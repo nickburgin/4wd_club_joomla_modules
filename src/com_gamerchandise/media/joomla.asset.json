@@ -1,0 +1,71 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "com_gamerchandise",
+  "version": "4.0.5",
+  "description": "This file contains details of the assets used by the Barebone component by Glenn Arkell.",
+  "license": "GPL-2.0-or-later",
+  "assets": [
+    {
+      "name": "com_gamerchandise.gamerchandise",
+      "description": "Glenn's Component styling.",
+      "type": "style",
+      "uri": "com_gamerchandise/gamerchandise.css",
+      "dependencies": [
+        "fontawesome"
+      ]
+    },
+    {
+      "name": "com_gamerchandise.item",
+      "description": "Glenn's Component styling for an item.",
+      "type": "style",
+      "uri": "com_gamerchandise/item.css",
+      "dependencies": [
+        "com_gamerchandise.gamerchandise"
+      ]
+    },
+    {
+      "name": "com_gamerchandise.list",
+      "description": "Glenn's Component styling for a list.",
+      "type": "style",
+      "uri": "com_gamerchandise/list.css",
+      "dependencies": [
+        "com_gamerchandise.gamerchandise"
+      ]
+    },
+    {
+      "name": "com_gamerchandise.form",
+      "description": "Glenn's Component styling for a form.",
+      "type": "style",
+      "uri": "com_gamerchandise/form.css",
+      "dependencies": [
+        "com_gamerchandise.gamerchandise"
+      ]
+    },
+    {
+      "name": "com_gamerchandise.formjs",
+      "description": "JavaScript for the component form page.",
+      "type": "script",
+      "uri": "com_gamerchandise/form.js",
+      "attributes" : {
+        "defer": true
+      },
+      "dependencies": [
+        "core",
+        "keepalive",
+        "form.validate",
+        "bootstrap.modal"
+      ]
+    },
+    {
+      "name": "com_gamerchandise.gamerchandisepreset",
+      "type": "preset",
+      "dependencies": [
+        "com_gamerchandise.gamerchandise#style",
+        "com_gamerchandise.form#style",
+        "com_gamerchandise.item#style",
+        "com_gamerchandise.list#style",
+        "com_gamerchandise.formjs#script"
+      ]
+    }
+  ]
+}

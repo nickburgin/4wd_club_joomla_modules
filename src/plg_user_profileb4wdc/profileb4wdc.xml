@@ -1,0 +1,1307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="user" method="upgrade">,
+	<name>User Profile B4WDC</name>
+	<author>Glenn Arkell</author>
+	<creationDate>24 September 2021</creationDate>
+	<copyright>(C) 2021 - 2031 Glenn Arkell. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later</license>
+	<authorEmail>glenn@glennarkell.com.au</authorEmail>
+	<authorUrl>www.glennarkell.com.au</authorUrl>
+	<version>4.5.9</version>
+	<description>Profile plug-in, to enhance the available options for the User record.</description>
+
+	<namespace path="src">GlennArkell\Plugin\User\Profileb4wdc</namespace>
+
+	<files>
+		<filename plugin="profileb4wdc">profileb4wdc.php</filename>
+		<folder>forms</folder>
+	</files>
+	<languages>
+		<language tag="en-GB">language/en-GB/plg_user_profileb4wdc.ini</language>
+		<language tag="en-GB">language/en-GB/plg_user_profileb4wdc.sys.ini</language>
+	</languages>
+
+	<updateservers>
+		<server type="extension" priority="1" name="User Profile B4WDC">https://www.glennarkell.com.au/joomlaorg/plugins/j4/profileb4wdc_update.xml</server>
+	</updateservers>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+    			<field name="limit_pw" type="radio" default="0" class="btn-group btn-group-yesno"
+    				description="PLG_USER_PROFILEB4WDC_PARAM_LIMIT_PW_DESC"
+    				label="PLG_USER_PROFILEB4WDC_PARAM_LIMIT_PW_LABEL" >
+    				<option value="1">JYES</option>
+    				<option value="0">JNO</option>
+    			</field>
+
+		        <field name="adminGroup" type="usergrouplist" multiple="true" class="input-xxlarge"
+		             label="PLG_USER_PROFILEB4WDC_PARAM_ADMINGRP_LABEL"
+		             description="PLG_USER_PROFILEB4WDC_PARAM_ADMINGRP_DESC" />
+
+				<field name="register-require-user" type="spacer" class="text"
+					   label="PLG_USER_PROFILEB4WDC_FIELD_NAME_REGISTER_REQUIRE_USER" />
+
+				<field name="register-require_fwdvic_no" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_FWDVIC_NO_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_FWDVIC_NO_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_mship_no" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_MSHIP_NO_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_MSHIP_NO_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_mdod" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_MDOD_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_MDOD_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_partner" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_PARTNER_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_PARTNER_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_pdod" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_PDOD_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_PDOD_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_kids" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_KIDS_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_KIDS_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_altphone" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_ALTPHONE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_ALTPHONE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_altemail" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_ALTEMAIL_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_ALTEMAIL_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_inc_altemail" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_INC_ALTEMAIL_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_INC_ALTEMAIL_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_2nd_email" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_2ND_EMAIL_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_2ND_EMAIL_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_2nd_phone" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_2ND_PHONE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_2ND_PHONE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_vehicle_make" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_MAKE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_VEHICLE_MAKE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_vehicle_year" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_YEAR_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_VEHICLE_YEAR_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_vehicle_model" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_MODEL_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_VEHICLE_MODEL_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_vehicle_rego" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_REGO_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_VEHICLE_REGO_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_vehicle_trans" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_TRANS_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_VEHICLE_TRANS_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_vehicle_fuel" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_FUEL_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_VEHICLE_FUEL_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_vehicle_winch" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_WINCH_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_VEHICLE_WINCH_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+                <field name="register-require_alt_vehicle" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_ALT_VEHICLE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_ALT_VEHICLE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+                <field name="register-require_alt_vehicle_rego" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_ALT_VEHICLE_REGO_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_ALT_VEHICLE_REGO_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_emailnews" type="list" default="2"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_EMAILNEWS_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_EMAILNEWS_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_m_img" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_M_IMG_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_M_IMG_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_p_img" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_P_IMG_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_P_IMG_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_memtype" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_MEMTYPE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_MEMTYPE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_m_usi" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_M_USI_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_M_USI_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_p_usi" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_P_USI_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_P_USI_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_prof" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROF_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_PROF_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_profc" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROFC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_PROFC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_lead" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEAD_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_LEAD_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_leadc" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEADC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_LEADC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_inst" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_INST_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_INST_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_instc" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_INSTC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_INSTC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_csaw" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAW_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_CSAW_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_csawc" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAWC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_CSAWC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_faid" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAID_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_FAID_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_faidc" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAIDC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_FAIDC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_trck" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCK_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_TRCK_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_trckc" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCKC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_TRCKC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_food" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOOD_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_FOOD_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_foodc" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOODC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_FOODC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_othr" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_OTHR_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_OTHR_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_wwk_reg" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_WWK_REG_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_WWK_REG_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_wwk_exp" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_WWK_EXP_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_WWK_EXP_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_cert4_dvct" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVCT_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_DVCT_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_cert4_dvdt" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVDT_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_DVDT_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_cert4_dvfile" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVFILE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_DVFILE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_cert4_csct" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSCT_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_CSCT_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_cert4_csdt" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSDT_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_CSDT_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_cert4_csfile" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSFILE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_CSFILE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_trg_profp" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROF_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_PROF_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_profpc" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROFC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_PROFC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_leadp" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEAD_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_LEAD_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_leadpc" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEADC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_LEADC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_instp" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_INST_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_INST_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_instpc" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_INSTC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_INSTC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_csawp" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAW_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_CSAW_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_csawpc" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAWC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_CSAWC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_faidp" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAID_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_FAID_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_faidpc" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAIDC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_FAIDC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_trckp" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCK_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_TRCK_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_trckpc" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCKC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_TRCKC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_foodp" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOOD_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_FOOD_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_foodpc" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOODC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_FOODC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_trg_othrp" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_OTHR_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_OTHR_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_wwk_regp" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_WWK_REG_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_WWK_REG_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_wwk_expp" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_WWK_EXP_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_WWK_EXP_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_cert4_dvctp" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVCT_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_DVCT_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_cert4_dvdtp" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVDT_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_DVDT_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_cert4_dvfilep" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVFILE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_DVFILE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_cert4_csctp" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSCT_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_CSCT_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_cert4_csdtp" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSDT_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_CSDT_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_cert4_csfilep" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSFILE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_CSFILE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_hf_net" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_HF_NET_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_HF_NET_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_hf_callsign" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_HF_CALLSIGN_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_HF_CALLSIGN_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_hf_selcall" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_HF_SELCALL_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_HF_SELCALL_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_hf2_net" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_HF2_NET_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_HF2_NET_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_hf2_callsign" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_HF2_CALLSIGN_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_HF2_CALLSIGN_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_hf2_selcall" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_HF2_SELCALL_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_HF2_SELCALL_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_camp_caravan" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CAMP_CARAVAN_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CAMP_CARAVAN_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_camp_other" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CAMP_OTHER_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CAMP_OTHER_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_use_post" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_USE_POST_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_USE_POST_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_postal_address1" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_ADDRESS1_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_POSTAL_ADDRESS1_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_postal_address2" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_ADDRESS2_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_POSTAL_ADDRESS2_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_postal_city" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_CITY_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_POSTAL_CITY_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_postal_region" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_REGION_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_POSTAL_REGION_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="register-require_postal_post_code" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_POST_CODE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_POSTAL_POST_CODE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="spacer1" type="spacer" hr="true" />
+
+				<field name="profile-require-user" type="spacer" class="text"
+					   label="PLG_USER_PROFILEB4WDC_FIELD_NAME_PROFILE_REQUIRE_USER" />
+
+				<field name="profile-require_fwdvic_no" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_FWDVIC_NO_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_FWDVIC_NO_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_mship_no" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_MSHIP_NO_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_MSHIP_NO_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_mdod" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_MDOD_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_MDOD_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_partner" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_PARTNER_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_PARTNER_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_pdod" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_PDOD_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_PDOD_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_kids" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_KIDS_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_KIDS_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_altphone" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_ALTPHONE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_ALTPHONE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_altemail" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_ALTEMAIL_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_ALTEMAIL_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_inc_altemail" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_INC_ALTEMAIL_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_INC_ALTEMAIL_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_2nd_email" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_2ND_EMAIL_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_2ND_EMAIL_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_2nd_phone" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_2ND_PHONE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_2ND_PHONE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_vehicle_make" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_MAKE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_VEHICLE_MAKE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_vehicle_model" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_MODEL_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_VEHICLE_MODEL_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_vehicle_year" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_YEAR_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_VEHICLE_YEAR_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_vehicle_rego" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_REGO_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_VEHICLE_REGO_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_vehicle_trans" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_TRANS_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_VEHICLE_TRANS_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_vehicle_fuel" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_FUEL_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_VEHICLE_FUEL_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_vehicle_winch" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_WINCH_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_VEHICLE_WINCH_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+                <field name="profile-require_alt_vehicle" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_ALT_VEHICLE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_ALT_VEHICLE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+                <field name="profile-require_alt_vehicle_rego" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_ALT_VEHICLE_REGO_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_ALT_VEHICLE_REGO_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_emailnews" type="list" default="2"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_EMAILNEWS_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_EMAILNEWS_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_m_img" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_M_IMG_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_M_IMG_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_p_img" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_P_IMG_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_P_IMG_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_memtype" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_MEMTYPE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_MEMTYPE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_m_usi" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_M_USI_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_M_USI_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_p_usi" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_P_USI_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_P_USI_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_prof" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROF_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_PROF_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_profc" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROFC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_PROFC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_lead" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEAD_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_LEAD_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_leadc" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEADC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_LEADC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_inst" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_INST_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_INST_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_instc" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_INSTC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_INSTC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_csaw" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAW_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_CSAW_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_csawc" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAWC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_CSAWC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_faid" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAID_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_FAID_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_trck" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCK_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_TRCK_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_trckc" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCKC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_TRCKC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_food" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOOD_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_FOOD_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_foodc" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOODC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_FOODC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_othr" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_OTHR_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_OTHR_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_wwk_reg" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_WWK_REG_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_WWK_REG_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_wwk_exp" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_WWK_EXP_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_WWK_EXP_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_cert4_dvct" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVCT_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_DVCT_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_cert4_dvdt" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVDT_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_DVDT_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_cert4_dvfile" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVFILE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_DVFILE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_cert4_csct" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSCT_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_CSCT_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_cert4_csdt" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSDT_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_CSDT_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_cert4_csfile" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSFILE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_CSFILE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_trg_profp" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROF_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_PROF_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_profpc" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROFC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_PROFC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_leadp" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEAD_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_LEAD_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_leadpc" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEADC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_LEADC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_instp" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_INST_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_INST_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_instpc" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_INSTC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_INSTC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_csawp" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAW_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_CSAW_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_csawpc" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAWC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_CSAWC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_faidp" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAID_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_FAID_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_faidpc" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAIDC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_FAIDC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_trckp" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCK_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_TRCK_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_trckpc" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCKC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_TRCKC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_foodp" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOOD_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_FOOD_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_foodpc" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOODC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_FOODC_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_othrp" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_OTHR_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_OTHR_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_wwk_regp" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_WWK_REG_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_WWK_REG_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_wwk_expp" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_WWK_EXP_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_WWK_EXP_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_cert4_dvctp" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVCT_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_DVCT_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_cert4_dvdtp" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVDT_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_DVDT_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_cert4_dvfilep" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVFILE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_DVFILE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_cert4_csctp" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSCT_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_CSCT_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_cert4_csdtp" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSDT_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_CSDT_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_cert4_csfilep" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSFILE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CERT4_CSFILE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_hf_net" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_HF_NET_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_HF_NET_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_hf_callsign" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_HF_CALLSIGN_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_HF_CALLSIGN_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_hf_selcall" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_HF_SELCALL_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_HF_SELCALL_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_hf2_net" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_HF2_NET_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_HF2_NET_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_hf2_callsign" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_HF2_CALLSIGN_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_HF2_CALLSIGN_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_hf2_selcall" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_HF2_SELCALL_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_HF2_SELCALL_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_camp_caravan" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CAMP_CARAVAN_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CAMP_CARAVAN_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_camp_other" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_CAMP_OTHER_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_CAMP_OTHER_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="profile-require_use_post" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_USE_POST_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_USE_POST_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_postal_address1" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_ADDRESS1_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_POSTAL_ADDRESS1_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_postal_address2" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_ADDRESS2_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_POSTAL_ADDRESS2_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_postal_city" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_CITY_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_POSTAL_CITY_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_postal_region" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_REGION_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_POSTAL_REGION_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_postal_post_code" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_POST_CODE_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_POSTAL_POST_CODE_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+			</fieldset>
+
+		</fields>
+	</config>
+</extension>

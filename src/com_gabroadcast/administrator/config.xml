@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <inlinehelp button="show" />
+
+    <fieldset name="gabroadcast"
+		addfieldprefix="GlennArkell\Component\Gabroadcast\Administrator\Field"
+		label="COM_GABROADCAST"
+		description="COM_GABROADCAST_CONFIG_DESC">
+
+        <field name="indiv_bulk" type="radio" class="btn-group btn-group-yesno" default="0"
+             label="COM_GABROADCAST_INDIV_BULK_LABEL"
+             description="COM_GABROADCAST_INDIV_BULK_DESC">
+                 <option value="0">Bulk</option>
+                 <option value="1">Individual</option>
+        </field>
+
+        <field name="bulk_label" type="text" default="Member" showon="indiv_bulk:0"
+             label="COM_GABROADCAST_BULK_LABEL_LABEL"
+             description="COM_GABROADCAST_BULK_LABEL_DESC" />
+
+        <field name="limit_set" type="radio" class="btn-group btn-group-yesno" default="0"
+             label="COM_GABROADCAST_LIMIT_SET_LABEL"
+             description="COM_GABROADCAST_LIMIT_SET_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+         </field>
+
+        <field name="mail_limit" type="text" default="200" showon="limit_set:1"
+             label="COM_GABROADCAST_MAIL_LIMIT_LABEL"
+             description="COM_GABROADCAST_MAIL_LIMIT_DESC" />
+
+        <field name="cycle_time" type="text" default="10" showon="limit_set:1"
+             label="COM_GABROADCAST_CYCLE_TIME_LABEL"
+             description="COM_GABROADCAST_CYCLE_TIME_DESC" />
+
+        <field name="max_time" type="text" default="120" showon="limit_set:1"
+             label="COM_GABROADCAST_MAX_TIME_LABEL"
+             description="COM_GABROADCAST_MAX_TIME_DESC" />
+
+        <field name="send_clubs" type="radio" class="btn-group btn-group-yesno" default="0"
+             label="COM_GABROADCAST_SEND_CLUBS_LABEL"
+             description="COM_GABROADCAST_SEND_CLUBS_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+         </field>
+
+        <field name="incl_bcast_type" type="bcastlist" showon="send_clubs:1"
+             label="COM_GABROADCAST_INCL_BCAST_TYPE_LABEL"
+             description="COM_GABROADCAST_INCL_BCAST_TYPE_DESC" />
+
+        <field name="incl_clubs" type="text" class="input-xxlarge" default="" showon="send_clubs:1"
+             label="COM_GABROADCAST_EXCLUDE_INCL_CLUBS_LABEL"
+             description="COM_GABROADCAST_EXCLUDE_INCL_CLUBS_DESC" />
+
+        <field name="incl_std_text" type="text" class="input-xxlarge"
+             default="DO NOT REPLY to this email as it is NOT monitored."
+             label="COM_GABROADCAST_EXCLUDE_INCL_STD_TEXT_LABEL"
+             description="COM_GABROADCAST_EXCLUDE_INCL_STD_TEXT_DESC" />
+
+        <field name="ret_address" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GABROADCAST_RET_ADDRESS_LABEL"
+             description="COM_GABROADCAST_RET_ADDRESS_DESC">
+             <option value="0">JNO</option>
+             <option value="1">Group</option>
+             <option value="2">User</option>
+         </field>
+        <field name="retaddr_group" type="usergrouplist" showon="ret_address:1"
+             label="COM_GABROADCAST_RETADDR_GROUP_LABEL"
+             description="COM_GABROADCAST_RETADDR_GROUP_DESC" />
+
+        <field name="retaddr_user" type="radio" default="0" class="btn-group btn-group-yesno" showon="ret_address:2"
+             label="COM_GABROADCAST_RETADDR_USER_LABEL"
+             description="COM_GABROADCAST_RETADDR_USER_DESC" >
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+         </field>
+
+        <field name="incl_unsub" type="radio" default="1" class="btn-group btn-group-yesno"
+             label="COM_GABROADCAST_INCL_UNSUB_LABEL"
+             description="COM_GABROADCAST_INCL_UNSUB_DESC" >
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+         </field>
+
+        <field name="unsub_article" type="Articlelist" showon="incl_unsub:1"
+             label="COM_GABROADCAST_UNSUB_ARTICLE_LABEL"
+             description="COM_GABROADCAST_UNSUB_ARTICLE_DESC" />
+
+
+	</fieldset>
+
+    <fieldset name="audience"
+		addfieldprefix="GlennArkell\Component\Gabroadcast\Administrator\Field"
+		label="COM_GABROADCAST_AUDIENCE_LABEL"
+		description="COM_GABROADCAST_AUDIENCE_DESC" >
+
+        <field name="exclude_email_pref" type="text" default="noemail"
+             label="COM_GABROADCAST_EXCLUDE_EMAIL_PREF_LABEL"
+             description="COM_GABROADCAST_EXCLUDE_EMAIL_PREF_DESC" />
+
+        <field name="exclude_member" type="members" multiple="multiple"
+             label="COM_GABROADCAST_EXCLUDE_MEMBER_LABEL"
+             description="COM_GABROADCAST_EXCLUDE_MEMBER_DESC" />
+
+        <field name="sendto_group" type="usergrouplist"
+             label="COM_GABROADCAST_SENDTO_GROUP_LABEL"
+             description="COM_GABROADCAST_SENDTO_GROUP_DESC" />
+
+        <field name="exclude_group" type="usergrouplist" multiple="true"
+             label="COM_GABROADCAST_EXCLUDE_GROUP_LABEL"
+             description="COM_GABROADCAST_EXCLUDE_GROUP_DESC" />
+
+        <field name="profile_suffix" type="text" default="b4wdc"
+             label="COM_GABROADCAST_PROFILE_SUFFIX_LABEL"
+             description="COM_GABROADCAST_PROFILE_SUFFIX_DESC" />
+
+        <field name="include_userfilter" type="radio" class="btn-group btn-group-yesno" default="0"
+            label="COM_GABROADCAST_INCLUDE_USERFILTER_LABEL"
+            description="COM_GABROADCAST_INCLUDE_USERFILTER_DESC">
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field name="filter_users" type="radio"
+            class="btn-group btn-group-yesno" default="0"
+            label="COM_GABROADCAST_FILTER_USERS_LABEL"
+            description="COM_GABROADCAST_FILTER_USERS_DESC">
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field name="filter_type" type="radio" showon="filter_users:1"
+            class="btn-group btn-group-yesno" default="0"
+            label="COM_GABROADCAST_FILTER_TYPE_LABEL"
+            description="COM_GABROADCAST_FILTER_TYPE_DESC">
+            <option value="p">GAPROFILE</option>
+            <option value="c">GACUSTOMFLD</option>
+        </field>
+
+        <field name="prof_field" type="Proflist" showon="filter_users:1[AND]filter_type:p"
+             label="COM_GABROADCAST_PROF_FIELD_LABEL"
+             description="COM_GABROADCAST_PROF_FIELD_DESC" />
+
+        <field name="cust_field" type="Customlist" showon="filter_users:1[AND]filter_type:c"
+             label="COM_GABROADCAST_CUST_FIELD_LABEL"
+             description="COM_GABROADCAST_CUST_FIELD_DESC" />
+
+	</fieldset>
+
+    <fieldset name="bcastparams"
+		addfieldprefix="GlennArkell\Component\Gabroadcast\Administrator\Field"
+		label="COM_GABROADCAST_BCASTPARAMS_LABEL"
+		description="COM_GABROADCAST_BCASTPARAMS_DESC" >
+
+        <field name="html_headfoot" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GABROADCAST_HTML_HEADFOOT_LABEL"
+             description="COM_GABROADCAST_HTML_HEADFOOT_DESC">
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+         </field>
+
+        <field name="html_header" type="editor" showon="html_headfoot:1" filter="raw"
+             buttons="true" hide="article,image,readmore,pagebreak"
+			 label="COM_GABROADCAST_HTML_HEADER_LABEL"
+             description="COM_GABROADCAST_HTML_HEADER_DESC" />
+
+        <field name="html_footer" type="editor" showon="html_headfoot:1" filter="raw"
+             buttons="true" hide="article,image,readmore,pagebreak"
+			 label="COM_GABROADCAST_HTML_FOOTER_LABEL"
+             description="COM_GABROADCAST_HTML_FOOTER_DESC" />
+
+	</fieldset>
+
+    <fieldset name="contentparams"
+		addfieldprefix="GlennArkell\Component\Gabroadcast\Administrator\Field"
+		label="COM_GABROADCAST_CONTENTPARAMS_LABEL"
+		description="COM_GABROADCAST_CONTENTPARAMS_DESC" >
+
+        <field name="link_site" type="radio" default="1" class="btn-group btn-group-yesno"
+             label="COM_GABROADCAST_LINK_SITE_LABEL"
+             description="COM_GABROADCAST_LINK_SITE_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+         </field>
+
+        <field name="safe_files" type="list" class="multiple" multiple="true"
+             label="COM_GABROADCAST_SAFE_FILES_LABEL"
+             description="COM_GABROADCAST_SAFE_FILES_DESC">
+                 <option value="pdf">pdf</option>
+                 <option value="PDF">PDF</option>
+                 <option value="jpg">jpg</option>
+                 <option value="JPG">JPG</option>
+                 <option value="png">png</option>
+                 <option value="PNG">PNG</option>
+                 <option value="gif">gif</option>
+                 <option value="GIF">GIF</option>
+         </field>
+
+        <field name="attach_link" type="radio" class="btn-group btn-group-yesno" default="0"
+             label="COM_GABROADCAST_ATTACH_LINK_LABEL"
+             description="COM_GABROADCAST_ATTACH_LINK_DESC">
+                 <option value="0">Attach File</option>
+                 <option value="1">Link to File</option>
+         </field>
+
+        <field name="attach_sort" type="radio" class="btn-group btn-group-yesno" default="0"
+             label="COM_GABROADCAST_ATTACH_SORT_LABEL"
+             description="COM_GABROADCAST_ATTACH_SORT_DESC">
+                 <option value="0">Descending</option>
+                 <option value="1">Ascending</option>
+         </field>
+
+        <field name="sig_block" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GABROADCAST_SIG_BLOCK_LABEL"
+             description="COM_GABROADCAST_SIG_BLOCK_DESC">
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+         </field>
+
+        <field name="sig_name" type="text" showon="sig_block:1"
+             label="COM_GABROADCAST_SIG_NAME_LABEL"
+             description="COM_GABROADCAST_SIG_NAME_DESC" />
+
+        <field name="sig_title" type="text" showon="sig_block:1"
+             label="COM_GABROADCAST_SIG_TITLE_LABEL"
+             description="COM_GABROADCAST_SIG_TITLE_DESC" />
+
+    </fieldset>
+
+    <fieldset name="permissions" description="JCONFIG_PERMISSIONS_DESC" label="JCONFIG_PERMISSIONS_LABEL">
+        <field name="rules" type="rules" component="com_gabroadcast" class="inputbox" filter="rules" validate="rules" label="JCONFIG_PERMISSIONS_LABEL" section="component" />
+	</fieldset>
+
+    <fieldset name="component"
+		addfieldprefix="GlennArkell\Component\Gabroadcast\Administrator\Field"
+	   description="COM_GABROADCAST_COMPONENT_DESC">
+
+        <field name="set_test" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GABROADCAST_TEST_LABEL"
+             description="COM_GABROADCAST_TEST_DESC">
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+         </field>
+
+        <field name="user_id" type="user" showon="set_test:1"
+             label="COM_GABROADCAST_TEST_ID_LABEL"
+             description="COM_GABROADCAST_TEST_ID_DESC" />
+
+        <field name="actually_send" type="radio" default="1" class="btn-group btn-group-yesno"
+             label="COM_GABROADCAST_SEND_LABEL"
+             description="COM_GABROADCAST_SEND_DESC">
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+         </field>
+
+        <field name="disp_sent" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GABROADCAST_DISP_SENT_LABEL"
+             description="COM_GABROADCAST_DISP_SENT_DESC">
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+         </field>
+
+        <field name="save_history" type="radio" class="btn-group btn-group-yesno" default="0" label="JGLOBAL_SAVE_HISTORY_OPTIONS_LABEL" description="JGLOBAL_SAVE_HISTORY_OPTIONS_DESC">
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field name="history_limit" type="text" filter="integer" showon="save_history:1"
+			label="JGLOBAL_HISTORY_LIMIT_OPTIONS_LABEL"
+			description="JGLOBAL_HISTORY_LIMIT_OPTIONS_DESC" default="5"/>
+
+        <field name="act_log" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GABROADCAST_ACT_LOG_LABEL"
+             description="COM_GABROADCAST_ACT_LOG_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+         </field>
+
+    </fieldset>
+
+</config>

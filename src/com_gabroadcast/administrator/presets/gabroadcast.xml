@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<menu
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="urn:joomla.org"
+	xsi:schemaLocation="urn:joomla.org menu.xsd"
+	>
+	<menuitem
+		title="COM_GABROADCAST_MENUS"
+		type="heading"
+		icon="fas fa-broadcast-tower"
+		class="class:fas fa-broadcast-tower"
+		>
+		<menuitem
+			title="COM_GABROADCAST_TITLE_USERNEWS"
+			type="component"
+			element="com_gabroadcast"
+			link="index.php?option=com_gabroadcast&amp;view=usernews"
+		/>
+
+		<menuitem
+			title="COM_GABROADCAST_USERNEWS_CAT_ID"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gabroadcast"
+			quicktask="index.php?option=com_categories&amp;extension=com_gabroadcast&amp;task=category.add"
+			quicktask-title="COM_GABROADCAST_NEW_CATEGORY"
+		/>
+
+		<menuitem
+			title="COM_GABROADCAST_TITLE_BCASTS"
+			type="component"
+			element="com_gabroadcast"
+			link="index.php?option=com_gabroadcast&amp;view=bcasts"
+			quicktask="index.php?option=com_gabroadcast&amp;task=bcast.add"
+			quicktask-title="COM_GABROADCAST_NEW_BCAST"
+		/>
+
+		<menuitem
+			title="COM_GABROADCAST_CONFIGURATION"
+			type="component"
+			element="com_config"
+			link="index.php?option=com_config&amp;view=component&amp;component=com_gabroadcast&amp;path=&amp;return="
+		/>
+
+	</menuitem>
+
+</menu>

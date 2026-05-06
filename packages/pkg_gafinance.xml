@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" method="upgrade">
+    <name>Finance Package</name>
+    <packagename>gafinance</packagename>
+    <version>5.1</version>
+    <creationDate>May 2024</creationDate>
+    <copyright>Glenn Arkell</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Glenn Arkell</author>
+    <authorEmail>glenn@glennarkell.com.au</authorEmail>
+    <packager>Nick Burgin</packager>
+    <description>Finance Package - includes component and module</description>
+
+    <files folder="packages">
+        <file type="component" id="com_gafinance">com_gafinance-5.1.0.zip</file>
+        <file type="module" id="gafinance" client="site">mod_gafinance-5.0.2.zip</file>
+    </files>
+
+    <blockChildUninstall>true</blockChildUninstall>
+</extension>

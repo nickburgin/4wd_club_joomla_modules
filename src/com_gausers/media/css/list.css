@@ -1,0 +1,126 @@
+/**
+ * @version     5.1.6
+ * @package     com_gausers
+ * @copyright   2021 Glenn Arkell
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Glenn Arkell <glenn@glennarkell.com.au>
+ */
+
+table.front-end-list{
+    width: 100%;
+    border-spacing: 1px;
+    background-color: #f3f3f3;
+    color: #666;
+}
+
+table.front-end-list thead th{
+    text-align: center;
+    background: #f7f7f7;
+    color: #666;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #fff;
+}
+
+table.front-end-list td, table.front-end-list th{
+    padding: 4px;
+}
+
+table.front-end-list thead th.align-left{
+    text-align: left;
+}
+
+table.front-end-list thead th.align-center, table.front-end-list tbody td.align-center {
+    text-align: center;
+}
+
+table.front-end-list tbody tr td{
+    background: #fff;
+    border: 1px solid #fff;
+}
+
+table.front-end-list td{
+    padding-left: 8px;
+}
+
+div.list-footer{
+    clear:both;
+    text-decoration: none;
+    text-align: center;
+}
+
+div.list-footer ul{
+    list-style: none;
+    display: inline-block;
+}
+
+div.list-footer ul li{
+    display: inline-block;
+}
+
+div.list-footer div.limit{
+    display: inline-block;
+}
+
+div.list-footer div.counter{
+    display: inline-block;
+}
+
+div.filter-select.hide{
+    display: none;
+}
+
+div.filter-select.show{
+    display: block;
+}
+
+div.filter-search , div.filter-select {
+    clear: both;
+}
+
+div.filter-select .fltlft{
+    float: left;
+    clear: both;
+}
+
+div.field-filter{
+    float: left;
+    margin: 10px;
+}
+
+#filter-bar div.fltrt div.button2-left .blank a {
+    margin-top: 0 !important;
+}
+
+button.open{
+    font-weight: bold;
+}
+
+div.field-filter:first-of-type{
+    margin-left: 0;
+}
+
+.table thead th.mbr-name,
+.table tbody td.mbr-name {
+	min-width: 250px;
+}
+.table thead th.inv-amt,
+.table tbody td.inv-amt {
+	max-width: 60px;
+	text-align:right;
+}
+.table thead th.inv-date,
+.table tbody td.inv-date {
+	max-width: 70px;
+	text-align:center;
+}
+.table thead th.inv-acts,
+.table tbody td.inv-acts {
+	min-width: 120px;
+	text-align:center;
+}
+
+#filter_search, 
+.mb-3 {
+	float: left;
+}
+

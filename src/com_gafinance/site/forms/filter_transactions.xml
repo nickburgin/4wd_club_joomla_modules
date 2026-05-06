@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter" addfieldprefix="GlennArkell\Component\Gafinance\Administrator\Field">
+        <field name="search" type="text" hint="COM_GAFINANCE_SEARCH_FILTER_SUBMIT"
+            label="COM_GAFINANCE_FILTER_SEARCH_DESC"
+            class="js-stools-search-string" />
+
+        <field name="state" type="list"
+            label="COM_CONTENT_FILTER_STATE"
+            description="COM_CONTENT_FILTER_STATE_DESC"
+            onchange="this.form.submit();" >
+            <option value="">JOPTION_SELECT_STATUS</option>
+            <option value="1">JOPTION_SELECT_BANKED</option>
+            <option value="0">JOPTION_SELECT_UNPRESENTED</option>
+        </field>
+
+        <field name="accnt_id" type="Account" default=""
+            onchange="this.form.submit();"
+            label="COM_GAFINANCE_FORM_LBL_TRANSACTION_ACCOUNT"
+            description="COM_GAFINANCE_FORM_DESC_TRANSACTION_ACCOUNT" />
+
+        <field name="tran_type" type="list" onchange="this.form.submit();">
+            <option value="">COM_GAFINANCE_TRANSACTIONS_TRAN_TYPE_FILTER</option>
+            <option value="E">COM_GAFINANCE_TRANSACTIONS_TRAN_TYPE_OPTION_E</option>
+            <option value="I">COM_GAFINANCE_TRANSACTIONS_TRAN_TYPE_OPTION_I</option>
+            <option value="Z">COM_GAFINANCE_TRANSACTIONS_TRAN_TYPE_OPTION_Z</option>
+            <option value="D">COM_GAFINANCE_TRANSACTIONS_TRAN_TYPE_OPTION_D</option>
+        </field>
+
+        <field name="cat_id" type="category"
+            label="COM_GAFINANCE_FORM_LBL_TRANSACTION_CAT_ID"
+            description="COM_GAFINANCE_FORM_DESC_TRANSACTION_CAT_ID"
+            extension="com_gafinance" onchange="this.form.submit();" >
+			<option value="">JOPTION_SELECT_CATEGORY</option>
+		</field>
+
+
+    </fields>
+
+    <fields name="list">
+
+        <field name="limit"
+               type="limitbox"
+               class="input-mini"
+               default="25"
+               onchange="this.form.submit();"
+        />
+
+    </fields>
+
+</form>

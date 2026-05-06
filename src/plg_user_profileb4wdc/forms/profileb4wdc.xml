@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="profile">
+		<fieldset
+			name="profile"
+			label="PLG_USER_PROFILE_SLIDER_LABEL"
+		>
+			<field
+				name="region"
+				type="list" size="1"
+				label="PLG_USER_PROFILE_FIELD_REGION_LABEL"
+				description="PLG_USER_PROFILE_FIELD_REGION_DESC"
+				id="region"
+				filter="safehtml"
+			>
+				<option value="VIC">VIC</option>
+				<option value="NSW">NSW</option>
+				<option value="TAS">TAS</option>
+				<option value="SA">SA</option>
+				<option value="QLD">QLD</option>
+				<option value="WA">WA</option>
+				<option value="NT">NT</option>
+				<option value="ACT">ACT</option>
+				<option value="OTHER">OTHER</option>
+			</field>
+		</fieldset>
+	</fields>
+
+	<fields name="profileb4wdc">
+		<fieldset name="postaddress"
+			label="PLG_USER_PROFILEB4WDC_SLIDER_POSTADDRESS_LABEL" >
+
+			<field name="use_post" type="radio" default="0" class="btn-group btn-group-yesno"
+				description="PLG_USER_PROFILEB4WDC_FIELD_USE_POST_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_USE_POST_LABEL" >
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="postal_address1" type="text" filter="safehtml" showon="use_post:1"
+				description="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_ADDRESS1_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_ADDRESS1_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_ADDRESS1_MESSAGE" />
+			<field name="postal_address2" type="text" filter="safehtml" showon="use_post:1"
+				description="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_ADDRESS2_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_ADDRESS2_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_ADDRESS2_MESSAGE" />
+			<field name="postal_city" type="text" filter="safehtml" showon="use_post:1"
+				description="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_CITY_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_CITY_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_CITY_MESSAGE" />
+			<field name="postal_region" type="list" filter="safehtml" showon="use_post:1"
+				description="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_REGION_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_REGION_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_REGION_MESSAGE" >
+				<option value="VIC">VIC</option>
+				<option value="NSW">NSW</option>
+				<option value="TAS">TAS</option>
+				<option value="SA">SA</option>
+				<option value="QLD">QLD</option>
+				<option value="WA">WA</option>
+				<option value="NT">NT</option>
+				<option value="ACT">ACT</option>
+				<option value="OTHER">OTHER</option>
+			</field>
+			<field name="postal_post_code" type="text" filter="safehtml" showon="use_post:1"
+				description="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_POST_CODE_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_POST_CODE_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_POSTAL_POST_CODE_MESSAGE" />
+
+		</fieldset>
+	</fields>
+
+	<fields name="profileb4wdc">
+		<fieldset name="extpers"
+			label="PLG_USER_PROFILEB4WDC_SLIDER_EXTPERS_LABEL" >
+
+			<field name="fwdvic_no" type="text" filter="safehtml" default="0"
+				description="PLG_USER_PROFILEB4WDC_FIELD_FWDVIC_NO_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_FWDVIC_NO_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_FWDVIC_NO_MESSAGE" />
+
+			<field name="mship_no" type="text" filter="integer"
+				description="PLG_USER_PROFILEB4WDC_FIELD_MSHIP_NO_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_MSHIP_NO_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_MSHIP_NO_MESSAGE" />
+
+			<field name="m_img_txt" type="text"
+				description="PLG_USER_PROFILEB4WDC_FIELD_M_IMG_TXT_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_M_IMG_TXT_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_M_IMG_TXT_MESSAGE" />
+
+			<field name="m_img" type="file"
+				description="PLG_USER_PROFILEB4WDC_FIELD_M_IMG_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_M_IMG_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_M_IMG_MESSAGE" />
+
+			<field name="mdod" type="calendar" weeknumbers="false" filltable="true" filter="user_utc"
+				description="PLG_USER_PROFILEB4WDC_FIELD_MDOD_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_MDOD_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_MDOD_MESSAGE" />
+
+			<field name="partner" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_PARTNER_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_PARTNER_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_PARTNER_MESSAGE" />
+
+			<field name="p_img_txt" type="text"
+				description="PLG_USER_PROFILEB4WDC_FIELD_M_IMG_TXT_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_M_IMG_TXT_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_M_IMG_TXT_MESSAGE" />
+
+			<field name="p_img" type="file"
+				description="PLG_USER_PROFILEB4WDC_FIELD_P_IMG_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_P_IMG_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_P_IMG_MESSAGE" />
+
+			<field name="pdod" type="calendar" weeknumbers="false" filltable="true" filter="user_utc"
+				description="PLG_USER_PROFILEB4WDC_FIELD_PDOD_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_PDOD_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_PDOD_MESSAGE" />
+
+			<field name="kids" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_KIDS_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_KIDS_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_KIDS_MESSAGE" />
+
+			<field name="altphone" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_ALTPHONE_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_ALTPHONE_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_ALTPHONE_MESSAGE" />
+
+			<field name="altemail" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_ALTEMAIL_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_ALTEMAIL_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_ALTEMAIL_MESSAGE" />
+
+			<field name="inc_altemail" type="radio" default="0" class="btn-group btn-group-yesno"
+				description="PLG_USER_PROFILEB4WDC_FIELD_INC_ALTEMAIL_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_INC_ALTEMAIL_LABEL">
+			    <option	value="1">JYES</option>
+			    <option	value="0">JNO</option>
+			</field>
+
+			<field name="emailnews" type="radio" default="1" class="btn-group btn-group-yesno"
+			    label="PLG_USER_PROFILEB4WDC_FIELD_EMAILNEWS_LABEL"
+			    description="PLG_USER_PROFILEB4WDC_FIELD_EMAILNEWS_DESC">
+			    <option	value="1">JYES</option>
+			    <option	value="0">JNO</option>
+			</field>
+
+			<field name="2nd_email" type="email" validate="email" 
+				description="PLG_USER_PROFILEB4WDC_FIELD_2ND_EMAIL_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_2ND_EMAIL_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_2ND_EMAIL_MESSAGE" />
+
+			<field name="2nd_phone" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_2ND_PHONE_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_2ND_PHONE_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_2ND_PHONE_MESSAGE" />
+
+		</fieldset>
+	</fields>
+
+	<fields name="profileb4wdc">
+		<fieldset name="vehicle" label="PLG_USER_PROFILEB4WDC_SLIDER_VEHICLE_LABEL" class="profileb4wdc_veh" >
+			<field name="vehicle_make" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_MAKE_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_MAKE_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_MAKE_MESSAGE" />
+
+			<field name="vehicle_model" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_MODEL_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_MODEL_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_MODEL_MESSAGE" />
+
+			<field name="vehicle_year" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_YEAR_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_YEAR_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_YEAR_MESSAGE" />
+
+			<field name="vehicle_rego" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_REGO_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_REGO_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_REGO_MESSAGE" />
+
+			<field name="vehicle_trans" type="radio" default="Manual" class="btn-group btn-group-yesno"
+				description="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_TRANS_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_TRANS_LABEL" >
+			    <option	value="Manual">Manual</option>
+			    <option	value="Automatic">Auto</option>
+			</field>
+
+			<field name="vehicle_fuel" type="radio" default="Diesel" class="btn-group btn-group-yesno"
+				description="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_FUEL_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_FUEL_LABEL" >
+				<option value="Diesel">Diesel</option>
+				<option value="Petrol">Petrol</option>
+				<option value="Gas">Gas</option>
+				<option value="Petrol-Gas">Petrol-Gas</option>
+			</field>
+
+			<field name="vehicle_winch" type="radio" default="0" class="btn-group btn-group-yesno"
+				description="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_WINCH_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_VEHICLE_WINCH_LABEL" >
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="alt_vehicle" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_ALT_VEHICLE_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_ALT_VEHICLE_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_ALT_VEHICLE_MESSAGE" />
+
+			<field name="alt_vehicle_rego" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_ALT_VEHICLE_REGO_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_ALT_VEHICLE_REGO_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_ALT_VEHICLE_REGO_MESSAGE" />
+
+			<field name="camp_caravan" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_CAMP_CARAVAN_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_CAMP_CARAVAN_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_CAMP_CARAVAN_MESSAGE" />
+
+			<field name="camp_other" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_CAMP_OTHER_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_CAMP_OTHER_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_CAMP_OTHER_MESSAGE" />
+
+			<field name="hf_net" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_HF_NET_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_HF_NET_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_HF_NET_MESSAGE" />
+
+			<field name="hf_callsign" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_HF_CALLSIGN_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_HF_CALLSIGN_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_HF_CALLSIGN_MESSAGE" />
+
+			<field name="hf_selcall" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_HF_SELCALL_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_HF_SELCALL_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_HF_SELCALL_MESSAGE" />
+
+			<field name="hf2_net" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_HF2_NET_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_HF2_NET_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_HF2_NET_MESSAGE" />
+
+			<field name="hf2_callsign" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_HF2_CALLSIGN_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_HF2_CALLSIGN_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_HF2_CALLSIGN_MESSAGE" />
+
+			<field name="hf2_selcall" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_HF2_SELCALL_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_HF2_SELCALL_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_HF2_SELCALL_MESSAGE" />
+
+		</fieldset>
+	</fields>
+
+	<fields name="profileb4wdc">
+		<fieldset name="offmbrtrg"
+            label="PLG_USER_PROFILEB4WDC_SLIDER_OFFMBRTRG_LABEL"
+            class="profileb4wdc_off" >
+
+			<field name="m_usi" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_M_USI_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_M_USI_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_M_USI_MESSAGE" />
+
+			<field
+				name="trg_prof" type="calendar" format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROF_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROF_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROF_MESSAGE" />
+			<field name="trg_profc" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROFC_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROFC_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROFC_MESSAGE" />
+
+			<field
+				name="trg_lead" type="calendar" format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEAD_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEAD_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEAD_MESSAGE" />
+			<field name="trg_leadc" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEADC_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEADC_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEADC_MESSAGE" />
+
+			<field
+				name="trg_inst" type="calendar" format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_INST_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_INST_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_INST_MESSAGE" />
+			<field name="trg_instc" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_INSTC_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_INSTC_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_INSTC_MESSAGE" />
+
+			<field
+				name="trg_csaw" type="calendar" format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAW_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAW_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAW_MESSAGE" />
+			<field name="trg_csawc" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAWC_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAWC_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAWC_MESSAGE" />
+
+			<field
+				name="trg_faid" type="calendar" format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAID_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAID_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAID_MESSAGE" />
+			<field name="trg_faidc" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAIDC_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAIDC_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAIDC_MESSAGE" />
+
+			<field
+				name="trg_trck" type="calendar" format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCK_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCK_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCK_MESSAGE" />
+			<field name="trg_trckc" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCKC_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCKC_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCKC_MESSAGE" />
+
+			<field
+				name="trg_food" type="calendar" format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOOD_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOOD_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOOD_MESSAGE" />
+			<field name="trg_foodc" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOODC_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOODC_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOODC_MESSAGE" />
+
+			<field name="trg_othr" type="textarea" rows="5" cols="60" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_OTHR_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_OTHR_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_OTHR_MESSAGE" />
+
+			<field name="wwk_reg" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_WWK_REG_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_WWK_REG_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_WWK_REG_MESSAGE" />
+
+			<field
+				name="wwk_exp" type="calendar" format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_WWK_EXP_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_WWK_EXP_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_WWK_EXP_MESSAGE" />
+
+		</fieldset>
+	</fields>
+
+	<fields name="profileb4wdc">
+		<fieldset name="certmbr" label="PLG_USER_PROFILEB4WDC_SLIDER_CERTMBR_LABEL" class="profileb4wdc_cert" >
+
+			<field name="cert4_dvct" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVCT_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVCT_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVCT_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVCT_MESSAGE" />
+			<field
+				name="cert4_dvdt" type="calendar" format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVDT_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVDT_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVDT_MESSAGE" />
+			<field
+				name="cert4_dvfile" type="media" directory="certificates" 
+				description="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVFILE_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVFILE_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVFILE_MESSAGE" />
+
+			<field name="cert4_csct" type="text" filter="safehtml" 
+				description="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSCT_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSCT_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSCT_MESSAGE" />
+			<field
+				name="cert4_csdt" type="calendar" format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSDT_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSDT_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSDT_MESSAGE" />
+			<field
+				name="cert4_csfile" type="media" directory="certificates" 
+				description="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSFILE_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSFILE_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSFILE_MESSAGE" />
+
+		</fieldset>
+	</fields>
+
+	<fields name="profileb4wdc">
+		<fieldset name="offprttrg" label="PLG_USER_PROFILEB4WDC_SLIDER_OFFPRTTRG_LABEL" class="profileb4wdc_offp" >
+
+			<field name="p_usi" type="text" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_P_USI_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_P_USI_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_P_USI_MESSAGE" />
+
+			<field
+				name="trg_profp" type="calendar"  format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROF_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROF_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROF_MESSAGE" />
+			<field name="trg_profpc" type="text" filter="safehtml" 
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROFC_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROFC_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROFC_MESSAGE" />
+
+			<field
+				name="trg_leadp" type="calendar"  format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEAD_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEAD_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEAD_MESSAGE" />
+			<field name="trg_leadpc" type="text" filter="safehtml" 
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEADC_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEADC_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEADC_MESSAGE" />
+
+			<field
+				name="trg_instp" type="calendar"  format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_INST_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_INST_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_INST_MESSAGE" />
+			<field name="trg_instpc" type="text" filter="safehtml" 
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_INSTC_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_INSTC_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_INSTC_MESSAGE" />
+
+			<field
+				name="trg_csawp" type="calendar"  format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAW_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAW_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAW_MESSAGE" />
+			<field name="trg_csawpc" type="text" filter="safehtml" 
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAWC_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAWC_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAWC_MESSAGE" />
+
+			<field
+				name="trg_faidp" type="calendar"  format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAID_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAID_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAID_MESSAGE" />
+			<field name="trg_faidpc" type="text" filter="safehtml" 
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAIDC_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAIDC_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAIDC_MESSAGE" />
+
+			<field
+				name="trg_trckp" type="calendar"  format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCK_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCK_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCK_MESSAGE" />
+			<field name="trg_trckpc" type="text" filter="safehtml" 
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCKC_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCKC_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCKC_MESSAGE" />
+
+			<field
+				name="trg_foodp" type="calendar"  format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOOD_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOOD_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOOD_MESSAGE" />
+			<field name="trg_foodpc" type="text" filter="safehtml" 
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOODC_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOODC_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOODC_MESSAGE" />
+
+			<field name="trg_othrp" type="textarea" rows="5" cols="60" filter="safehtml"
+				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_OTHR_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_OTHR_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_OTHR_MESSAGE" />
+
+			<field name="wwk_regp" type="text" filter="safehtml" 
+				description="PLG_USER_PROFILEB4WDC_FIELD_WWK_REG_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_WWK_REG_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_WWK_REG_MESSAGE" />
+
+			<field
+				name="wwk_expp" type="calendar"  format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_WWK_EXP_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_WWK_EXP_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_WWK_EXP_MESSAGE" />
+
+		</fieldset>
+	</fields>
+
+	<fields name="profileb4wdc">
+		<fieldset name="certprt" label="PLG_USER_PROFILEB4WDC_SLIDER_CERTPRT_LABEL" class="profileb4wdc_certp" >
+
+			<field name="cert4_dvctp" type="text" filter="safehtml" 
+				description="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVCT_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVCT_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVCT_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVCT_MESSAGE" />
+			<field
+				name="cert4_dvdtp" type="calendar"  format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVDT_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVDT_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVDT_MESSAGE" />
+			<field
+				name="cert4_dvfilep" type="media" directory="certificates" 
+				description="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVFILE_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVFILE_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVFILE_MESSAGE" />
+
+			<field name="cert4_csctp" type="text" filter="safehtml" 
+				description="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSCT_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSCT_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSCT_MESSAGE" />
+			<field
+				name="cert4_csdtp" type="calendar"  format="%Y-%m-%d"
+				description="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSDT_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSDT_LABEL"
+				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
+				message="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSDT_MESSAGE" />
+			<field
+				name="cert4_csfilep" type="media" directory="certificates"
+				description="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSFILE_DESC"
+				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSFILE_LABEL"
+				message="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSFILE_MESSAGE" />
+
+		</fieldset>
+	</fields>
+</form>

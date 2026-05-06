@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+    <layout title="COM_GACALEVENTS_TITLE_FORM_VIEW_ATTENDEE" option="View">
+        <message>
+                        <![CDATA[COM_GACALEVENTS_TITLE_FORM_VIEW_ATTENDEE_DESC]]>
+        </message>
+    </layout>
+</metadata>

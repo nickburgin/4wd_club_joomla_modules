@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <inlinehelp button="show" />
+    <fieldset label="COM_GAFORSALE" name="gaforsale">
+
+        <field name="display_limit" type="text" default="360"
+               label="COM_GAFORSALE_DISP_LIMIT_LABEL"
+               description="COM_GAFORSALE_DISP_LIMIT_DESC" />
+
+        <field name="show_offerdate" type="radio" default="1" class="btn-group"
+             label="COM_GAFORSALE_SHOW_OFFERDATE_LABEL"
+             description="COM_GAFORSALE_SHOW_OFFERDATE_DESC">
+                 <option value="0">JHIDE</option>
+                 <option value="1">JSHOW</option>
+        </field>
+        <field name="bg1_colour" type="color" required="false" default="e0e0e0"
+             label="COM_GAFORSALE_BG1_COLOUR_LABEL"
+             description="COM_GAFORSALE_BG1_COLOUR_DESC" />
+
+        <field name="bg2_colour" type="color" required="false" default="ffff99"
+             label="COM_GAFORSALE_BG2_COLOUR_LABEL"
+             description="COM_GAFORSALE_BG2_COLOUR_DESC" />
+
+        <field name="htx_colour" type="color" required="false" default="5c3809"
+             label="COM_GAFORSALE_HTX_COLOUR_LABEL"
+             description="COM_GAFORSALE_HTX_COLOUR_DESC" />
+
+        <field name="header_title" type="text" class="inputbox" required="false" size="70"
+             default="Listing of Items For Sale"
+             label="COM_GAFORSALE_HEADER_TITLE_LABEL"
+             description="COM_GAFORSALE_HEADER_TITLE_DESC" />
+
+        <field name="header_text" type="textarea" class="input-xxlarge" required="false" rows="3"
+             default="The following items are listed for sale by the owner and all negotiations and communications are between the seller and potential buyer and the Ballarat Four Wheel Drive Club is not responsible or involved in the transaction in any way other than being an advertising medium for the seller."
+             label="COM_GAFORSALE_HEADER_TEXT_LABEL"
+             description="COM_GAFORSALE_HEADER_TEXT_DESC" />
+
+        <field name="email_text" type="textarea" class="input-xxlarge" required="false" rows="3"
+             default="Thank you for advertising this item on the website.  Please be sure to advise us of the items disposal."
+             label="COM_GAFORSALE_EMAIL_TEXT_LABEL"
+             description="COM_GAFORSALE_EMAIL_TEXT_DESC" />
+
+        <field name="email_user" type="user"
+             label="COM_GAFORSALE_EMAIL_USER_LABEL"
+             description="COM_GAFORSALE_EMAIL_USER_DESC" />
+
+        <field name="attach_dir" type="text" required="true" class="input-xlarge"
+             default="images/forsale"
+             label="COM_GAFORSALE_ATTACH_DIR_LABEL"
+             description="COM_GAFORSALE_ATTACH_DIR_DESC" />
+
+        <field name="safe_files" type="list" class="multiple" multiple="true"
+             label="COM_GAFORSALE_SAFE_FILES_LABEL"
+             description="COM_GAFORSALE_SAFE_FILES_DESC">
+                 <option value="pdf">pdf</option>
+                 <option value="PDF">PDF</option>
+                 <option value="jpg">jpg</option>
+                 <option value="JPG">JPG</option>
+                 <option value="png">png</option>
+                 <option value="PNG">PNG</option>
+                 <option value="gif">gif</option>
+                 <option value="GIF">GIF</option>
+         </field>
+
+    </fieldset>
+
+    <fieldset name="permissions"
+              description="JCONFIG_PERMISSIONS_DESC"
+              label="JCONFIG_PERMISSIONS_LABEL">
+
+        <field name="rules" type="rules" component="com_gaforsale"
+               class="inputbox" filter="rules" validate="rules"
+               label="JCONFIG_PERMISSIONS_LABEL"
+               section="component"
+        />
+	</fieldset>
+
+    <fieldset name="component">
+        <field name="save_history"
+               type="radio"
+               class="btn-group btn-group-yesno"
+               default="0"
+               label="JGLOBAL_SAVE_HISTORY_OPTIONS_LABEL"
+               description="JGLOBAL_SAVE_HISTORY_OPTIONS_DESC"
+        >
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field name="history_limit"
+               type="text"
+               filter="integer"
+               label="JGLOBAL_HISTORY_LIMIT_OPTIONS_LABEL"
+               description="JGLOBAL_HISTORY_LIMIT_OPTIONS_DESC"
+               default="5"
+        />
+    </fieldset>
+</config>

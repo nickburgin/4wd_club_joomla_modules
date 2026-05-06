@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="sysinfo" addfieldprefix="GlennArkell\Component\Gamerchandise\Administrator\Field">
+		<field name="id" type="text" readonly="true" class="readonly" default="0" label="COM_GAMERCHANDISE_FORM_LBL_ID" description="COM_GAMERCHANDISE_FORM_DESC_ID"/>
+		<field name="ordering" label="COM_GAMERCHANDISE_FORM_LBL_ORDERING" description="COM_GAMERCHANDISE_FORM_DESC_ORDERING"/>
+		<field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+		<field name="checked_out" type="hidden" filter="unset"/>
+		<field name="checked_out_time" type="hidden" filter="unset"/>
+	    <field name="created_by" type="Createdby" hidden="true" default="0" label="COM_GAMERCHANDISE_FORM_LBL_CREATED_BY" description="COM_GAMERCHANDISE_FORM_DESC_CREATED_BY" hint="COM_GAMERCHANDISE_FORM_LBL_CREATED_BY"/>
+	    <field name="modified_by" type="Modifiedby" hidden="true" default="0" label="COM_GAMERCHANDISE_FORM_LBL_MODIFIED_BY" description="COM_GAMERCHANDISE_FORM_DESC_MODIFIED_BY" hint="COM_GAMERCHANDISE_FORM_LBL_MODIFIED_BY"/>
+	    <field name="created_date" type="Timecreated" label="COM_GAMERCHANDISE_FORM_LBL_CREATED_DATE" description="COM_GAMERCHANDISE_FORM_DESC_CREATED_DATE" hint="COM_GAMERCHANDISE_FORM_LBL_CREATED_DATE"/>
+	    <field name="modified_date" type="Timecreated" label="COM_GAMERCHANDISE_FORM_LBL_MODIFIED_DATE" description="COM_GAMERCHANDISE_FORM_DESC_MODIFIED_DATE" hint="COM_GAMERCHANDISE_FORM_LBL_MODIFIED_DATE"/>
+	</fieldset>
+
+	<fieldset name="general" addfieldprefix="GlennArkell\Component\Gamerchandise\Administrator\Field">
+		<field name="cat_id" type="category" extension="com_gamerchandise" required="true" label="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_CAT_ID" description="COM_GAMERCHANDISE_FORM_DESC_PRODUCT_CAT_ID" hint="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_CAT_ID"/>
+		<field name="prod_name" type="text" required="true" label="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_PROD_NAME" description="COM_GAMERCHANDISE_FORM_DESC_PRODUCT_PROD_NAME" hint="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_PROD_NAME"/>
+		<field name="prod_code" type="text" required="true" label="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_PROD_CODE" description="COM_GAMERCHANDISE_FORM_DESC_PRODUCT_PROD_CODE" hint="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_PROD_CODE"/>
+		<field name="prod_img" type="media" directory="merchandise" label="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_PROD_IMG" description="COM_GAMERCHANDISE_FORM_DESC_PRODUCT_PROD_IMG" hint="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_PROD_IMG"/>
+		<field name="gender" type="list" required="true" default="0" label="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_SEX" description="COM_GAMERCHANDISE_FORM_DESC_PRODUCT_SEX">
+			<option value="0">GAGENDER_UNISEX</option>
+			<option value="1">GAGENDER_MENS</option>
+			<option value="2">GAGENDER_LADIES</option>
+		</field>
+		<field name="cost" type="text" required="true" default="0.00" label="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_COST" description="COM_GAMERCHANDISE_FORM_DESC_PRODUCT_COST" hint="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_COST"/>
+		<field name="price" type="text" required="true" default="0.00" label="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_PRICE" description="COM_GAMERCHANDISE_FORM_DESC_PRODUCT_PRICE" hint="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_PRICE"/>
+		<field name="soh" type="text" default="0" label="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_SOH" description="COM_GAMERCHANDISE_FORM_DESC_PRODUCT_SOH" hint="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_SOH"/>
+		<field name="prod_desc" type="textarea" filter="safehtml" class="input-xxlarge" label="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_PROD_DESC" description="COM_GAMERCHANDISE_FORM_DESC_PRODUCT_PROD_DESC" hint="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_PROD_DESC"/>
+	</fieldset>
+
+	<fieldset name="extrainfo">
+		<field name="comment" filter="safehtml" type="textarea" label="COM_GAMERCHANDISE_FORM_LBL_COMMENT" description="COM_GAMERCHANDISE_FORM_DESC_COMMENT" hint="COM_GAMERCHANDISE_FORM_LBL_COMMENT"/>
+		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+	</fieldset>
+</form>

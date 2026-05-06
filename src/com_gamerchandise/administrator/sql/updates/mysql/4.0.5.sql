@@ -1,0 +1,50 @@
+ALTER TABLE `#__gamerchandise_products` CHANGE `state` `state` TINYINT(1) NOT NULL DEFAULT 1;
+ALTER TABLE `#__gamerchandise_products` CHANGE `ordering` `ordering` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_products` CHANGE `checked_out` `checked_out` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_products` CHANGE `created_by` `created_by` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_products` CHANGE `created_date` `created_date` DATETIME NULL;
+ALTER TABLE `#__gamerchandise_products` CHANGE `checked_out` `checked_out` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_products` CHANGE `checked_out_time` `checked_out_time` DATETIME NULL;
+ALTER TABLE `#__gamerchandise_products` change `modified_date` `modified_date` DATETIME NULL;
+ALTER TABLE `#__gamerchandise_products` CHANGE `modified_by` `modified_by` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_products` CHANGE `comment` `comment` TEXT NULL;
+
+ALTER TABLE `#__gamerchandise_products` CHANGE `prod_desc` `prod_desc` TEXT NULL;
+ALTER TABLE `#__gamerchandise_products` CHANGE `soh` `soh` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_products` CHANGE `price` `price` DECIMAL(11,2)  NOT NULL  DEFAULT 0.00;
+ALTER TABLE `#__gamerchandise_products` CHANGE `cost` `cost` DECIMAL(11,2)  NOT NULL  DEFAULT 0.00;
+ALTER TABLE `#__gamerchandise_products` CHANGE `gender` `gender` TINYINT(1) NOT NULL DEFAULT 1;
+ALTER TABLE `#__gamerchandise_products` CHANGE `cat_id` `cat_id` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_products` CHANGE `prod_img` `prod_img` VARCHAR(1024) NULL;
+ALTER TABLE `#__gamerchandise_products` CHANGE `prod_code` `prod_code` VARCHAR(255) NULL;
+ALTER TABLE `#__gamerchandise_products` CHANGE `prod_name` `prod_name` VARCHAR(255) NULL;
+
+ALTER TABLE `#__gamerchandise_sales` CHANGE `state` `state` TINYINT(1) NOT NULL DEFAULT 1;
+ALTER TABLE `#__gamerchandise_sales` CHANGE `ordering` `ordering` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_sales` CHANGE `checked_out` `checked_out` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_sales` CHANGE `created_by` `created_by` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_sales` CHANGE `created_date` `created_date` DATETIME NULL;
+ALTER TABLE `#__gamerchandise_sales` CHANGE `checked_out` `checked_out` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_sales` CHANGE `checked_out_time` `checked_out_time` DATETIME NULL;
+ALTER TABLE `#__gamerchandise_sales` change `modified_date` `modified_date` DATETIME NULL;
+ALTER TABLE `#__gamerchandise_sales` CHANGE `modified_by` `modified_by` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_sales` CHANGE `comment` `comment` TEXT NULL;
+
+ALTER TABLE `#__gamerchandise_sales` CHANGE `user_id` `user_id` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_sales` CHANGE `prod_id` `prod_id` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_sales` CHANGE `cat_colour_id` `cat_colour_id` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_sales` CHANGE `cat_size_id` `cat_size_id` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_sales` CHANGE `order_qty` `order_qty` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_sales` change `date_required` `date_required` DATETIME NULL;
+ALTER TABLE `#__gamerchandise_sales` change `date_delivered` `date_delivered` DATETIME NULL;
+ALTER TABLE `#__gamerchandise_sales` CHANGE `part_qty` `part_qty` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_sales` change `part_delivered` `part_delivered` DATETIME NULL;
+ALTER TABLE `#__gamerchandise_sales` CHANGE `ord_amt` `ord_amt` DECIMAL(11,2)  NOT NULL  DEFAULT 0.00;
+ALTER TABLE `#__gamerchandise_sales` CHANGE `ord_paid` `ord_paid` TINYINT(1) NOT NULL DEFAULT 1;
+ALTER TABLE `#__gamerchandise_sales` CHANGE `order_ref` `order_ref` INT NOT NULL DEFAULT 0;
+ALTER TABLE `#__gamerchandise_sales` change `paid_date` `paid_date` DATETIME NULL;
+
+ALTER TABLE `#__gamerchandise_products` ENGINE=InnoDB;
+ALTER TABLE `#__gamerchandise_products` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `#__gamerchandise_sales` ENGINE=InnoDB;
+ALTER TABLE `#__gamerchandise_sales` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

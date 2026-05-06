@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+    <layout title="COM_GAFORSALE_TITLE_FORM_VIEW_FSITEM" option="View">
+        <message>
+                        <![CDATA[COM_GAFORSALE_TITLE_FORM_VIEW_FSITEM_DESC]]>
+        </message>
+    </layout>
+</metadata>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" client="site" method="upgrade">
+	<name>Glenn's Newsletters</name>
+	<author>Glenn Arkell</author>
+	<authorEmail>glenn@glennarkell.com.au</authorEmail>
+	<authorUrl>https://www.glennarkell.com.au</authorUrl>
+	<copyright>Open Source</copyright>
+	<license>GNU General Public License version 2 or later</license>
+	<creationDate>21 August 2021</creationDate>
+	<version>4.4</version>
+	<description>A simple Newsletters listing display.</description>
+	<namespace path="src">GlennArkell\Module\Glennsnewsletters</namespace>
+
+	<files>
+		<filename module="mod_glennsnewsletters">mod_glennsnewsletters.php</filename>
+		<filename>glennsnewsletters_update.xml</filename>
+		<folder>src</folder>
+		<folder>tmpl</folder>
+    </files>
+
+	<media destination="mod_glennsnewsletters" folder="media">
+		<folder>css</folder>
+		<folder>images</folder>
+	</media>
+
+	<languages>
+		<language tag="en-GB">language/en-GB/mod_glennsnewsletters.ini</language>
+		<language tag="en-GB">language/en-GB/mod_glennsnewsletters.sys.ini</language>
+	</languages>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">				
+				<field name="default_fold" type="folderlist"
+                    directory="images" recursive="true"
+					label="MOD_GLENNNEWSLETTERS_FIELD_DEFAULT_FOLD_LABEL"
+					description="MOD_GLENNNEWSLETTERS_FIELD_DEFAULT_FOLD_DESC" />
+
+				<field name="man_fold" type="text" default=""
+					label="MOD_GLENNNEWSLETTERS_FIELD_MAN_FOLD_LABEL"
+					description="MOD_GLENNNEWSLETTERS_FIELD_MAN_FOLD_DESC" />
+
+				<field name="default_file" type="radio" default="pdf"
+                    class="btn-group btn-group-yesno"
+					label="MOD_GLENNNEWSLETTERS_FIELD_DEFAULT_FILE_LABEL"
+					description="MOD_GLENNNEWSLETTERS_FIELD_DEFAULT_FILE_DESC" >
+					<option value="pdf">pdf</option>
+					<option value="doc">doc</option>
+					<option value="docx">docx</option>
+					<option value="xls">xls</option>
+					<option value="xlsx">xlsx</option>
+				</field>
+
+				<field name="sort_type" type="radio" default="0" class="btn-group btn-group-yesno" filter="int"
+					label="MOD_GLENNNEWSLETTERS_FIELD_SORT_TYPE_LABEL"
+					description="MOD_GLENNNEWSLETTERS_FIELD_SORT_TYPE_DESC" >
+					<option value="0">File Name</option>
+					<option value="1">Modified Date</option>
+				</field>
+
+				<field name="default_order" type="radio" default="0" filter="int"
+                    class="btn-group btn-group-yesno"
+					label="MOD_GLENNNEWSLETTERS_FIELD_DEFAULT_ORDER_LABEL"
+					description="MOD_GLENNNEWSLETTERS_FIELD_DEFAULT_ORDER_DESC" >
+					<option value="0">Descending</option>
+					<option value="1">Ascending</option>
+				</field>
+
+				<field name="sort_prefix" type="text" default="" showon="sort_type:0"
+					label="MOD_GLENNNEWSLETTERS_FIELD_SORT_PREFIX_LABEL"
+					description="MOD_GLENNNEWSLETTERS_FIELD_SORT_PREFIX_DESC" />
+
+				<field name="set_listheight" type="radio" default="0" class="btn-group btn-group-yesno" filter="int"
+					label="MOD_GLENNNEWSLETTERS_FIELD_SET_IFRAME_LABEL"
+					description="MOD_GLENNNEWSLETTERS_FIELD_SET_IFRAME_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="list_height" type="text" default="400" filter="int" showon="set_listheight:1"
+					label="MOD_GLENNNEWSLETTERS_FIELD_IFRAME_HEIGHT_LABEL"
+					description="MOD_GLENNNEWSLETTERS_FIELD_IFRAME_HEIGHT_DESC" />
+
+			</fieldset>
+
+			<fieldset name="advanced">
+				<field name="layout" type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+
+				<field name="moduleclass_sfx" type="text"
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+
+				<field name="cache" type="list" default="1"
+					label="COM_MODULES_FIELD_CACHING_LABEL"
+					description="COM_MODULES_FIELD_CACHING_DESC">
+					<option value="1">JGLOBAL_USE_GLOBAL</option>
+					<option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+
+				<field name="cache_time" type="text" default="900"
+					label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+					description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+				<field name="cachemode" type="hidden" default="static">
+					<option value="static"></option>
+				</field>
+				<field name="content_tag" type="text" default="p"
+					label="MOD_GLENNNEWSLETTERS_FIELD_CONTENT_TAG_LABEL"
+					description="MOD_GLENNNEWSLETTERS_FIELD_CONTENT_TAG_DESC" />
+
+			</fieldset>
+		</fields>
+	</config>
+
+    <updateservers>
+            <server type="extension" name="GlennsNewsletters" priority="1">https://www.glennarkell.com.au/joomlaorg/modules/j4/glennsnewsletters_update.xml</server>
+    </updateservers>
+
+</extension>

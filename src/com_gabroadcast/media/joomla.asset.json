@@ -1,0 +1,55 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "com_gabroadcast",
+  "version": "4.2.1",
+  "description": "This file contains details of the assets used by the Broadcast component by Glenn Arkell.",
+  "license": "GPL-2.0-or-later",
+  "assets": [
+    {
+      "name": "com_gabroadcast.gabroadcast",
+      "description": "Glenn's Component styling.",
+      "type": "style",
+      "uri": "com_gabroadcast/gabroadcast.css",
+      "dependencies": [
+        "fontawesome"
+      ]
+    },
+    {
+      "name": "com_gabroadcast.item",
+      "description": "Glenn's Component styling for an item.",
+      "type": "style",
+      "uri": "com_gabroadcast/item.css",
+      "dependencies": [
+        "com_gabroadcast.gabroadcast"
+      ]
+    },
+    {
+      "name": "com_gabroadcast.list",
+      "description": "Glenn's Component styling for a list.",
+      "type": "style",
+      "uri": "com_gabroadcast/list.css",
+      "dependencies": [
+        "com_gabroadcast.gabroadcast"
+      ]
+    },
+    {
+      "name": "com_gabroadcast.form",
+      "description": "Glenn's Component styling for a form.",
+      "type": "style",
+      "uri": "com_gabroadcast/form.css",
+      "dependencies": [
+        "com_gabroadcast.gabroadcast"
+      ]
+    },
+    {
+      "name": "com_gabroadcast.gabroadcastpreset",
+      "type": "preset",
+      "dependencies": [
+        "com_gabroadcast.gabroadcast#style",
+        "com_gabroadcast.form#style",
+        "com_gabroadcast.item#style",
+        "com_gabroadcast.list#style"
+      ]
+    }
+  ]
+}

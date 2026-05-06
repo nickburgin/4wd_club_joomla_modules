@@ -1,0 +1,55 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "com_gafinance",
+  "version": "5.0.0",
+  "description": "This file contains details of the assets used by the component by Glenn Arkell.",
+  "license": "GPL-2.0-or-later",
+  "assets": [
+    {
+      "name": "com_gafinance.gafinance",
+      "description": "Glenn's Component styling.",
+      "type": "style",
+      "uri": "com_gafinance/gafinance.css",
+      "dependencies": [
+        "fontawesome"
+      ]
+    },
+    {
+      "name": "com_gafinance.item",
+      "description": "Glenn's Component styling for an item.",
+      "type": "style",
+      "uri": "com_gafinance/item.css",
+      "dependencies": [
+        "com_gafinance.gafinance"
+      ]
+    },
+    {
+      "name": "com_gafinance.list",
+      "description": "Glenn's Component styling for a list.",
+      "type": "style",
+      "uri": "com_gafinance/list.css",
+      "dependencies": [
+        "com_gafinance.gafinance"
+      ]
+    },
+    {
+      "name": "com_gafinance.form",
+      "description": "Glenn's Component styling for a form.",
+      "type": "style",
+      "uri": "com_gafinance/form.css",
+      "dependencies": [
+        "com_gafinance.gafinance"
+      ]
+    },
+    {
+      "name": "com_gafinance.gafinancepreset",
+      "type": "preset",
+      "dependencies": [
+        "com_gafinance.gafinance#style",
+        "com_gafinance.form#style",
+        "com_gafinance.item#style",
+        "com_gafinance.list#style"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<menu
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="urn:joomla.org"
+	xsi:schemaLocation="urn:joomla.org menu.xsd"
+	>
+	<menuitem
+		title="COM_GATRACKLOG_DASHBOARD"
+		type="heading"
+		icon="icon-fas fa-settings"
+		class="class:icon-fas fa-settings"
+		dashboard="gatracklog"
+		>
+		<menuitem
+			title="COM_GATRACKLOG_TITLE_TRACKLOGS"
+			type="component"
+			element="com_gatracklog"
+			link="index.php?option=com_gatracklog&amp;view=tracklogs"
+			quicktask="index.php?option=com_gatracklog&amp;task=tracklog.edit"
+			quicktask-title="COM_GATRACKLOG_CREATE_NEW_TRACKLOG"
+		/>
+
+		<menuitem
+			title="COM_GATRACKLOG_TITLE_RATINGS"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gatracklog"
+			quicktask="index.php?option=com_categories&amp;extension=com_gatracklog&amp;task=category.add"
+			quicktask-title="COM_GATRACKLOG_NEW_RATINGS"
+		/>
+
+		<menuitem
+			title="COM_GATRACKLOG_TITLE_TRACK_ZONES"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gatracklog.track_zone"
+			quicktask="index.php?option=com_categories&amp;extension=com_gatracklog.track_zone&amp;task=category.add"
+			quicktask-title="COM_GATRACKLOG_NEW_TRACK_ZONES"
+		/>
+
+		<menuitem
+			title="COM_GATRACKLOG_TITLE_SEASON_CLOSES"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gatracklog.season_close"
+			quicktask="index.php?option=com_categories&amp;extension=com_gatracklog.season_close&amp;task=category.add"
+			quicktask-title="COM_GATRACKLOG_NEW_SEASON_CLOSES"
+		/>
+
+		<menuitem
+			title="COM_GATRACKLOG_CONFIGURATION"
+			type="component"
+			element="com_config"
+			link="index.php?option=com_config&amp;view=component&amp;component=com_gatracklog&amp;path=&amp;return="
+		/>
+
+	</menuitem>
+
+</menu>

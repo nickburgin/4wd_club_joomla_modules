@@ -1,0 +1,55 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "com_gacalevents",
+  "version": "3.0.0",
+  "description": "This file contains details of the assets used by the Events Calendar component by Glenn Arkell.",
+  "license": "GPL-2.0-or-later",
+  "assets": [
+    {
+      "name": "com_gacalevents.gacalevents",
+      "description": "Glenn's Component styling.",
+      "type": "style",
+      "uri": "com_gacalevents/gacalevents.css",
+      "dependencies": [
+        "fontawesome"
+      ]
+    },
+    {
+      "name": "com_gacalevents.item",
+      "description": "Glenn's Component styling for an item.",
+      "type": "style",
+      "uri": "com_gacalevents/item.css",
+      "dependencies": [
+        "com_gacalevents.gacalevents"
+      ]
+    },
+    {
+      "name": "com_gacalevents.list",
+      "description": "Glenn's Component styling for a list.",
+      "type": "style",
+      "uri": "com_gacalevents/list.css",
+      "dependencies": [
+        "com_gacalevents.gacalevents"
+      ]
+    },
+    {
+      "name": "com_gacalevents.form",
+      "description": "Glenn's Component styling for a form.",
+      "type": "style",
+      "uri": "com_gacalevents/form.css",
+      "dependencies": [
+        "com_gacalevents.gacalevents"
+      ]
+    },
+    {
+      "name": "com_gacalevents.gacaleventspreset",
+      "type": "preset",
+      "dependencies": [
+        "com_gacalevents.gacalevents#style",
+        "com_gacalevents.form#style",
+        "com_gacalevents.item#style",
+        "com_gacalevents.list#style"
+      ]
+    }
+  ]
+}

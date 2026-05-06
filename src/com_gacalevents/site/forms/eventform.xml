@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="GlennArkell\Component\Gacalevents\Administrator\Field">
+    <fieldset name="sysinfo">
+        <field name="id" type="text" readonly="true" class="readonly" default="0" description="JGLOBAL_FIELD_ID_DESC"/>
+        <field name="ordering"/>
+        <field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+          <option value="1">JPUBLISHED</option>
+          <option value="0">JUNPUBLISHED</option>
+          <option value="2">JARCHIVED</option>
+          <option value="-2">JTRASHED</option>
+        </field>
+        <field name="checked_out" type="hidden" filter="unset"/>
+        <field name="checked_out_time" type="hidden" filter="unset"/>
+        <field name="created_by" type="createdby" default="0" label="COM_GACALEVENTS_FORM_LBL_CREATED_BY" description="COM_GACALEVENTS_FORM_DESC_CREATED_BY" hidden="true" hint="COM_GACALEVENTS_FORM_LBL_CREATED_BY"/>
+        <field name="modified_by" type="modifiedby" default="0" label="COM_GACALEVENTS_FORM_LBL_MODIFIED_BY" description="COM_GACALEVENTS_FORM_DESC_MODIFIED_BY" hidden="true" hint="COM_GACALEVENTS_FORM_LBL_MODIFIED_BY"/>
+        <field name="created_date" type="timecreated" label="COM_GACALEVENTS_FORM_LBL_CREATED_DATE" description="COM_GACALEVENTS_FORM_DESC_CREATED_DATE" hint="COM_GACALEVENTS_FORM_LBL_CREATED_DATE"/>
+        <field name="modified_date" type="timecreated" label="COM_GACALEVENTS_FORM_LBL_MODIFIED_DATE" description="COM_GACALEVENTS_FORM_DESC_MODIFIED_DATE" hint="COM_GACALEVENTS_FORM_LBL_MODIFIED_DATE"/>
+	</fieldset>
+
+	<fieldset name="general">
+        <field name="title" filter="safehtml" type="text" required="true" class="input-xxlarge" label="COM_GACALEVENTS_FORM_LBL_EVENT_TITLE" description="COM_GACALEVENTS_FORM_DESC_EVENT_TITLE" hint="COM_GACALEVENTS_FORM_LBL_EVENT_TITLE"/>
+        <field name="brief_desc" filter="safehtml" type="text" class="input-xxlarge" label="COM_GACALEVENTS_FORM_LBL_EVENT_BRIEF_DESC" description="COM_GACALEVENTS_FORM_DESC_EVENT_BRIEF_DESC" hint="COM_GACALEVENTS_FORM_LBL_EVENT_BRIEF_DESC"/>
+        <field name="catid" type="category" extension="com_gacalevents.events" label="COM_GACALEVENTS_FORM_LBL_EVENT_CATID" description="COM_GACALEVENTS_FORM_DESC_EVENT_CATID" hint="COM_GACALEVENTS_FORM_LBL_EVENT_CATID"/>
+        <field name="leader" filter="safehtml" type="text" label="COM_GACALEVENTS_FORM_LBL_EVENT_LEADER" description="COM_GACALEVENTS_FORM_DESC_EVENT_LEADER" hint="COM_GACALEVENTS_FORM_LBL_EVENT_LEADER"/>
+        <field name="depart_point" type="category" extension="com_gacalevents.deptpt" label="COM_GACALEVENTS_FORM_LBL_EVENT_DEPART_POINT" description="COM_GACALEVENTS_FORM_DESC_EVENT_DEPART_POINT" hint="COM_GACALEVENTS_FORM_LBL_EVENT_DEPART_POINT"/>
+        <field name="depart_date" type="calendar"
+            filterFormat="Y-m-d" translateformat="true"
+            label="COM_GACALEVENTS_FORM_LBL_EVENT_DEPART_DATE"
+            description="COM_GACALEVENTS_FORM_DESC_EVENT_DEPART_DATE"
+            hint="COM_GACALEVENTS_HINT_DATE"/>
+        <field name="return_date" type="calendar"
+            filterFormat="Y-m-d" translateformat="true"
+            label="COM_GACALEVENTS_FORM_LBL_EVENT_RETURN_DATE"
+            description="COM_GACALEVENTS_FORM_DESC_EVENT_RETURN_DATE"
+            hint="COM_GACALEVENTS_HINT_DATE"/>
+        <field name="max_attend" type="text" label="COM_GACALEVENTS_FORM_LBL_EVENT_MAX_ATTEND" description="COM_GACALEVENTS_FORM_DESC_EVENT_MAX_ATTEND" hint="COM_GACALEVENTS_FORM_LBL_EVENT_MAX_ATTEND" default="0" filter="safehtml" />
+        <field name="inc_mod" type="radio" layout="joomla.form.field.radio.switcher" default="1" label="COM_GACALEVENTS_FORM_LBL_EVENT_INC_MOD" description="COM_GACALEVENTS_FORM_DESC_EVENT_INC_MOD" hint="COM_GACALEVENTS_FORM_LBL_EVENT_INC_MOD" >
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="formal_event" type="radio" layout="joomla.form.field.radio.switcher" default="0" label="COM_GACALEVENTS_FORM_LBL_EVENT_FORMAL_EVENT" description="COM_GACALEVENTS_FORM_DESC_EVENT_FORMAL_EVENT" hint="COM_GACALEVENTS_FORM_LBL_EVENT_FORMAL_EVENT" >
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+        <field name="allow_pub" type="radio" layout="joomla.form.field.radio.switcher" default="0" label="COM_GACALEVENTS_FORM_LBL_EVENT_ALLOW_PUB" description="COM_GACALEVENTS_FORM_DESC_EVENT_ALLOW_PUB" hint="COM_GACALEVENTS_FORM_LBL_EVENT_ALLOW_PUB" >
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+	</fieldset>
+
+	<fieldset name="details">
+        <field name="event_details" type="editor" filter="raw" label="COM_GACALEVENTS_FORM_LBL_EVENT_EVENT_DETAILS" description="COM_GACALEVENTS_FORM_DESC_EVENT_EVENT_DETAILS" hint="COM_GACALEVENTS_FORM_LBL_EVENT_EVENT_DETAILS" />
+	</fieldset>
+
+	<fieldset name="costings">
+        <field name="mbr_cost" type="text" label="COM_GACALEVENTS_FORM_LBL_EVENT_MBR_COST" description="COM_GACALEVENTS_FORM_DESC_EVENT_MBR_COST" hint="COM_GACALEVENTS_FORM_LBL_EVENT_MBR_COST" default="0.00" filter="safehtml" />
+        <field name="pub_cost" type="text" showon="allow_pub:1" label="COM_GACALEVENTS_FORM_LBL_EVENT_PUB_COST" description="COM_GACALEVENTS_FORM_DESC_EVENT_PUB_COST" hint="COM_GACALEVENTS_FORM_LBL_EVENT_PUB_COST" default="0.00" filter="safehtml" />
+	</fieldset>
+
+	<fieldset name="extrainfo">
+        <field name="comment" filter="safehtml" type="textarea" label="COM_GACALEVENTS_FORM_LBL_COMMENT" description="COM_GACALEVENTS_FORM_DESC_COMMENT" />
+	</fieldset>
+
+	<fieldset name="others">
+        <field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+    </fieldset>
+
+	<fieldset name="notifyEmail">
+        <field name="notifsubject" filter="safehtml" type="text" label="COM_GACALEVENTS_FORM_LBL_EVENT_NOTIFSUBJ" description="COM_GACALEVENTS_FORM_DESC_EVENT_NOTIFSUBJ" hint="COM_GACALEVENTS_FORM_LBL_EVENT_NOTIFSUBJ"/>
+        <field name="notifbody" filter="safehtml" type="textarea" rows="5" label="COM_GACALEVENTS_FORM_LBL_EVENT_NOTIFBODY" description="COM_GACALEVENTS_FORM_DESC_EVENT_NOTIFBODY" hint="COM_GACALEVENTS_FORM_LBL_EVENT_NOTIFBODY"/>
+    </fieldset>
+
+</form>

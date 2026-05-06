@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" client="site" method="upgrade">
+	<name>MOD_GAUSERS_EXECS</name>
+	<author>Glenn Arkell</author>
+	<authorEmail>glenn@glennarkell.com.au</authorEmail>
+	<authorUrl>https://www.glennarkell.com.au</authorUrl>
+	<copyright>Open Source</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<creationDate>22 November 2019</creationDate>
+	<version>5.1.6</version>
+	<description>Display Club Executives</description>
+
+	<namespace path="src">GlennArkell\Module\Gausersexecs</namespace>
+
+	<files>
+		<filename module="mod_gausersexecs">mod_gausersexecs.php</filename>
+		<folder>src</folder>
+		<folder>tmpl</folder>
+    </files>
+
+	<media destination="mod_gausersexecs" folder="media">
+		<folder>css</folder>
+	</media>
+
+	<languages>
+		<language tag="en-GB">language/en-GB/mod_gausersexecs.ini</language>
+		<language tag="en-GB">language/en-GB/mod_gausersexecs.sys.ini</language>
+	</languages>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+
+		        <field name="intro_text" type="editor" filter="safehtml"
+		             buttons="true" hide="article,image,pagebreak,readmore'"
+					 label="MOD_GAUSERSEXECS_INTRO_TEXT_LABEL"
+		             description="MOD_GAUSERSEXECS_INTRO_TEXT_DESC" />
+
+				<field name="set_listheight" type="radio" default="0" class="btn-group btn-group-yesno" filter="int"
+					label="MOD_GAUSERSEXECS_FIELD_SET_IFRAME_LABEL"
+					description="MOD_GAUSERSEXECS_FIELD_SET_IFRAME_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="list_height" type="text" default="400" filter="int" showon="set_listheight:1"
+					label="MOD_GAUSERSEXECS_FIELD_IFRAME_HEIGHT_LABEL"
+					description="MOD_GAUSERSEXECS_FIELD_IFRAME_HEIGHT_DESC" />
+
+				<field name="show_past" type="radio" default="0"
+					class="btn-group btn-group-yesno" filter="int"
+                    label="MOD_GAUSERSEXECS_FIELD_SHOW_PAST_LABEL"
+					description="MOD_GAUSERSEXECS_FIELD_SHOW_PAST_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="show_pos" type="radio" default="0"
+					class="btn-group btn-group-yesno" filter="int"
+                    label="MOD_GAUSERSEXECS_FIELD_SHOW_POS_LABEL"
+					description="MOD_GAUSERSEXECS_FIELD_SHOW_POS_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="show_exec" type="radio" default="0"
+					class="btn-group btn-group-yesno" filter="int"
+                    label="MOD_GAUSERSEXECS_FIELD_SHOW_EXEC_LABEL"
+					description="MOD_GAUSERSEXECS_FIELD_SHOW_EXEC_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+			</fieldset>
+
+			<fieldset name="advanced">
+				<field name="layout" type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+
+				<field name="moduleclass_sfx" type="text"
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+
+				<field name="cache" type="list" default="1"
+					label="COM_MODULES_FIELD_CACHING_LABEL"
+					description="COM_MODULES_FIELD_CACHING_DESC">
+					<option value="1">JGLOBAL_USE_GLOBAL</option>
+					<option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+
+				<field name="cache_time" type="text" default="900"
+					label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+					description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+
+				<field name="cachemode" type="hidden" default="static">
+					<option value="static"></option>
+				</field>
+
+			</fieldset>
+		</fields>
+	</config>
+
+</extension>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="3.0" method="upgrade">
+    <name>com_gaforsale</name>
+    <creationDate>2016-05-06</creationDate>
+    <copyright>Copyright (C) 2013. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Glenn Arkell</author>
+    <authorEmail>glenn@glennarkell.com.au</authorEmail>
+    <authorUrl>https://www.glennarkell.com.au</authorUrl>
+    <version>4.0.2</version>
+    <description>A simple component to manage club/group members forsale items.</description>
+    
+    <namespace path="src">GlennArkell\Component\Gaforsale</namespace>
+
+	<scriptfile>script.php</scriptfile>
+
+    <install> <!-- Runs on install -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <update> <!-- Runs on update -->
+		<schemas>
+			<schemapath type="mysql">sql/updates/mysql/</schemapath>
+		</schemas>
+    </update>
+
+    <uninstall> <!-- Runs on uninstall -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+
+    <files folder="site">
+        <folder>forms</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+
+    <media destination="com_gaforsale" folder="media">
+        <folder>css</folder>
+        <folder>images</folder>
+        <folder>js</folder>
+    </media>
+
+    <languages folder="site">
+			<language tag="en-GB">language/en-GB/com_gaforsale.ini</language>
+    </languages>
+
+    <administration>
+
+        <menu img="class:fas fa-shopify" >COM_GAFORSALE</menu>
+        <submenu>
+			<menu link="option=com_gaforsale&amp;view=fsitems" view="fsitems" img="class:fas fa-shopify" alt="Gaforsale/Fsitems">COM_GAFORSALE_TITLE_FSITEMS</menu>
+        </submenu>
+        <files folder="administrator">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <folder>forms</folder>
+            <folder>src</folder>
+            <folder>tmpl</folder>
+            <folder>services</folder>
+            <folder>presets</folder>
+            <folder>sql</folder>
+        </files>
+
+        <languages folder="administrator">
+			<language tag="en-GB">language/en-GB/com_gaforsale.ini</language>
+			<language tag="en-GB">language/en-GB/com_gaforsale.sys.ini</language>
+        </languages>
+
+    </administration>
+
+    <config>
+        <fields name="params">
+            <fieldset name="component">
+                <field name="save_history" default="0" />
+            </fieldset>
+        </fields>
+    </config>
+
+	<changelogurl>https://www.glennarkell.com.au/joomlaorg/components/j4/gaforsale-changelog.xml</changelogurl>
+
+	<updateservers>
+		<server type="extension" priority="1" name="ForSale Management">https://www.glennarkell.com.au/joomlaorg/components/j4/gaforsale-update.xml</server>
+	</updateservers>
+</extension>

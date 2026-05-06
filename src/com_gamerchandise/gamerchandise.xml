@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="4.0" method="upgrade">
+    <name>com_gamerchandise</name>
+    <creationDate>27 Aug 2016</creationDate>
+    <copyright>2016 Glenn Arkell</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Glenn Arkell</author>
+    <authorEmail>glenn@glennarkell.com.au</authorEmail>
+    <authorUrl>http://www.glennarkell.com.au</authorUrl>
+    <version>4.0.7</version>
+    <description>A simple merchandise system for POs and invoicing.</description>
+    
+    <namespace path="src">GlennArkell\Component\Gamerchandise</namespace>
+
+	<scriptfile>script.php</scriptfile>
+
+    <install> <!-- Runs on install -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <update> <!-- Runs on update -->
+		<schemas>
+			<schemapath type="mysql">sql/updates/mysql/</schemapath>
+		</schemas>
+    </update>
+    <uninstall> <!-- Runs on uninstall -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+
+	<dashboards>
+		<dashboard title="COM_GAMERCHANDISE_DASHBOARD_TITLE" icon="fas fa-shopping-cart">
+			COM_GAMERCHANDISE_DASHBOARD_TITLE
+		</dashboard>
+	</dashboards>
+
+    <files folder="site">
+        <folder>forms</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+
+    <media destination="com_gamerchandise" folder="media">
+        <folder>js</folder>
+		<folder>images</folder>
+        <folder>css</folder>
+        <file>joomla.asset.json</file>
+    </media>
+
+    <languages folder="site">
+			<language tag="en-GB">language/en-GB/com_gamerchandise.ini</language>
+    </languages>
+
+    <administration>
+        <menu img="class:fas fa-shopping-cart" >
+			COM_GAMERCHANDISE
+			<params>
+				<dashboard>gamerchandise</dashboard>
+			</params>
+		</menu>
+
+        <files folder="administrator">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <folder>forms</folder>
+            <folder>src</folder>
+            <folder>tmpl</folder>
+            <folder>services</folder>
+            <folder>presets</folder>
+            <folder>sql</folder>
+        </files>
+
+        <languages folder="administrator">
+			<language tag="en-GB">language/en-GB/com_gamerchandise.ini</language>
+			<language tag="en-GB">language/en-GB/com_gamerchandise.sys.ini</language>
+        </languages>
+    </administration>
+
+	<changelogurl>https://www.glennarkell.com.au/joomlaorg/components/j4/gamerchandise-changelog.xml</changelogurl>
+
+	<updateservers>
+		<server type="extension" priority="1" name="Merchandise Management">https://www.glennarkell.com.au/joomlaorg/components/j4/gamerchandise-update.xml</server>
+	</updateservers>
+</extension>

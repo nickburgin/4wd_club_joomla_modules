@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="sysinfo" addfieldprefix="GlennArkell\Component\Gamerchandise\Administrator\Field">
+		<field name="id" type="text" readonly="true" class="readonly" default="0" label="COM_GAMERCHANDISE_FORM_LBL_ID" description="COM_GAMERCHANDISE_FORM_DESC_ID"/>
+		<field name="ordering" label="COM_GAMERCHANDISE_FORM_LBL_ORDERING" description="COM_GAMERCHANDISE_FORM_DESC_ORDERING"/>
+		<field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+		<field name="checked_out" type="hidden" filter="unset"/>
+		<field name="checked_out_time" type="hidden" filter="unset"/>
+	    <field name="created_by" type="Createdby" hidden="true" default="0" label="COM_GAMERCHANDISE_FORM_LBL_CREATED_BY" description="COM_GAMERCHANDISE_FORM_DESC_CREATED_BY" hint="COM_GAMERCHANDISE_FORM_LBL_CREATED_BY"/>
+	    <field name="modified_by" type="Modifiedby" hidden="true" default="0" label="COM_GAMERCHANDISE_FORM_LBL_MODIFIED_BY" description="COM_GAMERCHANDISE_FORM_DESC_MODIFIED_BY" hint="COM_GAMERCHANDISE_FORM_LBL_MODIFIED_BY"/>
+	    <field name="created_date" type="Timecreated" label="COM_GAMERCHANDISE_FORM_LBL_CREATED_DATE" description="COM_GAMERCHANDISE_FORM_DESC_CREATED_DATE" hint="COM_GAMERCHANDISE_FORM_LBL_CREATED_DATE"/>
+	    <field name="modified_date" type="Timecreated" label="COM_GAMERCHANDISE_FORM_LBL_MODIFIED_DATE" description="COM_GAMERCHANDISE_FORM_DESC_MODIFIED_DATE" hint="COM_GAMERCHANDISE_FORM_LBL_MODIFIED_DATE"/>
+	</fieldset>
+
+	<fieldset name="special" addfieldprefix="GlennArkell\Component\Gamerchandise\Administrator\Field">
+	    <field name="prod_id" type="Product" required="true"
+			label="COM_GAMERCHANDISE_FORM_LBL_SALE_PROD_ID" description="COM_GAMERCHANDISE_FORM_DESC_SALE_PROD_ID" hint="COM_GAMERCHANDISE_FORM_LBL_SALE_PROD_ID"/>
+	    <field name="user_id" type="Member" required="true"
+			label="COM_GAMERCHANDISE_FORM_LBL_SALE_USER_ID" description="COM_GAMERCHANDISE_FORM_DESC_SALE_USER_ID" hint="COM_GAMERCHANDISE_FORM_LBL_SALE_USER_ID"/>
+	    <field name="date_delivered" type="calendar"
+			label="COM_GAMERCHANDISE_FORM_LBL_SALE_DATE_DELIVERED" description="COM_GAMERCHANDISE_FORM_DESC_SALE_DATE_DELIVERED" hint="COM_GAMERCHANDISE_FORM_LBL_SALE_DATE_DELIVERED"/>
+	    <field name="part_qty" type="text"
+			label="COM_GAMERCHANDISE_FORM_LBL_SALE_PART_QTY" description="COM_GAMERCHANDISE_FORM_DESC_SALE_PART_QTY" hint="COM_GAMERCHANDISE_FORM_LBL_SALE_PART_QTY"/>
+	    <field name="part_delivered" type="calendar" class="inputbox"
+			label="COM_GAMERCHANDISE_FORM_LBL_SALE_PART_DELIVERED" description="COM_GAMERCHANDISE_FORM_DESC_SALE_PART_DELIVERED" hint="COM_GAMERCHANDISE_FORM_LBL_SALE_PART_DELIVERED"/>
+		<field name="price" type="text" required="true" default="0.00" 
+			label="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_PRICE" description="COM_GAMERCHANDISE_FORM_DESC_PRODUCT_PRICE" hint="COM_GAMERCHANDISE_FORM_LBL_PRODUCT_PRICE"/>
+	    <field name="ord_amt" type="text"
+			label="COM_GAMERCHANDISE_FORM_LBL_SALE_ORD_AMT" description="COM_GAMERCHANDISE_FORM_DESC_SALE_ORD_AMT" hint="COM_GAMERCHANDISE_FORM_LBL_SALE_ORD_AMT"/>
+	    <field name="ord_paid" type="radio" class="btn-group btn-group-yesno" default="0"
+			label="COM_GAMERCHANDISE_FORM_LBL_SALE_ORD_PAID" description="COM_GAMERCHANDISE_FORM_DESC_SALE_ORD_PAID" hint="COM_GAMERCHANDISE_FORM_LBL_SALE_ORD_PAID">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+	    </field>
+	    <field name="paid_date" type="calendar" filter="safehtml"
+			label="COM_GAMERCHANDISE_FORM_LBL_SALE_PAID_DATE" description="COM_GAMERCHANDISE_FORM_DESC_SALE_PAID_DATE" hint="COM_GAMERCHANDISE_FORM_LBL_SALE_PAID_DATE"/>
+
+	</fieldset>
+
+	<fieldset name="general" addfieldprefix="GlennArkell\Component\Gamerchandise\Administrator\Field">
+
+	    <field name="cat_colour_id" type="category" extension="com_gamerchandise.prod_colours" required="true" label="COM_GAMERCHANDISE_FORM_LBL_SALE_CAT_COLOUR_ID" description="COM_GAMERCHANDISE_FORM_DESC_SALE_CAT_COLOUR_ID" hint="COM_GAMERCHANDISE_FORM_LBL_SALE_CAT_COLOUR_ID"/>
+	    <field name="cat_size_id" type="category" extension="com_gamerchandise.prod_sizes" required="true" label="COM_GAMERCHANDISE_FORM_LBL_SALE_CAT_SIZE_ID" description="COM_GAMERCHANDISE_FORM_DESC_SALE_CAT_SIZE_ID" hint="COM_GAMERCHANDISE_FORM_LBL_SALE_CAT_SIZE_ID"/>
+	    <field name="order_qty" type="integer" required="true" default="1" first="1" last="20" step="1"
+			label="COM_GAMERCHANDISE_FORM_LBL_SALE_ORDER_QTY" description="COM_GAMERCHANDISE_FORM_DESC_SALE_ORDER_QTY" hint="COM_GAMERCHANDISE_FORM_LBL_SALE_ORDER_QTY"/>
+	    <field name="date_required" type="calendar"
+			label="COM_GAMERCHANDISE_FORM_LBL_SALE_DATE_REQUIRED" description="COM_GAMERCHANDISE_FORM_DESC_SALE_DATE_REQUIRED" hint="COM_GAMERCHANDISE_FORM_LBL_SALE_DATE_REQUIRED"/>
+
+	</fieldset>
+
+	<fieldset name="extrainfo">
+		<field name="comment" filter="safehtml" type="textarea" label="COM_GAMERCHANDISE_FORM_LBL_COMMENT" description="COM_GAMERCHANDISE_FORM_DESC_COMMENT" hint="COM_GAMERCHANDISE_FORM_LBL_COMMENT"/>
+		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+	</fieldset>
+</form>

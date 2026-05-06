@@ -1,0 +1,206 @@
+.icon-48-products {
+      background-image: url(../images/l_products.png);
+      padding-left:60px!important;
+}
+
+.icon-48-product {
+      background-image: url(../images/l_products.png);
+      padding-left:60px!important;
+}
+
+.icon-48-sales {
+      background-image: url(../images/l_sales.png);
+      padding-left:60px!important;
+}
+
+.icon-48-sale {
+      background-image: url(../images/l_sales.png);
+      padding-left:60px!important;
+}
+
+.icon-16-male {
+      background-image: url(../images/icon-16-male.png);
+}
+
+.icon-16-female {
+      background-image: url(../images/icon-16-female.png);
+}
+
+.color-box-products {
+      float: left;
+	  width: 15px;
+	  height: 15px;
+	  margin-right: 5px;
+	  border: 1px solid rgba(0, 0, 0, .2);
+}
+
+.other-filters{
+    padding: 0 14px;
+}
+
+.right {
+	float: right;
+}
+.left {
+	float: left;
+}
+
+img.thumbnail {
+    max-width: 300px;
+}
+img.fullwidth {
+    max-width: 900px;
+}
+img.smalltn_p {
+    max-width: 80px;
+    float: left;
+}
+img.smalltn_l {
+    max-height: 80px;
+    float: left;
+}
+.modal-dialog {
+	width: 400px;
+	height: 264px;
+}
+	
+div.row0 {
+	background-color: #ffff99;
+}
+div.row1 {
+	background-color: #e0e0e0;
+}
+div.row2 {
+	background-color: #ebd6ca;
+}
+div.row0,
+div.row1,
+div.row2 {
+	width: 48%;
+	height: 320px;
+	padding: 0 5px;
+	float: left;
+	border: 1px solid #ccc;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    img.thumbnail {
+        max-width: 225px;
+    }
+    img.fullwidth {
+        max-width: 560px;
+    }
+	div.row0,
+	div.row1,
+	div.row2 {
+		width: 45%;
+	}
+}
+@media (min-width: 601px) and (max-width: 767px) {
+    img.thumbnail {
+        max-width: 160px;
+    }
+    img.fullwidth {
+        max-width: 510px;
+    }
+	div.row0,
+	div.row1,
+	div.row2 {
+		width: 96%;
+	}
+}
+@media (min-width: 481px) and (max-width: 600px) {
+    img.thumbnail {
+        max-width: 120px;
+    }
+    img.fullwidth {
+        max-width: 400px;
+    }
+	div.row0,
+	div.row1,
+	div.row2 {
+		width: 96%;
+	}
+}
+@media (min-width: 321px) and (max-width: 480px) {
+    img.thumbnail {
+        max-width: 70px;
+    }
+    img.fullwidth {
+        max-width: 240px;
+    }
+	div.row0,
+	div.row1,
+	div.row2 {
+		width: 96%;
+	}
+}
+@media (max-width: 320px) {
+    img.thumbnail {
+        max-width: 70px;
+    }
+    img.fullwidth {
+        max-width: 240px;
+    }
+	div.row0,
+	div.row1,
+	div.row2 {
+		width: 96%;
+	}
+}
+
+/* 
+div.modal.fade.in {
+    top: 30% !important;
+}
+
+div.modal-body {
+    display: none;
+}
+div.modal {
+    width: auto !important;
+}
+ */
+
+.xbottom {
+    margin-bottom: 10px !important;
+}
+
+/*  A = star, S = magnify, D = calendar, F = life bouy, G = bigTick, H = triangle!, J = crossinCircle, K = minusInCircle, L = dustbin, : = spanner  */
+/*  Q = download, W = music, E = question, R = upload, T = funnel, Y = check, I = bigCross, O = inbox, P = full-inbox, { = fastForward, } = fullBack, | = fastRewind */
+/*  Z = 3dots, X = 4dots, C = calendar, V = play, B = star, N = openEnvelope, M = closedEnvelope, < = eye, > = tickSquare, ? = squareinsquare*/
+/*  ~ = tilda, @ = hollowStar, # = padlock, $ = speachbubble, % = conversation, ^ = bigMinus, & = OutOfBox, * = plusInCircle, ( = undo, ) = newDoc, _ = key, + = penPaper*/
+
+[class^="icon-redcross"],
+[class*=" icon-redcross"],
+[class^="icon-greentick"],
+[class*=" icon-greentick"] {
+    margin-right: 5px;
+    font-size: 110%;
+}
+
+.icon-redcross:before {
+    color: #bd363f; /* red */
+    content: "I";
+}
+
+.icon-greentick:before {
+    color: #51a351; /* green */
+    content: "G";
+}
+
+.zoom {
+	padding: 1px;
+	transition: transform .2s; /* Animation */
+	width: 100px;
+	height: auto;
+	margin: 0 auto;
+}
+
+.zoom:hover {
+	transform: scale(5.5); /* 550% */
+}
+
+.btn-inverse {
+	background-color: --var(dark);
+}	

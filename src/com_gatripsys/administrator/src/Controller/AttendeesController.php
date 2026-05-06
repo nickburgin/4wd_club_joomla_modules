@@ -1,0 +1,100 @@
+<?php
+/**
+ * @version     5.1.0
+ * @package     com_gatripsys
+ * @copyright   Copyright (C) 2014. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Glenn Arkell <glenn@glennarkell.com.au> - http://www.glennarkell.com.au
+ */
+
+namespace GlennArkell\Component\Gatripsys\Administrator\Controller;
+
+// No direct access.
+defined('_JEXEC') or die;
+
+use \Joomla\CMS\Application\SiteApplication;
+use \Joomla\CMS\Language\Multilanguage;
+use \Joomla\CMS\MVC\Controller\AdminController;
+use \Joomla\CMS\Router\Route;
+use \Joomla\CMS\Uri\Uri;
+use \Joomla\Utilities\ArrayHelper;
+use \Joomla\CMS\Factory;
+use \Joomla\CMS\Session\Session;
+use \Joomla\CMS\Language\Text;
+
+/**
+ * Multiple list controller class.
+ */
+class AttendeesController extends AdminController
+{
+	/**
+	 * Proxy for getModel.
+	 * @since	1.6
+	 */
+	public function getModel($name = 'Attendee', $prefix = 'Administrator', $config = array('ignore_request' => true))
+	{
+		return parent::getModel($name, $prefix, $config);
+	}
+    
+	/**
+	 * Method to clone existing record
+	 * @return void
+	 */
+	public function duplicate()
+	{
+		// Check for request forgeries
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
+
+		// Get id(s)
+		$pks = $this->input->post->get('cid', array(), 'array');
+
+		try {
+			if (empty($pks)) {
+				throw new \Exception(Text::_('COM_GATRIPSYS_NO_ELEMENT_SELECTED'));
+			}
+
+			ArrayHelper::toInteger($pks);
+			$model = $this->getModel();
+			$model->duplicate($pks);
+			$this->setMessage(Text::_('COM_GATRIPSYS_ITEMS_SUCCESS_DUPLICATED'));
+		} catch (Exception $e) {
+			Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+		}
+
+		$this->setRedirect('index.php?option=com_gatripsys&view=attendees');
+	}
+
+	/**
+	 * Method to save the submitted ordering values for records via AJAX.
+	 * @return  void
+	 * @since   3.0
+	 */
+	public function saveOrderAjax()
+	{
+		// Get the input
+		$input = Factory::getApplication()->input;
+		$pks = $input->post->get('cid', array(), 'array');
+		$order = $input->post->get('order', array(), 'array');
+
+		// Sanitize the input
+		ArrayHelper::toInteger($pks);
+		ArrayHelper::toInteger($order);
+
+		// Get the model
+		$model = $this->getModel();
+
+		// Save the ordering
+		$return = $model->saveorder($pks, $order);
+
+		if ($return)
+		{
+			echo "1";
+		}
+
+		// Close the application
+		Factory::getApplication()->close();
+	}
+    
+    
+    
+}

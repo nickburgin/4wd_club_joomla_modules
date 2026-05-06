@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter">
+        <field name="search" type="text" hint="COM_GABROADCAST_SEARCH_FILTER_SUBMIT"
+            label="COM_USERS_FILTER_SEARCH_DESC"
+            class="js-stools-search-string" />
+
+        <field name="state"
+            type="status"
+            label="COM_GABROADCAST_FILTER_STATE"
+            description="COM_GABROADCAST_FILTER_STATE_DESC"
+            onchange="this.form.submit();" >
+            <option value="">JOPTION_SELECT_PUBLISHED</option>
+        </field>
+
+    </fields>
+
+    <fields name="list">
+
+        <field name="limit"
+            type="limitbox"
+            class="input-mini"
+            default="25"
+            onchange="this.form.submit();" />
+
+    </fields>
+
+</form>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="4.0" method="upgrade">
+    <name>com_gabroadcast</name>
+    <creationDate>09 Febriuary 2019</creationDate>
+    <copyright>2019 Glenn Arkell</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Glenn Arkell</author>
+    <authorEmail>glenn@glennarkell.com.au</authorEmail>
+    <authorUrl>https://www.glennarkell.com.au</authorUrl>
+    <version>4.2.1</version>
+    <description>A Simple Broadcast news to registered users</description>
+    
+    <namespace path="src">GlennArkell\Component\Gabroadcast</namespace>
+
+	<scriptfile>script.php</scriptfile>
+
+	<dashboards>
+		<dashboard title="COM_GABROADCAST_DASHBOARD_TITLE" icon="fas fa-broadcast-tower">COM_GABROADCAST_DASHBOARD_TITLE</dashboard>
+	</dashboards>
+
+    <install> <!-- Runs on install -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <uninstall> <!-- Runs on uninstall -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+    <update> <!-- Runs on update -->
+		<schemas>
+			<schemapath type="mysql">sql/updates/mysql/</schemapath>
+		</schemas>
+    </update>
+
+    <files folder="site">
+        <folder>forms</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+    <media destination="com_gabroadcast" folder="media">
+        <folder>css</folder>
+        <folder>images</folder>
+        <file>joomla.asset.json</file>
+    </media>
+    <languages folder="site">
+			<language tag="en-GB">language/en-GB/com_gabroadcast.ini</language>
+    </languages>
+    <administration>
+        <menu img="class:fas fa-broadcast-tower">
+			COM_GABROADCAST
+			<params>
+				<dashboard>gabroadcast</dashboard>
+			</params>
+		</menu>
+
+        <files folder="administrator">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <folder>forms</folder>
+            <folder>src</folder>
+            <folder>tmpl</folder>
+            <folder>sql</folder>
+            <folder>services</folder>
+            <folder>presets</folder>
+        </files>
+        <languages folder="administrator">
+			<language tag="en-GB">language/en-GB/com_gabroadcast.ini</language>
+			<language tag="en-GB">language/en-GB/com_gabroadcast.sys.ini</language>
+        </languages>
+    </administration>
+
+	<changelogurl>https://www.glennarkell.com.au/joomlaorg/components/j4/gabroadcast-changelog.xml</changelogurl>
+
+	<updateservers>
+		<server type="extension" priority="1" name="Broadcast">https://www.glennarkell.com.au/joomlaorg/components/j4/gabroadcast-update.xml</server>
+	</updateservers>
+
+</extension>

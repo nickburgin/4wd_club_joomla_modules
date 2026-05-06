@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<menu
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="urn:joomla.org"
+	xsi:schemaLocation="urn:joomla.org menu.xsd"
+	>
+	<menuitem
+		title="COM_GAUSERS_DASHBOARD"
+		type="heading"
+		icon="icon-fas fa-credit-card"
+		class="class:icon-fas fa-credit-card"
+		>
+		<menuitem
+			title="COM_GAUSERS_TITLE_INVOICES"
+			type="component"
+			element="com_gausers"
+			link="index.php?option=com_gausers&amp;view=invoices"
+			quicktask="index.php?option=com_gausers&amp;task=invoice.edit"
+			quicktask-title="COM_GAUSERS_CREATE_NEW_INVOICE"
+		/>
+
+		<menuitem
+			title="COM_GAUSERS_TITLE_CLUBEXECS"
+			type="component"
+			element="com_gausers"
+			link="index.php?option=com_gausers&amp;view=clubexecs"
+			quicktask="index.php?option=com_gausers&amp;task=clubexec.edit"
+			quicktask-title="COM_GAUSERS_CREATE_NEW_CLUBEXEC"
+		/>
+
+		<menuitem
+			title="COM_GAUSERS_TITLE_MSHIPTYPES"
+			type="component"
+			element="com_gausers"
+			link="index.php?option=com_gausers&amp;view=mshiptypes"
+			quicktask="index.php?option=com_gausers&amp;task=mshiptype.edit"
+			quicktask-title="COM_GAUSERS_CREATE_NEW_MSHIPTYPE"
+		/>
+
+		<menuitem
+			title="COM_GAUSERS_TITLE_PAYTYPES"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gausers.payment"
+			quicktask="index.php?option=com_categories&amp;extension=com_gausers&amp;task=category.add"
+			quicktask-title="COM_GAUSERS_PAYTYPE_NEW_CATEGORY"
+		/>
+
+		<menuitem
+			title="COM_GAUSERS_TITLE_AUDITS"
+			type="component"
+			element="com_gausers"
+			link="index.php?option=com_gausers&amp;view=audits"
+		/>
+
+		<menuitem
+			title="COM_GAUSERS_CONFIGURATION"
+			type="component"
+			element="com_config"
+			link="index.php?option=com_config&amp;view=component&amp;component=com_gausers&amp;path=&amp;return="
+		/>
+
+	</menuitem>
+
+	<menuitem
+		title="COM_CONTENT_MENUS_MANAGE"
+		type="heading"
+		icon="user-tag"
+		class="class:user-tag"
+		>
+		<menuitem
+			title="COM_CONTENT_MENUS_WORKFLOW"
+			type="component"
+			element="com_workflow"
+			link="index.php?option=com_workflow&amp;view=workflows&amp;extension=com_gausers.clubexec"
+		/>
+
+		<menuitem
+			title="MOD_MENU_FIELDS"
+			type="component"
+			element="com_fields"
+			link="index.php?option=com_fields&amp;view=fields&amp;context=com_gausers.clubexec"
+		/>
+
+		<menuitem
+			title="MOD_MENU_FIELDS_GROUP"
+			type="component"
+			element="com_fields"
+			link="index.php?option=com_fields&amp;view=groups&amp;context=com_gausers.clubexec"
+		/>
+	</menuitem>
+
+	<menuitem
+		title="COM_CONTENT_MENUS_MISC"
+		type="heading"
+		icon="cubes"
+		class="class:file-alt"
+		dashboard="gausers"
+		>
+		<menuitem
+			title="MOD_MENU_MEDIA_MANAGER"
+			type="component"
+			element="com_media"
+			link="index.php?option=com_media"
+			class="class:image"
+		/>
+
+		<menuitem
+			title="MOD_MENU_EXTENSIONS_MODULE_MANAGER_SITE"
+			type="component"
+			element="com_modules"
+			link="index.php?option=com_modules&amp;view=modules&amp;client_id=0"
+			quicktask="index.php?option=com_modules&amp;view=select&amp;client_id=0"
+			quicktask-title="COM_CONTENT_MENUS_NEW_SITE_MODULE"
+		/>
+	</menuitem>
+
+</menu>

@@ -1,0 +1,34 @@
+/**
+ * @version     5.1.0
+ * @package     com_gatripsys
+ * @copyright   2021 Glenn Arkell
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Glenn Arkell <glenn@glennarkell.com.au>
+ */
+
+.form-control.inclButton {
+    max-width:80%;
+    margin-right: 10px;
+    float: left;
+}
+
+.fields-inline > div {
+	float: left;
+}
+
+.front-end-edit label {
+    margin-right: 10px;
+    display: block;
+    float: left;
+    text-align: right;
+    width: 180px !important;
+}
+
+.front-end-edit .controls {
+    margin-left: 195px;
+}
+
+fieldset.radio label{
+    width: 50px !important;
+}
+

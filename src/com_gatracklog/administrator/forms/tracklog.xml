@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="sysinfo" addfieldprefix="GlennArkell\Component\Gatracklog\Administrator\Field">
+		<field name="id" type="text" readonly="true" class="readonly" default="0" label="COM_GATRACKLOG_FORM_LBL_ID" description="COM_GATRACKLOG_FORM_DESC_ID"/>
+		<field name="ordering" label="COM_GATRACKLOG_FORM_LBL_ORDERING" description="COM_GATRACKLOG_FORM_DESC_ORDERING"/>
+		<field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+		<field name="checked_out" type="hidden" filter="unset"/>
+		<field name="checked_out_time" type="hidden" filter="unset"/>
+	    <field name="created_by" type="Createdby" hidden="true" default="0" label="COM_GATRACKLOG_FORM_LBL_CREATED_BY" description="COM_GATRACKLOG_FORM_DESC_CREATED_BY" hint="COM_GATRACKLOG_FORM_LBL_CREATED_BY"/>
+	    <field name="modified_by" type="Modifiedby" hidden="true" default="0" label="COM_GATRACKLOG_FORM_LBL_MODIFIED_BY" description="COM_GATRACKLOG_FORM_DESC_MODIFIED_BY" hint="COM_GATRACKLOG_FORM_LBL_MODIFIED_BY"/>
+	    <field name="created_date" type="Timecreated" label="COM_GATRACKLOG_FORM_LBL_CREATED_DATE" description="COM_GATRACKLOG_FORM_DESC_CREATED_DATE" hint="COM_GATRACKLOG_FORM_LBL_CREATED_DATE"/>
+	    <field name="modified_date" type="Timecreated" label="COM_GATRACKLOG_FORM_LBL_MODIFIED_DATE" description="COM_GATRACKLOG_FORM_DESC_MODIFIED_DATE" hint="COM_GATRACKLOG_FORM_LBL_MODIFIED_DATE"/>
+	</fieldset>
+
+	<fieldset name="general" addfieldprefix="GlennArkell\Component\Gatracklog\Administrator\Field">
+
+		<field name="name" type="text" filter="safehtml" required="true"
+			label="COM_GATRACKLOG_FORM_LBL_TRACKLOG_NAME"
+			description="COM_GATRACKLOG_FORM_DESC_TRACKLOG_NAME"
+			hint="COM_GATRACKLOG_FORM_LBL_TRACKLOG_NAME"/>
+		<field name="rating" type="category" extension="com_gatracklog" required="true"
+			label="COM_GATRACKLOG_FORM_LBL_TRACKLOG_RATING"
+			description="COM_GATRACKLOG_FORM_DESC_TRACKLOG_RATING"
+			hint="COM_GATRACKLOG_FORM_LBL_TRACKLOG_RATING"/>
+		<field name="track_zone" type="category" extension="com_gatracklog.track_zone" required="true"
+			label="COM_GATRACKLOG_FORM_LBL_TRACKLOG_TRACK_ZONE"
+			description="COM_GATRACKLOG_FORM_DESC_TRACKLOG_TRACK_ZONE"
+			hint="COM_GATRACKLOG_FORM_LBL_TRACKLOG_TRACK_ZONE"/>
+		<field name="season_close" type="category" extension="com_gatracklog.season_close" required="true"
+			label="COM_GATRACKLOG_FORM_LBL_TRACKLOG_SEASON_CLOSE"
+			description="COM_GATRACKLOG_FORM_DESC_TRACKLOG_SEASON_CLOSE"
+			hint="COM_GATRACKLOG_FORM_LBL_TRACKLOG_SEASON_CLOSE"/>
+		<field name="file_format" type="text" filter="safehtml"
+			label="COM_GATRACKLOG_FORM_LBL_TRACKLOG_FILE_FORMAT"
+			description="COM_GATRACKLOG_FORM_DESC_TRACKLOG_FILE_FORMAT"
+			hint="COM_GATRACKLOG_FORM_LBL_TRACKLOG_FILE_FORMAT"/>
+		<field name="trklog" type="textarea" filter="safehtml"
+			label="COM_GATRACKLOG_FORM_LBL_TRACKLOG_TRKLOG"
+			description="COM_GATRACKLOG_FORM_DESC_TRACKLOG_TRKLOG"
+			hint="COM_GATRACKLOG_FORM_HINT_TRACKLOG_TRKLOG"/>
+
+	</fieldset>
+
+	<fieldset name="extrainfo">
+		<field name="comment" filter="safehtml" type="textarea" label="COM_GATRACKLOG_FORM_LBL_COMMENT" description="COM_GATRACKLOG_FORM_DESC_COMMENT" hint="COM_GATRACKLOG_FORM_LBL_COMMENT"/>
+		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+	</fieldset>
+</form>

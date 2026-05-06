@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+        <field name="search" type="text" hint="COM_GAUSERS_SEARCH_FILTER_SUBMIT"
+               label="COM_USERS_FILTER_SEARCH_DESC"
+               class="js-stools-search-string" />
+
+    </fields>
+
+	<fields name="list">
+
+		<field name="limit"
+			type="limitbox"
+			class="input-mini"
+			default="25"
+			onchange="this.form.submit();" />
+
+	</fields>
+
+</form>

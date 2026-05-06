@@ -1,0 +1,32 @@
+ALTER TABLE `#__gabroadcast_usernews` change `ordering` `ordering` INT  NOT NULL DEFAULT 0;
+ALTER TABLE `#__gabroadcast_usernews` change `state` `state` TINYINT(1)  NOT NULL DEFAULT 1;
+ALTER TABLE `#__gabroadcast_usernews` change `created_by` `created_by` INT  NOT NULL DEFAULT 0;
+ALTER TABLE `#__gabroadcast_usernews` change `modified_by` `modified_by` INT  NOT NULL DEFAULT 0;
+ALTER TABLE `#__gabroadcast_usernews` change `checked_out` `checked_out` INT  NOT NULL DEFAULT 0;
+ALTER TABLE `#__gabroadcast_usernews` change `checked_out_time` `checked_out_time` DATETIME NULL;
+ALTER TABLE `#__gabroadcast_usernews` change `created_date` `created_date` DATETIME NULL;
+ALTER TABLE `#__gabroadcast_usernews` change `modified_date` `modified_date` DATETIME NULL;
+ALTER TABLE `#__gabroadcast_usernews` change `comment` `comment` TEXT  NULL;
+ALTER TABLE `#__gabroadcast_usernews` change `cat_id` `cat_id` INT  NOT NULL DEFAULT 0;
+ALTER TABLE `#__gabroadcast_usernews` change `fin_users_only` `fin_users_only` TINYINT(1)  NOT NULL DEFAULT 1;
+ALTER TABLE `#__gabroadcast_usernews` change `news_detail` `news_detail` TEXT  NULL;
+ALTER TABLE `#__gabroadcast_usernews` change `pending_bcast` `pending_bcast` TEXT  NULL;
+ALTER TABLE `#__gabroadcast_usernews` change `news_subject` `news_subject` VARCHAR(255)  NULL;
+ALTER TABLE `#__gabroadcast_usernews` change `attach_file` `attach_file` VARCHAR(1024)  NULL;
+
+ALTER TABLE `#__gabroadcast_bcasts` change `ordering` `ordering` INT  NOT NULL DEFAULT 0;
+ALTER TABLE `#__gabroadcast_bcasts` change `state` `state` TINYINT(1)  NOT NULL DEFAULT 1;
+ALTER TABLE `#__gabroadcast_bcasts` change `created_by` `created_by` INT  NOT NULL DEFAULT 0;
+ALTER TABLE `#__gabroadcast_bcasts` change `modified_by` `modified_by` INT  NOT NULL DEFAULT 0;
+ALTER TABLE `#__gabroadcast_bcasts` change `checked_out` `checked_out` INT  NOT NULL DEFAULT 0;
+ALTER TABLE `#__gabroadcast_bcasts` change `checked_out_time` `checked_out_time` DATETIME NULL;
+ALTER TABLE `#__gabroadcast_bcasts` change `created_date` `created_date` DATETIME NULL;
+ALTER TABLE `#__gabroadcast_bcasts` change `modified_date` `modified_date` DATETIME NULL;
+ALTER TABLE `#__gabroadcast_bcasts` change `comment` `comment` TEXT  NULL;
+ALTER TABLE `#__gabroadcast_bcasts` change `attach_lab` `attach_lab` VARCHAR(255)  NULL;
+ALTER TABLE `#__gabroadcast_bcasts` change `attach_dir` `attach_dir` VARCHAR(1024)  NULL;
+
+ALTER TABLE `#__gabroadcast_usernews` ENGINE=InnoDB;
+ALTER TABLE `#__gabroadcast_usernews` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `#__gabroadcast_bcasts` ENGINE=InnoDB;
+ALTER TABLE `#__gabroadcast_bcasts` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

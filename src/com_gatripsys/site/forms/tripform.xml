@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="sysinfo" addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field">
+		<field name="id" type="text" readonly="true" class="readonly" default="0" description="JGLOBAL_FIELD_ID_DESC"/>
+		<field name="ordering"/>
+		<field name="state" default="0" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+			<option value="1">GAPROPOSED</option>
+			<option value="2">GABOOKING</option>
+			<option value="4">GACLOSED</option>
+			<option value="6">GAFINALISED</option>
+			<option value="5">GACANCELLED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+		<field name="checked_out" type="hidden" filter="unset"/>
+		<field name="checked_out_time" type="hidden" filter="unset"/>
+		<field name="created_by" type="Createdby" default="0" readonly="true" class="readonly" label="COM_GATRIPSYS_FORM_LBL_CREATED_BY" description="COM_GATRIPSYS_FORM_DESC_CREATED_BY" hint="COM_GATRIPSYS_FORM_LBL_CREATED_BY"/>
+		<field name="modified_by" type="Modifiedby" default="0" readonly="true" class="readonly" label="COM_GATRIPSYS_FORM_LBL_MODIFIED_BY" description="COM_GATRIPSYS_FORM_DESC_MODIFIED_BY" hint="COM_GATRIPSYS_FORM_LBL_MODIFIED_BY"/>
+		<field name="created_date" type="Timecreated" label="COM_GATRIPSYS_FORM_LBL_CREATED_DATE" description="COM_GATRIPSYS_FORM_DESC_CREATED_DATE" hint="COM_GATRIPSYS_FORM_LBL_CREATED_DATE"/>
+		<field name="modified_date" type="Timecreated" label="COM_GATRIPSYS_FORM_LBL_UPDATE_DATE" description="COM_GATRIPSYS_FORM_DESC_UPDATE_DATE" hint="COM_GATRIPSYS_FORM_LBL_UPDATE_DATE"/>
+	</fieldset>
+
+	<fieldset name="general" addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field">
+		<field name="title" type="text" required="true" label="COM_GATRIPSYS_FORM_LBL_TRIP_TITLE" description="COM_GATRIPSYS_FORM_DESC_TRIP_TITLE" />
+		<field name="rating" type="Triprating" label="COM_GATRIPSYS_FORM_LBL_TRIP_RATING" description="COM_GATRIPSYS_FORM_DESC_TRIP_RATING" />
+		<field name="trip_type" type="Triptype" label="COM_GATRIPSYS_FORM_LBL_TRIP_TRIP_TYPE" description="COM_GATRIPSYS_FORM_DESC_TRIP_TRIP_TYPE" />
+		<field name="suited_for" type="Suitedfor" label="COM_GATRIPSYS_FORM_LBL_TRIP_SUITED_FOR" description="COM_GATRIPSYS_FORM_DESC_TRIP_SUITED_FOR" />
+		<field name="leader" type="Tripleaders" layout="joomla.form.field.list-fancy-select" label="COM_GATRIPSYS_FORM_LBL_TRIP_LEADER" description="COM_GATRIPSYS_FORM_DESC_TRIP_LEADER" />
+		<field name="trip_tec" type="Tailends" layout="joomla.form.field.list-fancy-select" label="COM_GATRIPSYS_FORM_LBL_TRIP_TEC" description="COM_GATRIPSYS_FORM_DESC_TRIP_TEC" />
+		<field name="min_no" type="integer" default="4" required="true" first="1" last="10" step="1" label="COM_GATRIPSYS_FORM_LBL_TRIP_MIN_NO" description="COM_GATRIPSYS_FORM_DESC_TRIP_MIN_NO" />
+		<field name="max_no" type="integer" default="10" required="true" first="0" last="100" step="1" label="COM_GATRIPSYS_FORM_LBL_TRIP_MAX_NO" description="COM_GATRIPSYS_FORM_DESC_TRIP_MAX_NO" />
+		<field name="max_people" type="integer" default="20" required="true" class="input-small" first="0" last="200" step="2" label="COM_GATRIPSYS_FORM_LBL_TRIP_MAX_PEOPLE" description="COM_GATRIPSYS_FORM_DESC_TRIP_MAX_PEOPLE" />
+	</fieldset>
+
+	<fieldset name="depart" addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field">
+		<field name="regby_date" type="calendar" 
+            filterFormat="Y-m-d" translateformat="true"
+            label="COM_GATRIPSYS_FORM_LBL_TRIP_REGBY_DATE" hint="COM_GATRIPSYS_FORM_HINT_TRIP_REGBY_DATE" description="COM_GATRIPSYS_FORM_DESC_TRIP_REGBY_DATE" />
+		<field name="dept_date" type="calendar"
+            filterFormat="Y-m-d" translateformat="true"
+            label="COM_GATRIPSYS_FORM_LBL_TRIP_DEPT_DATE" description="COM_GATRIPSYS_FORM_DESC_TRIP_DEPT_DATE" />
+		<field name="ret_date" type="calendar"
+            filterFormat="Y-m-d" translateformat="true"
+            label="COM_GATRIPSYS_FORM_LBL_TRIP_RET_DATE" description="COM_GATRIPSYS_FORM_DESC_TRIP_RET_DATE" />
+		<field name="dept_loc" type="text" label="COM_GATRIPSYS_FORM_LBL_TRIP_DEPT_LOC" description="COM_GATRIPSYS_FORM_DESC_TRIP_DEPT_LOC" />
+		<field name="ret_loc" type="text" label="COM_GATRIPSYS_FORM_LBL_TRIP_RET_LOC" description="COM_GATRIPSYS_FORM_DESC_TRIP_RET_LOC" />
+		<field name="public_view" type="radio" default="0" layout="joomla.form.field.radio.switcher" label="COM_GATRIPSYS_FORM_LBL_TRIP_PUBLIC_VIEW" description="COM_GATRIPSYS_FORM_DESC_TRIP_PUBLIC_VIEW">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+	</fieldset>
+
+	<fieldset name="where" addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field">
+		<field name="where_go" type="editor" buttons="false" filter="safehtml" 
+        label="COM_GATRIPSYS_FORM_LBL_TRIP_WHERE_GO" description="COM_GATRIPSYS_FORM_DESC_TRIP_WHERE_GO" />
+	</fieldset>
+
+	<fieldset name="what" addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field">
+		<field name="what_do" type="editor" buttons="false" filter="safehtml"
+        label="COM_GATRIPSYS_FORM_LBL_TRIP_WHAT_DO" description="COM_GATRIPSYS_FORM_DESC_TRIP_WHAT_DO" />
+	</fieldset>
+
+	<fieldset name="equip" addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field">
+		<field name="equip" type="editor" buttons="false" filter="safehtml"
+        label="COM_GATRIPSYS_FORM_LBL_TRIP_EQUIP" description="COM_GATRIPSYS_FORM_DESC_TRIP_EQUIP" />
+	</fieldset>
+
+	<fieldset name="details" addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field">
+		<field name="details" type="editor" buttons="false" filter="safehtml"
+        label="COM_GATRIPSYS_FORM_LBL_TRIP_DETAILS" description="COM_GATRIPSYS_FORM_DESC_TRIP_DETAILS" />
+	</fieldset>
+
+	<fieldset name="plans" addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field">
+		<field name="trip_plan" type="filelist" directory="images/trips/trip_plans" exclude="index.html" hide_default="true" label="COM_GATRIPSYS_FORM_LBL_TRIP_TRIP_PLAN" description="COM_GATRIPSYS_FORM_DESC_TRIP_TRIP_PLAN" />
+		<field name="trip_plan_new" type="file" label="COM_GATRIPSYS_FORM_LBL_TRIP_NEW_PLAN" hint="COM_GATRIPSYS_FORM_DESC_TRIP_NEW_PLAN" description="COM_GATRIPSYS_FORM_DESC_TRIP_NEW_PLAN" />
+		<field name="trip_img" type="file" label="COM_GATRIPSYS_FORM_LBL_TRIP_TRIP_IMG" hint="COM_GATRIPSYS_FORM_DESC_TRIP_TRIP_IMG" description="COM_GATRIPSYS_FORM_DESC_TRIP_TRIP_IMG" />
+		<field name="trip_img_disp" type="text" class="readonly" readonly="true" label="COM_GATRIPSYS_FORM_LBL_TRIP_TRIP_IMG" description="COM_GATRIPSYS_FORM_DESC_TRIP_TRIP_IMG" />
+	</fieldset>
+
+	<fieldset name="others">
+		<field name="trip_cost" type="text" default="0.00" label="COM_GATRIPSYS_FORM_LBL_TRIP_TRIP_COST" description="COM_GATRIPSYS_FORM_DESC_TRIP_TRIP_COST" />
+		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+	</fieldset>
+
+	<fieldset name="extrainfo">
+		<field name="insurance_cat" type="Inscat" label="COM_GATRIPSYS_FORM_LBL_INSURANCE_CAT" description="COM_GATRIPSYS_FORM_DESC_INSURANCE_CAT" />
+		<field name="comment" filter="safehtml" type="textarea" label="COM_GATRIPSYS_FORM_LBL_COMMENT" description="COM_GATRIPSYS_FORM_DESC_COMMENT" hint="COM_GATRIPSYS_FORM_LBL_COMMENT"/>
+	</fieldset>
+
+</form>

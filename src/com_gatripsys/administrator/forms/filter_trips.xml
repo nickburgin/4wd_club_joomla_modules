@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter" addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field">
+        <field name="search" type="text" hint="COM_GATRIPSYS_SEARCH_FILTER_SUBMIT"
+               label="COM_USERS_FILTER_SEARCH_DESC"
+               class="js-stools-search-string" />
+
+        <field name="state"
+               type="list"
+               label="COM_GATRIPSYS_FILTER_STATE"
+               description="COM_GATRIPSYS_FILTER_STATE_DESC"
+               onchange="this.form.submit();" >
+            <option value="">JOPTION_SELECT_PUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="1">GAPROPOSED</option>
+			<option value="2">GABOOKING</option>
+			<option value="3">GAPROGRESS</option>
+			<option value="4">GACLOSED</option>
+			<option value="5">GACANCELLED</option>
+			<option value="6">GAFINALISED</option>
+			<option value="-2">JTRASHED</option>
+        </field>
+
+		<field name="rating" type="category"
+			extension="com_gatripsys" show_root="1" onchange="this.form.submit();"
+			label="COM_GATRIPSYS_FORM_LBL_TRIP_RATING"
+			description="COM_GATRIPSYS_FORM_DESC_TRIP_RATING" />
+
+		<field name="triptype" type="category"
+			extension="com_gatripsys.triptype" show_root="1" onchange="this.form.submit();"
+			label="COM_GATRIPSYS_FORM_LBL_TRIP_TRIP_TYPE"
+			description="COM_GATRIPSYS_FORM_DESC_TRIP_TRIP_TYPE" />
+
+		<field name="suitedfor" type="category"
+			extension="com_gatripsys.suitedfor" show_root="1" onchange="this.form.submit();"
+			label="COM_GATRIPSYS_FORM_LBL_TRIP_SUITED_FOR"
+			description="COM_GATRIPSYS_FORM_DESC_TRIP_SUITED_FOR" />
+
+    </fields>
+
+    <fields name="list"
+		addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field">
+
+        <field name="limit"
+               type="limitbox"
+               class="input-mini"
+               default="20"
+               onchange="this.form.submit();" />
+
+    </fields>
+
+</form>

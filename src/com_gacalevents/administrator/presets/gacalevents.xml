@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<menu
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="urn:joomla.org"
+	xsi:schemaLocation="urn:joomla.org menu.xsd"
+	>
+	<menuitem
+		title="COM_GACALEVENTS_MENUS"
+		type="heading"
+		icon="fas fa-calendar-alt"
+		class="class:fas fa-calendar-alt"
+		>
+		<menuitem
+			title="COM_GACALEVENTS_TITLE_EVENTS"
+			type="component"
+			element="com_gacalevents"
+			link="index.php?option=com_gacalevents&amp;view=events"
+			quicktask="index.php?option=com_gacalevents&amp;task=event.add"
+			quicktask-title="COM_GACALEVENTS_NEW_EVENT"
+		/>
+
+		<menuitem
+			title="COM_GACALEVENTS_TITLE_EVENTS_CATEGORY"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gacalevents.events"
+			quicktask="index.php?option=com_categories&amp;extension=com_gacalevents.events&amp;task=category.add"
+			quicktask-title="COM_GACALEVENTS_NEW_CATEGORY"
+		/>
+
+		<menuitem
+			title="COM_GACALEVENTS_TITLE_DEPTPTS"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gacalevents.deptpt"
+			quicktask="index.php?option=com_categories&amp;extension=com_gacalevents.deptpt&amp;task=category.add"
+			quicktask-title="COM_GACALEVENTS_NEW_DEPTPT"
+		/>
+
+		<menuitem
+			title="COM_GACALEVENTS_TITLE_ATTENDEES"
+			type="component"
+			element="com_gacalevents"
+			link="index.php?option=com_gacalevents&amp;view=attendees"
+			quicktask="index.php?option=com_gacalevents&amp;task=attendee.add"
+			quicktask-title="COM_GACALEVENTS_NEW_ATTENDEE"
+		/>
+
+		<menuitem
+			title="COM_GACALEVENTS_CONFIGURATION"
+			type="component"
+			element="com_config"
+			link="index.php?option=com_config&amp;view=component&amp;component=com_gacalevents&amp;path=&amp;return=&amp;dashboard=gacalevents"
+		/>
+
+	</menuitem>
+
+	<menuitem
+		title="COM_GACALEVENTS_CUSTOMFLDS_WORKFLOW"
+		type="heading"
+		icon="cog"
+		class="class:file-alt"
+		>
+		<menuitem
+			title="COM_CONTENT_MENUS_WORKFLOW"
+			type="component"
+			element="com_workflow"
+			link="index.php?option=com_workflow&amp;view=workflows&amp;extension=com_gacalevents.event"
+		/>
+
+		<menuitem
+			title="MOD_MENU_FIELDS"
+			type="component"
+			element="com_fields"
+			link="index.php?option=com_fields&amp;view=fields&amp;context=com_gacalevents.event"
+		/>
+
+		<menuitem
+			title="MOD_MENU_FIELDS_GROUP"
+			type="component"
+			element="com_fields"
+			link="index.php?option=com_fields&amp;view=groups&amp;context=com_gacalevents.event"
+		/>
+	</menuitem>
+
+</menu>

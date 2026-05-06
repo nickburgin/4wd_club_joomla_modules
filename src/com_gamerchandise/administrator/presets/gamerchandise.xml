@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<menu
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="urn:joomla.org"
+	xsi:schemaLocation="urn:joomla.org menu.xsd"
+	>
+	<menuitem
+		title="COM_GAMERCHANDISE"
+		type="heading"
+		icon="fas fa-shopping-cart"
+		class="class:fas fa-shopping-cart"
+		>
+		<menuitem
+			title="COM_GAMERCHANDISE_TITLE_PRODUCTS"
+			type="component"
+			element="com_gamerchandise"
+			link="index.php?option=com_gamerchandise&amp;view=products"
+			quicktask="index.php?option=com_gamerchandise&amp;task=product.add"
+			quicktask-title="COM_GAMERCHANDISE_MENUS_NEW_PRODUCT"
+		/>
+
+		<menuitem
+			title="COM_GAMERCHANDISE_TITLE_CATEGORY"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gamerchandise"
+			quicktask="index.php?option=com_categories&amp;extension=com_gamerchandise&amp;task=category.add"
+			quicktask-title="COM_CONTENT_MENUS_NEW_CATEGORY"
+		/>
+
+		<menuitem
+			title="COM_GAMERCHANDISE_TITLE_PROD_COLOURS"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gamerchandise.prod_colours"
+			quicktask="index.php?option=com_categories&amp;extension=com_gamerchandise.prod_colours&amp;task=category.add"
+			quicktask-title="COM_CONTENT_MENUS_NEW_CATEGORY"
+		/>
+
+		<menuitem
+			title="COM_GAMERCHANDISE_TITLE_PROD_SIZES"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gamerchandise.prod_sizes"
+			quicktask="index.php?option=com_categories&amp;extension=com_gamerchandise.prod_sizes&amp;task=category.add"
+			quicktask-title="COM_CONTENT_MENUS_NEW_CATEGORY"
+		/>
+
+		<menuitem
+			title="COM_GAMERCHANDISE_TITLE_PRODL_SIZES"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gamerchandise.prodl_sizes"
+			quicktask="index.php?option=com_categories&amp;extension=com_gamerchandise.prodl_sizes&amp;task=category.add"
+			quicktask-title="COM_CONTENT_MENUS_NEW_CATEGORY"
+		/>
+
+		<menuitem
+			title="COM_GAMERCHANDISE_TITLE_SALES"
+			type="component"
+			element="com_gamerchandise"
+			link="index.php?option=com_gamerchandise&amp;view=sales"
+		/>
+
+		<menuitem
+			title="COM_GAMERCHANDISE_CONFIGURATION"
+			type="component"
+			element="com_config"
+			link="index.php?option=com_config&amp;view=component&amp;component=com_gamerchandise&amp;path=&amp;return="
+		/>
+
+	</menuitem>
+
+</menu>

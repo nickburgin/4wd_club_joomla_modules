@@ -1,0 +1,55 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "com_gatripsys",
+  "version": "5.1.0",
+  "description": "This file contains details of the assets used by the Trip System component by Glenn Arkell.",
+  "license": "GPL-2.0-or-later",
+  "assets": [
+    {
+      "name": "com_gatripsys.gatripsys",
+      "description": "Glenn's Component styling.",
+      "type": "style",
+      "uri": "com_gatripsys/gatripsys.css",
+      "dependencies": [
+        "fontawesome"
+      ]
+    },
+    {
+      "name": "com_gatripsys.item",
+      "description": "Glenn's Component styling for an item.",
+      "type": "style",
+      "uri": "com_gatripsys/item.css",
+      "dependencies": [
+        "com_gatripsys.gatripsys"
+      ]
+    },
+    {
+      "name": "com_gatripsys.list",
+      "description": "Glenn's Component styling for a list.",
+      "type": "style",
+      "uri": "com_gatripsys/list.css",
+      "dependencies": [
+        "com_gatripsys.gatripsys"
+      ]
+    },
+    {
+      "name": "com_gatripsys.form",
+      "description": "Glenn's Component styling for a form.",
+      "type": "style",
+      "uri": "com_gatripsys/form.css",
+      "dependencies": [
+        "com_gatripsys.gatripsys"
+      ]
+    },
+    {
+      "name": "com_gatripsys.gatripsyspreset",
+      "type": "preset",
+      "dependencies": [
+        "com_gatripsys.gatripsys#style",
+        "com_gatripsys.form#style",
+        "com_gatripsys.item#style",
+        "com_gatripsys.list#style"
+      ]
+    }
+  ]
+}

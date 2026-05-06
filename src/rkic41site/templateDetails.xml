@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="template" client="site" method="upgrade">
+	<name>rkic41site</name>
+	<version>1.0</version>
+	<creationDate>April 2022</creationDate>
+	<author>Glenn Arkell</author>
+	<authorEmail>glenn@glennarkell.com.au</authorEmail>
+	<copyright>(C) 2017 Open Source Matters, Inc.</copyright>
+	<description>TPL_RKIC41SITE_XML_DESCRIPTION</description>
+	<inheritable>1</inheritable>
+	<files>
+		<filename>component.php</filename>
+		<filename>error.php</filename>
+		<filename>index.php</filename>
+		<filename>joomla.asset.json</filename>
+		<filename>offline.php</filename>
+		<filename>templateDetails.xml</filename>
+		<folder>html</folder>
+	</files>
+	<media destination="templates/site/rkic41site" folder="media">
+		<folder>js</folder>
+		<folder>css</folder>
+		<folder>scss</folder>
+		<folder>images</folder>
+	</media>
+	<positions>
+		<position>toplogin</position>
+		<position>topbar</position>
+		<position>below-top</position>
+		<position>menu</position>
+		<position>search</position>
+		<position>banner</position>
+		<position>top-a</position>
+		<position>top-b</position>
+		<position>main-top</position>
+		<position>main-belowcomp</position>
+		<position>main-bottom</position>
+		<position>breadcrumbs</position>
+		<position>sidebar-left</position>
+		<position>sidebar-right</position>
+		<position>main-comp</position>
+		<position>main-fullwidth</position>
+		<position>bottom-a</position>
+		<position>bottom-b</position>
+		<position>footer</position>
+		<position>under-footer</position>
+		<position>debug</position>
+	</positions>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/tpl_rkic41site.ini</language>
+		<language tag="en-GB">en-GB/tpl_rkic41site.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="advanced">
+				<field
+					name="brand"
+					type="radio"
+					label="TPL_RKIC41SITE_BRAND_LABEL"
+					default="1"
+					layout="joomla.form.field.radio.switcher"
+					filter="boolean"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field
+					name="logoSwitch"
+					type="radio"
+					label="TPL_RKIC41SITE_LOGOSWITCH_LABEL"
+					default="1"
+					layout="joomla.form.field.radio.switcher"
+					filter="boolean"
+					showon="brand:1"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field
+					name="logoFile"
+					type="media"
+					default=""
+					label="TPL_RKIC41SITE_LOGO_LABEL"
+					showon="brand:1[AND]logoSwitch:1"
+				/>
+
+				<field
+					name="w100Logo"
+					type="radio" showon="brand:1[AND]logoSwitch:1"
+					label="TPL_RKIC41SITE_IMG100_LABEL"
+					description="TPL_RKIC41SITE_IMG100_DESC"
+					default="0"
+					layout="joomla.form.field.radio.switcher"
+					filter="boolean"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field
+					name="brandBG"
+					type="media"
+					default=""
+					label="TPL_RKIC41SITE_BRANDBG_LABEL"
+					description="TPL_RKIC41SITE_BRANDBG_DESC"
+					showon="brand:1"
+				/>
+
+				<field
+					name="w100Brand"
+					type="radio" showon="brand:1"
+					label="TPL_RKIC41SITE_IMG100_LABEL"
+					description="TPL_RKIC41SITE_IMG100_DESC"
+					default="0"
+					layout="joomla.form.field.radio.switcher"
+					filter="boolean"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field
+					name="brandMob"
+					type="media"
+					default=""
+					label="TPL_RKIC41SITE_BRANDMOB_LABEL"
+					description="TPL_RKIC41SITE_BRANDMOB_DESC"
+					showon="brand:1"
+				/>
+
+				<field
+					name="pageBG"
+					type="media"
+					default=""
+					label="TPL_RKIC41SITE_PAGEBG_LABEL"
+					description="TPL_RKIC41SITE_PAGEBG_DESC"
+					showon="brand:1"
+				/>
+
+				<field
+					name="siteTitle"
+					type="text"
+					default=""
+					label="TPL_RKIC41SITE_TITLE"
+					filter="string"
+					showon="brand:1"
+				/>
+
+				<field
+					name="siteDescription"
+					type="text"
+					default=""
+					label="TPL_RKIC41SITE_TAGLINE_LABEL"
+					description="TPL_RKIC41SITE_TAGLINE_DESC"
+					filter="string"
+					showon="brand:1"
+				/>
+
+				<field
+					name="footerImg"
+					type="radio"
+					label="TPL_RKIC41SITE_FOOTERIMG_LABEL"
+					default="0"
+					layout="joomla.form.field.radio.switcher"
+					filter="boolean"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field
+					name="footerFile"
+					type="media"
+					default=""
+					label="TPL_RKIC41SITE_FOOTERFILE_LABEL"
+					showon="footerImg:1"
+				/>
+
+				<field
+					name="centerFoot"
+					type="radio" showon="footerImg:1"
+					label="TPL_RKIC41SITE_CENTERFOOT_LABEL"
+					description="TPL_RKIC41SITE_CENTERFOOT_DESC"
+					default="1"
+					layout="joomla.form.field.radio.switcher"
+					filter="boolean"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+			</fieldset>
+			<fieldset name="fontscheme">
+
+				<field
+					name="useFontScheme"
+					type="groupedlist"
+					label="TPL_RKIC41SITE_FONT_LABEL"
+					default="0"
+					>
+					<option value="0">JNONE</option>
+					<group label="TPL_RKIC41SITE_FONT_GROUP_LOCAL">
+						<option value="media/templates/site/rkic41site/css/global/fonts-local_roboto.css">Roboto (local)</option>
+					</group>
+					<group label="TPL_RKIC41SITE_FONT_GROUP_WEB">
+						<option value="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@100;300;400;700&amp;display=swap">Fira Sans (web)</option>
+						<option value="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;300;400;700&amp;family=Roboto:wght@100;300;400;700&amp;display=swap">Roboto + Noto Sans (web)</option>
+					</group>
+				</field>
+
+				<field
+					name="noteFontScheme"
+					type="note"
+					description="TPL_RKIC41SITE_FONT_NOTE_TEXT"
+					class="alert alert-warning"
+				/>
+
+				<field
+					name="fblink"
+					type="text"
+					default=""
+					label="TPL_RKIC41SITE_FBLINK"
+					filter="string"
+				/>
+
+				<field
+					name="fluidContainer"
+					type="radio"
+					layout="joomla.form.field.radio.switcher"
+					default="0"
+					label="TPL_RKIC41SITE_FLUID_LABEL"
+					>
+					<option value="0">TPL_RKIC41SITE_STATIC</option>
+					<option value="1">TPL_RKIC41SITE_FLUID</option>
+				</field>
+
+				<field
+					name="stickyHeader"
+					type="radio"
+					label="TPL_RKIC41SITE_STICKY_LABEL"
+					layout="joomla.form.field.radio.switcher"
+					default="0"
+					filter="integer"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field
+					name="stickyFooter"
+					type="radio"
+					label="TPL_RKIC41SITE_STICKYF_LABEL"
+					layout="joomla.form.field.radio.switcher"
+					default="0"
+					filter="integer"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field
+					name="backTop"
+					type="radio"
+					label="TPL_RKIC41SITE_BACKTOTOP_LABEL"
+					layout="joomla.form.field.radio.switcher"
+					default="0"
+					filter="integer"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+			</fieldset>
+			<fieldset name="colourscheme">
+
+				<field
+					name="colorName"
+					type="filelist"
+					label="TPL_RKIC41SITE_COLOR_NAME_LABEL"
+					default="colors_standard"
+					fileFilter="^custom.+[^min]\.css$"
+					exclude="^colors.+"
+					stripext="true"
+					hide_none="true"
+					hide_default="true"
+					directory="media/templates/site/rkic41site/css/global/"
+					validate="options"
+					>
+					<option value="colors_alternative">TPL_RKIC41SITE_COLOR_NAME_ALTERNATIVE</option>
+					<option value="colors_burned">TPL_RKIC41SITE_COLOR_NAME_BURNED</option>
+					<option value="colors_white">TPL_RKIC41SITE_COLOR_NAME_WHITE</option>
+					<option value="colors_dark">TPL_RKIC41SITE_COLOR_NAME_DARK</option>
+					<option value="colors_green">TPL_RKIC41SITE_COLOR_NAME_GREEN</option>
+					<option value="colors_red">TPL_RKIC41SITE_COLOR_NAME_RED</option>
+					<option value="colors_ohau">TPL_RKIC41SITE_COLOR_NAME_OHAU</option>
+					<option value="colors_pastelgreen">TPL_RKIC41SITE_COLOR_NAME_PASTELGREEN</option>
+					<option value="colors_purple">TPL_RKIC41SITE_COLOR_NAME_PURPLE</option>
+					<option value="colors_salmon">TPL_RKIC41SITE_COLOR_NAME_SALMON</option>
+					<option value="colors_sand">TPL_RKIC41SITE_COLOR_NAME_SAND</option>
+					<option value="colors_standard">TPL_RKIC41SITE_COLOR_NAME_STANDARD</option>
+				</field>
+
+				<field
+					name="removeGradient"
+					type="radio"
+					label="TPL_RKIC41SITE_REMOVEGRADIENT_LABEL"
+					layout="joomla.form.field.radio.switcher"
+					default="0"
+					filter="integer"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field
+					name="btnPbgColor" showon="colorName:colors_white"
+					type="color"
+					default="#8bafcf;"
+					label="TPL_RKIC41SITE_BTNPBGCOLOR_LABEL" />
+
+				<field
+					name="bodyBgColor"
+					type="text" default=""
+					description="TPL_RKIC41SITE_BODYBGCOLOR_DESC"
+					hint="TPL_RKIC41SITE_BODYBGCOLOR_HINT"
+					label="TPL_RKIC41SITE_BODYBGCOLOR_LABEL" />
+
+				<field
+					name="bgColor"
+					type="color"
+					default=""
+					label="TPL_RKIC41SITE_BGCOLOR_LABEL" />
+
+				<field
+					name="bgOpac"
+					type="text"
+					default="0.5"
+					label="TPL_RKIC41SITE_BGOPAC_LABEL" />
+
+				<field
+					name="cardBGColor"
+					type="color"
+					default="transparent"
+					label="TPL_RKIC41SITE_CARDBGCOLOR_LABEL" />
+
+				<field
+					name="cardBordColor"
+					type="color"
+					default="transparent"
+					label="TPL_RKIC41SITE_CARDBORDCOLOR_LABEL" />
+
+				<field
+					name="changeMenuColor"
+					type="radio"
+					label="TPL_RKIC41SITE_CHANGEMENU_LABEL"
+					layout="joomla.form.field.radio.switcher"
+					default="0"
+					filter="integer"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field
+					name="menuColor" showon="changeMenuColor:1"
+					type="color"
+					default="transparent"
+					label="TPL_RKIC41SITE_MENUCOLOR_LABEL" />
+
+				<field
+					name="menuBGColor" showon="changeMenuColor:1"
+					type="color"
+					default="transparent"
+					label="TPL_RKIC41SITE_MENUBGCOLOR_LABEL" />
+
+				<field
+					name="menuHovColor" showon="changeMenuColor:1"
+					type="color"
+					default="var(--primary)"
+					label="TPL_RKIC41SITE_MENUHOVCOLOR_LABEL" />
+
+				<field
+					name="menuUnderline" showon="changeMenuColor:1"
+					type="radio"
+					label="TPL_RKIC41SITE_MENUUNDERLINE_LABEL"
+					layout="joomla.form.field.radio.switcher"
+					default="0"
+					filter="integer"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field
+					name="menuBG100" showon="changeMenuColor:1"
+					type="radio"
+					label="TPL_RKIC41SITE_MENUBG100_LABEL"
+					layout="joomla.form.field.radio.switcher"
+					default="0"
+					filter="integer"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field
+					name="copyrightColor"
+					type="color"
+					default="transparent"
+					label="TPL_RKIC41SITE_COPYRIGHTCOLOR_LABEL" />
+
+				<field
+					name="designerColor"
+					type="color"
+					default="transparent"
+					label="TPL_RKIC41SITE_DESIGNERCOLOR_LABEL" />
+
+			</fieldset>
+			<fieldset name="speciallinks">
+				<field name="incl_defaulterror" type="radio" class="btn-group btn-group-yesno" default="0"
+					label="TPL_RKIC41SITE_INCL_DEFAULTERROR_LABEL"
+					description="TPL_RKIC41SITE_INCL_DEFAULTERROR_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="defaulterror" type="text" default="" showon="incl_defaulterror:1"
+					label="TPL_RKIC41SITE_DEFAULTERROR_LABEL"
+					description="TPL_RKIC41SITE_DEFAULTERROR_DESC" />
+
+				<field name="change_metaGen" type="radio" class="btn-group btn-group-yesno" default="0"
+					label="TPL_RKIC41SITE_CHANGE_METAGEN_LABEL"
+					description="TPL_RKIC41SITE_CHANGE_METAGEN_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="new_metaGen" type="text" default="" showon="change_metaGen:1"
+					label="TPL_RKIC41SITE_NEW_METAGEN_LABEL"
+					description="TPL_RKIC41SITE_NEW_METAGEN_DESC" />
+
+				<field name="googleAnalytics" type="text" default=""
+					label="TPL_RKIC41SITE_GOOGLEANAL_LABEL"
+					description="TPL_RKIC41SITE_GOOGLEANAL_DESC" />
+
+				<field name="setShadowFrame" type="radio" class="btn-group btn-group-yesno" default="0"
+					label="TPL_RKIC41SITE_SETSHADOW_LABEL"
+					description="TPL_RKIC41SITE_SETSHADOW_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field
+					name="shadowColor" showon="setShadowFrame:1"
+					type="text"
+					default="rgba(0,0,0,0.15)"
+					label="TPL_RKIC41SITE_SHADOWCOLOR_LABEL"
+                    description="TPL_RKIC41SITE_SHADOWCOLOR_DESC" />
+
+			</fieldset>
+		</fields>
+	</config>
+</extension>

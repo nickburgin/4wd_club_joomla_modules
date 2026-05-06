@@ -1,0 +1,77 @@
+<?php
+/**
+ * @version    4.2.1
+ * @package    Com_Gabroadcast
+ * @author     Glenn Arkell <glenn@glennarkell.com.au>
+ * @copyright  2019 Glenn Arkell
+ * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+namespace GlennArkell\Component\Gabroadcast\Administrator\Controller;
+
+// No direct access.
+defined('_JEXEC') or die;
+
+use \Joomla\Utilities\ArrayHelper;
+use \Joomla\CMS\Factory;
+use \Joomla\CMS\MVC\Controller\AdminController;
+use \Joomla\CMS\Session\Session;
+use \Joomla\CMS\Language\Text;
+use \Joomla\CMS\MVC\View\GenericDataException;
+
+/**
+ * Bcasts list controller class.
+ *
+ * @since  1.6
+ */
+class BcastsController extends AdminController
+{
+	/**
+	 * Proxy for getModel.
+	 *
+	 * @param   string  $name    Optional. Model name
+	 * @param   string  $prefix  Optional. Class prefix
+	 * @param   array   $config  Optional. Configuration array for model
+	 *
+	 * @return  object	The Model
+	 *
+	 * @since    1.6
+	 */
+	public function getModel($name = 'Bcast', $prefix = 'Administrator', $config = array('ignore_request' => true))
+	{
+		return parent::getModel($name, $prefix, $config);
+	}
+
+	/**
+	 * Method to save the submitted ordering values for records via AJAX.
+	 *
+	 * @return  void
+	 *
+	 * @since   3.0
+	 */
+	public function saveOrderAjax()
+	{
+		// Get the input
+		$input = Factory::getApplication()->input;
+		$pks   = $input->post->get('cid', array(), 'array');
+		$order = $input->post->get('order', array(), 'array');
+
+		// Sanitize the input
+		ArrayHelper::toInteger($pks);
+		ArrayHelper::toInteger($order);
+
+		// Get the model
+		$model = $this->getModel();
+
+		// Save the ordering
+		$return = $model->saveorder($pks, $order);
+
+		if ($return)
+		{
+			echo "1";
+		}
+
+		// Close the application
+		Factory::getApplication()->close();
+	}
+}

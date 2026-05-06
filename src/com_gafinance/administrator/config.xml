@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <inlinehelp button="show" />
+	<fieldset name="gafinance" addfieldprefix="GlennArkell\Component\Gafinance\Administrator\Field"
+		label="COM_GAFINANCE_BUS_DETAILS_LABEL"
+		description="COM_GAFINANCE_BUS_DETAILS_DESC"
+	>
+
+        <field name="site_abn" type="text" class="inputbox" required="false" filter="safehtml"
+             default="Your Business Registration Number"
+             label="COM_GAFINANCE_SITE_ABN_LABEL"
+             description="COM_GAFINANCE_SITE_ABN_DESC" />
+
+        <field name="site_addr" type="text" class="input-xlarge" required="false" filter="safehtml"
+             default="Your Business Address"
+             label="COM_GAFINANCE_SITE_ADDR_LABEL"
+             description="COM_GAFINANCE_SITE_ADDR_DESC" />
+
+        <field name="site_sub" type="text" class="inputbox" required="false" filter="safehtml"
+             default="Your Business Suburb or Town"
+             label="COM_GAFINANCE_SITE_SUB_LABEL"
+             description="COM_GAFINANCE_SITE_SUB_DESC" />
+
+        <field name="site_phone" type="text" class="inputbox" required="false" filter="safehtml"
+             default="Your Business Phone"
+             label="COM_GAFINANCE_SITE_PHONE_LABEL"
+             description="COM_GAFINANCE_SITE_PHONE_DESC" />
+
+        <field name="site_fax" type="text" class="inputbox" required="false" filter="safehtml"
+             default="Your Business Fax"
+             label="COM_GAFINANCE_SITE_FAX_LABEL"
+             description="COM_GAFINANCE_SITE_FAX_DESC" />
+
+	</fieldset>
+
+	<fieldset name="finmships" addfieldprefix="GlennArkell\Component\Gafinance\Administrator\Field"
+		label="COM_GAFINANCE_FINMSHIPS_LABEL"
+		description="COM_GAFINANCE_FINMSHIPS_DESC" >
+
+        <field name="mship_single" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAFINANCE_MSHIP_SINGLE_LABEL"
+             description="COM_GAFINANCE_MSHIP_SINGLE_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="profile_suffix" type="text" default=""
+             label="COM_GAFINANCE_PROFILE_SUFFIX_LABEL"
+             description="COM_GAFINANCE_PROFILE_SUFFIX_DESC" />
+
+	</fieldset>
+
+	<fieldset name="fintrans" addfieldprefix="GlennArkell\Component\Gafinance\Administrator\Field"
+		label="COM_GAFINANCE_FINTRANS_LABEL"
+		description="COM_GAFINANCE_FINTRANS_DESC" >
+
+        <field name="auto_neg" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAFINANCE_AUTO_NEG_LABEL"
+             description="COM_GAFINANCE_AUTO_NEG_DESC" >
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+        </field>
+
+        <field name="act_log" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAFINANCE_ACT_LOG_LABEL"
+             description="COM_GAFINANCE_ACT_LOG_DESC" >
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+        </field>
+
+        <field name="exchange_rates" class="inputbox" filter="safehtml"
+             type="text" default="1"
+             label="COM_GAFINANCE_EXCHANGE_RATES_LABEL"
+             description="COM_GAFINANCE_EXCHANGE_RATES_DESC" />
+
+        <field name="paypalau" class="inputbox"
+             type="text" filter="safehtml" default="0.00"
+             label="COM_GAFINANCE_PAYPALAU_LABEL"
+             description="COM_GAFINANCE_PAYPALAU_DESC" />
+
+        <field name="paypalus" class="inputbox"
+             type="text" filter="safehtml" default="0.00"
+             label="COM_GAFINANCE_PAYPALUS_LABEL"
+             description="COM_GAFINANCE_PAYPALUS_DESC" />
+
+        <field name="acctpay" class="inputbox"
+             type="text" filter="safehtml" default="0.00"
+             label="COM_GAFINANCE_ACCNTPAY_LABEL"
+             description="COM_GAFINANCE_ACCNTPAY_DESC" />
+
+        <field name="ownerCat" type="category" extension="com_gafinance" show_root="true" 
+             label="COM_GAFINANCE_OWNERCAT_LABEL"
+             description="COM_GAFINANCE_OWNERCAT_DESC" />
+
+        <field name="claim_gst" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAFINANCE_CLAIM_GST_LABEL"
+             description="COM_GAFINANCE_CLAIM_GST_DESC" >
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+        </field>
+
+        <field name="gst_rate" type="text" default="0.10" showon="claim_gst:1" filter="safehtml"
+             label="COM_GAFINANCE_GST_RATE_LABEL"
+             description="COM_GAFINANCE_GST_RATE_DESC" />
+
+        <field name="safe_files" type="list" class="multiple" multiple="true"
+             label="COM_GAFINANCE_SAFE_FILES_LABEL"
+             description="COM_GAFINANCE_SAFE_FILES_DESC">
+                 <option value="pdf">pdf</option>
+                 <option value="PDF">PDF</option>
+                 <option value="jpg">jpg</option>
+                 <option value="JPG">JPG</option>
+                 <option value="png">png</option>
+                 <option value="PNG">PNG</option>
+                 <option value="gif">gif</option>
+                 <option value="GIF">GIF</option>
+         </field>
+
+        <field name="max_size" type="text" default="300000" filter="safehtml"
+             label="COM_GAFINANCE_MAX_SIZE_LABEL"
+             description="COM_GAFINANCE_MAX_SIZE_DESC" />
+
+        <field name="email_audit" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAFINANCE_EMAIL_AUDIT_LABEL"
+             description="COM_GAFINANCE_EMAIL_AUDIT_DESC" >
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+        </field>
+
+	</fieldset>
+
+	<fieldset name="finreporting" addfieldprefix="GlennArkell\Component\Gafinance\Administrator\Field"
+		label="COM_GAFINANCE_FINREPORTING_LABEL"
+		description="COM_GAFINANCE_FINREPORTING_DESC" >
+
+        <field name="combine_accnts" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAFINANCE_COMBINE_ACCNTS_LABEL"
+             description="COM_GAFINANCE_COMBINE_ACCNTS_DESC" >
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+        </field>
+
+        <field name="select_accnts" type="account" multiple="true" showon="combine_accnts:1"
+             label="COM_GAFINANCE_SELECT_ACCNTS_LABEL"
+             description="COM_GAFINANCE_SELECT_ACCNTS_DESC" />
+
+        <field name="combine_rpt" type="radio" default="0" class="btn-group btn-group-yesno" showon="combine_accnts:1"
+             label="COM_GAFINANCE_COMBINE_RPT_LABEL"
+             description="COM_GAFINANCE_COMBINE_RPT_DESC" >
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+        </field>
+
+        <field name="budget" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAFINANCE_BUDGET_LABEL"
+             description="COM_GAFINANCE_BUDGET_DESC" >
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+        </field>
+
+        <field name="budget_reg" multiple="false" type="list" filter="int" default="1" showon="budget:1"
+             label="COM_GAFINANCE_BUDGET_REG_LABEL"
+             description="COM_GAFINANCE_BUDGET_REG_DESC" >
+             <option value="1">Monthly</option>
+             <option value="2">Quarterly</option>
+             <option value="3">Annually</option>
+        </field>
+
+	</fieldset>
+
+	<fieldset name="invoicing" addfieldprefix="GlennArkell\Component\Gafinance\Administrator\Field"
+		label="COM_GAFINANCE_INVOICING_LABEL"
+		description="COM_GAFINANCE_INVOICING_DESC" >
+
+        <field name="inc_invoices" class="btn-group"
+             type="radio" default="0"
+             label="COM_GAFINANCE_INC_INVOICES_LABEL"
+             description="COM_GAFINANCE_INC_INVOICES_DESC">
+             <option value="0">None</option>
+             <option value="1">Timesheets</option>
+             <option value="2">Finance</option>
+         </field>
+
+        <field name="inv_no_offset" type="int" class="inputbox" required="false" default="900000"
+             label="COM_GAFINANCE_INV_NO_OFFSET_LABEL" filter="safehtml"
+             description="COM_GAFINANCE_INV_NO_OFFSET_DESC" />
+
+        <field name="inv_prefix" type="text" class="inputbox" required="true" default="BECS"
+             label="COM_GAFINANCE_INV_PREFIX_LABEL" filter="safehtml"
+             description="COM_GAFINANCE_INV_PREFIX_DESC" />
+
+        <field name="inv_dummyemail" type="email" default="noemail@dummy.com" validate="email"
+             label="COM_GAFINANCE_INV_DUMMYEMAIL_LABEL"
+             description="COM_GAFINANCE_INV_DUMMYEMAIL_DESC" />
+
+        <field name="site_bank" type="text" class="inputbox" required="false" size="50"
+             default="Your Bank" filter="safehtml"
+             label="COM_GAFINANCE_SITE_BANK_LABEL"
+             description="COM_GAFINANCE_SITE_BANK_DESC" />
+
+        <field name="site_aname" type="text" class="inputbox" required="false" size="50"
+             default="Your Business Name"
+             label="COM_GAFINANCE_SITE_ANAME_LABEL"
+             description="COM_GAFINANCE_SITE_ANAME_DESC" />
+
+        <field name="site_bsb" type="text" class="inputbox" required="false" size="50"
+             default="Your Bank BSB/Sort Code"
+             label="COM_GAFINANCE_SITE_BSB_LABEL"
+             description="COM_GAFINANCE_SITE_BSB_DESC" />
+
+        <field name="site_accnt" type="text" class="inputbox" required="false" size="50"
+             default="Your Account Number"
+             label="COM_GAFINANCE_SITE_ACCNT_LABEL"
+             description="COM_GAFINANCE_SITE_ACCNT_DESC" />
+
+        <field name="inv_himage" type="media"
+             label="COM_GAFINANCE_INV_HIMAGE_LABEL"
+             description="COM_GAFINANCE_INV_HIMAGE_DESC" />
+
+        <field name="img_type" type="text" default="JPG"
+             label="COM_GAFINANCE_IMG_TYPE_LABEL"
+             description="COM_GAFINANCE_IMG_TYPE_DESC" />
+
+        <field name="inv_cat" type="category" extension="com_gafinance" show_root="true"
+             label="COM_GAFINANCE_INV_CAT_LABEL"
+             description="COM_GAFINANCE_INV_CAT_DESC" />
+
+        <field name="age_tohide" type="text" default="90"
+             label="COM_GAFINANCE_AGE_TOHIDE_LABEL"
+             description="COM_GAFINANCE_AGE_TOHIDE_DESC" />
+
+        <field name="email_text" type="textarea" rows="4" class="input-xxlarge" filter="safehtml"
+             default="Please find attached invoice relating to work provided by us.  If you have any questions or concerns about any aspect of this invoice, please contact us to discuss."
+             label="COM_GAFINANCE_EMAIL_TEXT_LABEL"
+             description="COM_GAFINANCE_EMAIL_TEXT_DESC" />
+
+        <field name="email_salute" type="text" default="Sincerely"
+             label="COM_GAFINANCE_EMAIL_SALUTE_LABEL"
+             description="COM_GAFINANCE_EMAIL_SALUTE_DESC" />
+
+        <field name="payment_txt" type="text" default="(Please include your business name in the transaction reference)"
+             label="COM_GAFINANCE_PAYMENT_TXT_LABEL" class="input-xxlarge" 
+             description="COM_GAFINANCE_PAYMENT_TXT_DESC" />
+
+	</fieldset>
+
+    <fieldset name="permissions" description="JCONFIG_PERMISSIONS_DESC" label="JCONFIG_PERMISSIONS_LABEL">
+        <field name="rules" type="rules" component="com_gafinance" class="inputbox" filter="rules" validate="rules" label="JCONFIG_PERMISSIONS_LABEL" section="component" />
+	</fieldset>
+
+    <fieldset name="component">
+
+        <field name="test_mode" type="radio" class="btn-group btn-group-yesno" default="0" 
+            label="COM_GAFINANCE_TEST_MODE_LABEL"
+            description="COM_GAFINANCE_TEST_MODE_DESC">
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field name="save_history" type="radio" class="btn-group btn-group-yesno" default="0" label="JGLOBAL_SAVE_HISTORY_OPTIONS_LABEL" description="JGLOBAL_SAVE_HISTORY_OPTIONS_DESC">
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field name="history_limit" type="text" filter="integer" label="JGLOBAL_HISTORY_LIMIT_OPTIONS_LABEL" description="JGLOBAL_HISTORY_LIMIT_OPTIONS_DESC" default="5"/>
+
+        <field
+          name="sef_ids"
+          type="radio"
+          class="btn-group btn-group-yesno"
+          default="0"
+          label="JGLOBAL_SEF_NOIDS_LABEL"
+          description="JGLOBAL_SEF_NOIDS_DESC"
+          filter="integer"
+          >
+          <option value="1">JYES</option>
+          <option value="0">JNO</option>
+        </field>
+    </fieldset>
+</config>

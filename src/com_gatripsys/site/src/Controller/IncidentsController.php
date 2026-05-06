@@ -1,0 +1,44 @@
+<?php
+/**
+ * @version    5.1.0
+ * @package    Com_Gatripsys
+ * @author     Glenn Arkell <glenn@glennarkell.com.au>
+ * @copyright  2016 Glenn Arkell
+ * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+namespace GlennArkell\Component\Gatripsys\Site\Controller;
+
+// No direct access.
+defined('_JEXEC') or die;
+
+use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Multilanguage;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Utilities\ArrayHelper;
+
+/**
+ * List controller class.
+ * @since  1.6
+ */
+class IncidentsController extends FormController
+{
+	/**
+	 * Proxy for getModel.
+	 * @param   string  $name    The model name. Optional.
+	 * @param   string  $prefix  The class prefix. Optional
+	 * @param   array   $config  Configuration array for model. Optional
+	 * @return object	The model
+	 * @since	1.6
+	 */
+	public function getModel($name = 'Incidents', $prefix = 'Site', $config = array('ignore_request' => true))
+	{
+		$model = parent::getModel($name, $prefix, $config);
+
+		return $model;
+	}
+}

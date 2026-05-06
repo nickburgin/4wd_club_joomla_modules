@@ -1,0 +1,25 @@
+/**
+ * @version     5.1.6
+ * @package     com_gausers
+ * @copyright   2021 Glenn Arkell
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Glenn Arkell <glenn@glennarkell.com.au>
+ */
+
+.table{
+    width: 100%;
+    margin-bottom: 18px;
+}
+
+.table tr{
+    border: none;
+}
+
+.table td, .table th{
+    padding: 8px;
+    line-height: 18px;
+    text-align: left;
+    vertical-align: top;
+    border: none;
+    border-top: 1px solid #ddd;
+}

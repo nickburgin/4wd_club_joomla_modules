@@ -1,0 +1,239 @@
+/**
+ * @version     5.1.6
+ * @package     com_gausers
+ * @copyright   2021 Glenn Arkell
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Glenn Arkell <glenn@glennarkell.com.au>
+ */
+
+div.js-stools-container-filters-visible {
+    grid-template-columns: repeat(auto-fill, minmax(245px, 1fr)) !important;
+}
+
+.xlargefont {
+	font-size: 48px;
+	line-height: 40px;
+	font-family: "Arial Black", Gadget, sans-serif;
+}
+
+textarea.gausertext {
+    max-width: 99%;
+    width: 99%;
+}
+
+.gausernone {
+    border: none;
+    border-collapse:collapse;
+    width: 100%;
+    padding: 0px 5px 0px 5px;
+    vertical-align: top;
+}
+
+.gauserhead {
+    border: 1px solid black;
+    background-color: #c0c0c0;
+    padding: 0px 5px 0px 5px;
+    text-align: center;
+}
+
+.gauserphone {
+    border: 1px solid black;
+    text-align: center;
+    width: 15%;
+}
+.gausername {
+    border: 1px solid black;
+    padding-left: 5px;
+    text-align: left;
+    width: 28% !important;
+}
+.gausertrg {
+    border: 1px solid black;
+    padding-left: 3px;
+    text-align: left;
+    width: 15% !important;
+}
+
+.gauserothr {
+    border: 1px solid black;
+    padding-left: 3px;
+    text-align: left;
+    font-weight: normal;
+    font-size: 11px;
+    width: 72% !important;
+}
+
+.gausername a {
+    text-decoration:none;
+    background: transparent;
+}
+
+.gauseraddr {
+    border: 1px solid black;
+    padding-left: 5px;
+    text-align: left;
+    font-weight: normal;
+    text-decoration:none;
+    width: 32%;
+}
+.gausermem {
+    border: 1px solid black;
+    text-align: center;
+    font-weight: normal;
+    width: 18%;
+}
+tr.primbr {
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-bottom: 1px solid #c0c0c0;
+}
+tr.partnerinc {
+    border-top: 1px solid #c0c0c0;
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+td.partnerincname,
+td.primbrname {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    padding-left: 5px;
+    text-align: left;
+    font-weight: normal;
+    width: 28% !important;
+}
+td.primbrtrg,
+td.partnerinctrg {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    padding-left: 3px;
+    text-align: left;
+    font-weight: normal;
+    font-size: 11px;
+    width: 15% !important;
+}
+.txtareawide {
+    width:80%;
+}
+
+@media (max-width: 767px) {
+    .gausername {
+        width: 30%;
+    }
+    .gauseraddr {
+        width: 50%;
+    }
+    .gauserphone {
+        width: 8%;
+    }
+    .gausermem {
+        width: 12%;
+    }
+}
+@media (min-width: 768px) and (max-width: 979px) {
+    .gausername {
+        width: 30%;
+    }
+    .gauseraddr {
+        width: 50%;
+    }
+    .gauserphone {
+        width: 8%;
+    }
+    .gausermem {
+        width: 12%;
+    }
+}
+@media (max-width: 480px) {
+    .gausername {
+        width: 80%;
+    }
+    .gauseraddr {
+        display: none !important;
+    }
+    .gauserphone {
+        width: 20%;
+    }
+    .gausermem {
+        display: none !important;
+    }
+}
+
+.form-horizontal
+.control-group {
+    margin-bottom: 3px !important;
+}
+.control-group {
+    margin-bottom: 3px !important;
+}
+.form-horizontal
+.controls {
+    /* margin-left: 220px !important; */
+}
+
+.zoom {
+	padding: 1px;
+	transition: transform .2s; /* Animation */
+	width: 14px;
+	height: auto;
+	margin: 0 auto;
+}
+
+.zoom:hover {
+	transform: scale(8.5); /* 850% */
+}
+
+i.fa-exclamation-triangle {
+    color: var(--danger);
+}
+i.fa-undo {
+    color: var(--info);
+}
+i.fa-sad-tear {
+    color: var(--cyan);
+}
+i.fa-barcode {
+    color: var(--warning);
+}
+i.fa-file-invoice-dollar {
+    color: var(--success);
+}
+.icon-publish:before {
+    color: var(--success);
+}
+.icon-unpublish:before {
+    color: var(--danger);
+}
+.icon-mail:before {
+    color: var(--indigo);
+}
+.icon-trash {
+    color: var(--danger);
+}
+i.fa-mailchimp {
+    font-size: 1.5rem;
+    padding: 0.45em;
+    border:1px solid var(--rkic41site-color-link);
+    border-radius: 0.25rem;
+}
+i.fa-stack-exchange {
+    color: var(--warning);
+}
+
+p.center,
+table th.center,
+table td.center {
+	text-align: center;
+	margin: 0 auto;
+}
+
+a.pull-right {
+	float: right;
+	margin-right: 5px;
+}
+a.pull-left {
+	float: left;
+	margin-left: 5px;
+}
+

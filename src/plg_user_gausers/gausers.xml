@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="4.0" type="plugin" group="user" method="upgrade">
+	<name>User Loader</name>
+	<author>Glenn Arkell</author>
+	<creationDate>17 March 2020</creationDate>
+	<copyright>(C) 2020 - 2020 Glenn Arkell. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>glenn@glennarkell.com.au</authorEmail>
+	<authorUrl>https://www.glennarkell.com.au</authorUrl>
+	<version>5.1.6</version>
+	<description>User plug-in, to enable easy uploading of bulk new users from csv file.</description>
+
+    <namespace path="src">GlennArkell\Plugin\User\Gausers</namespace>
+
+	<files>
+		<filename plugin="gausers">gausers.php</filename>
+		<folder>language</folder>
+		<folder>src</folder>
+	</files>
+	<languages>
+		<language tag="en-GB">language/en-GB/plg_user_gausers.ini</language>
+		<language tag="en-GB">language/en-GB/plg_user_gausers.sys.ini</language>
+	</languages>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+				
+				<field name="spacer2" type="spacer" class="text"
+					   label="PLG_USER_GAUSERLOADER_CSVFILE_FORMAT" />
+
+				<field name="spacer1" type="spacer" hr="true" />
+				
+				<field name="def_usergroup" type="usergrouplist" default="2"
+				       label="PLG_USER_GAUSERLOADER_DEF_USERGROUP_LABEL"
+					   description="PLG_USER_GAUSERLOADER_DEF_USERGROUP_DESC" />
+
+				<field name="def_filename" type="filelist" default="members.csv" directory="images/members"
+				       label="PLG_USER_GAUSERLOADER_DEF_FILENAME_LABEL"
+					   description="PLG_USER_GAUSERLOADER_DEF_FILENAME_DESC" />
+
+				<field name="prof_fields" type="text" default="name,email,address1,address2,city,postal_code,region,country,phone,website,favoritebook,aboutme,dob,mship_no,partner,altphone,memtype"
+				       label="PLG_USER_GAUSERLOADER_PROF_FIELDS_LABEL"
+					   description="PLG_USER_GAUSERLOADER_PROF_FIELDS_DESC" />
+
+				<field name="prof_suffix" type="text" default=""
+				       label="PLG_USER_GAUSERLOADER_PROF_SUFF_LABEL"
+					   description="PLG_USER_GAUSERLOADER_PROF_SUFF_DESC" />
+
+				<field name="send_email" type="radio" default="0" class="btn-group btn-group-yesno"
+				       label="PLG_USER_GAUSERLOADER_SEND_EMAIL_LABEL"
+					   description="PLG_USER_GAUSERLOADER_SEND_EMAIL_DESC" >
+					   <option value="0">JNO</option>
+					   <option value="1">JYES</option>
+				</field>
+
+				<field name="welcome_note" type="Articlelist" showon="send_email:1"
+				       label="PLG_USER_GAUSERLOADER_WELCOME_NOTE_LABEL"
+					   description="PLG_USER_GAUSERLOADER_WELCOME_NOTE_DESC" />
+
+			</fieldset>
+
+		</fields>
+	</config>
+</extension>

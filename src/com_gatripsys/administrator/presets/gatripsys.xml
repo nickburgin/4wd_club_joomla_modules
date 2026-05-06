@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<menu
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="urn:joomla.org"
+	xsi:schemaLocation="urn:joomla.org menu.xsd"
+	>
+	<menuitem
+		title="COM_GATRIPSYS_MENUS"
+		type="heading"
+		icon="fas fa-truck-monster"
+		class="class:fas fa-truck-monster"
+		dashboard="gatripsys"
+		>
+		<menuitem
+			title="COM_GATRIPSYS_TITLE_TRIPS"
+			type="component"
+			element="com_gatripsys"
+			link="index.php?option=com_gatripsys&amp;view=trips"
+			quicktask="index.php?option=com_gatripsys&amp;task=trip.add"
+			quicktask-title="COM_GATRIPSYS_NEW_TRIP"
+		/>
+		<menuitem
+			title="COM_GATRIPSYS_TRIPS_RATING"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gatripsys"
+			quicktask="index.php?option=com_categories&amp;extension=com_gatripsys&amp;task=category.add"
+			quicktask-title="COM_GATRIPSYS_NEW_RATING"
+		/>
+		<menuitem
+			title="COM_GATRIPSYS_TITLE_TRIP_TYPES"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gatripsys.triptype"
+			quicktask="index.php?option=com_categories&amp;extension=com_gatripsys.triptype&amp;task=category.add"
+			quicktask-title="COM_GATRIPSYS_NEW_TRIP_TYPE"
+		/>
+		<menuitem
+			title="COM_GATRIPSYS_TITLE_SUITED_FOR"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gatripsys.suitedfor"
+			quicktask="index.php?option=com_categories&amp;extension=com_gatripsys.suitedfor&amp;task=category.add"
+			quicktask-title="COM_GATRIPSYS_NEW_SUITED_FOR"
+		/>
+
+		<menuitem
+			title="COM_GATRIPSYS_TITLE_ATTENDEES"
+			type="component"
+			element="com_gatripsys"
+			link="index.php?option=com_gatripsys&amp;view=attendees"
+			quicktask="index.php?option=com_gatripsys&amp;task=attendee.add"
+			quicktask-title="COM_GATRIPSYS_NEW_ATTENDEE"
+		/>
+
+		<menuitem
+			title="COM_GATRIPSYS_TITLE_INVOICES"
+			type="component"
+			element="com_gatripsys"
+			link="index.php?option=com_gatripsys&amp;view=invoices"
+			quicktask="index.php?option=com_gatripsys&amp;task=invoice.add"
+			quicktask-title="COM_GATRIPSYS_NEW_INVOICE"
+		/>
+
+		<menuitem
+			title="COM_GATRIPSYS_TITLE_INCIDENTS"
+			type="component"
+			element="com_gatripsys"
+			link="index.php?option=com_gatripsys&amp;view=incidents"
+			quicktask="index.php?option=com_gatripsys&amp;task=incident.add"
+			quicktask-title="COM_GATRIPSYS_NEW_INCIDENT"
+		/>
+
+		<menuitem
+			title="COM_GATRIPSYS_TITLE_INSURANCE_CAT"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gatripsys.inscat"
+			quicktask="index.php?option=com_categories&amp;extension=com_gatripsys.inscat&amp;task=category.add"
+			quicktask-title="COM_GATRIPSYS_NEW_INSURANCE_CAT"
+		/>
+
+		<menuitem
+			title="COM_GATRIPSYS_CONFIGURATION"
+			type="component"
+			element="com_config"
+			link="index.php?option=com_config&amp;view=component&amp;component=com_gatripsys&amp;path=&amp;return="
+		/>
+
+	</menuitem>
+
+</menu>

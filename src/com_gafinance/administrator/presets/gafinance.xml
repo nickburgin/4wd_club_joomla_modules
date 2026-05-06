@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<menu
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="urn:joomla.org"
+	xsi:schemaLocation="urn:joomla.org menu.xsd"
+	>
+	<menuitem
+		title="COM_GAFINANCE_MENUS"
+		type="heading"
+		icon="fas fa-donate"
+		class="class:fas fa-donate"
+		>
+		<menuitem
+			title="COM_GAFINANCE_TITLE_TRANSACTIONS"
+			type="component"
+			element="com_gafinance"
+			link="index.php?option=com_gafinance&amp;view=transactions"
+			quicktask="index.php?option=com_gafinance&amp;task=transaction.add"
+			quicktask-title="COM_GAFINANCE_NEW_TRANSACTION"
+		/>
+
+		<menuitem
+			title="COM_GAFINANCE_TRANSACTION_CATEGORY"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gafinance"
+			quicktask="index.php?option=com_categories&amp;extension=com_gafinance&amp;task=category.add"
+			quicktask-title="COM_GAFINANCE_TRANSACTION_NEW_CATEGORY"
+		/>
+
+		<menuitem
+			title="COM_GAFINANCE_TITLE_BUSASSETS"
+			type="component"
+			element="com_gafinance"
+			link="index.php?option=com_gafinance&amp;view=busassets"
+			quicktask="index.php?option=com_gafinance&amp;task=busasset.add"
+			quicktask-title="COM_GAFINANCE_NEW_BUSASSET"
+		/>
+
+		<menuitem
+			title="COM_GAFINANCE_BUSASSET_CATEGORY"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gafinance.asset"
+			quicktask="index.php?option=com_categories&amp;extension=com_gafinance.asset&amp;task=category.add"
+			quicktask-title="COM_GAFINANCE_BUSASSET_NEW_CATEGORY"
+		/>
+
+		<menuitem
+			title="COM_GAFINANCE_TITLE_BUDGETS"
+			type="component"
+			element="com_gafinance"
+			link="index.php?option=com_gafinance&amp;view=budgets"
+			quicktask="index.php?option=com_gafinance&amp;task=budget.add"
+			quicktask-title="COM_GAFINANCE_NEW_BUDGET"
+		/>
+
+		<menuitem
+			title="COM_GAFINANCE_TITLE_ACCOUNTS"
+			type="component"
+			element="com_gafinance"
+			link="index.php?option=com_gafinance&amp;view=accounts"
+			quicktask="index.php?option=com_gafinance&amp;task=account.add"
+			quicktask-title="COM_GAFINANCE_NEW_ACCOUNT"
+		/>
+
+		<menuitem
+			title="COM_GAFINANCE_TITLE_INVOICES"
+			type="component"
+			element="com_gafinance"
+			link="index.php?option=com_gafinance&amp;view=invoices"
+			quicktask="index.php?option=com_gafinance&amp;task=invoice.add"
+			quicktask-title="COM_GAFINANCE_NEW_INVOICE"
+		/>
+
+		<menuitem
+			title="COM_GAFINANCE_TITLE_INVTYPES"
+			type="component"
+			element="com_gafinance"
+			link="index.php?option=com_gafinance&amp;view=invtypes"
+			quicktask="index.php?option=com_gafinance&amp;task=invtype.add"
+			quicktask-title="COM_GAFINANCE_NEW_INVTYPE"
+		/>
+
+		<menuitem
+			title="COM_GAFINANCE_TITLE_PATRONS"
+			type="component"
+			element="com_gafinance"
+			link="index.php?option=com_gafinance&amp;view=patrons"
+			quicktask="index.php?option=com_gafinance&amp;task=patron.add"
+			quicktask-title="COM_GAFINANCE_NEW_PATRON"
+		/>
+
+		<menuitem
+			title="COM_GAFINANCE_TITLE_AUDITS"
+			type="component"
+			element="com_gafinance"
+			link="index.php?option=com_gafinance&amp;view=audits"
+		/>
+
+		<menuitem
+			title="COM_GAFINANCE_CONFIGURATION"
+			type="component"
+			element="com_config"
+			link="index.php?option=com_config&amp;view=component&amp;component=com_gafinance&amp;path=&amp;return="
+		/>
+
+	</menuitem>
+
+</menu>

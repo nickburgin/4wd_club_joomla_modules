@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" method="upgrade">
+    <name>com_gacalevents</name>
+    <creationDate>2021-07-29</creationDate>
+    <copyright>2021 Glenn Arkell</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Glenn Arkell</author>
+    <authorEmail>glenn@glennarkell.com.au</authorEmail>
+    <authorUrl>https://www.glennarkell.com.au</authorUrl>
+    <version>3.0.0</version>
+    <description>COM_GACALEVENTS_XML_DESCRIPTION</description>
+    <namespace path="src">GlennArkell\Component\Gacalevents</namespace>
+
+    <scriptfile>script.php</scriptfile>
+    
+	<dashboards>
+		<dashboard title="COM_GACALEVENTS_DASHBOARD_TITLE" icon="fas fa-calendar-alt">COM_GACALEVENTS_DASHBOARD_TITLE</dashboard>
+	</dashboards>
+
+    <install> <!-- Runs on install -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <update> <!-- Runs on update -->
+		<schemas>
+			<schemapath type="mysql">sql/updates/mysql/</schemapath>
+		</schemas>
+    </update>
+    <uninstall> <!-- Runs on uninstall -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+
+    <files folder="site">
+        <folder>forms</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+    <media destination="com_gacalevents" folder="media">
+        <folder>css</folder>
+        <folder>images</folder>
+        <file>joomla.asset.json</file>
+    </media>
+    <languages folder="site">
+			<language tag="en-GB">language/en-GB/com_gacalevents.ini</language>
+    </languages>
+    <administration>
+        <menu img="class:fas fa-calendar-alt">COM_GACALEVENTS<params><dashboard>gacalevents</dashboard></params></menu>
+
+        <files folder="administrator">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <folder>forms</folder>
+            <folder>src</folder>
+            <folder>tmpl</folder>
+            <folder>services</folder>
+            <folder>presets</folder>
+            <folder>sql</folder>
+        </files>
+        <languages folder="administrator">
+			<language tag="en-GB">language/en-GB/com_gacalevents.ini</language>
+			<language tag="en-GB">language/en-GB/com_gacalevents.sys.ini</language>
+        </languages>
+    </administration>
+
+	<changelogurl>https://www.glennarkell.com.au/joomlaorg/components/j6/gacalevents-changelog.xml</changelogurl>
+
+	<updateservers>
+		<server type="extension" priority="1" name="Calendar Events Management">https://www.glennarkell.com.au/joomlaorg/components/j6/gacalevents-update.xml</server>
+	</updateservers>
+
+</extension>

@@ -1,0 +1,55 @@
+/**
+ * @version     5.1.0
+ * @package     com_gatripsys
+ * @copyright   2016 Glenn Arkell
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Glenn Arkell <glenn@glennarkell.com.au>
+ */
+
+
+.trips {
+	font-size: 95%;
+}
+
+.red {
+	color: #ff0000 !important;
+}
+
+div.pull-right {
+	float: right;
+}
+div.pull-left {
+	float: left;
+}
+
+.fa-thumbs-down {
+	color: #bd362f;
+}	
+
+.fa-thumbs-up {
+	color: #51a351;
+}	
+
+.btn-tertiary {
+	color: #99b2d3 !important;
+	background-color: var(--rkic41site-color-link) !important;
+	border-color: var(--rkic41site-color-primary) !important;
+}
+
+.btn-incident {
+	color: #fff !important;
+	background-color: #e93f8e !important;
+	border-color: #e93f8e !important;
+}
+
+.btn-inverse {
+	color: #fff !important;
+	background-color: #6d757e !important;
+	border-color: #6d757e !important;
+}
+
+.btn-mini {
+	line-height: 0.75 !important;
+	padding: 0.4rem 0.5rem !important;
+}
+

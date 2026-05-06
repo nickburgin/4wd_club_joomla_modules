@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter" addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field">
+        <field name="search" type="text" hint="COM_GATRIPSYS_SEARCH_FILTER_SUBMIT"
+               label="COM_USERS_FILTER_SEARCH_DESC"
+               class="js-stools-search-string" />
+        
+		<field name="state" type="list" default="2"
+			label="COM_GATRIPSYS_FILTER_TRIP_PROG"
+			description="COM_GATRIPSYS_FILTER_TRIP_PROG_DESC"
+			onchange="this.form.submit();" >
+            <option value="7">JOPTION_SELECT_PUBLISHED</option>
+			<option value="1">GAPROPOSED</option>
+			<option value="2">GABOOKING</option>
+			<option value="3">GAPROGRESS</option>
+			<option value="4">GACLOSED</option>
+			<option value="5">GACANCELLED</option>
+			<option value="6">GAFINALISED</option>
+		</field>
+
+		<field name="rating" type="Triprating" 
+            label="COM_GATRIPSYS_FORM_LBL_TRIP_RATING"
+            description="COM_GATRIPSYS_FORM_DESC_TRIP_RATING"
+            onchange="this.form.submit();" />
+
+    </fields>
+
+	<fields name="list">
+
+		<field name="limit"
+			type="limitbox"
+			class="input-mini"
+			default="25"
+			onchange="this.form.submit();" />
+
+	</fields>
+
+</form>

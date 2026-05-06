@@ -1,0 +1,55 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "com_gatracklog",
+  "version": "4.1.0",
+  "description": "This file contains details of the assets used by the Track Log component by Glenn Arkell.",
+  "license": "GPL-2.0-or-later",
+  "assets": [
+    {
+      "name": "com_gatracklog.gatracklog",
+      "description": "Glenn's Component styling.",
+      "type": "style",
+      "uri": "com_gatracklog/gatracklog.css",
+      "dependencies": [
+        "fontawesome"
+      ]
+    },
+    {
+      "name": "com_gatracklog.item",
+      "description": "Glenn's Component styling for an item.",
+      "type": "style",
+      "uri": "com_gatracklog/item.css",
+      "dependencies": [
+        "com_gatracklog.gatracklog"
+      ]
+    },
+    {
+      "name": "com_gatracklog.list",
+      "description": "Glenn's Component styling for a list.",
+      "type": "style",
+      "uri": "com_gatracklog/list.css",
+      "dependencies": [
+        "com_gatracklog.gatracklog"
+      ]
+    },
+    {
+      "name": "com_gatracklog.form",
+      "description": "Glenn's Component styling for a form.",
+      "type": "style",
+      "uri": "com_gatracklog/form.css",
+      "dependencies": [
+        "com_gatracklog.gatracklog"
+      ]
+    },
+    {
+      "name": "com_gatracklog.gatracklogpreset",
+      "type": "preset",
+      "dependencies": [
+        "com_gatracklog.gatracklog#style",
+        "com_gatracklog.form#style",
+        "com_gatracklog.item#style",
+        "com_gatracklog.list#style"
+      ]
+    }
+  ]
+}

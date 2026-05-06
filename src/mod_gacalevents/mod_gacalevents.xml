@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" method="upgrade" client="site">
+    <name>MOD_GACALEVENTS_NAME</name>
+    <creationDate>2021-07-29</creationDate>
+    <copyright>2021 Glenn Arkell</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Glenn Arkell</author>
+    <authorEmail>glenn@glennarkell.com.au</authorEmail>
+    <authorUrl>http://www.glennarkell.com.au</authorUrl>
+    <version>2.1.2</version>
+    <description>MOD_GACALEVENTS_DESCRIPTION</description>
+	<namespace path="src">GlennArkell\Module\Gacalevents</namespace>
+
+    <files>
+        <filename module="mod_gacalevents">mod_gacalevents.php</filename>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+
+	<media destination="mod_gacalevents" folder="media">
+		<folder>css</folder>
+		<folder>js</folder>
+	</media>
+
+    <languages folder="language">
+			<language tag="en-GB">en-GB/mod_gacalevents.ini</language>
+			<language tag="en-GB">en-GB/mod_gacalevents.sys.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset 
+                name="content_type" 
+                label="MOD_GACALEVENTS_CONTENT_TYPE_TAB_LBL"
+                description="MOD_GACALEVENTS_CONTENT_TYPE_TAB_DESC">
+
+				<field name="disp_events" type="radio" default="0"
+                    class="btn-group btn-group-yesno" filter="int"
+					label="MOD_GACALEVENTS_FIELD_DISP_EVENTS_LABEL"
+					description="MOD_GACALEVENTS_FIELD_DISP_EVENTS_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="disp_mthonly" type="radio" default="0"
+                    class="btn-group btn-group-yesno" filter="int"
+					label="MOD_GACALEVENTS_FIELD_DISP_MTHONLY_LABEL"
+					description="MOD_GACALEVENTS_FIELD_DISP_MTHONLY_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="details_len" type="int" default="200"
+					label="MOD_GACALEVENTS_FIELD_DETAILS_LEN_LABEL"
+					description="MOD_GACALEVENTS_FIELD_DETAILS_LEN_DESC" />
+
+				<field name="header_colour" type="color"
+					label="MOD_GACALEVENTS_FIELD_HEADER_COLOUR_LABEL"
+					description="MOD_GACALEVENTS_FIELD_HEADER_COLOUR_DESC" />
+
+				<field name="set_listheight" type="radio" default="0" class="btn-group btn-group-yesno" filter="int"
+					label="MOD_GACALEVENTS_FIELD_SET_IFRAME_LABEL"
+					description="MOD_GACALEVENTS_FIELD_SET_IFRAME_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="list_height" type="text" default="400" filter="int" showon="set_listheight:1"
+					label="MOD_GACALEVENTS_FIELD_IFRAME_HEIGHT_LABEL"
+					description="MOD_GACALEVENTS_FIELD_IFRAME_HEIGHT_DESC" />
+
+            </fieldset>
+        </fields>
+    </config>
+</extension>

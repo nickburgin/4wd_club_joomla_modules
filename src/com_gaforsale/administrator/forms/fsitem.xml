@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="sysinfo" addfieldprefix="GlennArkell\Component\Gaforsale\Administrator\Field">
+		<field name="id" type="text" readonly="true" class="readonly" default="0" label="COM_GAFORSALE_FORM_LBL_ID" description="COM_GAFORSALE_FORM_DESC_ID"/>
+		<field name="ordering" label="COM_GAFORSALE_FORM_LBL_ORDERING" description="COM_GAFORSALE_FORM_DESC_ORDERING"/>
+		<field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="4">GASOLD</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+		<field name="checked_out" type="hidden" filter="unset"/>
+		<field name="checked_out_time" type="hidden" filter="unset"/>
+	    <field name="created_by" type="Createdby" hidden="true" default="0" label="COM_GAFORSALE_FORM_LBL_CREATED_BY" description="COM_GAFORSALE_FORM_DESC_CREATED_BY" hint="COM_GAFORSALE_FORM_LBL_CREATED_BY"/>
+	    <field name="modified_by" type="Modifiedby" hidden="true" default="0" label="COM_GAFORSALE_FORM_LBL_MODIFIED_BY" description="COM_GAFORSALE_FORM_DESC_MODIFIED_BY" hint="COM_GAFORSALE_FORM_LBL_MODIFIED_BY"/>
+	    <field name="created_date" type="Timecreated" label="COM_GAFORSALE_FORM_LBL_CREATED_DATE" description="COM_GAFORSALE_FORM_DESC_CREATED_DATE" hint="COM_GAFORSALE_FORM_LBL_CREATED_DATE"/>
+	    <field name="modified_date" type="Timecreated" label="COM_GAFORSALE_FORM_LBL_MODIFIED_DATE" description="COM_GAFORSALE_FORM_DESC_MODIFIED_DATE" hint="COM_GAFORSALE_FORM_LBL_MODIFIED_DATE"/>
+	</fieldset>
+
+	<fieldset name="general" addfieldprefix="GlennArkell\Component\Gaforsale\Administrator\Field">
+
+		<field name="user_id" type="user" required="true"
+			label="COM_GAFORSALE_FORM_LBL_FSITEM_USER_ID"
+			description="COM_GAFORSALE_FORM_DESC_FSITEM_USER_ID"
+			hint="COM_GAFORSALE_FORM_LBL_FSITEM_USER_ID" />
+
+		<field name="item_desc" type="text" required="true"
+			label="COM_GAFORSALE_FORM_LBL_FSITEM_ITEM_DESC"
+			description="COM_GAFORSALE_FORM_DESC_FSITEM_ITEM_DESC"
+			hint="COM_GAFORSALE_FORM_LBL_FSITEM_ITEM_DESC" />
+
+		<field name="item_image" type="media" directory="images/forsale"
+			label="COM_GAFORSALE_FORM_LBL_FSITEM_ITEM_IMAGE"
+			description="COM_GAFORSALE_FORM_DESC_FSITEM_ITEM_IMAGE"
+			hint="COM_GAFORSALE_FORM_LBL_FSITEM_ITEM_IMAGE" />
+
+		<field name="item_details" type="editor" filter="raw" buttons="true"
+			label="COM_GAFORSALE_FORM_LBL_FSITEM_ITEM_DETAILS"
+			description="COM_GAFORSALE_FORM_DESC_FSITEM_ITEM_DETAILS" 
+			hint="COM_GAFORSALE_FORM_LBL_FSITEM_ITEM_DETAILS" />
+
+		<field name="item_price" type="text" required="true" default="0.00"
+			label="COM_GAFORSALE_FORM_LBL_FSITEM_ITEM_PRICE"
+			description="COM_GAFORSALE_FORM_DESC_FSITEM_ITEM_PRICE" 
+			hint="COM_GAFORSALE_FORM_LBL_FSITEM_ITEM_PRICE" />
+
+        <field name="neg_ono" type="radio" default="0"
+            class="btn-group btn-group-yesno"
+            label="COM_GAFORSALE_FORM_LBL_FSITEM_NEG_ONO"
+            description="COM_GAFORSALE_FORM_DESC_FSITEM_NEG_ONO" >
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+		<field name="seller_contact" type="text" required="true"
+			label="COM_GAFORSALE_FORM_LBL_FSITEM_SELLER_CONTACT"
+			description="COM_GAFORSALE_FORM_DESC_FSITEM_SELLER_CONTACT" 
+			hint="COM_GAFORSALE_FORM_LBL_FSITEM_SELLER_CONTACT" />
+
+		<field name="seller_phone" type="text" required="true"
+			label="COM_GAFORSALE_FORM_LBL_FSITEM_SELLER_PHONE"
+			description="COM_GAFORSALE_FORM_DESC_FSITEM_SELLER_PHONE" 
+			hint="COM_GAFORSALE_FORM_LBL_FSITEM_SELLER_PHONE" />
+
+	</fieldset>
+
+	<fieldset name="extrainfo">
+		<field name="comment" filter="safehtml" type="textarea" label="COM_GAFORSALE_FORM_LBL_COMMENT" description="COM_GAFORSALE_FORM_DESC_COMMENT" hint="COM_GAFORSALE_FORM_LBL_COMMENT"/>
+		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+	</fieldset>
+</form>

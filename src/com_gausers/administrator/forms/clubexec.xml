@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="sysinfo" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+		<field name="id" type="text" readonly="true" class="readonly" default="0" label="COM_GAUSERS_FORM_LBL_ID" description="COM_GAUSERS_FORM_DESC_ID"/>
+		<field name="ordering" label="COM_GAUSERS_FORM_LBL_ORDERING" description="COM_GAUSERS_FORM_DESC_ORDERING"/>
+		<field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+		<field name="checked_out" type="hidden" filter="unset"/>
+		<field name="checked_out_time" type="hidden" filter="unset"/>
+	    <field name="created_by" type="Createdby" hidden="true" default="0" label="COM_GAUSERS_FORM_LBL_CREATED_BY" description="COM_GAUSERS_FORM_DESC_CREATED_BY" hint="COM_GAUSERS_FORM_LBL_CREATED_BY"/>
+	    <field name="modified_by" type="Modifiedby" hidden="true" default="0" label="COM_GAUSERS_FORM_LBL_MODIFIED_BY" description="COM_GAUSERS_FORM_DESC_MODIFIED_BY" hint="COM_GAUSERS_FORM_LBL_MODIFIED_BY"/>
+	    <field name="created_date" type="Timecreated" label="COM_GAUSERS_FORM_LBL_CREATED_DATE" description="COM_GAUSERS_FORM_DESC_CREATED_DATE" hint="COM_GAUSERS_FORM_LBL_CREATED_DATE"/>
+	    <field name="modified_date" type="Timeupdated" label="COM_GAUSERS_FORM_LBL_MODIFIED_DATE" description="COM_GAUSERS_FORM_DESC_MODIFIED_DATE" hint="COM_GAUSERS_FORM_LBL_MODIFIED_DATE"/>
+	</fieldset>
+
+	<fieldset name="club" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+        <field name="club_name" type="text" class="input-xlarge"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_CLUB_NAME"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_CLUB_NAME" />
+    
+        <field name="club_address" type="text" class="input-xlarge"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_CLUB_ADDRESS"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_CLUB_ADDRESS" />
+    
+        <field name="club_suburb" type="text" class="input-xlarge"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_CLUB_SUBURB"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_CLUB_SUBURB"  />
+    
+        <field name="club_pcode" type="text"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_CLUB_PCODE"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_CLUB_PCODE" />
+    
+        <field name="club_phone" type="text"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_CLUB_PHONE"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_CLUB_PHONE"  />
+    
+        <field name="club_email" type="email" validate="email"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_CLUB_EMAIL"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_CLUB_EMAIL"  />
+    
+        <field name="use_clubemail" type="radio" class="btn-group btn-group-yesno" default="0"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_USE_CLUBEMAIL"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_USE_CLUBEMAIL" >
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field name="club_website" type="text"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_CLUB_WEBSITE"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_CLUB_WEBSITE"  />
+    
+        <field name="club_logo" type="media"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_CLUB_LOGO"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_CLUB_LOGO"  />
+    
+        <field name="club_region" type="regionlist"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_CLUB_REGION"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_CLUB_REGION"  />
+    
+        <field name="integ_mbrs" type="radio" class="btn-group btn-group-yesno" default="0"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_INTEG_MBRS"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_INTEG_MBRS" >
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+	</fieldset>
+
+	<fieldset name="meeting" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+        <field name="meeting_address" type="text"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_MEETING_ADDRESS"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_MEETING_ADDRESS"  />
+
+        <field name="meeting_info" type="editor" 
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_MEETING_INFO"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_MEETING_INFO"  />
+    
+	</fieldset>
+
+	<fieldset name="general" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+        <field name="pres_id" type="user" required="false"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_PRES_ID"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_PRES_ID" />
+        <field name="pres_idp" type="radio" class="btn-group btn-group-mempart" default="0"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_PRES_IDP"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_PRES_IDP" >
+            <option value="0">COM_GAUSERS_MBR_OPTION</option>
+            <option value="1">COM_GAUSERS_PTN_OPTION</option>
+        </field>
+        <field name="pres_name" type="text" required="false"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_PRES_ID"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_PRES_ID" />
+
+        <field name="vpres_id" type="user" required="false"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_VPRES_ID"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_VPRES_ID" />
+        <field name="vpres_idp" type="radio" class="btn-group btn-group-mempart" default="0"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_VPRES_IDP"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_VPRES_IDP" >
+            <option value="0">COM_GAUSERS_MBR_OPTION</option>
+            <option value="1">COM_GAUSERS_PTN_OPTION</option>
+        </field>
+        <field name="vpres_name" type="text" required="false"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_VPRES_ID"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_VPRES_ID" />
+
+        <field name="secr_id" type="user" required="false"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_SECR_ID"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_SECR_ID" />
+        <field name="secr_idp" type="radio" class="btn-group btn-group-mempart" default="0"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_SECR_IDP"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_SECR_IDP" >
+            <option value="0">COM_GAUSERS_MBR_OPTION</option>
+            <option value="1">COM_GAUSERS_PTN_OPTION</option>
+        </field>
+        <field name="secr_name" type="text" required="false"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_SECR_ID"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_SECR_ID" />
+
+        <field name="tres_id" type="user" required="false"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_TRES_ID"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_TRES_ID" />
+        <field name="tres_idp" type="radio" class="btn-group btn-group-mempart" default="0"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_TRES_IDP"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_TRES_IDP" >
+            <option value="0">COM_GAUSERS_MBR_OPTION</option>
+            <option value="1">COM_GAUSERS_PTN_OPTION</option>
+        </field>
+        <field name="tres_name" type="text" required="false"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_TRES_ID"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_TRES_ID" />
+
+        <field name="edit_id" type="user" required="false"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_EDIT_ID"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_EDIT_ID" />
+        <field name="edit_idp" type="radio" class="btn-group btn-group-mempart" default="0"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_EDIT_IDP"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_EDIT_IDP" >
+            <option value="0">COM_GAUSERS_MBR_OPTION</option>
+            <option value="1">COM_GAUSERS_PTN_OPTION</option>
+        </field>
+        <field name="edit_name" type="text" required="false"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_EDIT_ID"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_EDIT_ID" />
+
+        <field name="delg_id" type="user" required="false"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_DELG_ID"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_DELG_ID" />
+        <field name="delg_idp" type="radio" class="btn-group btn-group-mempart" default="0"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_DELG_IDP"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_DELG_IDP" >
+            <option value="0">COM_GAUSERS_MBR_OPTION</option>
+            <option value="1">COM_GAUSERS_PTN_OPTION</option>
+        </field>
+        <field name="delg_name" type="text" required="false"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_DELG_ID"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_DELG_ID" />
+
+        <field name="regr_id" type="user" required="false"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_REGR_ID"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_REGR_ID" />
+        <field name="regr_idp" type="radio" class="btn-group btn-group-mempart" default="0"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_REGR_IDP"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_REGR_IDP" >
+            <option value="0">COM_GAUSERS_MBR_OPTION</option>
+            <option value="1">COM_GAUSERS_PTN_OPTION</option>
+        </field>
+        <field name="regr_name" type="text" required="false"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_REGR_ID"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_REGR_ID" />
+
+        <field name="istc_id" type="user" required="false"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_ISTC_ID"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_ISTC_ID" />
+        <field name="istc_idp" type="radio" class="btn-group btn-group-mempart" default="0"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_ISTC_IDP"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_ISTC_IDP" >
+            <option value="0">COM_GAUSERS_MBR_OPTION</option>
+            <option value="1">COM_GAUSERS_PTN_OPTION</option>
+        </field>
+        <field name="istc_name" type="text" required="false"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_ISTC_ID"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_ISTC_ID" />
+
+        <field name="end_term" type="calendar" default="2001-06-30" required="true"
+            filterFormat="Y-m-d" translateformat="true"
+            label="COM_GAUSERS_FORM_LBL_CLUBEXEC_END_TERM"
+            description="COM_GAUSERS_FORM_DESC_CLUBEXEC_END_TERM" />
+
+	</fieldset>
+
+	<fieldset name="extrainfo">
+		<field name="comment" filter="safehtml" type="textarea" label="COM_GAUSERS_FORM_LBL_COMMENT" description="COM_GAUSERS_FORM_DESC_COMMENT" hint="COM_GAUSERS_FORM_LBL_COMMENT"/>
+		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+	</fieldset>
+</form>

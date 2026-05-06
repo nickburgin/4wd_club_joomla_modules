@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+        <field name="search" type="text" hint="COM_GAUSERS_SEARCH_FILTER_SUBMIT"
+               label="COM_USERS_FILTER_SEARCH_DESC"
+               class="js-stools-search-string" />
+
+		<field name="state"
+			type="list" default=""
+			label="COM_GAUSERS_FILTER_STATE"
+			description="COM_GAUSERS_FILTER_STATE_DESC"
+			onchange="this.form.submit();" >
+			<option value="">GAOPTION_SELECT</option>
+			<option value="1">GAOPTION_FINANCIAL</option>
+			<option value="2">GAOPTION_UNFINANCIAL</option>
+		</field>
+
+        <field name="mship" type="Memtype"
+			onchange="this.form.submit();"
+            label="COM_GAUSERS_MSHIP_FILTER_LABEL"
+            description="COM_GAUSERS_MSHIP_FILTER_DESC" />
+
+        <field name="ugroup" type="UserGroupList"
+			onchange="this.form.submit();"
+			checksuperusergroup="1"
+			default=""
+			layout="joomla.form.field.list-fancy-select"
+            label="COM_GAUSERS_UGROUP_FILTER_LABEL"
+            description="COM_GAUSERS_UGROUP_FILTER_DESC" >
+            <option value="0">GAOPTION_UG_SELECT</option>
+        </field>
+
+        <field name="pgroup" type="Profgroup"
+			onchange="this.form.submit();"  default=""
+			layout="joomla.form.field.list-fancy-select"
+            label="COM_GAUSERS_PGROUP_FILTER_LABEL"
+            description="COM_GAUSERS_PGROUP_FILTER_DESC" >
+            <option value="0">GAOPTION_PG_SELECT</option>
+        </field>
+
+    </fields>
+
+	<fields name="list">
+
+		<field name="limit"
+			type="limitbox"
+			class="input-mini"
+			default="25"
+			onchange="this.form.submit();" />
+
+	</fields>
+
+</form>

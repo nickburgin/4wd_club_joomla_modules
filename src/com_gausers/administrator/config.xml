@@ -1,0 +1,835 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <inlinehelp button="show" />
+	<fieldset name="component"
+		addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field"
+		label="COM_GAUSERS_COMPONENT_LABEL"
+		description="COM_GAUSERS_COMPONENT_DESC" >
+
+        <field name="exclude_email_pref" type="text" default="noemail"
+             label="COM_GAUSERS_EXCLUDE_EMAIL_PREF_LABEL"
+             description="COM_GAUSERS_EXCLUDE_EMAIL_PREF_DESC" />
+
+        <field name="profile_suffix" type="text" class="inputbox" default=""
+             label="COM_GAUSERS_USERLIST_PROFILE_SUFIX_LABEL"
+             description="COM_GAUSERS_USERLIST_PROFILE_SUFIX_DESC" />
+
+        <field name="img_location" type="text" default="images/members/membersphotos"
+             label="COM_GAUSERS_IMGLOC_LABEL"
+             description="COM_GAUSERS_IMGLOC_DESC" />
+
+        <field name="hide_vax" type="radio" default="1" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_HIDE_VAX_LABEL"
+             description="COM_GAUSERS_HIDE_VAX_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="vax_field1" type="Custfld" showon="hide_vax:0"
+             label="COM_GAUSERS_VAX_FIELD1_LABEL"
+             description="COM_GAUSERS_VAX_FIELD1_DESC" />
+
+        <field name="exempt_field1" type="Custfld" showon="hide_vax:0"
+             label="COM_GAUSERS_EXEMPT_FIELD1_LABEL"
+             description="COM_GAUSERS_EXEMPT_FIELD1_DESC" />
+
+        <field name="med_cond1" type="Custfld" showon="hide_vax:0"
+             label="COM_GAUSERS_FORM_LBL_GAUSER_MEDCOND1"
+             description="COM_GAUSERS_FORM_DESC_GAUSER_MEDCOND1" />
+
+        <field name="vax_field2" type="Custfld" showon="hide_vax:0"
+             label="COM_GAUSERS_VAX_FIELD2_LABEL"
+             description="COM_GAUSERS_VAX_FIELD2_DESC" />
+
+        <field name="exempt_field2" type="Custfld" showon="hide_vax:0"
+             label="COM_GAUSERS_EXEMPT_FIELD2_LABEL"
+             description="COM_GAUSERS_EXEMPT_FIELD2_DESC" />
+
+        <field name="med_cond2" type="Custfld" showon="hide_vax:0"
+             label="COM_GAUSERS_FORM_LBL_GAUSER_MEDCOND2"
+             description="COM_GAUSERS_FORM_DESC_GAUSER_MEDCOND2" />
+
+	</fieldset>
+
+    <fieldset name="groupparams" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field"
+		label="COM_GAUSERS_GROUPPARAMS_LABEL"
+		description="COM_GAUSERS_GROUPPARAMS_DESC" >
+
+        <field name="sendto_group" type="usergrouplist"
+             label="COM_GAUSERS_SENDTO_GROUP_LABEL"
+             description="COM_GAUSERS_SENDTO_GROUP_DESC" />
+
+        <field name="temp_group" type="usergrouplist"
+             label="COM_GAUSERS_TEMP_GROUP_LABEL"
+             description="COM_GAUSERS_TEMP_GROUP_DESC" />
+
+        <field name="temp_mship" type="Memtype"
+             label="COM_GAUSERS_TEMP_MSHIP_LABEL"
+             description="COM_GAUSERS_TEMP_MSHIP_DESC" />
+
+        <field name="exclude_group" type="usergrouplist" multiple="true" class="input-xxlarge"
+             label="COM_GAUSERS_EXCLUDE_GROUP_LABEL"
+             description="COM_GAUSERS_EXCLUDE_GROUP_DESC" />
+
+        <field name="leftclub_group" type="usergrouplist"
+             label="COM_GAUSERS_LEFTCLUB_GROUP_LABEL"
+             description="COM_GAUSERS_LEFTCLUB_GROUP_DESC" />
+
+        <field name="deceased_group" type="usergrouplist"
+             label="COM_GAUSERS_DECEASED_GROUP_LABEL"
+             description="COM_GAUSERS_DECEASED_GROUP_DESC" />
+
+        <field name="deceased_key" type="text" default=""
+             label="COM_GAUSERS_DECEASED_KEY_LABEL"
+             description="COM_GAUSERS_DECEASED_KEY_DESC" />
+
+        <field name="trg_group" type="usergrouplist"
+             label="COM_GAUSERS_TRG_GROUP_LABEL"
+             description="COM_GAUSERS_TRG_GROUP_DESC" />
+
+        <field name="wwc_group" type="usergrouplist"
+             label="COM_GAUSERS_WWC_GROUP_LABEL"
+             description="COM_GAUSERS_WWC_GROUP_DESC" />
+
+        <field name="mbrsec_group" type="usergrouplist"
+             label="COM_GAUSERS_MBRSEC_GROUP_LABEL"
+             description="COM_GAUSERS_MBRSEC_GROUP_DESC" />
+
+	</fieldset>
+
+    <fieldset name="finparams"
+		label="COM_GAUSERS_FINPARAMS_LABEL"
+		description="COM_GAUSERS_FINPARAMS_DESC" >
+
+        <field name="incl_finance" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_INCL_FINANCE_LABEL"
+             description="COM_GAUSERS_INCL_FINANCE_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="finance_cat" type="category" extension="com_gafinance" showon="incl_finance:1" default="0"
+             label="COM_GAUSERS_FINANCE_CAT_LABEL"
+             description="COM_GAUSERS_FINANCE_CAT_DESC" />
+
+        <field name="bank_desc" type="text" default="Bendigo Bank"
+             label="COM_GAUSERS_BANK_DESC_LABEL"
+             description="COM_GAUSERS_BANK_DESC_DESC" />
+
+        <field name="bank_bsb" type="text" default="633-000"
+             label="COM_GAUSERS_BANK_BSB_LABEL"
+             description="COM_GAUSERS_BANK_BSB_DESC" />
+
+        <field name="bank_accnt" type="text" default="123456789"
+             label="COM_GAUSERS_BANK_ACCNT_LABEL"
+             description="COM_GAUSERS_BANK_ACCNT_DESC" />
+
+        <field name="pp_pay" type="radio" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_PP_PAY_LABEL"
+             description="COM_GAUSERS_PP_PAY_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="pp_accnt" type="text" showon="pp_pay:1"
+             label="COM_GAUSERS_PP_ACCNT_LABEL"
+             description="COM_GAUSERS_PP_ACCNT_DESC" />
+
+        <field name="pp_img" type="media" directory="" showon="pp_pay:1"
+             label="COM_GAUSERS_PP_IMG_LABEL"
+             description="COM_GAUSERS_PP_IMG_DESC" />
+
+        <field name="admin_id" type="user" default=""
+             label="COM_GAUSERS_ADMIN_ID_LABEL"
+             description="COM_GAUSERS_ADMIN_ID_DESC" />
+
+        <field name="site_address" size="40"
+             type="text" class="inputbox" default="P.O. Box 1042,"
+             label="COM_GAUSERS_SITE_ADDRESS_LABEL"
+             description="COM_GAUSERS_SITE_ADDRESS_DESC" />
+
+        <field name="site_suburb" size="40"
+             type="text" class="inputbox" default="Ballarat Mail Centre 3353"
+             label="COM_GAUSERS_SITE_SUBURB_LABEL"
+             description="COM_GAUSERS_SITE_SUBURB_DESC" />
+
+        <field name="site_phone" size="30"
+             type="text" class="inputbox" default="0439 014 366"
+             label="COM_GAUSERS_SITE_PHONE_LABEL"
+             description="COM_GAUSERS_SITE_PHONE_DESC" />
+
+	</fieldset>
+
+    <fieldset name="invparams" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field"
+		label="COM_GAUSERS_INVPARAMS_LABEL"
+		description="COM_GAUSERS_INVPARAMS_DESC" >
+
+        <field name="exclude_member" type="Members" multiple="true" class="input-xxlarge"
+             label="COM_GAUSERS_EXCLUDE_MEMBER_LABEL"
+             description="COM_GAUSERS_EXCLUDE_MEMBER_DESC" />
+
+        <field name="invoice_date" type="calendar"
+             filterFormat="Y-m-d" translateformat="true"
+             label="COM_GAUSERS_INVOICE_DATE_LABEL"
+             description="COM_GAUSERS_INVOICE_DATE_DESC" />
+
+        <field name="use_cutoff" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_USE_CUTOFF_LABEL"
+             description="COM_GAUSERS_USE_CUTOFF_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="cutoff_date" type="calendar" showon="use_cutoff:1"
+             filterFormat="Y-m-d" translateformat="true"
+             label="COM_GAUSERS_CUTOFF_DATE_LABEL"
+             description="COM_GAUSERS_CUTOFF_DATE_DESC" />
+
+        <field name="cutoff_text" type="textarea" rows="3" class="input-xxlarge" showon="use_cutoff:1"
+             default="COM_GAUSERS_CUTOFF_MESSAGE"
+             label="COM_GAUSERS_CUTOFF_TEXT_LABEL"
+             description="COM_GAUSERS_CUTOFF_TEXT_DESC" />
+
+        <field name="invoice_due" size="10"
+             type="text" class="inputbox" default="14"
+             label="COM_GAUSERS_INVOICE_DUE_LABEL"
+             description="COM_GAUSERS_INVOICE_DUE_DESC" />
+
+        <field name="membership_desc" type="text" class="input-xxlarge" default="Membership Subscription"
+             label="COM_GAUSERS_MEMBERSHIP_DESC_LABEL"
+             description="COM_GAUSERS_MEMBERSHIP_DESC_DESC" />
+
+        <field name="inv_logo" type="media" directory=""
+             label="COM_GAUSERS_INV_LOGO_LABEL"
+             description="COM_GAUSERS_INV_LOGO_DESC" />
+
+        <field name="inv_foot_text" type="textarea" rows="3" cols="60" class="input-xxlarge" default=""
+             label="COM_GAUSERS_INV_FOOT_TEXT_LABEL"
+             hint="COM_GAUSERS_INV_FOOT_TEXT_LABEL"
+             description="COM_GAUSERS_INV_FOOT_TEXT_DESC" />
+
+        <field name="invoice_loc" type="text"
+			default="images/members/invoices"
+            label="COM_GAUSERS_INVOICE_LOC_LABEL"
+            description="COM_GAUSERS_INVOICE_LOC_DESC" />
+
+        <field name="order_inv" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_ORDER_INV_LABEL"
+             description="COM_GAUSERS_ORDER_INV_DESC">
+                 <option value="1">Invoice</option>
+                 <option value="0">Name</option>
+         </field>
+
+        <field name="indiv_inv" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_INDIV_INV_LABEL"
+             description="COM_GAUSERS_INDIV_INV_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="disable_users" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_DISABLE_USERS_LABEL"
+             description="COM_GAUSERS_DISABLE_USERS_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="email_acknow" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_EMAIL_ACKNOW_LABEL"
+             description="COM_GAUSERS_EMAIL_ACKNOW_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="pay_ack_text" type="textarea" rows="3" cols="60"
+             class="input-xxlarge" default="Your membership payment has been registered." showon="email_acknow:1"
+			 label="COM_GAUSERS_PAY_ACK_TEXT_LABEL"
+             hint="COM_GAUSERS_PAY_ACK_TEXT_LABEL"
+             description="COM_GAUSERS_PAY_ACK_TEXT_DESC" />
+
+        <field name="incl_std_text" type="text" class="input-xxlarge" default="DO NOT REPLY to this email as it is NOT monitored."
+             label="COM_GAUSERS_EXCLUDE_INCL_STD_TEXT_LABEL"
+             description="COM_GAUSERS_EXCLUDE_INCL_STD_TEXT_DESC" />
+
+        <field name="link_site" type="radio" default="1" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_LINK_SITE_LABEL"
+             description="COM_GAUSERS_LINK_SITE_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+		<field name="def_pay_type" type="category" extension="com_gausers.payment"
+			description="COM_GAUSERS_DEF_PAY_TYPE"
+			label="COM_GAUSERS_DEF_PAY_TYPE_DESC" />
+
+	</fieldset>
+
+    <fieldset name="feeparams" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field"
+		label="COM_GAUSERS_FEEPARAMS_LABEL"
+		description="COM_GAUSERS_FEEPARAMS_DESC" >
+
+        <field name="mship_period" type="radio" default="1" class="btn-group"
+             label="COM_GAUSERS_MSHIP_PERIOD_LABEL"
+             description="COM_GAUSERS_MSHIP_PERIOD_DESC">
+                 <option value="1">GAMSHIP_PERIOD_FINANCIAL</option>
+                 <option value="2">GAMSHIP_PERIOD_CALENDAR</option>
+         </field>
+
+        <field name="new_users" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_NEW_USERS_LABEL"
+             description="COM_GAUSERS_NEW_USERS_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="auto_users" type="radio" default="0" class="btn-group btn-group-yesno" showon="new_users:1"
+             label="COM_GAUSERS_AUTO_USERS_LABEL"
+             description="COM_GAUSERS_AUTO_USERS_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+		<field name="send_email" type="radio" default="1" class="btn-group btn-group-yesno"
+		       label="COM_GAUSERS_SEND_EMAIL_LABEL" showon="new_users:1"
+			   description="COM_GAUSERS_SEND_EMAIL_DESC" >
+			   <option value="1">JYES</option>
+			   <option value="0">JNO</option>
+		</field>
+
+        <field name="default_mship" type="Memtype" showon="new_users:1"
+             label="COM_GAUSERS_DEFAULT_MSHIP_LABEL"
+             description="COM_GAUSERS_DEFAULT_MSHIP_DESC" />
+
+        <field name="welcome_note" type="Articlelist" default="0" showon="new_users:1"
+             label="COM_GAUSERS_WELCOME_NOTE_LABEL"
+             description="COM_GAUSERS_WELCOME_NOTE_DESC" />
+
+        <field name="discount_allowed" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_DISCOUNT_ALLOWED_LABEL"
+             description="COM_GAUSERS_DISCOUNT_ALLOWED_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="discount_switch" type="sql" showon="discount_allowed:1"
+             query=" select distinct(substr(profile_key,(instr(profile_key, '.')+1))) as profile_switch from #__user_profiles order by profile_switch "
+             size="1" default="0"
+             value_field="profile_switch"
+             key_field="profile_switch"
+             label="COM_GAUSERS_DISCOUNT_SWITCH_LABEL"
+             description="COM_GAUSERS_DISCOUNT_SWITCH_DESC" >
+				<option value="">JOPTION_SELECT_PROFILE_ITEM</option>
+       </field>
+
+        <field name="mship_exempt" type="Memtype" multiple="true" default="Life"
+             label="COM_GAUSERS_USERLIST_MSHIP_EXEMPT_LABEL"
+             description="COM_GAUSERS_USERLIST_MSHIP_EXEMPT_DESC" />
+
+        <field name="mship_extend" type="Memtype" multiple="true"
+             label="COM_GAUSERS_USERLIST_MSHIP_EXTEND_LABEL"
+             description="COM_GAUSERS_USERLIST_MSHIP_EXTEND_DESC" />
+
+        <field name="group_exempt" type="usergrouplist" multiple="true"
+             label="COM_GAUSERS_USERLIST_GROUP_EXEMPT_LABEL"
+             description="COM_GAUSERS_USERLIST_GROUP_EXEMPT_DESC" />
+
+        <field name="payment_desc" type="text" class="input-xxlarge" default="Thank you for paying this membership promptly."
+             label="COM_GAUSERS_PAYMENT_DESC_LABEL"
+             description="COM_GAUSERS_PAYMENT_DESC_DESC" />
+
+        <field name="allow_prorata" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_ALLOW_PRORATA_LABEL"
+             description="COM_GAUSERS_ALLOW_PRORATA_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+        </field>
+
+        <field name="year_prorata" type="list" default="2" showon="allow_prorata:1"
+             label="COM_GAUSERS_YEAR_PRORATA_LABEL"
+             description="COM_GAUSERS_YEAR_PRORATA_DESC">
+                 <option value="1">First</option>
+                 <option value="2">Second</option>
+         </field>
+
+        <field name="min_prorata" size="30" showon="allow_prorata:1"
+             type="text" class="inputbox" default="45.00"
+             label="COM_GAUSERS_MIN_PRORATA_LABEL"
+             description="COM_GAUSERS_MIN_PRORATA_DESC" />
+
+        <field name="temp_mbr_duration" type="text" default="6"
+             label="COM_GAUSERS_TEMP_MBR_DUR_LABEL"
+             description="COM_GAUSERS_TEMP_MBR_DUR_DESC" />
+
+        <field name="allow_family" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_ALLOW_FAMILY_LABEL"
+             description="COM_GAUSERS_ALLOW_FAMILY_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+        </field>
+
+        <field name="primary_indic" type="Proflist" showon="allow_family:1"
+             label="COM_GAUSERS_PRIMARY_INDIC_LABEL"
+             description="COM_GAUSERS_PRIMARY_INDIC_DESC" />
+
+        <field name="link_family" type="Proflist" showon="allow_family:1"
+             label="COM_GAUSERS_LINK_FAMILY_LABEL"
+             description="COM_GAUSERS_LINK_FAMILY_DESC" />
+
+        <field name="mship_family" type="Memtype" multiple="true" showon="allow_family:1"
+             label="COM_GAUSERS_MSHIP_FAMILY_LABEL"
+             description="COM_GAUSERS_MSHIP_FAMILY_DESC" />
+
+	</fieldset>
+
+    <fieldset name="privacy"
+		addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field"
+		label="COM_GAUSERS_PROFILE_PRIVACY_LABEL"
+		description="COM_GAUSERS_PROFILE_PRIVACY_DESC" >
+
+        <field name="privacy_type" type="radio" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_PRIVACY_TYPE_LABEL"
+             description="COM_GAUSERS_PRIVACY_TYPE_DESC">
+                 <option value="Custom">Custom Field</option>
+                 <option value="Profile">Profile Field</option>
+        </field>
+
+        <field name="privacy_switchc" type="Custfld" showon="privacy_type:Custom"
+             label="COM_GAUSERS_PRIVACY_SWITCHC_LABEL"
+             description="COM_GAUSERS_PRIVACY_SWITCHC_DESC" />
+
+        <field name="privacy_switchp" type="Proflist"  showon="privacy_type:Profile"
+             label="COM_GAUSERS_PRIVACY_SWITCHP_LABEL"
+             description="COM_GAUSERS_PRIVACY_SWITCHP_DESC" />
+
+        <field name="privacy_color" type="color" default="#5879a3"
+             label="COM_GAUSERS_PRIVACY_COLOUR_LABEL"
+             description="COM_GAUSERS_PRIVACY_COLOUR_DESC" />
+
+        <field name="disp_expiry" type="radio" default="1" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_DISP_EXPIRY_LABEL"
+             description="COM_GAUSERS_DISP_EXPIRY_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="disp_address" type="radio" default="1" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_DISP_ADDRESS_LABEL"
+             description="COM_GAUSERS_DISP_ADDRESS_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+        <field name="suburb_only" type="radio" default="0" class="btn-group btn-group-yesno" showon="disp_address:1"
+             label="COM_GAUSERS_SUBURB_ONLY_LABEL"
+             description="COM_GAUSERS_SUBURB_ONLY_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="incl_years" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_INCL_YEARS_LABEL"
+             description="COM_GAUSERS_INCL_YEARS_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+        <field name="incl_partner" type="radio" default="1" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_INCL_PARTNER_LABEL"
+             description="COM_GAUSERS_INCL_PARTNER_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="mship_single" type="radio" default="0" class="btn-group btn-group-yesno" showon="incl_partner:1"
+             label="COM_GAUSERS_MSHIP_SINGLE_LABEL"
+             description="COM_GAUSERS_MSHIP_SINGLE_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="safe_imgs" type="list" default="jpg"
+			 multiple="true" class="multiple"
+             label="COM_GAUSERS_SAFE_FILES_LABEL"
+             description="COM_GAUSERS_SAFE_FILES_DESC">
+                 <option value="jpg">jpg</option>
+                 <option value="JPG">JPG</option>
+                 <option value="png">png</option>
+                 <option value="PNG">PNG</option>
+                 <option value="gif">gif</option>
+                 <option value="GIF">GIF</option>
+                 <option value="pdf">pdf</option>
+                 <option value="PDF">PDF</option>
+         </field>
+        <field name="delete_file" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_DELETE_FILE_LABEL"
+             description="COM_GAUSERS_DELETE_FILE_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+	</fieldset>
+
+    <fieldset name="params" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field"
+		label="COM_GAUSERS_PROFILE_PARAMS_LABEL"
+		description="COM_GAUSERS_PROFILE_PARAMS_DESC" >
+
+		<field name="extract_mbr_dir" type="note" label="COM_GAUSERS_EXTRACT_MBR_DIR" />
+
+        <field name="allow_mbrdir" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_ALLOW_MBRDIR_LABEL"
+             description="COM_GAUSERS_ALLOW_MBRDIR_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+        </field>
+
+        <field name="send_mbrdir" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_SEND_MBRDIR_LABEL" showon="allow_mbrdir:1"
+             description="COM_GAUSERS_SEND_MBRDIR_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+        </field>
+
+        <field name="md_header" type="media" directory="" showon="allow_mbrdir:1"
+             label="COM_GAUSERS_MD_HEADER_LABEL"
+             description="COM_GAUSERS_MD_HEADER_DESC" />
+
+        <field name="membership_privacy" type="textarea" rows="5" class="input-xxlarge" showon="allow_mbrdir:1"
+             label="COM_GAUSERS_MEMBERSHIP_PRIVACY_LABEL"
+             description="COM_GAUSERS_MEMBERSHIP_PRIVACY_DESC" />
+
+		<field name="extract_mbr" type="note" label="COM_GAUSERS_ATTEND_LIST" />
+
+        <field name="allow_mbrlist" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_ALLOW_MBRLIST_LABEL"
+             description="COM_GAUSERS_ALLOW_MBRLIST_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+        </field>
+
+        <field name="send_mbrlist" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_SEND_MBRLIST_LABEL" showon="allow_mbrlist:1"
+             description="COM_GAUSERS_SEND_MBRLIST_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+        </field>
+
+		<field name="extract_data" type="note" label="COM_GAUSERS_EXTRACT_MBR_DATA" />
+
+        <field name="extract_members" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_EXTRACT_MEMBERS_LABEL"
+             description="COM_GAUSERS_EXTRACT_MEMBERS_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="profile_params" type="Proflist" multiple="true" showon="extract_members:1"
+             label="COM_GAUSERS_USERLIST_FIELD_XTRAINFO_LABEL"
+             description="COM_GAUSERS_USERLIST_FIELD_XTRAINFO_DESC" />
+
+        <field name="club_id" type="text" showon="extract_members:1" default="0"
+             label="COM_GAUSERS_CLUB_ID_LABEL"
+             description="COM_GAUSERS_CLUB_ID_DESC" />
+
+        <field name="fin_members" type="radio" default="1"
+             class="btn-group btn-group-yesno" showon="extract_members:1"
+             label="COM_GAUSERS_FIN_MEMBERS_LABEL"
+             description="COM_GAUSERS_FIN_MEMBERS_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="extract_dir" type="text" showon="extract_members:1"
+             label="COM_GAUSERS_EXTRACT_DIR_LABEL"
+             description="COM_GAUSERS_EXTRACT_DIR_DESC" />
+
+        <field name="extract_email" type="text" showon="extract_members:1" default="office@fwdvictoria.org.au"
+             label="COM_GAUSERS_EXTRACT_EMAIL_LABEL"
+             description="COM_GAUSERS_EXTRACT_EMAIL_DESC" />
+
+        <field name="extract_type" type="radio" default="0" class="btn-group btn-group-yesno" showon="extract_members:1"
+             label="COM_GAUSERS_EXTRACT_TYPE_LABEL"
+             description="COM_GAUSERS_EXTRACT_TYPE_DESC">
+                 <option value="1">CSV</option>
+                 <option value="0">SQL</option>
+         </field>
+        <field
+             name="profile_extract" showon="extract_members:1" type="Proflist"
+             multiple="true" class="input-xxlarge"
+             label="COM_GAUSERS_PROFILE_EXTRACT_LABEL"
+             description="COM_GAUSERS_PROFILE_EXTRACT_DESC" />
+
+        <field name="extract_excludes" type="Members" showon="extract_members:1" multiple="true" class="input-xxlarge"
+             label="COM_GAUSERS_EXTRACT_EXCLUDES_LABEL"
+             description="COM_GAUSERS_EXTRACT_EXCLUDES_DESC" />
+
+        <field name="extract_number" type="text" showon="extract_members:1" default="0"
+             label="COM_GAUSERS_EXTRACT_NUMBER_LABEL"
+             description="COM_GAUSERS_EXTRACT_NUMBER_DESC" />
+
+        <field name="extract_date" type="calendar" showon="extract_members:1"
+             filterFormat="Y-m-d H:i:s" translateformat="true"
+             label="COM_GAUSERS_EXTRACT_DATE_LABEL"
+             description="COM_GAUSERS_EXTRACT_DATE_DESC" />
+
+        <field name="allow_compare" type="radio" default="0" class="btn-group btn-group-yesno" showon="extract_members:1"
+             label="COM_GAUSERS_ALLOW_COMPARE_LABEL"
+             description="COM_GAUSERS_ALLOW_COMPARE_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+        <field name="safe_files" type="list" default="xml" showon="extract_members:1[AND]allow_compare:1"
+			 multiple="true" class="multiple"
+             label="COM_GAUSERS_SAFE_FILES_LABEL"
+             description="COM_GAUSERS_SAFE_FILES_DESC">
+                 <option value="csv">csv</option>
+                 <option value="CSV">CSV</option>
+                 <option value="xml">xml</option>
+                 <option value="XML">XML</option>
+         </field>
+        <field name="mbr_compare" type="radio" default="0" class="btn-group btn-group-yesno" showon="extract_members:1[AND]allow_compare:1"
+             label="COM_GAUSERS_MBR_COMPARE_LABEL"
+             description="COM_GAUSERS_MBR_COMPARE_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="verify_file" type="filelist" showon="mbr_compare:1"
+             directory="images\members\import" stripext="true" hide_default="true" exclude="\.php$|\.html$" fileFilter="\.csv$"
+             label="COM_GAUSERS_VERIFY_FILE_LABEL"
+             description="COM_GAUSERS_VERIFY_FILE_DESC" />
+
+        <field name="use_clubnumber" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_USE_CLUBNUMBER_LABEL"
+             description="COM_GAUSERS_USE_CLUBNUMBER_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+        </field>
+
+        <field name="fld_clubnumber" type="text" class="inputbox" default="mship_no" showon="use_clubnumber:1"
+             label="COM_GAUSERS_FLD_CLUBNUMBER_LABEL"
+             description="COM_GAUSERS_FLD_CLUBNUMBER_DESC" />
+
+    </fieldset>
+
+    <fieldset
+		name="newmbr"
+		label="COM_GAUSERS_NEWMEMBER_SETTINGS_LABEL"
+		description="COM_GAUSERS_NEWMEMBER_SETTINGS_DESC"
+	>
+
+        <field name="newMember" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_NEWMEMBER_LABEL"
+             description="COM_GAUSERS_NEWMEMBER_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="ignoreMship" type="Memtype" multiple="true"
+             label="COM_GAUSERS_USERLIST_IGNOREMSHIP_LABEL"
+             description="COM_GAUSERS_USERLIST_IGNOREMSHIP_DESC" />
+
+        <field name="heading" type="text" default="Membership Application" showon="newMember:1"
+             label="COM_GAUSERS_NEWMBR_HEADING_LABEL"
+             description="COM_GAUSERS_NEWMBR_HEADING_DESC" />
+
+        <field name="newmbr_header" type="media" directory="" showon="newMember:1"
+             label="COM_GAUSERS_NEWMBR_HEADER_LABEL"
+             description="COM_GAUSERS_NEWMBR_HEADER_DESC" />
+
+        <field name="headText" type="textarea" showon="newMember:1"
+             rows="10" filter="safehtml"
+             label="COM_GAUSERS_NEWMBR_HEADERTXT_LABEL"
+             description="COM_GAUSERS_NEWMBR_HEADERTXT_DESC" />
+
+        <field name="footText" type="textarea" showon="newMember:1"
+             rows="10" filter="safehtml"
+             label="COM_GAUSERS_NEWMBR_FOOTERTXT_LABEL"
+             description="COM_GAUSERS_NEWMBR_FOOTERTXT_DESC" />
+
+        <field name="sig_required" type="radio" default="0" class="btn-group btn-group-yesno" showon="newMember:1"
+             label="COM_GAUSERS_NEWMBR_SIGREQ_LABEL"
+             description="COM_GAUSERS_NEWMBR_SIGREQ_DESC" >
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+    </fieldset>
+
+    <fieldset
+		name="addresslist"
+		label="COM_GAUSERS_ADDRESSLIST_SETTINGS_LABEL"
+		description="COM_GAUSERS_ADDRESSLIST_SETTINGS_DESC"
+	>
+
+        <field name="addrlist" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_ADDRESSLIST_LABEL"
+             description="COM_GAUSERS_ADDRESSLIST_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="address_group" type="usergrouplist" showon="addrlist:1"
+             label="COM_GAUSERS_ADDRESS_GROUP_LABEL"
+             description="COM_GAUSERS_ADDRESS_GROUP_DESC" />
+
+        <field name="emaillist" type="radio" default="0"
+             class="btn-group btn-group-yesno" showon="addrlist:1"
+             label="COM_GAUSERS_EMAILLIST_LABEL"
+             description="COM_GAUSERS_EMAILLIST_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+    </fieldset>
+
+    <fieldset
+		name="mailchimplist"
+		label="COM_GAUSERS_MAILCHIMP_SETTINGS_LABEL"
+		description="COM_GAUSERS_MAILCHIMP_SETTINGS_DESC"
+	>
+
+        <field name="mchimplist" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_MCHIMPLIST_LABEL"
+             description="COM_GAUSERS_MCHIMPLIST_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="mchimp_extra" type="text" showon="mchimplist:1" default=""
+             label="COM_GAUSERS_MCHIMP_EXTRA_LABEL"
+             description="COM_GAUSERS_MCHIMP_EXTRA_DESC" />
+
+    </fieldset>
+
+    <fieldset
+		name="integration"
+		label="JGLOBAL_INTEGRATION_LABEL"
+		description="COM_GAUSERS_INTEGRATION_SETTINGS_DESC"
+	>
+
+        <field name="set_test" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_TEST_LABEL"
+             description="COM_GAUSERS_TEST_DESC">
+             <option value="1">JYES</option>
+             <option value="0">JNO</option>
+         </field>
+
+        <field name="user_id" type="user" showon="set_test:1"
+             label="COM_GAUSERS_TEST_ID_LABEL"
+             description="COM_GAUSERS_TEST_ID_DESC" />
+
+        <field name="test_block" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_TESTBLOCK_LABEL"
+             description="COM_GAUSERS_TESTBLOCK_DESC">
+             <option value="1">JYES</option>
+             <option value="0">JNO</option>
+         </field>
+
+        <field name="use_barcodes" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_BARCODE_LABEL"
+             description="COM_GAUSERS_BARCODE_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="bc_field" type="list" default="id" showon="use_barcodes:1"
+             label="COM_GAUSERS_BC_FIELD_LABEL"
+             description="COM_GAUSERS_BC_FIELD_DESC">
+                 <option value="username">Username</option>
+                 <option value="id">User id</option>
+                 <option value="both">Username-User id</option>
+         </field>
+
+        <field name="bc_size" type="text" default="20" showon="use_barcodes:1"
+             label="COM_GAUSERS_BC_SIZE_LABEL"
+             description="COM_GAUSERS_BC_SIZE_DESC" />
+
+        <field name="namebadge_img" type="media" showon="use_barcodes:1"
+             label="COM_GAUSERS_NAMEBADGE_LABEL"
+             description="COM_GAUSERS_NAMEBADGE_DESC" />
+
+        <field name="profile_group" type="Proflist"
+             label="COM_GAUSERS_PROFILE_GROUP_LABEL"
+             description="COM_GAUSERS_PROFILE_GROUP_DESC" />
+
+		<field
+			name="integration_customfields"
+			type="note"
+			label="JGLOBAL_FIELDS_TITLE"
+		/>
+
+		<field
+			name="custom_fields_enable"
+			type="radio"
+			label="JGLOBAL_CUSTOM_FIELDS_ENABLE_LABEL"
+			description="JGLOBAL_CUSTOM_FIELDS_ENABLE_DESC"
+			class="btn-group btn-group-yesno"
+			default="0"
+			>
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+
+        <field name="tmplMail" type="radio" default="0"
+			class="btn-group btn-group-yesno" 
+			label="COM_GAUSERS_TMPLMAIL_LABEL"
+			description="COM_GAUSERS_TMPLMAIL_DESC">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+		<field
+			name="integration_actionlogs"
+			type="note"
+			label="COM_GAUSERS_LOG_ACTIONS"
+		/>
+
+        <field name="log_actions" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_LOG_ACTIONS_LABEL"
+             description="COM_GAUSERS_LOG_ACTIONS_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="log_mbrsec" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_LOG_MBRSEC_LABEL"
+             description="COM_GAUSERS_LOG_MBRSEC_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+		<field
+			name="integration_versions"
+			type="note"
+			label="COM_GAUSERS_VERSIONS"
+		/>
+
+        <field name="save_history" type="radio" class="btn-group btn-group-yesno" default="0"
+			label="JGLOBAL_SAVE_HISTORY_OPTIONS_LABEL"
+			description="JGLOBAL_SAVE_HISTORY_OPTIONS_DESC">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+        <field name="history_limit" type="text" filter="integer" default="5" showon="save_history:1"
+			label="JGLOBAL_HISTORY_LIMIT_OPTIONS_LABEL"
+			description="JGLOBAL_HISTORY_LIMIT_OPTIONS_DESC" />
+
+	</fieldset>
+
+	<fieldset name="permissions"
+		description="JCONFIG_PERMISSIONS_DESC"
+		label="JCONFIG_PERMISSIONS_LABEL" >
+
+		<field 
+            name="rules"
+            type="rules"
+			component="com_gausers"
+            class="inputbox"
+			filter="rules"
+			validate="rules"
+			label="JCONFIG_PERMISSIONS_LABEL"
+			section="component" />
+
+	</fieldset>
+
+    <fieldset name="component">
+    </fieldset>
+</config>

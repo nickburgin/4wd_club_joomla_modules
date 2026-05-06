@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+    <layout title="COM_GAFINANCE_TITLE_FORM_VIEW_PATRON" option="View">
+        <message>
+            <![CDATA[COM_GAFINANCE_TITLE_FORM_VIEW_PATRON_DESC]]>
+        </message>
+    </layout>
+</metadata>

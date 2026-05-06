@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="4.0" method="upgrade" client="site">
+    <name>MOD_GAFINANCE</name>
+    <creationDate>2021-01-29</creationDate>
+    <copyright>2021 Glenn Arkell</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Glenn Arkell</author>
+    <authorEmail>glenn@glennarkell.com.au</authorEmail>
+    <authorUrl>http://www.glennarkell.com.au</authorUrl>
+    <version>5.0.2</version>
+    <description>MOD_GAFINANCE_XML_DESCRIPTION</description>
+
+	<namespace path="src">GlennArkell\Module\Gafinance</namespace>
+
+    <files>
+        <filename module="mod_gafinance">mod_gafinance.php</filename>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+
+	<media destination="mod_gafinance" folder="media">
+		<folder>css</folder>
+		<folder>js</folder>
+	</media>
+
+    <languages folder="language">
+			<language tag="en-GB">en-GB/mod_gafinance.ini</language>
+			<language tag="en-GB">en-GB/mod_gafinance.sys.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset  addfieldprefix="GlennArkell\Component\Gafinance\Administrator\Field"
+                name="basic"
+                label="MOD_GAFINANCE_CONTENT_TYPE_TAB_LBL"
+                description="MOD_GAFINANCE_CONTENT_TYPE_TAB_DESC">
+
+		        <field name="accnt_id" type="Account" default="1"
+		            label="MOD_GAFINANCE_ACCOUNT_LABEL"
+		            description="MOD_GAFINANCE_ACCOUNT_DESC" />
+
+            </fieldset>
+
+			<fieldset name="advanced">
+				<field name="layout" type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+
+				<field name="moduleclass_sfx" type="text"
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+
+				<field name="cache" type="list" default="1"
+					label="COM_MODULES_FIELD_CACHING_LABEL"
+					description="COM_MODULES_FIELD_CACHING_DESC">
+					<option value="1">JGLOBAL_USE_GLOBAL</option>
+					<option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+
+				<field name="cache_time" type="text" default="900"
+					label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+					description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+
+				<field name="cachemode" type="hidden" default="static">
+					<option value="static"></option>
+				</field>
+
+			</fieldset>
+        </fields>
+    </config>
+</extension>

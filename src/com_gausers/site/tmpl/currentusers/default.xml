@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_GAUSERS_TITLE_LIST_VIEW_CURRENTUSERS" option="View">
+        <message>
+                        <![CDATA[COM_GAUSERS_TITLE_LIST_VIEW_CURRENTUSERS_DESC]]>
+        </message>
+	</layout>
+
+    <fields name="params">
+        <fieldset name="basic"
+            label="COM_GAUSERS_FIELDSET_VIEWTYPE_SELECT_LABEL">
+
+            <field name="view_type" type="list" require="true" default="0"
+                label="COM_GAUSERS_VIEWTYPE_SELECT_LABEL_FORM"
+                description="COM_GAUSERS_VIEWTYPE_SELECT_DESC_FORM">
+    			<option value="0">COM_GAUSERS_GAGENERAL</option>
+    			<option value="1">COM_GAUSERS_GATRAINING</option>
+    			<option value="2">COM_GAUSERS_PROFGROUP</option>
+            </field>
+
+        </fieldset>
+    </fields>
+
+</metadata>

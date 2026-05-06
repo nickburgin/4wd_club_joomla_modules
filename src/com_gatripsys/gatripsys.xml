@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="4.0" method="upgrade">
+    <name>com_gatripsys</name>
+    <creationDate>1 March 2016</creationDate>
+    <copyright>2016 Glenn Arkell</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Glenn Arkell</author>
+    <authorEmail>glenn@glennarkell.com.au</authorEmail>
+    <authorUrl>https://www.glennarkell.com.au</authorUrl>
+    <version>5.1.0</version>
+    <description>A simple trip management system to use for club planned trips.</description>
+
+    <namespace path="src">GlennArkell\Component\Gatripsys</namespace>
+
+	<scriptfile>script.php</scriptfile>
+
+	<dashboards>
+		<dashboard title="COM_GATRIPSYS_DASHBOARD_TITLE" icon="fas fa-truck-monster">COM_GATRIPSYS_DASHBOARD_TITLE</dashboard>
+	</dashboards>
+
+    <install> <!-- Runs on install -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <uninstall> <!-- Runs on uninstall -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+    <update> <!-- Runs on update -->
+		<schemas>
+			<schemapath type="mysql">sql/updates/mysql/</schemapath>
+		</schemas>
+    </update>
+
+    <files folder="site">
+        <folder>forms</folder>
+        <folder>language</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+
+    <languages folder="site">
+			<language tag="en-GB">language/en-GB/com_gatripsys.ini</language>
+    </languages>
+
+    <media destination="com_gatripsys" folder="media">
+		<folder>images</folder>
+        <folder>css</folder>
+        <file>joomla.asset.json</file>
+    </media>
+
+    <administration>
+        <menu img="class:fas fa-truck-monster" >COM_GATRIPSYS<params><dashboard>gatripsys</dashboard></params></menu>
+
+        <files folder="administrator">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <folder>forms</folder>
+            <folder>language</folder>
+            <folder>presets</folder>
+            <folder>services</folder>
+            <folder>sql</folder>
+            <folder>src</folder>
+            <folder>tmpl</folder>
+        </files>
+        <languages folder="administrator">
+			<language tag="en-GB">language/en-GB/com_gatripsys.ini</language>
+			<language tag="en-GB">language/en-GB/com_gatripsys.sys.ini</language>
+			<language tag="en-GB">language/en-GB/guidedtours.gatripsys_configuration.ini</language>
+			<language tag="en-GB">language/en-GB/guidedtours.gatripsys_trips.ini</language>
+        </languages>
+
+    </administration>
+
+	<changelogurl>https://www.glennarkell.com.au/joomlaorg/components/j6/gatripsys-changelog.xml</changelogurl>
+
+	<updateservers>
+		<server type="extension" priority="1" name="Trip Management">https://www.glennarkell.com.au/joomlaorg/components/j6/gatripsys-update.xml</server>
+	</updateservers>
+</extension>

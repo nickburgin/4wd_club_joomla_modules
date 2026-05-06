@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+    <layout title="COM_GABROADCAST_TITLE_FORM_VIEW_USERNEW" option="View">
+        <message>
+                        <![CDATA[COM_GABROADCAST_TITLE_FORM_VIEW_USERNEW_DESC]]>
+        </message>
+    </layout>
+    <fields name="params">
+        <fieldset name="bcast_type" addfieldprefix="GlennArkell\Component\Gabroadcast\Administrator\Field">
+            <field
+                name="broadcast_type" type="Bcastlist"
+                label="COM_GABROADCAST_BCAST_TYPE_LABEL"
+                description="COM_GABROADCAST_BCAST_TYPE_DESC">
+            </field>
+	        <field name="pc_filter" type="radio" class="btn-group btn-group-yesno" default="0"
+	            label="COM_GABROADCAST_PC_FILTER_LABEL"
+	            description="COM_GABROADCAST_PC_FILTER_DESC">
+	            <option value="0">JNO</option>
+	            <option value="1">JYES</option>
+	        </field>
+
+	        <field name="sendto_filter" type="radio" class="btn-group btn-group-yesno" default="0"
+	            label="COM_GABROADCAST_SENDTO_FILTER_LABEL"
+	            description="COM_GABROADCAST_SENDTO_FILTER_DESC">
+	            <option value="0">JNO</option>
+	            <option value="1">JYES</option>
+	        </field>
+
+        </fieldset>
+    </fields>
+</metadata>

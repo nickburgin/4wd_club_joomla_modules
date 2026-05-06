@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter">
+        <field name="search" type="text" hint="COM_GAFINANCE_SEARCH_FILTER_SUBMIT"
+               label="COM_GAFINANCE_FILTER_SEARCH_DESC"
+               class="js-stools-search-string" />
+
+        <field name="state"
+               type="status"
+               label="COM_CONTENT_FILTER_STATE"
+               description="COM_CONTENT_FILTER_STATE_DESC"
+               onchange="this.form.submit();" >
+            <option value="">JOPTION_SELECT_PUBLISHED</option>
+        </field>
+
+        <field name="cat_id" type="category" extension="com_gafinance" show_root="1"
+            label="COM_GAFINANCE_FORM_LBL_TRANSACTION_CAT_ID"
+            description="COM_GAFINANCE_FORM_DESC_TRANSACTION_CAT_ID"
+            onchange="this.form.submit();" />
+
+    </fields>
+
+    <fields name="list">
+
+        <field name="limit"
+               type="limitbox"
+               class="input-mini"
+               default="25"
+               onchange="this.form.submit();"
+        />
+
+    </fields>
+
+</form>

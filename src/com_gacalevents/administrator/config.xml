@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config addfieldprefix="GlennArkell\Component\Gacalevents\Administrator\Field">
+    <inlinehelp button="show" />
+    <fieldset label="COM_GACALEVENTS" name="gacalevents">
+
+        <field name="allow_apology" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GACALEVENTS_ALLOW_APOLOGY_LABEL"
+             description="COM_GACALEVENTS_ALLOW_APOLOGY_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+         </field>
+
+		<field name="show_editor" type="radio" default="0"
+            class="btn-group btn-group-yesno" filter="int"
+			label="COM_GACALEVENTS_FIELD_SHOW_EDITOR_LABEL"
+			description="COM_GACALEVENTS_FIELD_SHOW_EDITOR_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+        <field name="editor_gp" type="usergrouplist" showon="show_editor:1"
+            label="COM_GACALEVENTS_FIELD_EDITOR_GP_LABEL"
+            description="COM_GACALEVENTS_FIELD_EDITOR_GP_DESC" />
+    
+		<field name="show_reminder" type="radio" default="0"
+            class="btn-group btn-group-yesno" filter="int"
+			label="COM_GACALEVENTS_FIELD_SHOW_REMINDER_LABEL"
+			description="COM_GACALEVENTS_FIELD_SHOW_REMINDER_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+        <field name="reminder_gp" type="usergrouplist" showon="show_reminder:1"
+            label="COM_GACALEVENTS_FIELD_REMINDER_GP_LABEL"
+            description="COM_GACALEVENTS_FIELD_REMINDER_GP_DESC" />
+
+		<field name="notif_attend" type="radio" default="0"
+            class="btn-group btn-group-yesno" filter="int"
+			label="COM_GACALEVENTS_FIELD_NOTIF_ATTEND_LABEL"
+			description="COM_GACALEVENTS_FIELD_NOTIF_ATTEND_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+        <field name="reminder_ignore" type="text"
+            label="COM_GACALEVENTS_FIELD_REMINDER_IGNORE_LABEL"
+            description="COM_GACALEVENTS_FIELD_REMINDER_IGNORE_DESC" />
+
+        <field name="act_log" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GACALEVENTS_ACT_LOG_LABEL"
+             description="COM_GACALEVENTS_ACT_LOG_DESC" >
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+        </field>
+
+        <field name="dload_attend" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GACALEVENTS_DLOAD_ATTEND_LABEL"
+             description="COM_GACALEVENTS_DLOAD_ATTEND_DESC" >
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+        </field>
+
+        <field name="charge_event" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GACALEVENTS_CHARGE_EVENT_LABEL"
+             description="COM_GACALEVENTS_CHARGE_EVENT_DESC" >
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+        </field>
+
+        <field name="send_inv" type="radio" default="0" class="btn-group btn-group-yesno" showon="charge_event:1"
+             label="COM_GACALEVENTS_SEND_INV_LABEL"
+             description="COM_GACALEVENTS_SEND_INV_DESC" >
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+        </field>
+
+    </fieldset>
+
+	<fieldset name="params"
+		label="COM_GACALEVENTS_PARAMS_LABEL"
+		description="COM_GACALEVENTS_PARAMS_DESC">
+
+        <field name="event_email" type="email" required="false" validate="email"
+             label="COM_GACALEVENTS_EVENT_EMAIL_LABEL"
+             description="COM_GACALEVENTS_EVENT_EMAIL_DESC" />
+
+        <field name="authorised_id" type="Apprvusers" required="true" multiple="multiple"
+             label="COM_GACALEVENTS_AUTHORISED_ID_LABEL"
+             description="COM_GACALEVENTS_AUTHORISED_ID_DESC" />
+
+        <field name="coord_name" type="text" class="inputbox" required="false" size="40" filter="safehtml" default="Trip"
+             label="COM_GACALEVENTS_COORD_NAME_LABEL"
+             description="COM_GACALEVENTS_COORD_NAME_DESC" />
+
+        <field name="bg1_colour" type="color" required="false" default="e0e0e0"
+             label="COM_GACALEVENTS_BG1_COLOUR_LABEL"
+             description="COM_GACALEVENTS_BG1_COLOUR_DESC" />
+
+        <field name="bg2_colour" type="color" required="false" default="ffff99"
+             label="COM_GACALEVENTS_BG2_COLOUR_LABEL"
+             description="COM_GACALEVENTS_BG2_COLOUR_DESC" />
+
+        <field name="htx_colour" type="color" required="false" default="efef10"
+             label="COM_GACALEVENTS_HTX_COLOUR_LABEL"
+             description="COM_GACALEVENTS_HTX_COLOUR_DESC" />
+
+        <field name="formal" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GACALEVENTS_FORMAL_LABEL"
+             description="COM_GACALEVENTS_FORMAL_DESC" >
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+        </field>
+
+        <field name="formal_reminder" type="text" class="input-xxlarge" showon="formal:1"
+             label="COM_GACALEVENTS_FORMAL_REMINDER_LABEL"
+             description="COM_GACALEVENTS_FORMAL_REMINDER_DESC" />
+
+        <field name="default_attcat" type="category" extension="com_gaevents.attcat" showon="formal:1"
+             label="COM_GACALEVENTS_DEFAULT_ATTCAT_LABEL"
+             description="COM_GACALEVENTS_DEFAULT_ATTCAT_DESC" />
+
+        <field name="partner_mship" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GACALEVENTS_PARTNER_MSHIP_LABEL"
+             description="COM_GACALEVENTS_PARTNER_MSHIP_DESC" >
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+        </field>
+        <field name="profile_suffix" type="text" showon="partner_mship:1" default="b4wdc"
+             label="COM_GACALEVENTS_PROFILE_SUFFIX_LABEL"
+             description="COM_GACALEVENTS_PROFILE_SUFFIX_DESC" />
+
+        <field name="profile_partner" type="Partner" showon="partner_mship:1" default="partner"
+             label="COM_GACALEVENTS_PROFILE_PARTNER_LABEL"
+             description="COM_GACALEVENTS_PROFILE_PARTNER_DESC" />
+
+        <field name="duplic_days" type="text" default="7"
+             label="COM_GACALEVENTS_DUPLIC_DAYS_LABEL"
+             description="COM_GACALEVENTS_DUPLIC_DAYS_DESC" />
+
+	</fieldset>
+
+	<fieldset name="params3"
+		label="COM_GACALEVENTS_PARAMS3_LABEL"
+		description="COM_GACALEVENTS_PARAMS3_DESC">
+
+        <field name="ignore_users" type="Apprvusers" multiple="multiple"
+             label="COM_GACALEVENTS_IGNORE_USERS_LABEL"
+             description="COM_GACALEVENTS_IGNORE_USERS_DESC" />
+
+        <field name="contact_label" type="text" class="inputbox" required="true" size="70" default="Contact"
+             label="COM_GACALEVENTS_CONTACT_LABEL_LABEL"
+             description="COM_GACALEVENTS_CONTACT_LABEL_DESC" />
+
+        <field name="location_label" type="text" class="inputbox" required="true" size="70" default="Location"
+             label="COM_GACALEVENTS_LOCATION_LABEL_LABEL"
+             description="COM_GACALEVENTS_LOCATION_LABEL_DESC" />
+
+        <field name="admin_data_filter" type="text" class="inputbox" required="true" size="10" default="21"
+             label="COM_GACALEVENTS_ADMIN_DATA_FILTER_LABEL"
+             description="COM_GACALEVENTS_ADMIN_DATA_FILTER_DESC"
+             filter="integer" />
+
+        <field name="site_data_filter" type="text" class="inputbox" required="true" size="10" default="1"
+             label="COM_GACALEVENTS_SITE_DATA_FILTER_LABEL"
+             description="COM_GACALEVENTS_SITE_DATA_FILTER_DESC"
+             filter="integer" />
+
+        <field name="header_text" type="textarea" filter="safehtml" class="input-xxlarge" required="true" rows="5" default="The following events and activities are planned for the forseeable future.  Members may update the calendar list with their own planned events/trips by logging in and click on 'Add a New Event' option in the User Menu."
+             label="COM_GACALEVENTS_HEADER_TEXT_LABEL"
+             description="COM_GACALEVENTS_HEADER_TEXT_DESC" />
+
+        <field name="header_text2" type="textarea" filter="safehtml" class="input-xxlarge" rows="5" default="Please contact us for any details about an event you may be interested in."
+             label="COM_GACALEVENTS_HEADER_TEXT_LABEL"
+             description="COM_GACALEVENTS_HEADER_TEXT_DESC" />
+
+        <field name="header_title" type="text" class="inputbox" required="false" size="70"
+             default="Events Calendar"
+             label="COM_GACALEVENTS_HEADER_TITLE_LABEL"
+             description="COM_GACALEVENTS_HEADER_TITLE_DESC" />
+    </fieldset>
+
+    <fieldset name="permissions" description="JCONFIG_PERMISSIONS_DESC" label="JCONFIG_PERMISSIONS_LABEL">
+        <field name="rules" type="rules" component="com_gacalevents" class="inputbox" filter="rules" validate="rules" label="JCONFIG_PERMISSIONS_LABEL" section="component" />
+	</fieldset>
+
+    <fieldset name="component">
+
+        <field name="set_test" type="radio" class="btn-group btn-group-yesno" default="0" 
+            label="COM_GACALEVENTS_SETTEST_LABEL" 
+            description="COM_GACALEVENTS_SETTEST_DESC">
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field name="save_history" type="radio" class="btn-group btn-group-yesno" default="0" label="JGLOBAL_SAVE_HISTORY_OPTIONS_LABEL" description="JGLOBAL_SAVE_HISTORY_OPTIONS_DESC">
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field name="history_limit" type="text" filter="integer" label="JGLOBAL_HISTORY_LIMIT_OPTIONS_LABEL" description="JGLOBAL_HISTORY_LIMIT_OPTIONS_DESC" default="5"/>
+
+        <field name="sef_ids" type="radio" default="0"
+          class="btn-group btn-group-yesno" filter="integer"
+          label="JGLOBAL_SEF_NOIDS_LABEL"
+          description="JGLOBAL_SEF_NOIDS_DESC" >
+          <option value="0">JNO</option>
+          <option value="1">JYES</option>
+        </field>
+
+        <field name="highlight_attendee" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GACALEVENTS_HLATTEND_LABEL"
+             description="COM_GACALEVENTS_HLATTEND_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+         </field>
+
+        <field name="vaxed_fld" type="Custfld" default="1" showon="highlight_attendee:1"
+             label="COM_GACALEVENTS_CUSTFLD1_LABEL"
+             description="COM_GACALEVENTS_CUSTFLD1_DESC" />
+
+        <field name="exempt_fld" type="Custfld" default="1" showon="highlight_attendee:1"
+             label="COM_GACALEVENTS_CUSTFLD2_LABEL"
+             description="COM_GACALEVENTS_CUSTFLD2_DESC" />
+
+    </fieldset>
+</config>

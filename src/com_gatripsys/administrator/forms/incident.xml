@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="sysinfo" addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field">
+		<field name="id" type="text" readonly="true" class="readonly" default="0" label="COM_GATRIPSYS_FORM_LBL_ID" description="COM_GATRIPSYS_FORM_DESC_ID"/>
+		<field name="ordering" label="COM_GATRIPSYS_FORM_LBL_ORDERING" description="COM_GATRIPSYS_FORM_DESC_ORDERING"/>
+		<field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+		<field name="checked_out" type="hidden" filter="unset"/>
+		<field name="checked_out_time" type="hidden" filter="unset"/>
+	    <field name="created_by" type="Createdby" hidden="true" default="0" label="COM_GATRIPSYS_FORM_LBL_CREATED_BY" description="COM_GATRIPSYS_FORM_DESC_CREATED_BY" hint="COM_GATRIPSYS_FORM_LBL_CREATED_BY"/>
+	    <field name="modified_by" type="Modifiedby" hidden="true" default="0" label="COM_GATRIPSYS_FORM_LBL_MODIFIED_BY" description="COM_GATRIPSYS_FORM_DESC_MODIFIED_BY" hint="COM_GATRIPSYS_FORM_LBL_MODIFIED_BY"/>
+	    <field name="created_date" type="Timecreated" label="COM_GATRIPSYS_FORM_LBL_CREATED_DATE" description="COM_GATRIPSYS_FORM_DESC_CREATED_DATE" hint="COM_GATRIPSYS_FORM_LBL_CREATED_DATE"/>
+	    <field name="modified_date" type="Timecreated" label="COM_GATRIPSYS_FORM_LBL_UPDATE_DATE" description="COM_GATRIPSYS_FORM_DESC_UPDATE_DATE" hint="COM_GATRIPSYS_FORM_LBL_UPDATE_DATE"/>
+	</fieldset>
+
+	<fieldset name="general" addfieldprefix="GlennArkell\Component\Gatracklog\Administrator\Field">
+        <field name="trip_id" type="Trips"
+            label="COM_GATRIPSYS_FORM_LBL_INCIDENT_TRIP_ID"
+            description="COM_GATRIPSYS_FORM_DESC_INCIDENT_TRIP_ID" />
+    
+        <field name="user_id" type="Members"
+            label="COM_GATRIPSYS_FORM_LBL_INCIDENT_USER_ID"
+            description="COM_GATRIPSYS_FORM_DESC_INCIDENT_USER_ID" />
+
+        <field name="user_name" type="text" readonly="true" class="readonly"
+            label="COM_GATRIPSYS_FORM_LBL_INCIDENT_USER_ID"
+            description="COM_GATRIPSYS_FORM_DESC_INCIDENT_USER_ID" />
+
+        <field name="incid_date" type="calendar" default="NOW"
+            filter="server_utc" format="%Y-%m-%d %H:%i:%s"
+            filterFormat="Y-m-d H:i:s" translateformat="true"
+            label="COM_GATRIPSYS_FORM_LBL_INCIDENT_INCID_DATE"
+            description="COM_GATRIPSYS_FORM_DESC_INCIDENT_INCID_DATE" />
+
+        <field name="pers_involved" type="editor" buttons="true" hide="module,article,pagebreak,readmore" filter="safehtml"
+            label="COM_GATRIPSYS_FORM_LBL_INCIDENT_PERS_INVOLVED"
+            description="COM_GATRIPSYS_FORM_DESC_INCIDENT_PERS_INVOLVED" />
+	</fieldset>
+
+	<fieldset name="location">
+        <field name="location" type="editor" buttons="true" hide="module,article,pagebreak,readmore" filter="safehtml"
+            label="COM_GATRIPSYS_FORM_LBL_INCIDENT_LOCATION"
+            description="COM_GATRIPSYS_FORM_DESC_INCIDENT_LOCATION" />
+
+        <field name="map_ref" type="text"
+            label="COM_GATRIPSYS_FORM_LBL_INCIDENT_MAP_REF"
+            description="COM_GATRIPSYS_FORM_DESC_INCIDENT_MAP_REF" />
+
+        <field name="gps_ref" type="text"
+            label="COM_GATRIPSYS_FORM_LBL_INCIDENT_GPS_REF"
+            description="COM_GATRIPSYS_FORM_DESC_INCIDENT_GPS_REF" />
+	</fieldset>
+
+	<fieldset name="witnesses">
+        <field name="witnesses" type="editor" buttons="true" hide="module,article,pagebreak,readmore" filter="safehtml"
+            label="COM_GATRIPSYS_FORM_LBL_INCIDENT_WITNESSES"
+            description="COM_GATRIPSYS_FORM_DESC_INCIDENT_WITNESSES" />
+	</fieldset>
+
+	<fieldset name="extrainfo">
+        <field name="from_modal" type="hidden" default="0" />
+
+		<field name="comment" filter="safehtml" type="textarea" label="COM_GATRIPSYS_FORM_LBL_COMMENT" description="COM_GATRIPSYS_FORM_DESC_COMMENT" hint="COM_GATRIPSYS_FORM_LBL_COMMENT"/>
+		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+	</fieldset>
+
+</form>

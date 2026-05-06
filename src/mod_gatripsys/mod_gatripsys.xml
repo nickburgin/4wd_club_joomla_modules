@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.4" client="site" method="upgrade">
+	<name>MOD_GATRIPSYS_NAME</name>
+	<author>Glenn Arkell</author>
+	<authorEmail>glenn@glennarkell.com.au</authorEmail>
+	<authorUrl>http://www.glennarkell.com.au</authorUrl>
+	<copyright>Open Source</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<creationDate>22 January 2016</creationDate>
+	<version>5.0.4</version>
+	<description>Display Trips</description>
+
+	<namespace path="src">GlennArkell\Module\Gatripsys</namespace>
+
+	<files>
+		<filename module="mod_gatripsys">mod_gatripsys.php</filename>
+		<folder>src</folder>
+		<folder>tmpl</folder>
+    </files>
+
+	<media destination="mod_gatripsys" folder="media">
+		<folder>css</folder>
+	</media>
+
+	<languages>
+		<language tag="en-GB">language/en-GB/mod_gatripsys.ini</language>
+		<language tag="en-GB">language/en-GB/mod_gatripsys.sys.ini</language>
+	</languages>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">				
+				<field name="disp_trips" type="radio" default="0"
+					layout="joomla.form.field.radio.switcher"
+					label="MOD_GATRIPSYS_FIELD_DISP_TRIPS_LABEL"
+					description="MOD_GATRIPSYS_FIELD_DISP_TRIPS_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="integ_calendar" type="radio" default="0"
+					layout="joomla.form.field.radio.switcher"
+					label="MOD_GATRIPSYS_FIELD_INTEG_CALENDAR_LABEL"
+					description="MOD_GATRIPSYS_FIELD_INTEG_CALENDAR_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="header_colour" type="color"
+					label="MOD_GATRIPSYS_FIELD_HEADER_COLOUR_LABEL"
+					description="MOD_GATRIPSYS_FIELD_HEADER_COLOUR_DESC" />
+
+				<field name="disp_dates" type="radio" default="0"
+					layout="joomla.form.field.radio.switcher"
+					label="MOD_GATRIPSYS_FIELD_DISP_DATES_LABEL"
+					description="MOD_GATRIPSYS_FIELD_DISP_DATES_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="dateformat" type="text" default="d-M-Y"
+					label="MOD_GATRIPSYS_FIELD_DATEFORMAT_LABEL"
+					description="MOD_GATRIPSYS_FIELD_DATEFORMAT_DESC" />
+
+				<field name="set_listheight" type="radio" default="0"
+					layout="joomla.form.field.radio.switcher"
+					label="MOD_GATRIPSYS_FIELD_SET_IFRAME_LABEL"
+					description="MOD_GATRIPSYS_FIELD_SET_IFRAME_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="list_height" type="text" default="400" filter="int" showon="set_listheight:1"
+					label="MOD_GATRIPSYS_FIELD_IFRAME_HEIGHT_LABEL"
+					description="MOD_GATRIPSYS_FIELD_IFRAME_HEIGHT_DESC" />
+
+				<field name="header_txt" type="text" class="input-xxlarge"
+					default="Non members wishing more information should contact our Trip Co-ordinator."
+					label="MOD_GATRIPSYS_FIELD_HEADER_TXT_LABEL"
+					description="MOD_GATRIPSYS_FIELD_HEADER_TXT_DESC" />
+
+				<field name="contact_email" type="email" validate="email"
+					label="MOD_GATRIPSYS_FIELD_CONTACT_EMAIL_LABEL"
+					description="MOD_GATRIPSYS_FIELD_CONTACT_EMAIL_DESC" />
+
+				<field name="trips_history" type="radio" default="0"
+					layout="joomla.form.field.radio.switcher"
+					label="MOD_GATRIPSYS_FIELD_TRIPS_HISTORY_LABEL"
+					description="MOD_GATRIPSYS_FIELD_TRIPS_HISTORY_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="history_age" type="text" default="60" showon="trips_history:1"
+					label="MOD_GATRIPSYS_FIELD_HISTORY_AGE_LABEL"
+					description="MOD_GATRIPSYS_FIELD_HISTORY_AGE_DESC" />
+
+				<field name="max_age" type="text" default="600" showon="trips_history:1"
+					label="MOD_GATRIPSYS_FIELD_MAX_AGE_LABEL"
+					description="MOD_GATRIPSYS_FIELD_MAX_AGE_DESC" />
+
+				<field name="only_pub" type="radio" default="1" showon="trips_history:1"
+					layout="joomla.form.field.radio.switcher"
+					label="MOD_GATRIPSYS_FIELD_ONLY_PUB_LABEL"
+					description="MOD_GATRIPSYS_FIELD_ONLY_PUB_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="only_past" type="radio" default="1"
+					layout="joomla.form.field.radio.switcher"
+					label="MOD_GATRIPSYS_FIELD_ONLY_PAST_LABEL"
+					description="MOD_GATRIPSYS_FIELD_ONLY_PAST_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="trips_order" type="radio" default="1"
+					layout="joomla.form.field.radio.switcher"
+					label="MOD_GATRIPSYS_FIELD_TRIPS_ORDER_LABEL"
+					description="MOD_GATRIPSYS_FIELD_TRIPS_ORDER_DESC" >
+					<option value="0">Descending</option>
+					<option value="1">Ascending</option>
+				</field>
+
+			</fieldset>
+
+			<fieldset name="xtradetails">
+
+				<field name="incl_suit" type="radio" default="0"
+					layout="joomla.form.field.radio.switcher"
+					label="MOD_GATRIPSYS_FIELD_INCL_SUIT_LABEL"
+					description="MOD_GATRIPSYS_FIELD_INCL_SUIT_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="incl_equip" type="radio" default="0"
+					layout="joomla.form.field.radio.switcher"
+					label="MOD_GATRIPSYS_FIELD_INCL_EQUIP_LABEL"
+					description="MOD_GATRIPSYS_FIELD_INCL_EQUIP_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="incl_where" type="radio" default="0"
+					layout="joomla.form.field.radio.switcher"
+					label="MOD_GATRIPSYS_FIELD_INCL_WHERE_LABEL"
+					description="MOD_GATRIPSYS_FIELD_INCL_WHERE_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="incl_what" type="radio" default="0"
+					layout="joomla.form.field.radio.switcher"
+					label="MOD_GATRIPSYS_FIELD_INCL_WHAT_LABEL"
+					description="MOD_GATRIPSYS_FIELD_INCL_WHAT_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+			</fieldset>
+
+			<fieldset name="advanced">
+				<field name="layout" type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+
+				<field name="moduleclass_sfx" type="text"
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+
+				<field name="cache" type="list" default="1"
+					label="COM_MODULES_FIELD_CACHING_LABEL"
+					description="COM_MODULES_FIELD_CACHING_DESC">
+					<option value="1">JGLOBAL_USE_GLOBAL</option>
+					<option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+
+				<field name="cache_time" type="text" default="900"
+					label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+					description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+
+				<field name="cachemode" type="hidden" default="static">
+					<option value="static"></option>
+				</field>
+
+			</fieldset>
+		</fields>
+	</config>
+
+</extension>

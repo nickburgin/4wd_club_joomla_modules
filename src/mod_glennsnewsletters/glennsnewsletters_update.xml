@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<updates>
+   <update>
+      <name>Glenn's Newsletters</name>
+      <description>Show a Listing of Newsletters</description>
+      <element>mod_glennsnewsletters</element>
+      <type>module</type>
+      <version>4.4</version>
+
+      <infourl title="Glenn's Newsletters Module URL">https://www.glennarkell.com.au/index.php/basic-newsletters</infourl>
+      <downloads>
+         <downloadurl type="full" format="zip">https://www.glennarkell.com.au/joomlaorg/modules/j4/mod_glennsnewsletters-4.4.zip</downloadurl>
+      </downloads>
+
+      <maintainer>Glenn Arkell</maintainer>
+      <maintainerurl>https://www.glennarkell.com.au</maintainerurl>
+
+      <targetplatform name="joomla" version="4" />
+      <client>site</client>
+   </update>
+</updates>

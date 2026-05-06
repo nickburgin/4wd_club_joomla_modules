@@ -1,0 +1,26 @@
+/**
+ * @version     4.2.1
+ * @package     com_gabroadcast
+ * @copyright   2019 Glenn Arkell
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Glenn Arkell <glenn@glennarkell.com.au>
+ */
+
+/* this keeps the label with text floating right */
+.front-end-edit label {
+    margin-right: 10px;
+    display: block;
+    float: left;
+    text-align: right;
+    width: 180px !important;
+}
+
+/* this keeps the input fields to the right of the label */
+.front-end-edit .controls {
+    margin-left: 195px;
+}
+
+/* this reduces the space between field and help text */
+div.controls > fieldset {
+    margin-bottom: 0 !important;
+}

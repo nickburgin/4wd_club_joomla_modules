@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" method="upgrade">
+    <name>com_gausers</name>
+    <creationDate>30 September 2013</creationDate>
+    <copyright>Copyright (C) 2013. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Glenn Arkell</author>
+    <authorEmail>glenn@glennarkell.com.au</authorEmail>
+    <authorUrl>https://www.glennarkell.com.au</authorUrl>
+    <version>5.1.6</version>
+    <description>COM_GAUSERS_XML_DESCRIPTION</description>
+    
+    <namespace path="src">GlennArkell\Component\Gausers</namespace>
+
+	<scriptfile>script.php</scriptfile>
+
+	<dashboards>
+		<dashboard title="COM_GAUSERS_DASHBOARD_TITLE" icon="icon-fas fa-credit-card">COM_GAUSERS_DASHBOARD_TITLE</dashboard>
+	</dashboards>
+
+    <install> <!-- Runs on install -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <uninstall> <!-- Runs on uninstall -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+
+    <update> <!-- Runs on update -->
+		<schemas>
+			<schemapath type="mysql">sql/updates/mysql/</schemapath>
+		</schemas>
+    </update>
+
+    <files folder="site">
+        <folder>forms</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+
+    <languages folder="site">
+			<language tag="en-GB">language/en-GB/com_gausers.ini</language>
+    </languages>
+
+	<media destination="com_gausers" folder="media">
+		<folder>css</folder>
+		<folder>images</folder>
+		<folder>js</folder>
+        <file>joomla.asset.json</file>
+	</media>
+
+    <administration>
+        <menu img="class:users" >COM_GAUSERS<params><dashboard>gausers</dashboard></params></menu>
+
+        <files folder="administrator">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <folder>forms</folder>
+            <folder>src</folder>
+            <folder>tmpl</folder>
+            <folder>services</folder>
+            <folder>presets</folder>
+            <folder>sql</folder>
+        </files>
+
+        <languages folder="administrator">
+			<language tag="en-GB">language/en-GB/com_gausers.ini</language>
+			<language tag="en-GB">language/en-GB/com_gausers.sys.ini</language>
+        </languages>
+
+    </administration>
+
+    <modules>
+		<module module="mod_gausers" />
+		<module module="mod_gausersexecs" />
+	</modules>
+
+    <plugins>
+        <plugin group="user" plugin="gausers"/>
+    </plugins>
+
+	<changelogurl>https://www.glennarkell.com.au/joomlaorg/components/j5/gausers-changelog.xml</changelogurl>
+
+	<updateservers>
+		<!-- Note: No spaces or linebreaks allowed between the server tags -->
+		<server type="extension" priority="1" name="User Management">https://www.glennarkell.com.au/joomlaorg/components/j5/gausers-update.xml</server>
+	</updateservers>
+
+</extension>

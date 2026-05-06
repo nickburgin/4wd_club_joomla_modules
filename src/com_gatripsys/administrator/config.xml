@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <inlinehelp button="show" />
+    <fieldset name="gatripsys"
+		addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field"
+		label="COM_GATRIPSYS" >
+
+        <field name="header_text" type="text" filter="safehtml" class="input-xlarge"
+            label="COM_GATRIPSYS_FIELD_HEADER_TEXT_LABEL"
+            description="COM_GATRIPSYS_FIELD_HEADER_TEXT_DESC" />
+    
+        <field name="ht_color" type="color"
+            label="COM_GATRIPSYS_FIELD_HT_COLOR_LABEL"
+            description="COM_GATRIPSYS_FIELD_HT_COLOR_DESC" />
+    
+        <field name="disp_daysago" type="integer" default="0" first="0" last="31" step="1"
+            label="COM_GATRIPSYS_FIELD_DISP_DAYSAGO_LABEL"
+            description="COM_GATRIPSYS_FIELD_DISP_DAYSAGO_DESC" />
+    
+        <field name="admin_id" type="committee"
+            label="COM_GATRIPSYS_FIELD_ADMIN_ID_LABEL"
+            description="COM_GATRIPSYS_FIELD_ADMIN_ID_DESC" />
+    
+        <field name="trip_coord" type="usergrouplist"
+            label="COM_GATRIPSYS_FIELD_TRIP_COORD_LABEL"
+            description="COM_GATRIPSYS_FIELD_TRIP_COORD_DESC" />
+    
+		<field name="email_html" type="radio" default="1"
+			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_EMAIL_HTML_LABEL"
+			description="COM_GATRIPSYS_FIELD_EMAIL_HTML_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="allow_rpt" type="radio" default="0"
+ 			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_ALLOW_RPT_LABEL"
+			description="COM_GATRIPSYS_FIELD_ALLOW_RPT_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+        <field name="prof_pref" type="text" default="b4wdc"
+            label="COM_GATRIPSYS_FIELD_PROF_PREF_LABEL"
+            description="COM_GATRIPSYS_FIELD_PROF_PREF_DESC" />
+    
+        <field name="mship_single" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+             label="COM_GATRIPSYS_MSHIP_SINGLE_LABEL"
+             description="COM_GATRIPSYS_MSHIP_SINGLE_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+         </field>
+
+        <field name="rpt_header" type="media"
+            label="COM_GATRIPSYS_FIELD_RPT_HEADER_LABEL"
+            description="COM_GATRIPSYS_FIELD_RPT_HEADER_DESC" />
+
+        <field name="header_type" type="list" default="JPG"
+            label="COM_GATRIPSYS_FIELD_HEADER_TYPE_LABEL"
+            description="COM_GATRIPSYS_FIELD_HEADER_TYPE_DESC" >
+			<option value="JPG">JPG</option>
+			<option value="PNG">PNG</option>
+			<option value="GIF">GIF</option>
+		</field>
+
+        <field name="checkbox_pers" type="text" class="input-xxlarge"
+			default="Note: Use the check box to mark attendees that have handed their personal details forms to Trip Leader."
+            label="COM_GATRIPSYS_FIELD_CHECKBOX_PERS_LABEL"
+            description="COM_GATRIPSYS_FIELD_CHECKBOX_PERS_DESC" />
+    
+        <field name="exclude_email" type="text" class="inputbox" size="20" default="noemail"
+             label="COM_GATRIPSYS_EXCLUDE_EMAIL_LABEL"
+             description="COM_GATRIPSYS_EXCLUDE_EMAIL_DESC" />
+
+    </fieldset>
+
+    <fieldset name="gatripsys_invoicing"
+		addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field"
+		label="COM_GATRIPSYS_INV_DATA" >
+
+        <field name="charge_trip" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+             label="COM_GATRIPSYS_CHARGE_TRIP_LABEL"
+             description="COM_GATRIPSYS_CHARGE_TRIP_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+         </field>
+
+        <field name="inv_approval" type="radio" default="0" showon="charge_trip:1"
+			layout="joomla.form.field.radio.switcher"
+             label="COM_GATRIPSYS_INV_APPROVAL_LABEL"
+             description="COM_GATRIPSYS_INV_APPROVAL_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+         </field>
+
+        <field name="paid_apprv" type="radio" default="0" showon="charge_trip:1"
+			layout="joomla.form.field.radio.switcher"
+             label="COM_GATRIPSYS_PAID_APPRV_LABEL"
+             description="COM_GATRIPSYS_PAID_APPRV_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+         </field>
+
+        <field name="manual_inv" type="radio" default="0" showon="charge_trip:1"
+			layout="joomla.form.field.radio.switcher"
+             label="COM_GATRIPSYS_MANUAL_INV_LABEL"
+             description="COM_GATRIPSYS_MANUAL_INV_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+         </field>
+
+        <field name="invoice_due" size="10" showon="charge_trip:1"
+             type="text" class="inputbox" default="14"
+             label="COM_GATRIPSYS_INVOICE_DUE_LABEL"
+             description="COM_GATRIPSYS_INVOICE_DUE_DESC" />
+
+        <field name="inv_logo" type="media" directory="" showon="charge_trip:1"
+             label="COM_GATRIPSYS_INV_LOGO_LABEL"
+             description="COM_GATRIPSYS_INV_LOGO_DESC" />
+
+        <field name="inv_logo_type" type="list" showon="charge_trip:1"
+             label="COM_GATRIPSYS_INV_LOGO_TYPE_LABEL"
+             description="COM_GATRIPSYS_INV_LOGO_TYPE_DESC" >
+                 <option value="JPG">JPG</option>
+                 <option value="PNG">PNG</option>
+                 <option value="GIF">GIF</option>
+         </field>
+
+        <field name="inv_foot_text" type="textarea" rows="3" cols="60" default=""
+             label="COM_GATRIPSYS_INV_FOOT_TEXT_LABEL" showon="charge_trip:1"
+             hint="COM_GATRIPSYS_INV_FOOT_TEXT_LABEL"
+             description="COM_GATRIPSYS_INV_FOOT_TEXT_DESC" />
+
+        <field name="inv_pref" type="text" class="inputbox" default="TRIP" showon="charge_trip:1"
+             label="COM_GATRIPSYS_INV_PREF_LABEL"
+             description="COM_GATRIPSYS_INV_PREF_DESC" />
+
+        <field name="email_acknow" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+             label="COM_GATRIPSYS_EMAIL_ACKNOW_LABEL" showon="charge_trip:1"
+             description="COM_GATRIPSYS_EMAIL_ACKNOW_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+         </field>
+
+        <field name="pay_ack_text" type="textarea" rows="3" cols="60" showon="email_acknow:1"
+             class="input-xxlarge" default="Your membership payment has been registered."
+			 label="COM_GATRIPSYS_PAY_ACK_TEXT_LABEL"
+             hint="COM_GATRIPSYS_PAY_ACK_TEXT_LABEL"
+             description="COM_GATRIPSYS_PAY_ACK_TEXT_DESC" />
+
+        <field name="exclude_email_pref" type="text" default="noemail" showon="charge_trip:1"
+             label="COM_GATRIPSYS_EXC_EMAIL_PREF_LABEL"
+             description="COM_GATRIPSYS_EXC_EMAIL_PREF_DESC" />
+
+        <field name="incl_std_text" type="text" default="DO NOT REPLY to this email as it is NOT monitored."
+             label="COM_GATRIPSYS_EXCLUDE_INCL_STD_TEXT_LABEL" showon="charge_trip:1"
+             description="COM_GATRIPSYS_EXCLUDE_INCL_STD_TEXT_DESC" />
+
+        <field name="link_site" type="radio" default="1" showon="charge_trip:1"
+			layout="joomla.form.field.radio.switcher"
+             label="COM_GATRIPSYS_LINK_SITE_LABEL"
+             description="COM_GATRIPSYS_LINK_SITE_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+         </field>
+
+        <field name="order_inv" type="radio" default="0" showon="charge_trip:1"
+			layout="joomla.form.field.radio.switcher"
+             label="COM_GATRIPSYS_ORDER_INV_LABEL"
+             description="COM_GATRIPSYS_ORDER_INV_DESC">
+                 <option value="1">Invoice</option>
+                 <option value="0">Name</option>
+         </field>
+
+        <field name="incl_finance" type="radio" default="0" showon="charge_trip:1"
+			layout="joomla.form.field.radio.switcher"
+             label="COM_GATRIPSYS_INCL_FINANCE_LABEL"
+             description="COM_GATRIPSYS_INCL_FINANCE_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+         </field>
+
+        <field name="finance_cat" type="category" extension="com_gafinance" showon="charge_trip:1" default="0"
+             label="COM_GATRIPSYS_FINANCE_CAT_LABEL"
+             description="COM_GATRIPSYS_FINANCE_CAT_DESC" />
+
+        <field name="bank_desc" type="text" class="inputbox" size="60" default="Bendigo Bank" showon="charge_trip:1"
+             label="COM_GATRIPSYS_BANK_DESC_LABEL"
+             description="COM_GATRIPSYS_BANK_DESC_DESC" />
+
+        <field name="bank_bsb" type="text" class="inputbox" size="60" default="633-000" showon="charge_trip:1"
+             label="COM_GATRIPSYS_BANK_BSB_LABEL"
+             description="COM_GATRIPSYS_BANK_BSB_DESC" />
+
+        <field name="bank_accnt" type="text" class="inputbox" size="60" default="123456789" showon="charge_trip:1"
+             label="COM_GATRIPSYS_BANK_ACCNT_LABEL"
+             description="COM_GATRIPSYS_BANK_ACCNT_DESC" />
+
+        <field name="site_address" size="40" showon="charge_trip:1"
+             type="text" class="inputbox" default="P.O. Box 1042,"
+             label="COM_GATRIPSYS_SITE_ADDRESS_LABEL"
+             description="COM_GATRIPSYS_SITE_ADDRESS_DESC" />
+
+        <field name="site_suburb" size="40" showon="charge_trip:1"
+             type="text" class="inputbox" default="Ballarat Mail Centre 3353"
+             label="COM_GATRIPSYS_SITE_SUBURB_LABEL"
+             description="COM_GATRIPSYS_SITE_SUBURB_DESC" />
+
+        <field name="site_phone" size="30" showon="charge_trip:1"
+             type="text" class="inputbox" default="0439 014 366"
+             label="COM_GATRIPSYS_SITE_PHONE_LABEL"
+             description="COM_GATRIPSYS_SITE_PHONE_DESC" />
+
+        <field name="refund_notif" type="email" validate="email" 
+			 default="sample@dummy.com" showon="charge_trip:1"
+             label="COM_GATRIPSYS_REFUND_NOTIF_LABEL"
+             description="COM_GATRIPSYS_REFUND_NOTIF_DESC" />
+
+    </fieldset>
+
+    <fieldset name="gatripsys_approv"
+		addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field"
+		label="COM_GATRIPSYS_APPROV" >
+
+		<field name="auto_trip_apprv" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_AUTO_TRIP_APPRV_LABEL"
+			description="COM_GATRIPSYS_FIELD_AUTO_TRIP_APPRV_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="auto_book_apprv" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_AUTO_BOOK_APPRV_LABEL"
+			description="COM_GATRIPSYS_FIELD_AUTO_BOOK_APPRV_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+    </fieldset>
+
+    <fieldset name="gatripsys_notif"
+		addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field"
+		label="COM_GATRIPSYS_NOTIF" >
+
+		<field name="notif_leader" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_NOTIF_LEADER_LABEL"
+			description="COM_GATRIPSYS_FIELD_NOTIF_LEADER_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="notif_tc" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_NOTIF_TC_LABEL"
+			description="COM_GATRIPSYS_FIELD_NOTIF_TC_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+        <field name="notif_tc_group" type="usergrouplist" showon="notif_tc:1"
+            label="COM_GATRIPSYS_FIELD_NOTIF_TC_GROUP_LABEL"
+            description="COM_GATRIPSYS_FIELD_NOTIF_TC_GROUP_DESC" />
+    
+		<field name="notif_users" type="radio" default="0"
+ 			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_NOTIF_USERS_LABEL"
+			description="COM_GATRIPSYS_FIELD_NOTIF_USERS_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="bcc_users" type="radio" default="0" showon="notif_users:1"
+			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_BCC_USERS_LABEL"
+			description="COM_GATRIPSYS_FIELD_BCC_USERS_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+        <field name="trip_approval" type="radio" showon="notif_users:1"
+			layout="joomla.form.field.radio.switcher"
+             default="0"
+             label="COM_GATRIPSYS_TRIP_APPROVAL_LABEL"
+             description="COM_GATRIPSYS_TRIP_APPROVAL_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+        <field name="email_admin" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+             label="COM_GATRIPSYS_EMAIL_ADMIN_LABEL"
+             description="COM_GATRIPSYS_EMAIL_ADMIN_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+        <field name="send_admin" type="user" showon="email_admin:1"
+            label="COM_GATRIPSYS_SEND_ADMIN_LABEL"
+            description="COM_GATRIPSYS_SEND_ADMIN_DESC" />
+    
+        <field name="reply_sender" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+             label="COM_GATRIPSYS_REPLY_SENDER_LABEL"
+             description="COM_GATRIPSYS_REPLY_SENDER_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+    </fieldset>
+
+    <fieldset name="gatripsys_xtracntl"
+		addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field"
+		label="COM_GATRIPSYS_XTRACNTL" >
+
+		<field name="hlite_book_full" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_HLITE_BOOK_FULL_LABEL"
+			description="COM_GATRIPSYS_FIELD_HLITE_BOOK_FULL_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="block_book_full" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_BLOCK_BOOK_FULL_LABEL"
+			description="COM_GATRIPSYS_FIELD_BLOCK_BOOK_FULL_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="waitlist_avail" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_WAITLIST_AVAIL_LABEL"
+			description="COM_GATRIPSYS_FIELD_WAITLIST_AVAIL_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="waitlist_all" type="radio" default="0" showon="waitlist_avail:1"
+			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_WAITLIST_ALL_LABEL"
+			description="COM_GATRIPSYS_FIELD_WAITLIST_ALL_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="block_regby" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_BLOCK_REGBY_LABEL"
+			description="COM_GATRIPSYS_FIELD_BLOCK_REGBY_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="show_comment" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_SHOW_COMMENT_LABEL"
+			description="COM_GATRIPSYS_FIELD_SHOW_COMMENT_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="restrict_leader" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_RESTRICT_LEADER_LABEL"
+			description="COM_GATRIPSYS_FIELD_RESTRICT_LEADER_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+        <field name="leader_gp" type="usergrouplist" showon="restrict_leader:1" class="input-xlarge"
+            label="COM_GATRIPSYS_FIELD_LEADER_GP_LABEL"
+            description="COM_GATRIPSYS_FIELD_LEADER_GP_DESC" />
+
+		<field name="incl_email" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_INCL_EMAIL_LABEL"
+			description="COM_GATRIPSYS_FIELD_INCL_EMAIL_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="show_editor" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_SHOW_EDITOR_LABEL"
+			description="COM_GATRIPSYS_FIELD_SHOW_EDITOR_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+        <field name="editor_gp" type="usergrouplist" showon="show_editor:1"
+            label="COM_GATRIPSYS_FIELD_EDITOR_GP_LABEL"
+            description="COM_GATRIPSYS_FIELD_EDITOR_GP_DESC" />
+    
+        <field name="safe_files" type="list" class="multiple" multiple="true"
+             label="COM_GATRIPSYS_SAFE_FILES_LABEL"
+             description="COM_GATRIPSYS_SAFE_FILES_DESC">
+                 <option value="pdf">pdf</option>
+                 <option value="jpg">jpg</option>
+                 <option value="png">png</option>
+                 <option value="gif">gif</option>
+        </field>
+
+        <field name="tripplan_dir" type="text" default="images/trips/trip_plans"
+             label="COM_GATRIPSYS_TRIPPLAN_DIR_LABEL"
+             description="COM_GATRIPSYS_TRIPPLAN_DIR_DESC" />
+
+        <field name="tripimg_dir" type="text" default="images/trips/trip_images"
+             label="COM_GATRIPSYS_TRIPIMG_DIR_LABEL"
+             description="COM_GATRIPSYS_TRIPIMG_DIR_DESC" />
+
+		<field name="delete_file" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+			label="COM_GATRIPSYS_FIELD_DELETE_FILE_LABEL"
+			description="COM_GATRIPSYS_FIELD_DELETE_FILE_DESC" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+    </fieldset>
+
+    <fieldset name="permissions"
+              description="JCONFIG_PERMISSIONS_DESC"
+              label="JCONFIG_PERMISSIONS_LABEL">
+
+        <field name="rules" type="rules" component="com_gatripsys"
+               class="inputbox" filter="rules" validate="rules"
+               label="JCONFIG_PERMISSIONS_LABEL"
+               section="component"
+        />
+	</fieldset>
+
+    <fieldset name="component" label="COM_GATRIPSYS_INTEGRATION_LABEL">
+
+        <field name="save_history"
+               type="radio"
+			layout="joomla.form.field.radio.switcher"
+               default="0"
+               label="JGLOBAL_SAVE_HISTORY_OPTIONS_LABEL"
+               description="JGLOBAL_SAVE_HISTORY_OPTIONS_DESC" >
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field name="history_limit"
+               type="text"
+               filter="integer"
+               label="JGLOBAL_HISTORY_LIMIT_OPTIONS_LABEL"
+               description="JGLOBAL_HISTORY_LIMIT_OPTIONS_DESC"
+               default="5" showon="save_history:1"
+        />
+
+        <field name="log_actions" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+             label="COM_GATRIPSYS_LOG_ACTIONS_LABEL"
+             description="COM_GATRIPSYS_LOG_ACTIONS_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+        </field>
+
+        <field name="test_switch" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+             label="COM_GATRIPSYS_TEST_SWITCH_LABEL"
+             description="COM_GATRIPSYS_TEST_SWITCH_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+        </field>
+
+        <field name="tmpl_email" type="radio" default="0"
+			class="btn-group btn-group-yesno" 
+			label="COM_GATRIPSYS_TMPL_EMAIL_LABEL"
+			description="COM_GATRIPSYS_TMPL_EMAIL_DESC">
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+    </fieldset>
+</config>

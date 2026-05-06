@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="sysinfo" addfieldprefix="GlennArkell\Component\Gabroadcast\Administrator\Field">
+	    <field name="id" type="text" readonly="true" class="readonly" default="0" description="JGLOBAL_FIELD_ID_DESC"/>
+	    <field name="ordering"/>
+	    <field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+	      <option value="1">JPUBLISHED</option>
+	      <option value="0">JUNPUBLISHED</option>
+	      <option value="2">JARCHIVED</option>
+	      <option value="-2">JTRASHED</option>
+	    </field>
+	    <field name="checked_out" type="hidden" filter="unset"/>
+	    <field name="checked_out_time" default="0000-00-00 00:00:00" type="hidden" filter="unset"/>
+	    <field name="created_by" type="Createdby" default="0" label="COM_GABROADCAST_FORM_LBL_CREATED_BY" description="COM_GABROADCAST_FORM_DESC_CREATED_BY" hidden="true" hint="COM_GABROADCAST_FORM_LBL_CREATED_BY"/>
+	    <field name="modified_by" type="Modifiedby" default="0" label="COM_GABROADCAST_FORM_LBL_MODIFIED_BY" description="COM_GABROADCAST_FORM_DESC_MODIFIED_BY" hidden="true" hint="COM_GABROADCAST_FORM_LBL_MODIFIED_BY"/>
+	    <field name="created_date" type="Timecreated" label="COM_GABROADCAST_FORM_LBL_CREATED_DATE" description="COM_GABROADCAST_FORM_DESC_CREATED_DATE" hint="COM_GABROADCAST_FORM_LBL_CREATED_DATE"/>
+	    <field name="modified_date" type="Timecreated" label="COM_GABROADCAST_FORM_LBL_MODIFIED_DATE" description="COM_GABROADCAST_FORM_DESC_MODIFIED_DATE" hint="COM_GABROADCAST_FORM_LBL_MODIFIED_DATE"/>
+	</fieldset>
+
+	<fieldset name="details" addfieldprefix="GlennArkell\Component\Gabroadcast\Administrator\Field">
+	    <field name="attach_lab" filter="safehtml" type="text" required="true" label="COM_GABROADCAST_FORM_LBL_BCAST_ATTACH_LAB" description="COM_GABROADCAST_FORM_DESC_BCAST_ATTACH_LAB" hint="COM_GABROADCAST_FORM_LBL_BCAST_ATTACH_LAB"/>
+	    <field name="attach_dir" filter="safehtml" type="text" class="input-xxxlarge" label="COM_GABROADCAST_FORM_LBL_BCAST_ATTACH_DIR" description="COM_GABROADCAST_FORM_DESC_BCAST_ATTACH_DIR" hint="COM_GABROADCAST_FORM_LBL_BCAST_ATTACH_DIR"/>
+	</fieldset>
+
+	<fieldset name="extrainfo">
+	    <field name="comment" filter="safehtml" type="textarea" class="input-xlarge" label="COM_GABROADCAST_FORM_LBL_COMMENT" description="COM_GABROADCAST_FORM_DESC_COMMENT" hint="COM_GABROADCAST_FORM_LBL_COMMENT"/>
+	    <field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+	</fieldset>
+</form>

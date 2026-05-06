@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="GlennArkell\Component\Gafinance\Administrator\Field">
+	<fieldset name="sysinfo">
+		<field name="id" type="text" readonly="true" class="readonly" default="0" label="COM_GAFINANCE_FORM_LBL_ID" description="COM_GAFINANCE_FORM_DESC_ID"/>
+		<field name="ordering" label="COM_GAFINANCE_FORM_LBL_ORDERING" description="COM_GAFINANCE_FORM_DESC_ORDERING"/>
+		<field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+            <option value="5">Prepared Only</option>
+            <option value="4">PDF Created</option>
+            <option value="3">Waiting Payment</option>
+            <option value="2">Completed (Archived)</option>
+            <option value="1">JPUBLISHED</option>
+            <option value="0">JUNPUBLISHED</option>
+            <option value="6">Cancelled</option>
+		</field>
+		<field name="checked_out" type="hidden" filter="unset"/>
+		<field name="checked_out_time" type="hidden" filter="unset"/>
+	    <field name="created_by" type="Createdby" hidden="true" default="0" label="COM_GAFINANCE_FORM_LBL_CREATED_BY" description="COM_GAFINANCE_FORM_DESC_CREATED_BY" hint="COM_GAFINANCE_FORM_LBL_CREATED_BY"/>
+	    <field name="modified_by" type="Modifiedby" hidden="true" default="0" label="COM_GAFINANCE_FORM_LBL_MODIFIED_BY" description="COM_GAFINANCE_FORM_DESC_MODIFIED_BY" hint="COM_GAFINANCE_FORM_LBL_MODIFIED_BY"/>
+	    <field name="created_date" type="Timecreated" label="COM_GAFINANCE_FORM_LBL_CREATED_DATE" description="COM_GAFINANCE_FORM_DESC_CREATED_DATE" hint="COM_GAFINANCE_FORM_LBL_CREATED_DATE"/>
+	    <field name="modified_date" type="Timecreated" label="COM_GAFINANCE_FORM_LBL_MODIFIED_DATE" description="COM_GAFINANCE_FORM_DESC_MODIFIED_DATE" hint="COM_GAFINANCE_FORM_LBL_MODIFIED_DATE"/>
+	</fieldset>
+
+	<fieldset name="general">
+
+        <field name="client_id" type="Client" required="true"
+            label="COM_GAFINANCE_FORM_LBL_INVOICE_CLIENT_ID"
+            description="COM_GAFINANCE_FORM_DESC_INVOICE_CLIENT_ID" />
+
+        <field name="invoice_desc" type="textarea" rows="4" filter="safehtml"
+            label="COM_GAFINANCE_FORM_LBL_INVOICE_INVOICE_DESC"
+            description="COM_GAFINANCE_FORM_DESC_INVOICE_INVOICE_DESC" />
+
+        <field name="invoice_type" type="Invtype" required="true"
+            label="COM_GAFINANCE_FORM_LBL_INVOICE_INVOICE_TYPE"
+            description="COM_GAFINANCE_FORM_DESC_INVOICE_INVOICE_TYPE" />
+
+        <field name="invoice_cost" type="text"
+            default="0.00" required="true" filter="safehtml"
+            label="COM_GAFINANCE_FORM_LBL_INVOICE_INVOICE_COST"
+            description="COM_GAFINANCE_FORM_DESC_INVOICE_INVOICE_COST" />
+
+        <field name="paid_date" type="calendar"
+            filterFormat="Y-m-d" translateformat="true"
+            label="COM_GAFINANCE_FORM_LBL_INVOICE_PAID_DATE"
+            description="COM_GAFINANCE_FORM_DESC_INVOICE_PAID_DATE" />
+
+        <field name="inv_date" type="calendar"
+            filterFormat="Y-m-d" translateformat="true"
+            label="COM_GAFINANCE_FORM_LBL_INVOICE_INV_DATE"
+            description="COM_GAFINANCE_FORM_DESC_INVOICE_INV_DATE" />
+
+        <field name="email_comment" type="textarea"
+            label="COM_GAFINANCE_FORM_LBL_INVOICE_EMAIL_COMMENT"
+            description="COM_GAFINANCE_FORM_DESC_INVOICE_EMAIL_COMMENT"
+            cols="70" rows="4" filter="safehtml" />
+
+        <field name="accnt_id" type="Account" default="0" required="true"
+            label="COM_GAFINANCE_FORM_LBL_INVOICE_ACCNT_ID"
+            description="COM_GAFINANCE_FORM_DESC_INVOICE_ACCNT_ID" />
+
+	</fieldset>
+
+	<fieldset name="extrainfo">
+		<field name="comment" filter="safehtml" type="textarea" label="COM_GAFINANCE_FORM_LBL_COMMENT" description="COM_GAFINANCE_FORM_DESC_COMMENT" hint="COM_GAFINANCE_FORM_LBL_COMMENT"/>
+	</fieldset>
+
+	<fieldset name="other">
+		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+	</fieldset>
+</form>

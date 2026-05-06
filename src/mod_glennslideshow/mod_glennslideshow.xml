@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="4.0" client="site" method="upgrade">
+	<name>GlennSlideShow</name>
+	<author>Glenn Arkell</author>
+	<authorEmail>glenn@glennarkell.com.au</authorEmail>
+	<authorUrl>https://www.glennarkell.com.au</authorUrl>
+	<copyright>Open Source</copyright>
+	<license>GNU General Public License version 2 or later</license>
+	<creationDate>21 August 2021</creationDate>
+	<version>4.7</version>
+	<description>A simple Slideshow using bootstrap carousel for images from a folder or category of articles.</description>
+	<namespace path="src">GlennArkell\Module\GlennSlideshow</namespace>
+
+	<files>
+		<filename module="mod_glennslideshow">mod_glennslideshow.php</filename>
+		<filename>glennslideshow_update.xml</filename>
+		<folder>src</folder>
+		<folder>tmpl</folder>
+    </files>
+
+	<media destination="mod_glennslideshow" folder="media">
+		<folder>css</folder>
+		<folder>fonts</folder>
+	</media>
+
+	<languages>
+		<language tag="en-GB">language/en-GB/mod_glennslideshow.ini</language>
+		<language tag="en-GB">language/en-GB/mod_glennslideshow.sys.ini</language>
+	</languages>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="use_category_folder" type="radio" default="0"
+                    class="btn-group btn-group-yesno" filter="int"
+					label="MOD_GLENNSLIDESHOW_FIELD_USE_CATEGORY_FOLDER_LABEL"
+					description="MOD_GLENNSLIDESHOW_FIELD_USE_CATEGORY_FOLDER_DESC" >
+					<option value="0">Category</option>
+					<option value="1">Folder</option>
+				</field>
+				<field name="default_cat" type="category" showon="use_category_folder:0"
+					default="uncategorised" extension="com_content"
+					label="MOD_GLENNSLIDESHOW_FIELD_DEFAULT_CAT_LABEL"
+					description="MOD_GLENNSLIDESHOW_FIELD_DEFAULT_CAT_DESC" />
+
+				<field name="default_fold" type="folderlist" showon="use_category_folder:1"
+                    default="0" directory="images" hide_none="true" hide_default="false" recursive="true"
+					label="MOD_GLENNSLIDESHOW_FIELD_DEFAULT_FOLD_LABEL"
+					description="MOD_GLENNSLIDESHOW_FIELD_DEFAULT_FOLD_DESC" />
+
+				<field name="cycle_time" type="number" default="5000" min="2000" max="12000" step="1000"
+					label="MOD_GLENNSLIDESHOW_FIELD_CYCLE_TIME_LABEL"
+					description="MOD_GLENNSLIDESHOW_FIELD_CYCLE_TIME_DESC" />
+
+				<field name="slide_fade" type="radio" default="0"
+                    class="btn-group btn-group-yesno" filter="int"
+					label="MOD_GLENNSLIDESHOW_FIELD_SLIDE_FADE_LABEL"
+					description="MOD_GLENNSLIDESHOW_FIELD_SLIDE_FADE_DESC" >
+					<option value="0">Slide</option>
+					<option value="1">Fade</option>
+				</field>
+				<field name="use_websitelink" type="radio" default="0" showon="use_category_folder:0"
+                    class="btn-group btn-group-yesno" filter="int"
+					label="MOD_GLENNSLIDESHOW_FIELD_USE_WEBSITELINK_LABEL"
+					description="MOD_GLENNSLIDESHOW_FIELD_USE_WEBSITELINK_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="default_file" type="radio" default="jpg"
+                    class="btn-group btn-group-yesno"
+					label="MOD_GLENNSLIDESHOW_FIELD_DEFAULT_FILE_LABEL"
+					description="MOD_GLENNSLIDESHOW_FIELD_DEFAULT_FILE_DESC" >
+					<option value=".jpg">jpg</option>
+					<option value=".png">png</option>
+					<option value=".gif">gif</option>
+				</field>
+
+			</fieldset>
+
+			<fieldset name="dispoptions" label="Display Options">
+				<field name="show_navigation" type="radio" default="0"
+                    class="btn-group btn-group-yesno" filter="int"
+					label="MOD_GLENNSLIDESHOW_FIELD_SHOW_NAV_LABEL"
+					description="MOD_GLENNSLIDESHOW_FIELD_SHOW_NAV_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="set_width100" type="radio" default="0"
+                    class="btn-group btn-group-yesno" filter="int"
+					label="MOD_GLENNSLIDESHOW_FIELD_SET_WIDTH100_LABEL"
+					description="MOD_GLENNSLIDESHOW_FIELD_SET_WIDTH100_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="cntr_image" type="radio" default="1"
+                    class="btn-group btn-group-yesno" filter="int"
+					label="MOD_GLENNSLIDESHOW_FIELD_CNTR_IMAGE_LABEL"
+					description="MOD_GLENNSLIDESHOW_FIELD_CNTR_IMAGE_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="maxheight" type="text" default="0" showon="set_width100:0"
+					label="MOD_GLENNSLIDESHOW_FIELD_MAXHEIGHT_LABEL"
+					description="MOD_GLENNSLIDESHOW_FIELD_MAXHEIGHT_DESC" />
+
+				<field name="show_indicators" type="radio" default="0"
+                    class="btn-group btn-group-yesno" filter="int"
+					label="MOD_GLENNSLIDESHOW_FIELD_SHOW_INDICATORS_LABEL"
+					description="MOD_GLENNSLIDESHOW_FIELD_SHOW_INDICATORS_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="indicator_color" type="color" default="#ffffff" showon="show_indicators:1"
+					label="MOD_GLENNSLIDESHOW_FIELD_INDICATOR_COLOR_LABEL"
+					description="MOD_GLENNSLIDESHOW_FIELD_INDICATOR_COLOR_DESC" />
+
+			</fieldset>
+
+			<fieldset name="captions" label="Caption Options">
+
+				<field name="use_caption" type="radio" default="0"
+                    class="btn-group btn-group-yesno" filter="int"
+					label="MOD_GLENNSLIDESHOW_FIELD_USE_CAPTION_LABEL"
+					description="MOD_GLENNSLIDESHOW_FIELD_USE_CAPTION_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="set_captioncolour" type="radio" default="0"
+                    class="btn-group btn-group-yesno" filter="int" showon="use_caption:1"
+					label="MOD_GLENNSLIDESHOW_FIELD_SET_CAPTIONCOLOUR_LABEL"
+					description="MOD_GLENNSLIDESHOW_FIELD_SET_CAPTIONCOLOUR_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="caption_txt" type="color" 
+					default="" showon="use_caption:1"
+					label="MOD_GLENNSLIDESHOW_FIELD_CAPTION_TXT_LABEL"
+					description="MOD_GLENNSLIDESHOW_FIELD_CAPTION_TXT_DESC" />
+
+				<field name="caption_bg" type="text"
+					default="rgba(255, 255, 255, 0.0)" showon="use_caption:1"
+					label="MOD_GLENNSLIDESHOW_FIELD_CAPTION_BG_LABEL"
+					description="MOD_GLENNSLIDESHOW_FIELD_CAPTION_BG_DESC" />
+
+			</fieldset>
+
+			<fieldset name="advanced">
+				<field name="layout" type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+
+				<field name="moduleclass_sfx" type="text"
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+
+				<field name="cache" type="list" default="1"
+					label="COM_MODULES_FIELD_CACHING_LABEL"
+					description="COM_MODULES_FIELD_CACHING_DESC">
+					<option value="1">JGLOBAL_USE_GLOBAL</option>
+					<option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+
+				<field name="cache_time" type="text" default="900"
+					label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+					description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+
+				<field name="cachemode" type="hidden" default="static">
+					<option value="static"></option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+
+    <updateservers>
+            <server type="extension" name="GlennSlideShow" priority="1">https://www.glennarkell.com.au/joomlaorg/modules/j4/glennslideshow_update.xml</server>
+    </updateservers>
+
+</extension>

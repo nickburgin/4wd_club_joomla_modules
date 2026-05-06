@@ -1,0 +1,14 @@
+/**
+ * @version     4.1.0
+ * @package     com_gatracklog
+ * @copyright   2021 Glenn Arkell
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Glenn Arkell <glenn@glennarkell.com.au>
+ */
+
+p.center,
+table th.center,
+table td.center {
+	text-align: center;
+	margin: 0 auto;
+}

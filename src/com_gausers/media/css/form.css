@@ -1,0 +1,211 @@
+/**
+ * @version     5.1.6
+ * @package     com_gausers
+ * @copyright   2021 Glenn Arkell
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Glenn Arkell <glenn@glennarkell.com.au>
+ */
+
+.front-end-edit ul {
+    padding: 0 !important;
+}
+.front-end-edit li {
+    list-style: none;
+    margin-bottom: 6px !important;
+}
+.front-end-edit label {
+    display: block;
+    float: left;
+    text-align: right;
+    width: 180px !important;
+}
+.front-end-edit .radio label {
+    float: none;
+}
+.front-end-edit .readonly {
+    border: none !important;
+    color: #666;
+}
+.front-end-edit #editor-xtd-buttons {
+    height: 50px;
+    width: 600px;
+    float: left;
+}
+.front-end-edit .toggle-editor {
+    height: 50px;
+    width: 120px;
+    float: right;
+}
+
+.front-end-edit .controls {
+    margin-left: 195px;
+}
+
+#access-rules a:hover{
+    background:#f5f5f5 url('../images/slider_minus.png') right  top no-repeat;
+    color: #444;
+}
+
+fieldset.radio label{
+    width: 50px !important;
+}
+
+form div.button-div{
+    margin-left: 110px;
+}
+
+.fields-inline > div {
+	float: left;
+}
+
+.controls > fieldset {
+	margin-bottom: 0;
+}
+.controls > fieldset > div.btn-group {
+	margin-bottom: 0.25em;
+}
+
+.controls > fieldset > div.btn-group-yesno {
+	max-width: 110px;
+	margin-left: 10px;
+}
+
+.btn-group > .btn:not(:first-child), 
+.btn-group > .btn-group:not(:first-child) {
+	margin-left: -10px;
+}
+
+/**
+ * Tweek the field size for the display text version of transaction file
+ */
+#jform_tran_file_txt {
+	float: left;
+	width: 80%;
+}
+
+table.finreport tr {
+    border:none;
+    border-collapse: collapse;
+}
+
+td.trantype {
+	border:none;
+    padding: 0px 5px 0px 5px;
+    vertical-align:top;
+    text-align:left;
+    width: 70px;
+}
+
+td.trancat {
+    border:none;
+    padding: 0px 5px 0px 5px;
+    vertical-align:top;
+    text-align:left;
+    width: 180px;
+}
+
+td.trandesc {
+    border:none;
+    padding: 0px 5px 0px 5px;
+    vertical-align:top;
+}
+
+text-align:left;
+    width: 240px;
+}
+
+td.trandet {
+    border:none;
+    padding: 0px 5px 0px 5px;
+    vertical-align:top;
+    text-align:left;
+    width: 420px;
+}
+
+td.tranamt {
+    border:0px solid black;
+    padding: 0px 10px 0px 5px;
+    vertical-align:top;
+    text-align:right;
+    font-weight:normal;
+    width: 70px;
+}
+
+td.asstype {
+    border:none;
+    padding: 0px 5px 0px 5px;
+    vertical-align:top;
+    text-align:left;
+    width: 200px;
+}
+
+td.assamt {
+    border: none;
+    padding: 0px 0px 0px 6px;
+    vertical-align:top;
+    text-align:right;
+    font-weight:normal;
+    width: 60px;
+}
+
+table.finreport tr.deprec {
+    border: 0px solid #ddd;
+    border-collapse: collapse;
+    border-bottom:1px solid #ddd;
+    padding: 3px 0px 3px 0px;
+}
+
+td.dephead {
+    border: none;
+    vertical-align:top;
+    font-size:0.7em;
+    font-weight:bold;
+    text-align:right;
+    width: 60px;
+}
+
+td.depamt {
+    border: none;
+    padding: 0px 6px 0px 0px;
+    vertical-align:top;
+    text-align:right;
+    font-weight:normal;
+    width: 60px;
+}
+
+.redhighlight {
+    color: #ff0000;
+}
+
+.rptsmall {
+    border:none;
+    padding: 0px 5px 0px 5px;
+    vertical-align:top;
+    text-align:left;
+    width: 70px;
+}
+
+.rptmed {
+    border:none;
+    padding: 0px 5px 0px 5px;
+    vertical-align:top;
+    text-align:left;
+    width: 140px;
+}
+
+.rptdesc {
+    border:none;
+    padding: 0px 5px 0px 5px;
+    border-right:0px solid black;
+    vertical-align:top;
+    text-align:left;
+    width: 250px;
+}
+
+.form-control.input-xxlarge.readonly {
+	float: left;
+}
+div.field-calendar > .input-group > input {
+    max-width: 89%;
+}
+    

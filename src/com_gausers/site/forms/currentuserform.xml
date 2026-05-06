@@ -1,0 +1,1099 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset name="sysinfo" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+		<field name="id" type="text" readonly="true" class="readonly" default="0" label="COM_GAUSERS_FORM_LBL_ID" description="COM_GAUSERS_FORM_DESC_ID"/>
+		<field name="ordering" label="COM_GAUSERS_FORM_LBL_ORDERING" description="COM_GAUSERS_FORM_DESC_ORDERING"/>
+		<field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+		<field name="checked_out" type="hidden" filter="unset"/>
+		<field name="checked_out_time" type="hidden" filter="unset"/>
+	    <field name="created_by" type="Createdby" hidden="true" default="0" label="COM_GAUSERS_FORM_LBL_CREATED_BY" description="COM_GAUSERS_FORM_DESC_CREATED_BY" hint="COM_GAUSERS_FORM_LBL_CREATED_BY"/>
+	    <field name="modified_by" type="Modifiedby" hidden="true" default="0" label="COM_GAUSERS_FORM_LBL_MODIFIED_BY" description="COM_GAUSERS_FORM_DESC_MODIFIED_BY" hint="COM_GAUSERS_FORM_LBL_MODIFIED_BY"/>
+	    <field name="created_date" type="Timecreated" label="COM_GAUSERS_FORM_LBL_CREATED_DATE" description="COM_GAUSERS_FORM_DESC_CREATED_DATE" hint="COM_GAUSERS_FORM_LBL_CREATED_DATE"/>
+	    <field name="modified_date" type="Timecreated" label="COM_GAUSERS_FORM_LBL_MODIFIED_DATE" description="COM_GAUSERS_FORM_DESC_MODIFIED_DATE" hint="COM_GAUSERS_FORM_LBL_MODIFIED_DATE"/>
+	</fieldset>
+
+	<fieldset name="general" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+		<field name="name" type="text" required="true"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_NAME"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_NAME" />
+		<field name="name_ro" type="text" readonly="true" class="readonly"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_NAME"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_NAME" />
+		<field name="email" type="email" required="true" validate="email"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_EMAIL"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_EMAIL"/>
+		<field name="phone" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_PHONE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_PHONE" />
+
+		<field name="mphone" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_MPHONE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_MPHONE" />
+		<field name="wphone" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_WPHONE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_WPHONE" />
+		<field name="alt_email" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_ALT_EMAIL"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_ALT_EMAIL" />
+
+		<field name="aboutme" type="textarea"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_ABOUTME"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_ABOUTME" />
+		<field name="website" type="textarea"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_WEBSITE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_WEBSITE" />
+
+		<field name="mship_id" type="Memtype"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_MEMTYPE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_MEMTYPE" />
+
+		<field name="mdod" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_MDOD"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_MDOD" />
+
+	</fieldset>
+
+	<fieldset name="gausers_address" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+		<field name="address1" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_ADDRESS1"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_ADDRESS1" />
+		<field name="address2" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_ADDRESS2"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_ADDRESS2" />
+		<field name="city" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_SUBURB"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_SUBURB" />
+		<field name="plain_region" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_REGION"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_REGION" />
+		<field name="region" type="list"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_REGION"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_REGION" >
+			<option value="VIC">VIC</option>
+			<option value="NSW">NSW</option>
+			<option value="TAS">TAS</option>
+			<option value="SA">SA</option>
+			<option value="QLD">QLD</option>
+			<option value="WA">WA</option>
+			<option value="NT">NT</option>
+			<option value="ACT">ACT</option>
+			<option value="OTHER">OTHER</option>
+		</field>
+		<field name="postal_code" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_POSTCODE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_POSTCODE" />
+
+		<field name="country" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_COUNTRY"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_COUNTRY" />
+
+	</fieldset>
+
+	<fieldset name="gausers_postal" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+        <field name="use_post" type="radio" default="0" class="btn-group btn-group-yesno"
+            label="COM_GAUSERS_FORM_LBL_GAUSER_USE_POST"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_USE_POST" >
+                <option value="1">JYES</option>
+                <option value="0">JNO</option>
+        </field>
+		<field name="postal_address1" type="text" showon="use_post:1"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_POSTAL_ADDRESS1"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_POSTAL_ADDRESS1" />
+		<field name="postal_address2" type="text" showon="use_post:1"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_POSTAL_ADDRESS2"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_POSTAL_ADDRESS2" />
+		<field name="postal_city" type="text" showon="use_post:1"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_POSTAL_SUBURB"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_POSTAL_SUBURB" />
+		<field name="postal_plain_region" type="text" showon="use_post:1"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_POSTAL_REGION"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_POSTAL_REGION" />
+		<field name="postal_region" type="list" showon="use_post:1"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_POSTAL_REGION"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_POSTAL_REGION" >
+			<option value="VIC">VIC</option>
+			<option value="NSW">NSW</option>
+			<option value="TAS">TAS</option>
+			<option value="SA">SA</option>
+			<option value="QLD">QLD</option>
+			<option value="WA">WA</option>
+			<option value="NT">NT</option>
+			<option value="ACT">ACT</option>
+			<option value="OTHER">OTHER</option>
+		</field>
+		<field name="postal_post_code" type="text" showon="use_post:1"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_POSTAL_POSTCODE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_POSTAL_POSTCODE" />
+
+	</fieldset>
+
+	<fieldset name="gausers_med" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+		<field name="vaxed1" type="radio" class="btn-group btn-group-yesno"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_VAXED1"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_VAXED1" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="vax_exempt1" type="radio" class="btn-group btn-group-yesno"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_VAXEXEMPT1"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_VAXEXEMPT1" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="medcond1" type="textarea" rows="3" class="input-xxlarge" filter="safeHtml"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_MEDCOND1"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_MEDCOND1" />
+
+		<field name="vaxed2" type="radio" class="btn-group btn-group-yesno"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_VAXED2"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_VAXED2" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="vax_exempt2" type="radio" class="btn-group btn-group-yesno"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_VAXEXEMPT2"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_VAXEXEMPT2" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="medcond2" type="textarea" rows="3" class="input-xxlarge" filter="safeHtml"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_MEDCOND2"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_MEDCOND2" />
+
+	</fieldset>
+
+	<fieldset name="gausers_becs" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+		<field name="inductdate" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_INDUCTDATE"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_INDUCTDATE" />
+
+		<field name="inductwho" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_INDUCTWHO"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_INDUCTWHO" />
+
+		<field name="firstaid" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_FIRSTAID"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_FIRSTAID" />
+		<field name="workwithkids" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_WORKWITHKIDS"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_WORKWITHKIDS" />
+		<field name="foodhandle" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_FOODHANDLE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_FOODHANDLE" />
+
+		<field name="emergcontact" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_EMERGCONTACT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_EMERGCONTACT" />
+		<field name="emergcontactno" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_EMERGCONTACTNO"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_EMERGCONTACTNO" />
+		<field name="emergmobileno" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_EMERGMOBILENO"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_EMERGMOBILENO" />
+		<field name="relationship" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_RELATIONSHIP"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_RELATIONSHIP" />
+
+		<field name="competencelevel" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_COMPETENCELEVEL"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_COMPETENCELEVEL" />
+		<field name="tradequal" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRADEQUAL"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRADEQUAL" />
+		<field name="currentskill" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CURRENTSKILL"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CURRENTSKILL" />
+		<field name="desiredskill" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_DESIREDSKILL"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_DESIREDSKILL" />
+
+	</fieldset>
+
+    	<fieldset name="gausers_anon" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+            <field name="anonymous" type="radio" default="1" class="btn-group btn-group-yesno"
+                label="COM_GAUSERS_FORM_LBL_GAUSER_ANONOVERALL"
+                description="COM_GAUSERS_FORM_DESC_GAUSER_ANONOVERALL" >
+                <option value="1">JYES</option>
+                <option value="0">JNO</option>
+            </field>
+            <field name="anonaddress" type="radio" default="1" class="btn-group btn-group-yesno"
+                label="COM_GAUSERS_FORM_LBL_GAUSER_ANONADDRESS" showon="anonymous:0"
+                description="COM_GAUSERS_FORM_DESC_GAUSER_ANONADDRESS" >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+            </field>
+            <field name="anonpartner" type="radio" default="1" class="btn-group btn-group-yesno"
+                label="COM_GAUSERS_FORM_LBL_GAUSER_ANONPARTNER" showon="anonymous:0"
+                description="COM_GAUSERS_FORM_DESC_GAUSER_ANONPARTNER" >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+            </field>
+            <field name="anonemail" type="radio" default="1" class="btn-group btn-group-yesno"
+                label="COM_GAUSERS_FORM_LBL_GAUSER_ANONEMAIL" showon="anonymous:0"
+                description="COM_GAUSERS_FORM_DESC_GAUSER_ANONEMAIL" >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+            </field>
+            <field name="anonphone" type="radio" default="1" class="btn-group btn-group-yesno"
+                label="COM_GAUSERS_FORM_LBL_GAUSER_ANONPHONE" showon="anonymous:0"
+                description="COM_GAUSERS_FORM_DESC_GAUSER_ANONPHONE" >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+            </field>
+    
+    	</fieldset>
+
+	<fieldset name="gausers_pers" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+		<field name="m_img" type="file" accept="image/*"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_M_IMG"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_M_IMG" />
+		<field name="m_img_disp" type="text" class="input-xxlarge readonly" readonly="true"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_M_IMG"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_M_IMG" />
+
+		<field name="partner" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_PARTNER"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_PARTNER" />
+
+		<field name="p_img" type="file"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_P_IMG"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_P_IMG" />
+		<field name="p_img_disp" type="text" class="input-xxlarge readonly" readonly="true"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_P_IMG"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_P_IMG" />
+
+		<field name="kids" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_KIDS"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_KIDS" />
+		<field name="altphone" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_ALTPHONE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_ALTPHONE" />
+		<field name="altemail" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_ALTEMAIL"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_ALTEMAIL" />
+		<field name="inc_altemail" type="radio" default="0" class="btn-group btn-group-yesno"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_INC_ALTEMAIL"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_INC_ALTEMAIL" >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+		<field name="emailnews" type="radio" default="1" class="btn-group btn-group-yesno"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_EMAILNEWS"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_EMAILNEWS" >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+		<field name="2nd_email" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_2ND_EMAIL"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_2ND_EMAIL" />
+		<field name="2nd_phone" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_2ND_PHONE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_2ND_PHONE" />
+
+	</fieldset>
+
+	<fieldset name="gausers_vehicle" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+		<field name="vehicle_make" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_VEH_MAKE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_VEH_MAKE" />
+		<field name="vehicle_model" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_VEH_MODEL"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_VEH_MODEL" />
+		<field name="vehicle_rego" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_VEHICLE_REGO"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_VEHICLE_REGO" />
+		<field name="vehicle_year" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_VEH_YEAR"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_VEH_YEAR" />
+		<field name="vehicle_trans" type="radio" default="Manual" class="btn-group btn-group-yesno"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_VEHICLE_TRANS"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_VEHICLE_TRANS" >
+			<option	value="Manual">Manual</option>
+			<option	value="Auto">Auto</option>
+		</field>
+		<field name="vehicle_fuel" type="radio" default="Diesel" class="btn-group btn-group-yesno"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_VEHICLE_FUEL"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_VEHICLE_FUEL" >
+			<option	value="Petrol">Petrol</option>
+			<option	value="Petrol/Gas">Petrol/Gas</option>
+			<option	value="Diesel">Diesel</option>
+		</field>
+
+		<field name="veh_trans" type="radio" class="btn-group btn-group-yesno" default="Manual"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_VEHICLE_TRANS"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_VEHICLE_TRANS" >
+			<option value="Manual">Manual</option>
+			<option value="Automatic">Automatic</option>
+		</field>
+
+		<field name="veh_fuel" type="list" size="1" filter="string" default="Diesel"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_VEHICLE_FUEL"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_VEHICLE_FUEL" >
+			<option value="Diesel">Diesel</option>
+			<option value="Petrol">Petrol</option>
+			<option value="Gas">Gas</option>
+			<option value="Petrol-Gas">Petrol-Gas</option>
+		</field>
+
+		<field name="veh_make" type="text" size="30" filter="string"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_VEH_MAKE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_VEH_MAKE" />
+
+		<field name="veh_model" type="text" size="30" filter="string"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_VEH_MODEL"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_VEH_MODEL" />
+
+		<field name="veh_rego" type="text" size="30" filter="string"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_VEHICLE_REGO"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_VEHICLE_REGO" />
+
+		<field name="veh_winch" type="radio" class="btn-group btn-group-yesno" default="1"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_VEH_WINCH"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_VEH_WINCH" >
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+
+		<field name="veh_year" type="text" size="30" filter="string"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_VEH_YEAR"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_VEH_YEAR" />
+
+		<field name="alt_vehicle" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_ALT_VEHICLE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_ALT_VEHICLE" />
+		<field name="alt_vehicle_rego" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_ALT_VEHICLE_REGO"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_ALT_VEHICLE_REGO" />
+
+	</fieldset>
+
+	<fieldset name="gausers_trg" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+		<field name="m_usi" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_M_USI"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_M_USI" />
+		<field name="trg_prof" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_PROF"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_PROF" />
+		<field name="trg_profc" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_PROFC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_PROFC" />
+		<field name="trg_profc_txt" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_PROFC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_PROFC" />
+		<field name="trg_faid" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_FAID"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_FAID" />
+		<field name="trg_faidc" type="file" accept="application/pdf"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_FAIDC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_FAIDC" />
+		<field name="trg_faidc_txt" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_FAIDC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_FAIDC" />
+		<field name="trg_food" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_FOOD"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_FOOD" />
+		<field name="trg_foodc" type="file" accept="application/pdf"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_FOODC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_FOODC" />
+		<field name="trg_foodc_txt" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_FOODC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_FOODC" />
+		<field name="trg_lead" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_LEAD"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_LEAD" />
+		<field name="trg_leadc" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_LEADC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_LEADC" />
+		<field name="trg_inst" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_INST"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_INST" />
+		<field name="trg_instc" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_INSTC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_INSTC" />
+		<field name="trg_trck" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_TRCK"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_TRCK" />
+		<field name="trg_trckc" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_TRCKC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_TRCKC" />
+		<field name="trg_csaw" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_CSAW"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_CSAW" />
+		<field name="trg_csawc" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_CSAWC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_CSAWC" />
+		<field name="trg_othr" type="text" class="input-xxlarge"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_OTHR"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_OTHR" />
+
+	</fieldset>
+
+	<fieldset name="gausers_wwc" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+		<field name="wwk_reg" type="text" filter="safehtml"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_WWK_REG"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_WWK_REG" />
+		<field name="wwk_exp" type="calendar" format="%Y-%m-%d"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_WWK_EXP"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_WWK_EXP" />
+
+	</fieldset>
+
+	<fieldset name="gausers_trgp" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+		<field name="p_usi" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_P_USI"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_P_USI" />
+		<field name="trg_profp" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_PROF"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_PROF" />
+		<field name="trg_profpc" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_PROFC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_PROFC" />
+		<field name="trg_faidp" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_FAID"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_FAID" />
+		<field name="trg_faidpc" type="file" accept="application/pdf"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_FAIDC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_FAIDC" />
+		<field name="trg_faidpc_txt" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_FAIDC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_FAIDC" />
+		<field name="trg_foodp" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_FOOD"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_FOOD" />
+		<field name="trg_foodpc" type="file" accept="application/pdf"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_FOODC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_FOODC" />
+		<field name="trg_foodpc_txt" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_FOODC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_FOODC" />
+		<field name="trg_leadp" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_LEAD"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_LEAD" />
+		<field name="trg_leadpc" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_LEADC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_LEADC" />
+		<field name="trg_instp" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_INST"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_INST" />
+		<field name="trg_instpc" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_INSTC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_INSTC" />
+		<field name="trg_trckp" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_TRCK"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_TRCK" />
+		<field name="trg_trckpc" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_TRCKC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_TRCKC" />
+		<field name="trg_csawp" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_CSAW"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_CSAW" />
+		<field name="trg_csawpc" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_CSAWC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_CSAWC" />
+		<field name="trg_othrp" type="text" class="input-xxlarge"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_OTHR"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_OTHR" />
+
+	</fieldset>
+
+	<fieldset name="gausers_wwcp" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+		<field name="wwk_regp" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_WWK_REG"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_WWK_REG" />
+		<field name="wwk_expp" type="calendar" format="%Y-%m-%d"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_WWK_EXP"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_WWK_EXP" />
+
+	</fieldset>
+
+	<fieldset name="gausers_offic" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+		<field name="fwdvic_no" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_FWDVIC_NO"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_FWDVIC_NO" />
+		<field name="mship_no" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_MSHIP_NO"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_MSHIP_NO" />
+		<field name="m_club_position" type="list" default="No Position"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_M_CLUB_POSITION"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_M_CLUB_POSITION" >
+			<option value="No Position">No Position</option>
+			<option value="President">President</option>
+			<option value="Vice President">Vice President</option>
+			<option value="Secretary">Secretary</option>
+			<option value="Treasurer">Treasurer</option>
+			<option value="Delegate">Delegate</option>
+			<option value="Regional Rep">Regional Rep</option>
+			<option value="Editor">Editor</option>
+			<option value="Instructor">Instructor</option>
+			<option value="Trip Co-ordinator">Trip Co-ordinator</option>
+			<option value="Social Co-ordinator">Social Co-ordinator</option>
+			<option value="Property Officer">Property Officer</option>
+			<option value="Website Admin">Website Admin</option>
+			<option value="Committee">Committee</option>
+			<option value="Ed Training Unit">Ed Training Unit</option>
+		</field>
+		<field name="p_club_position" type="list" default="No Position"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_P_CLUB_POSITION"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_P_CLUB_POSITION" >
+			<option value="No Position">No Position</option>
+			<option value="President">President</option>
+			<option value="Vice President">Vice President</option>
+			<option value="Secretary">Secretary</option>
+			<option value="Treasurer">Treasurer</option>
+			<option value="Delegate">Delegate</option>
+			<option value="Regional Rep">Regional Rep</option>
+			<option value="Editor">Editor</option>
+			<option value="Instructor">Instructor</option>
+			<option value="Trip Co-ordinator">Trip Co-ordinator</option>
+			<option value="Social Co-ordinator">Social Co-ordinator</option>
+			<option value="Property Officer">Property Officer</option>
+			<option value="Website Admin">Website Admin</option>
+			<option value="Committee">Committee</option>
+			<option value="Ed Training Unit">Ed Training Unit</option>
+		</field>
+
+	</fieldset>
+
+	<fieldset name="gausers_camp" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+		<field name="camp_caravan" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CAMP_CARAVAN"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CAMP_CARAVAN" />
+		<field name="camp_other" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CAMP_OTHER"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CAMP_OTHER" />
+		<field name="hf_net" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_HF_NET"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_HF_NET" />
+		<field name="hf_callsign" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_HF_CALLSIGN"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_HF_CALLSIGN" />
+		<field name="hf_selcall" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_HF_SELCALL"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_HF_SELCALL" />
+		<field name="hf2_net" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_HF2_NET"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_HF2_NET" />
+		<field name="hf2_callsign" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_HF2_CALLSIGN"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_HF2_CALLSIGN" />
+		<field name="hf2_selcall" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_HF2_SELCALL"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_HF2_SELCALL" />
+
+	</fieldset>
+
+	<fieldset name="gausers_cert" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+		<field name="cert4_dvct" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CERT4_DVCT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CERT4_DVCT" />
+		<field name="cert4_dvdt" type="calendar" filterFormat="Y-m-d" translateformat="true"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CERT4_DVDT"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CERT4_DVDT" />
+		<field name="cert4_dvfile" type="file" accept="application/pdf"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CERT4_DVFILE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CERT4_DVFILE" />
+		<field name="cert4_dvfile_ro" type="text" readonly="true"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CERT4_DVFILE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CERT4_DVFILE" />
+
+		<field name="cert4_csct" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CERT4_CSCT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CERT4_CSCT" />
+		<field name="cert4_csdt" type="calendar" filterFormat="Y-m-d" translateformat="true"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CERT4_CSDT"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CERT4_CSDT" />
+		<field name="cert4_csfile" type="file" accept="application/pdf"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CERT4_CSFILE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CERT4_CSFILE" />
+		<field name="cert4_csfile_ro" type="text" readonly="true"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CERT4_CSFILE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CERT4_CSFILE" />
+
+	</fieldset>
+
+	<fieldset name="gausers_certp" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+		<field name="cert4_dvctp" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CERT4_DVCTP"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CERT4_DVCTP" />
+		<field name="cert4_dvdtp" type="calendar" filterFormat="Y-m-d" translateformat="true"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CERT4_DVDTP"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CERT4_DVDTP" />
+		<field name="cert4_dvfilep" type="file" accept="application/pdf"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CERT4_DVFILEP"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CERT4_DVFILEP" />
+		<field name="cert4_dvfilep_ro" type="text" readonly="true"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CERT4_DVFILEP"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CERT4_DVFILEP" />
+
+		<field name="cert4_csctp" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CERT4_CSCTP"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CERT4_CSCTP" />
+		<field name="cert4_csdtp" type="calendar" filterFormat="Y-m-d" translateformat="true"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CERT4_CSDTP"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CERT4_CSDTP" />
+		<field name="cert4_csfilep" type="file" accept="application/pdf"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CERT4_CSFILEP"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CERT4_CSFILEP" />
+		<field name="cert4_csfilep_ro" type="text" readonly="true"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_CERT4_CSFILEP"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_CERT4_CSFILEP" />
+
+	</fieldset>
+
+	<fieldset name="gausers_emerg" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+		<field name="emerg_name" type="text" size="30" filter="string"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_EMERG_NAME"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_EMERG_NAME"/>
+
+		<field name="emerg_relationship" type="text" size="30" filter="string"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_EMERG_RELATIONSHIP"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_EMERG_RELATIONSHIP" />
+
+		<field name="emerg_phone" type="text" size="30" filter="string"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_EMERG_PHONE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_EMERG_PHONE" />
+
+		<field name="emerg_email" type="text" size="30" filter="string"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_EMERG_EMAIL"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_EMERG_EMAIL" />
+
+	</fieldset>
+
+	<fieldset name="gausers_hidden" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+		<field name="left_date" type="calendar" filterFormat="Y-m-d" translateformat="true" class="input-xxlarge"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_LEFT_DATE"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_LEFT_DATE" />
+
+		<field name="left_reason" type="textarea" class="input-xxlarge"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_REASON_LEFT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_REASON_LEFT" />
+
+		<field name="left_comment" type="textarea" class="input-xxlarge"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_COMMENT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_COMMENT" />
+
+        <field name="single_user" type="checkbox" class="input-xlarge" checked="1" value="1"
+             label="COM_GAUSERS_SINGLE_USER_LABEL"
+             description="COM_GAUSERS_SINGLE_USER_DESC" />
+
+		<field name="dec_name" type="text" filter="string" class="input-xxlarge"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_DEC_NAME"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_DEC_NAME" />
+
+		<field name="mship_file" type="file" accept=".csv,.xml"
+            label="COM_GAUSERS_FORM_LBL_MSHIP_FILE_NAME"
+            description="COM_GAUSERS_FORM_DESC_MSHIP_FILE_NAME" />
+
+	</fieldset>
+
+	<fieldset name="gausers_food" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+			<field
+				name="bread" type="list" multiple="false" filter="safehtml"
+				description="PLG_USER_PROFILEFOOD_FIELD_BREAD_DESC"
+				label="PLG_USER_PROFILEFOOD_FIELD_BREAD_LABEL" >
+				<option value="White">White</option>
+				<option value="Brown">Brown</option>
+				<option value="Soy Lin">Soy Lin</option>
+				<option value="Whole Grain">Whole Grain</option>
+				<option value="Extra Fibre">Extra Fibre</option>
+				<option value="Rye">Rye</option>
+				<option value="Pumpernickle">Pumpernickle</option>
+			</field>
+			<field
+				name="bun" type="list" multiple="false" filter="safehtml"
+				description="PLG_USER_PROFILEFOOD_FIELD_BUN_DESC"
+				label="PLG_USER_PROFILEFOOD_FIELD_BUN_LABEL" >
+				<option value="Plain">Plain</option>
+				<option value="Chocolate">Chocolate</option>
+				<option value="Fruit">Fruit</option>
+			</field>
+			<field
+				name="cheese" type="list" multiple="false" filter="safehtml"
+				description="PLG_USER_PROFILEFOOD_FIELD_CHEESE_DESC"
+				label="PLG_USER_PROFILEFOOD_FIELD_CHEESE_LABEL" >
+				<option value="Ceddar">Ceddar</option>
+				<option value="Brie">Brie</option>
+				<option value="Camembere">Camembere</option>
+				<option value="Tasty">Tasty</option>
+				<option value="Extra Tasty">Extra Tasty</option>
+			</field>
+			<field
+				name="chocolate" type="list" multiple="false" filter="safehtml"
+				description="PLG_USER_PROFILEFOOD_FIELD_CHOCOLATE_DESC"
+				label="PLG_USER_PROFILEFOOD_FIELD_CHOCOLATE_LABEL" >
+				<option value="White">White</option>
+				<option value="Plain">Plain</option>
+				<option value="Dark">Dark</option>
+				<option value="Extra Dark">Extra Dark</option>
+				<option value="Cream Filled">Cream Filled</option>
+				<option value="Teeth Shattering Hard Filled">Teeth Shattering Hard Filled</option>
+				<option value="Filling Puller Toffee">Filling Puller Toffee</option>
+			</field>
+			<field
+				name="juice" type="list" multiple="false" filter="safehtml"
+				description="PLG_USER_PROFILEFOOD_FIELD_JUICE_DESC"
+				label="PLG_USER_PROFILEFOOD_FIELD_JUICE_LABEL" >
+				<option value="Apple">Apple</option>
+				<option value="Orange">Orange</option>
+				<option value="Tomato">Tomato</option>
+				<option value="Wild Berry">Wild Berry</option>
+			</field>
+			<field
+				name="milk" type="list" multiple="false" filter="safehtml"
+				description="PLG_USER_PROFILEFOOD_FIELD_MILK_DESC"
+				label="PLG_USER_PROFILEFOOD_FIELD_MILK_LABEL" >
+				<option value="Full Cream">Full Cream</option>
+				<option value="Extra Dollup">Extra Dollup</option>
+				<option value="Low Fat">Low Fat</option>
+				<option value="High Calcium">High Calcium</option>
+				<option value="Lite">Lite</option>
+				<option value="Soy">Soy</option>
+			</field>
+			<field
+				name="spread" type="list" multiple="false" filter="safehtml"
+				description="PLG_USER_PROFILEFOOD_FIELD_SPREAD_DESC"
+				label="PLG_USER_PROFILEFOOD_FIELD_SPREAD_LABEL" >
+				<option value="Butter">Butter</option>
+				<option value="Margerine">Margerine</option>
+			</field>
+			<field
+				name="wine" type="list" multiple="false" filter="safehtml"
+				description="PLG_USER_PROFILEFOOD_FIELD_WINE_DESC"
+				label="PLG_USER_PROFILEFOOD_FIELD_WINE_LABEL" >
+				<option value="Pinot">Pinot</option>
+				<option value="Durif">Durif</option>
+				<option value="Merlot">Merlot</option>
+				<option value="Shiraz">Shiraz</option>
+				<option value="Cabernet">Cabernet</option>
+				<option value="Chardonay">Chardonay</option>
+				<option value="Champagne">Champagne</option>
+				<option value="Chenin Blanc">Chenin Blanc</option>
+				<option value="Pineau de la Loire">Pineau de la Loire</option>
+				<option value="Rose">Rose</option>
+			</field>
+			<field
+				name="whisky" type="list" multiple="false" filter="safehtml"
+				description="PLG_USER_PROFILEFOOD_FIELD_WHISKY_DESC"
+				label="PLG_USER_PROFILEFOOD_FIELD_WHISKY_LABEL" >
+				<option value="Blend">Blend</option>
+				<option value="Single Malt">Single Malt</option>
+			</field>
+
+			<field name="nok" type="text" class="input-xlarge"
+				description="PLG_USER_PROFILEFOOD_FIELD_NOK_DESC"
+				label="PLG_USER_PROFILEFOOD_FIELD_NOK_LABEL" />
+
+			<field name="relship" type="text" class="input-xlarge"
+				description="PLG_USER_PROFILEFOOD_FIELD_RELSHIP_DESC"
+				label="PLG_USER_PROFILEFOOD_FIELD_RELSHIP_LABEL" />
+
+			<field name="ambo" type="radio" class="btn-group btn-group-yesno"
+				description="PLG_USER_PROFILEFOOD_FIELD_AMBO_DESC"
+				label="PLG_USER_PROFILEFOOD_FIELD_AMBO_LABEL" >
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="racv" type="radio" class="btn-group btn-group-yesno"
+				description="PLG_USER_PROFILEFOOD_FIELD_RACV_DESC"
+				label="PLG_USER_PROFILEFOOD_FIELD_RACV_LABEL" >
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="organ" type="radio" class="btn-group btn-group-yesno"
+				description="PLG_USER_PROFILEFOOD_FIELD_ORGAN_DESC"
+				label="PLG_USER_PROFILEFOOD_FIELD_ORGAN_LABEL" >
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="medinsure" type="radio" class="btn-group btn-group-yesno"
+				description="PLG_USER_PROFILEFOOD_FIELD_MEDINSURE_DESC"
+				label="PLG_USER_PROFILEFOOD_FIELD_MEDINSURE_LABEL" >
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="medinsure_name" type="text" class="input-xlarge" showon="medinsure:1"
+				description="PLG_USER_PROFILEFOOD_FIELD_MEDINSURE_DESC"
+				label="PLG_USER_PROFILEFOOD_FIELD_MEDINSURE_LABEL" />
+
+			<field name="health" type="textarea" rows="6" class="input-xlarge"
+				description="PLG_USER_PROFILEFOOD_FIELD_HEALTH_DESC"
+				label="PLG_USER_PROFILEFOOD_FIELD_HEALTH_LABEL" />
+
+		</fieldset>
+
+	<fieldset name="gausers_ifmr" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+		<field name="mobile" type="text" filter="safehtml"
+			description=""
+			label="PLG_USER_PROFILERTRY_FIELD_MOBILE_LABEL"
+		/>
+		<field name="workphone" type="text" filter="safehtml"
+			description=""
+			label="PLG_USER_PROFILERTRY_FIELD_WORKPHONE_LABEL"
+		/>
+		<field name="district" type="text" filter="safehtml" class="input-xxlarge"
+			description=""
+			label="PLG_USER_PROFILERTRY_FIELD_DISTRICT_LABEL"
+		/>
+		<field name="rotaryclub" type="text" filter="safehtml" class="input-xxlarge"
+			description=""
+			label="PLG_USER_PROFILERTRY_FIELD_ROTARYCLUB_LABEL"
+		/>
+		<field name="bike" type="text" filter="safehtml"
+			description=""
+			label="PLG_USER_PROFILERTRY_FIELD_BIKE_LABEL"
+		/>
+		<field name="rego_by" type="calendar" default="now" readonly="false"
+			filterFormat="Y-m-d" translateformat="true"
+            description=""
+			label="PLG_USER_PROFILERTRY_FIELD_REGO_BY_LABEL"
+		/>
+	</fieldset>
+
+	<fieldset name="gausers_brbtrg" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+
+		<field name="trg_b2b" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_B2B"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_B2B" />
+		<field name="trg_b2bc" type="file" accept="application/pdf"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_B2BC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_B2BC" />
+		<field name="trg_b2bc_txt" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_B2BC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_B2BC" />
+
+		<field name="trg_b2bp" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_B2BP"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_B2BP" />
+		<field name="trg_b2bpc" type="file" accept="application/pdf"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_B2BPC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_B2BPC" />
+		<field name="trg_b2bpc_txt" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_B2BPC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_B2BPC" />
+
+		<field name="trg_intro" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_INTRO"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_INTRO" />
+		<field name="trg_introc" type="file" accept="application/pdf"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_INTROC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_INTROC" />
+		<field name="trg_introc_txt" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_INTROC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_INTROC" />
+
+		<field name="trg_introp" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_INTROP"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_INTROP" />
+		<field name="trg_intropc" type="file" accept="application/pdf"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_INTROPC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_INTROPC" />
+		<field name="trg_intropc_txt" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_INTROPC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_INTROPC" />
+
+		<field name="trg_bio" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_BIO"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_BIO" />
+		<field name="trg_bioc" type="file" accept="application/pdf"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_BIOC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_BIOC" />
+		<field name="trg_bioc_txt" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_BIOC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_BIOC" />
+
+		<field name="trg_biop" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_BIOP"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_BIOP" />
+		<field name="trg_biopc" type="file" accept="application/pdf"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_BIOPC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_BIOPC" />
+		<field name="trg_biopc_txt" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_TRG_BIOPC"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_TRG_BIOPC" />
+
+	</fieldset>
+
+	<fieldset name="gausers_brb">
+
+		<field name="locgrp" type="list" size="1" filter="safehtml" default="Central"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_LOCGRP"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_LOCGRP">
+			<option value="Central">Central</option>
+			<option value="North">North</option>
+			<option value="East">East</option>
+			<option value="South">South</option>
+			<option value="West">West</option>
+		</field>
+
+		<field name="regono" type="text"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_REGONO"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_REGONO" />
+
+	</fieldset>
+
+	<fieldset name="extrainfo">
+		<field name="comment" filter="safehtml" type="textarea" label="COM_GAUSERS_FORM_LBL_COMMENT" description="COM_GAUSERS_FORM_DESC_COMMENT" hint="COM_GAUSERS_FORM_LBL_COMMENT"/>
+	</fieldset>
+
+	<fieldset name="mbractions">
+		<field name="user_id" type="hidden" />
+
+		<field name="act_name" type="text"
+			description="COM_GAUSERS_FORM_DESC_ACTION_ACT_NAME"
+			hint="COM_GAUSERS_FORM_MESS_ACTION_ACT_NAME"
+			label="COM_GAUSERS_FORM_LBL_ACTION_ACT_NAME" />
+	</fieldset>
+
+	<fieldset name="other">
+
+		<field name="prime_mbr" type="radio" class="btn-group btn-group-yesno"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_PRIME_MBR"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_PRIME_MBR" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="cert_name" type="text"
+			description="COM_GAUSERS_FORM_DESC_CERT_NAME"
+			hint="COM_GAUSERS_FORM_LBL_CERT_NAME"
+			label="COM_GAUSERS_FORM_LBL_CERT_NAME" />
+
+		<field name="yearofbirth" type="integer" first="1900" last="2100" step="1" default="1990"
+			description="COM_GAUSERS_FORM_DESC_YEAROFBIRTH"
+			hint="COM_GAUSERS_FORM_LBL_YEAROFBIRTH"
+			label="COM_GAUSERS_FORM_LBL_YEAROFBIRTH" />
+
+		<field name="privacy" type="radio" class="btn-group btn-group-yesno"
+			description="COM_GAUSERS_FORM_DESC_PRIVACY"
+			label="COM_GAUSERS_FORM_LBL_PRIVACY" >
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+
+		<field name="email_contact" type="radio" default="0" class="btn-group btn-group-yesno"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_EMAIL_CONTACT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_EMAIL_CONTACT">
+		    <option	value="1">JYES</option>
+		    <option	value="0">JNO</option>
+		</field>
+		<field name="allow_website" type="radio" class="btn-group btn-group-yesno"
+			description="COM_GAUSERS_FORM_DESC_ALLOW_WEBSITE"
+			label="COM_GAUSERS_FORM_LBL_ALLOW_WEBSITE" >
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+
+		<field name="MAX_FILE_SIZE" type="hidden" default="250kb" />
+		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+
+		<field
+			name="password1"
+			type="password"
+			label="COM_USERS_PROFILE_PASSWORD1_LABEL"
+			autocomplete="new-password"
+			class="validate-password"
+			filter="raw"
+			size="30"
+			validate="password"
+		/>
+
+		<field
+			name="password2"
+			type="password"
+			label="COM_USERS_PROFILE_PASSWORD2_LABEL"
+			autocomplete="new-password"
+			class="validate-password"
+			field="password1"
+			filter="raw"
+			message="COM_USERS_PROFILE_PASSWORD1_MESSAGE"
+			size="30"
+			validate="equals"
+		/>
+
+
+	</fieldset>
+</form>

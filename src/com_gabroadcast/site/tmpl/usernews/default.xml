@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_GABROADCAST_TITLE_LIST_VIEW_USERNEWS" option="View">
+        <message>
+                        <![CDATA[COM_GABROADCAST_TITLE_LIST_VIEW_USERNEWS_DESC]]>
+        </message>
+	</layout>
+
+    <fields name="params">
+        <fieldset name="basic"
+            label="COM_GABROADCAST_FIELDSET_VIEWTYPE_SELECT_LABEL">
+
+            <field name="view_type" type="list" require="true" default="0"
+                label="COM_GABROADCAST_VIEWTYPE_SELECT_LABEL_FORM"
+                description="COM_GABROADCAST_VIEWTYPE_SELECT_DESC_FORM">
+    			<option value="1">COM_GABROADCAST_GAGENERAL</option>
+    			<option value="5">COM_GABROADCAST_GADEFERRED</option>
+            </field>
+
+        </fieldset>
+    </fields>
+
+</metadata>

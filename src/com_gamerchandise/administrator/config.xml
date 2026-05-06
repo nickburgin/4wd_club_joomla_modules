@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <inlinehelp button="show" />
+    <fieldset label="COM_GAMERCHANDISE" name="gamerchandise"
+		 addfieldprefix="GlennArkell\Component\Gamerchandise\Administrator\Field">
+
+        <field name="product_txt" type="textarea" class="input-xxlarge"
+             default=""
+             hint="COM_GAMERCHANDISE_PRODUCT_TXT_DESC"
+             label="COM_GAMERCHANDISE_PRODUCT_TXT_LABEL"
+             description="COM_GAMERCHANDISE_PRODUCT_TXT_DESC" />
+
+        <field name="poemail" class="btn-group btn-group-yesno" type="radio" default="1"
+             label="COM_GAMERCHANDISE_POEMAIL_LABEL"
+             description="COM_GAMERCHANDISE_POEMAIL_DESC">
+             <option value="1">JYES</option>
+             <option value="0">JNO</option>
+        </field>
+
+        <field name="po_emailtxt" type="textarea" class="input-xxlarge" showon="poemail:1"
+             default="Please find attached order for merchandise you ordered.  If you have any changes or concerns about any aspect of this order, please contact us immediately to discuss. "
+             label="COM_GAMERCHANDISE_PO_EMAILTXT_LABEL"
+             description="COM_GAMERCHANDISE_PO_EMAILTXT_DESC" />
+
+        <field name="notify_qm" class="btn-group btn-group-yesno" type="radio" default="0"
+             label="COM_GAMERCHANDISE_NOTIFY_QM_LABEL"
+             description="COM_GAMERCHANDISE_NOTIFY_QM_DESC">
+             <option value="1">JYES</option>
+             <option value="0">JNO</option>
+        </field>
+
+        <field name="merchandise_email" type="email" validate="email" showon="notify_qm:1"
+             default="merchandise@clubname.org.au"
+			 label="COM_GAMERCHANDISE_PURCHASING_EMAIL_LABEL"
+             description="COM_GAMERCHANDISE_PURCHASING_EMAIL_DESC" />
+
+        <field name="po_contact"
+             type="text" class="inputbox" default="Merchandise Officer"
+             label="COM_GAMERCHANDISE_PO_CONTACT_LABEL"
+             description="COM_GAMERCHANDISE_PO_CONTACT_DESC" />
+
+        <field name="po_con_phone"
+             type="text" class="inputbox" default="0439 014 366"
+             label="COM_GAMERCHANDISE_PO_CON_PHONE_LABEL"
+             description="COM_GAMERCHANDISE_PO_CON_PHONE_DESC" />
+
+        <field name="rpt_header" type="media"
+            label="COM_GAMERCHANDISE_FIELD_RPT_HEADER_LABEL"
+            description="COM_GAMERCHANDISE_FIELD_RPT_HEADER_DESC" />
+
+        <field name="header_type" class="btn-group btn-group-yesno" type="radio" default="JPG"
+             label="COM_GAMERCHANDISE_HEADER_TYPE_LABEL"
+             description="COM_GAMERCHANDISE_HEADER_TYPE_DESC">
+             <option value="JPG">JPG</option>
+             <option value="PNG">PNG</option>
+             <option value="GIF">GIF</option>
+        </field>
+
+        <field name="po_insttxt" type="textarea" class="input-xxlarge"
+             default="COM_GAMERCHANDISE_PO_INSTTXT_DEFAULT"
+             label="COM_GAMERCHANDISE_PO_INSTTXT_LABEL"
+             description="COM_GAMERCHANDISE_PO_INSTTXT_DESC" />
+
+        <field name="prof_pref" type="text" default="b4wdc"
+            label="COM_GAMERCHANDISE_FIELD_PROF_PREF_LABEL"
+            description="COM_GAMERCHANDISE_FIELD_PROF_PREF_DESC" />
+    
+        <field name="mship_single" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAMERCHANDISE_MSHIP_SINGLE_LABEL"
+             description="COM_GAMERCHANDISE_MSHIP_SINGLE_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+    </fieldset>
+
+    <fieldset label="COM_GAMERCHANDISE_SALES_SETTINGS" name="sales_settings"
+		 addfieldprefix="GlennArkell\Component\Gamerchandise\Administrator\Field">
+
+        <field name="use_soh" type="radio" class="btn-group btn-group-yesno" default="0"
+			label="COM_GAMERCHANDISE_USE_SOH_LABEL"
+			description="COM_GAMERCHANDISE_USE_SOH_DESC">
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field name="public_sales" type="radio" class="btn-group btn-group-yesno" default="0"
+			label="COM_GAMERCHANDISE_PUBLIC_SALES_LABEL"
+			description="COM_GAMERCHANDISE_PUBLIC_SALES_DESC">
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field name="welcome_note" type="Articlelist" default="0" showon="public_sales:1"
+             label="COM_GAMERCHANDISE_WELCOME_NOTE_LABEL"
+             description="COM_GAMERCHANDISE_WELCOME_NOTE_DESC" />
+
+        <field name="ignore_cat" type="category" class="input-large" multiple="true" extension="com_gamerchandise"
+             label="COM_GAMERCHANDISE_IGNORE_CAT_LABEL"
+             description="COM_GAMERCHANDISE_IGNORE_CAT_DESC" />
+
+    </fieldset>
+
+    <fieldset label="COM_GAMERCHANDISE_SITE_DISCOUNTS" name="site_discounts"
+		 addfieldprefix="GlennArkell\Component\Gamerchandise\Administrator\Field">
+
+        <field name="mbr_disc" class="btn-group btn-group-yesno" type="radio" default="0"
+             label="COM_GAMERCHANDISE_MBR_DISC_LABEL"
+             description="COM_GAMERCHANDISE_MBR_DISC_DESC">
+             <option value="1">JYES</option>
+             <option value="0">JNO</option>
+        </field>
+
+        <field name="disc_amt" type="text" default="" showon="mbr_disc:1"
+             label="COM_GAMERCHANDISE_DISC_AMT_LABEL"
+             description="COM_GAMERCHANDISE_DISC_AMT_DESC" />
+
+    </fieldset>
+
+    <fieldset label="COM_GAMERCHANDISE_SITE_DETAILS" name="site_details"
+		 addfieldprefix="GlennArkell\Component\Gamerchandise\Administrator\Field">
+
+        <field name="site_abn" type="text" default="ABN: 93 336 475 760"
+             label="COM_GAMERCHANDISE_SITE_ABN_LABEL"
+             description="COM_GAMERCHANDISE_SITE_ABN_DESC" />
+
+        <field name="site_address" type="text" default="P.O. Box 1042"
+             label="COM_GAMERCHANDISE_SITE_ADDRESS_LABEL"
+             description="COM_GAMERCHANDISE_SITE_ADDRESS_DESC" />
+
+        <field name="site_suburb" type="text" default="Ballarat, 3353"
+             label="COM_GAMERCHANDISE_SITE_SUBURB_LABEL"
+             description="COM_GAMERCHANDISE_SITE_SUBURB_DESC" />
+
+        <field name="site_phone" type="text" default="0439 014 366"
+             label="COM_GAMERCHANDISE_SITE_PHONE_LABEL"
+             description="COM_GAMERCHANDISE_SITE_PHONE_DESC" />
+
+        <field name="site_fax" type="text" default=""
+             label="COM_GAMERCHANDISE_SITE_FAX_LABEL"
+             description="COM_GAMERCHANDISE_SITE_FAX_DESC" />
+
+    </fieldset>
+
+    <!-- Integration parameter settings for the component -->
+	<fieldset
+		name="integration"
+		label="JGLOBAL_INTEGRATION_LABEL"
+		description="COM_GAMERCHANDISE_CONFIG_INTEGRATION_SETTINGS_DESC"
+		>
+
+		<fieldset
+			name="integration_testing"
+			label="GATESTING_TITLE"
+		>
+            <field name="send_email" type="radio" class="btn-group btn-group-yesno" default="1"
+                label="COM_GAMERCHANDISE_SEND_EMAIL_LABEL" description="COM_GAMERCHANDISE_SEND_EMAIL_DESC">
+                <option value="0">JNO</option>
+                <option value="1">JYES</option>
+            </field>
+
+		</fieldset>
+
+        <fieldset 
+			name="integration_finance"
+			label="GAFINANCE_TITLE"
+		>
+
+            <field name="incl_finance" type="radio" class="btn-group btn-group-yesno" default="0"
+    			label="COM_GAMERCHANDISE_INCL_FINANCE_LABEL"
+    			description="COM_GAMERCHANDISE_INCL_FINANCE_DESC">
+                <option value="0">JNO</option>
+                <option value="1">JYES</option>
+            </field>
+    
+            <field name="fin_cat" type="category" class="input-large" extension="com_gafinance" showon="incl_finance:1"
+                 label="COM_GAMERCHANDISE_FIN_CAT_LABEL"
+                 description="COM_GAMERCHANDISE_FIN_CAT_DESC" />
+    
+        </fieldset>
+
+		<fieldset
+			name="integration_history"
+			label="GAHISTORY_TITLE"
+		>
+            <field name="save_history" type="radio" class="btn-group btn-group-yesno" default="0" label="JGLOBAL_SAVE_HISTORY_OPTIONS_LABEL" description="JGLOBAL_SAVE_HISTORY_OPTIONS_DESC">
+                <option value="0">JNO</option>
+                <option value="1">JYES</option>
+            </field>
+
+            <field name="history_limit" type="text" filter="integer" default="5" showon="save_history:1"
+                label="JGLOBAL_HISTORY_LIMIT_OPTIONS_LABEL"
+                description="JGLOBAL_HISTORY_LIMIT_OPTIONS_DESC" />
+
+		</fieldset>
+
+		<fieldset
+			name="integration_workflows"
+			label="JWORKFLOW_TITLE"
+		>
+    		<field
+    			name="workflow_enabled"
+    			type="radio"
+    			label="JWORKFLOW_ENABLED_LABEL"
+    			class="btn-group btn-group-yesno"
+    			default="0" >
+    			<option value="0">JNO</option>
+    			<option value="1">JYES</option>
+    		</field>
+
+		</fieldset>
+
+		<fieldset
+			name="integration_customfields"
+			label="JGLOBAL_FIELDS_TITLE"
+			>
+    		<field
+    			name="custom_fields_enable"
+    			type="radio"
+    			label="JGLOBAL_CUSTOM_FIELDS_ENABLE_LABEL"
+    			class="btn-group btn-group-yesno"
+    			default="0" >
+    			<option value="0">JNO</option>
+    			<option value="1">JYES</option>
+    		</field>
+		</fieldset>
+
+    </fieldset>
+
+    <!-- Permissions parameter settings for the component -->
+    <fieldset name="permissions" description="JCONFIG_PERMISSIONS_DESC" label="JCONFIG_PERMISSIONS_LABEL">
+        <field name="rules" type="rules" component="com_gamerchandise" class="inputbox" filter="rules" validate="rules" label="JCONFIG_PERMISSIONS_LABEL" section="component" />
+	</fieldset>
+
+</config>

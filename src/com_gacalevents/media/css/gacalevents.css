@@ -1,0 +1,71 @@
+/**
+ * @version     3.0.0
+ * @package     com_gacalevents
+ * @copyright   2021 Glenn Arkell
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Glenn Arkell <glenn@glennarkell.com.au>
+ */
+
+.icon-minus:before {
+    color: #eac42a;
+}
+
+div.calgaevents {
+    margin-right: 10px;
+}
+
+.eventborder {
+    margin: 0 auto;
+    border:1px solid #666;
+}
+table.eventborder,
+table.eventnone {
+    width: 98%;
+}
+
+.eventnone {
+    border:none;
+    padding: 0px 5px 0px 5px;
+    vertical-align:top;
+}
+.eventdate {
+    border:none;
+    padding: 0px 5px 0px 5px;
+    border-right:1px solid #666;
+    vertical-align:top;
+    text-align:center;
+    width: 20%;
+}
+.eventmonth {
+    border:1px solid #666;
+    padding: 0px 5px 0px 5px;
+    text-align:center;
+    font-size:1.3em;
+    font-weight:bold;
+    /* color:red; */
+    line-height: 1.7em;
+}
+.eventhead {
+    border:1px solid #666;
+    padding: 0px 5px 0px 5px;
+    text-align:center; 
+    font-weight:bold;
+}
+
+div.attendances {
+    display: block;
+}
+div.attending {
+    float: left;
+}
+div.apologies {
+    float: right;
+}
+.version {
+	padding-left: 10px;
+	font-size: 11px;
+}
+
+.modal-body {
+	max-height: 450px !important;
+}

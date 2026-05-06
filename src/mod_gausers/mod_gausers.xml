@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" client="site" method="upgrade">
+	<name>MOD_GAUSERS</name>
+	<author>Glenn Arkell</author>
+	<authorEmail>glenn@glennarkell.com.au</authorEmail>
+	<authorUrl>http://www.glennarkell.com.au</authorUrl>
+	<copyright>Open Source</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<creationDate>5 May 2018</creationDate>
+	<version>5.1.6</version>
+	<description>Display Members</description>
+
+	<namespace path="src">GlennArkell\Module\Gausers</namespace>
+
+	<files>
+		<filename module="mod_gausers">mod_gausers.php</filename>
+		<folder>src</folder>
+		<folder>tmpl</folder>
+    </files>
+
+	<media destination="mod_gausers" folder="media">
+		<folder>css</folder>
+	</media>
+
+	<languages>
+		<language tag="en-GB">language/en-GB/mod_gausers.ini</language>
+		<language tag="en-GB">language/en-GB/mod_gausers.sys.ini</language>
+	</languages>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+
+		        <field name="intro_text" type="editor" filter="safehtml"
+		             buttons="true" hide="article,image,pagebreak,readmore'"
+					 label="MOD_GAUSERS_INTRO_TEXT_LABEL"
+		             description="MOD_GAUSERS_INTRO_TEXT_DESC" />
+
+		        <field name="display_group" type="usergrouplist"
+		             label="MOD_GAUSERS_DISPLAY_GROUP_LABEL"
+		             description="MOD_GAUSERS_DISPLAY_GROUP_DESC" />
+
+		        <field name="prof_suffix" type="text"
+		             label="MOD_GAUSERS_PROF_SUFFIX_LABEL"
+		             description="MOD_GAUSERS_PROF_SUFFIX_DESC" />
+
+		        <field name="prof_field" type="text"
+		             label="MOD_GAUSERS_PROF_FIELD_LABEL"
+		             description="MOD_GAUSERS_PROF_FIELD_DESC" />
+
+				<field name="set_listheight" type="radio" default="0" class="btn-group btn-group-yesno" filter="int"
+					label="MOD_GAUSERS_FIELD_SET_IFRAME_LABEL"
+					description="MOD_GAUSERS_FIELD_SET_IFRAME_DESC" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="list_height" type="text" default="400" filter="int" showon="set_listheight:1"
+					label="MOD_GAUSERS_FIELD_IFRAME_HEIGHT_LABEL"
+					description="MOD_GAUSERS_FIELD_IFRAME_HEIGHT_DESC" />
+
+			</fieldset>
+
+			<fieldset name="advanced">
+				<field name="layout" type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+
+				<field name="moduleclass_sfx" type="text"
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+
+				<field name="cache" type="list" default="1"
+					label="COM_MODULES_FIELD_CACHING_LABEL"
+					description="COM_MODULES_FIELD_CACHING_DESC">
+					<option value="1">JGLOBAL_USE_GLOBAL</option>
+					<option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+				</field>
+
+				<field name="cache_time" type="text" default="900"
+					label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+					description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+
+				<field name="cachemode" type="hidden" default="static">
+					<option value="static"></option>
+				</field>
+
+			</fieldset>
+		</fields>
+	</config>
+
+</extension>

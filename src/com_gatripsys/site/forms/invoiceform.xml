@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="sysinfo" addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field">
+		<field name="id" type="text" readonly="true" class="readonly" default="0" description="JGLOBAL_FIELD_ID_DESC"/>
+		<field name="ordering"/>
+		<field name="state" default="3" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+			<option value="3">GAPROPOSED</option>
+			<option value="1">GABOOKING</option>
+			<option value="2">GACLOSED</option>
+			<option value="5">GAFINALISED</option>
+			<option value="4">GACANCELLED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+		<field name="checked_out" type="hidden" filter="unset"/>
+		<field name="checked_out_time" type="hidden" filter="unset"/>
+		<field name="created_by" type="Createdby" default="0" label="COM_GATRIPSYS_FORM_LBL_CREATED_BY" description="COM_GATRIPSYS_FORM_DESC_CREATED_BY" hidden="true" hint="COM_GATRIPSYS_FORM_LBL_CREATED_BY"/>
+		<field name="modified_by" type="Modifiedby" default="0" label="COM_GATRIPSYS_FORM_LBL_MODIFIED_BY" description="COM_GATRIPSYS_FORM_DESC_MODIFIED_BY" hidden="true" hint="COM_GATRIPSYS_FORM_LBL_MODIFIED_BY"/>
+		<field name="created_date" type="Timecreated" label="COM_GATRIPSYS_FORM_LBL_CREATED_DATE" description="COM_GATRIPSYS_FORM_DESC_CREATED_DATE" hint="COM_GATRIPSYS_FORM_LBL_CREATED_DATE"/>
+		<field name="modified_date" type="Timecreated" label="COM_GATRIPSYS_FORM_LBL_UPDATE_DATE" description="COM_GATRIPSYS_FORM_DESC_UPDATE_DATE" hint="COM_GATRIPSYS_FORM_LBL_UPDATE_DATE"/>
+	</fieldset>
+
+	<fieldset name="general" addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field">
+        <field name="user_id" type="members"
+            label="COM_GATRIPSYS_FORM_LBL_INVOICE_USER_ID"
+            description="COM_GATRIPSYS_FORM_DESC_INVOICE_USER_ID"
+            required="true"
+            filter="int"/>
+
+        <field name="att_id" type="text"
+            label="COM_GATRIPSYS_FORM_LBL_INVOICE_ATT_ID"
+            description="COM_GATRIPSYS_FORM_DESC_INVOICE_ATT_ID"
+            readonly="true" class="readonly"
+            filter="int"/>
+
+        <field name="nm_name" type="text" filter="safehtml" default=""
+            label="COM_GATRIPSYS_FORM_LBL_INVOICE_NM_NAME"
+            description="COM_GATRIPSYS_FORM_DESC_INVOICE_NM_NAME"
+            hint="COM_GATRIPSYS_FORM_LBL_INVOICE_NM_NAME" />
+
+        <field name="nm_email" type="text" filter="safehtml" default=""
+            label="COM_GATRIPSYS_FORM_LBL_INVOICE_NM_EMAIL"
+            description="COM_GATRIPSYS_FORM_DESC_INVOICE_NM_EMAIL"
+            hint="COM_GATRIPSYS_FORM_LBL_INVOICE_NM_EMAIL" />
+
+        <field name="nm_address" type="text" filter="safehtml" default=""
+            label="COM_GATRIPSYS_FORM_LBL_INVOICE_NM_ADDRESS"
+            description="COM_GATRIPSYS_FORM_DESC_INVOICE_NM_ADDRESS"
+            hint="COM_GATRIPSYS_FORM_LBL_INVOICE_NM_ADDRESS" />
+
+        <field name="nm_suburb" type="text" filter="safehtml" default=""
+            label="COM_GATRIPSYS_FORM_LBL_INVOICE_NM_SUBURB"
+            description="COM_GATRIPSYS_FORM_DESC_INVOICE_NM_SUBURB"
+            hint="COM_GATRIPSYS_FORM_LBL_INVOICE_NM_SUBURB" />
+
+        <field name="nm_postcode" type="text" filter="safehtml" default=""
+            label="COM_GATRIPSYS_FORM_LBL_INVOICE_NM_POSTCODE"
+            description="COM_GATRIPSYS_FORM_DESC_INVOICE_NM_POSTCODE"
+            hint="COM_GATRIPSYS_FORM_LBL_INVOICE_NM_POSTCODE" />
+
+        <field name="nm_phone" type="text" filter="safehtml" default=""
+            label="COM_GATRIPSYS_FORM_LBL_INVOICE_NM_PHONE"
+            description="COM_GATRIPSYS_FORM_DESC_INVOICE_NM_PHONE"
+            hint="COM_GATRIPSYS_FORM_LBL_INVOICE_NM_PHONE" />
+
+	</fieldset>
+
+	<fieldset name="payment" addfieldprefix="GlennArkell\Component\Gatripsys\Administrator\Field">
+
+        <field name="paid_date" type="calendar" default="NOW" class="input-xlarge"
+            filter="server_utc" format="%Y-%m-%d %H:%i:%s"
+            filterFormat="Y-m-d H:i:s" translateformat="true"
+            hint="COM_GATRIPSYS_FORM_LBL_DATE_FORMAT"
+            label="COM_GATRIPSYS_FORM_LBL_INVOICE_PAID_DATE"
+            description="COM_GATRIPSYS_FORM_DESC_INVOICE_PAID_DATE" />
+
+        <field name="invoice_amt" type="text" size="40" class="inputbox"
+            label="COM_GATRIPSYS_FORM_LBL_INVOICE_INVOICE_AMT"
+            description="COM_GATRIPSYS_FORM_DESC_INVOICE_INVOICE_AMT"
+            default="0.00" 
+            required="true"
+            filter="safehtml" /> 
+
+	</fieldset>
+
+	<fieldset name="others">
+		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+	</fieldset>
+
+	<fieldset name="extrainfo">
+		<field name="comment" filter="safehtml" type="textarea" label="COM_GATRIPSYS_FORM_LBL_COMMENT" description="COM_GATRIPSYS_FORM_DESC_COMMENT" hint="COM_GATRIPSYS_FORM_LBL_COMMENT"/>
+	</fieldset>
+
+</form>

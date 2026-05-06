@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <inlinehelp button="show" />
+    <!-- Basic parameter settings for the component -->
+	<fieldset name="gatracklog"
+		addfieldprefix="GlennArkell\Component\Gatracklog\Administrator\Field"
+		label="COM_GATRACKLOG" >
+
+        <field name="allow_input" type="radio" class="btn-group btn-group-yesno"
+			label="COM_GATRACKLOG_FORM_LBL_ALLOW_INPUT"
+			description="COM_GATRACKLOG_FORM_DESC_ALLOW_INPUT"
+			hint="COM_GATRACKLOG_FORM_LBL_ALLOW_INPUT" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="track_email" type="email" validate="email"
+			label="COM_GATRACKLOG_FORM_LBL_TRACK_EMAIL"
+			description="COM_GATRACKLOG_FORM_DESC_TRACK_EMAIL"
+			hint="COM_GATRACKLOG_FORM_LBL_TRACK_EMAIL"/>
+
+        <field name="header_text" type="editor" filter="raw"
+			default="The following tracks have been logged with a GPS system and stored here for members use. You can add a log of your own if you wish by clicking on the green ADD button at the bottom. You can request a copy of a log by clicking on the green Request Copy button to the right of the respective log entry."
+			label="COM_GATRACKLOG_FORM_LBL_HEADER_TEXT"
+			description="COM_GATRACKLOG_FORM_DESC_HEADER_TEXT" />
+
+        <field name="comment_text" type="editor" filter="raw"
+			default="The following track information is provided to assist you with your drive on this route. If you drive this route, any comments you can provide about the track conditions would be appreciated and will help other members."
+			label="COM_GATRACKLOG_FORM_LBL_COMMENT_TEXT"
+			description="COM_GATRACKLOG_FORM_DESC_COMMENT_TEXT" />
+
+		<field name="hotmail_help" type="article" default="72"
+			label="COM_GATRACKLOG_FORM_LBL_HOTMAIL_HELP"
+			description="COM_GATRACKLOG_FORM_DESC_HOTMAIL_HELP" />
+
+    </fieldset>
+
+    <!-- Permissions parameter settings for the component -->
+    <fieldset name="permissions"
+		description="JCONFIG_PERMISSIONS_DESC"
+		label="JCONFIG_PERMISSIONS_LABEL">
+
+        <field name="rules" type="rules" component="com_gatracklog" class="inputbox" filter="rules" validate="rules"
+			label="JCONFIG_PERMISSIONS_LABEL" section="component" />
+
+	</fieldset>
+
+    <!-- History parameter settings for the component -->
+    <fieldset name="component">
+
+        <field name="save_history" type="radio" default="0"
+			class="btn-group btn-group-yesno" 
+			label="JGLOBAL_SAVE_HISTORY_OPTIONS_LABEL"
+			description="JGLOBAL_SAVE_HISTORY_OPTIONS_DESC">
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field name="history_limit" type="text" filter="integer" default="5"
+			label="JGLOBAL_HISTORY_LIMIT_OPTIONS_LABEL"
+			description="JGLOBAL_HISTORY_LIMIT_OPTIONS_DESC" />
+
+        <field name="sef_ids" type="radio" filter="integer" default="0"
+			class="btn-group btn-group-yesno"
+			label="JGLOBAL_SEF_NOIDS_LABEL"
+			description="JGLOBAL_SEF_NOIDS_DESC" >
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+        </field>
+
+    </fieldset>
+</config>

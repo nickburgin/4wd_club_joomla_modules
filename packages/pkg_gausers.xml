@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" method="upgrade">
+    <name>User Membership Package</name>
+    <packagename>gausers</packagename>
+    <version>5.1.6</version>
+    <creationDate>2024</creationDate>
+    <copyright>Glenn Arkell</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Glenn Arkell</author>
+    <authorEmail>glenn@glennarkell.com.au</authorEmail>
+    <packager>Nick Burgin</packager>
+    <description>User Membership Package - includes component, modules, and user plugin</description>
+
+    <files folder="packages">
+        <file type="component" id="com_gausers">com_gausers-5.1.6.zip</file>
+        <file type="module" id="gausers" client="site">mod_gausers-5.1.6.zip</file>
+        <file type="module" id="gausersexecs" client="site">mod_gausersexecs-5.1.6.zip</file>
+        <file type="plugin" id="gausers" group="user">plg_user_gausers-5.1.6.zip</file>
+    </files>
+
+    <blockChildUninstall>true</blockChildUninstall>
+</extension>

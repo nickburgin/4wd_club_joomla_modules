@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="GlennArkell\Component\Gafinance\Administrator\Field">
+	<fieldset name="sysinfo">
+		<field name="id" type="text" readonly="true" class="readonly" default="0" label="COM_GAFINANCE_FORM_LBL_ID" description="COM_GAFINANCE_FORM_DESC_ID"/>
+		<field name="ordering" label="COM_GAFINANCE_FORM_LBL_ORDERING" description="COM_GAFINANCE_FORM_DESC_ORDERING"/>
+		<field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+		<field name="checked_out" type="hidden" filter="unset"/>
+		<field name="checked_out_time" type="hidden" filter="unset"/>
+	    <field name="created_by" type="Createdby" hidden="true" default="0" label="COM_GAFINANCE_FORM_LBL_CREATED_BY" description="COM_GAFINANCE_FORM_DESC_CREATED_BY" hint="COM_GAFINANCE_FORM_LBL_CREATED_BY"/>
+	    <field name="modified_by" type="Modifiedby" hidden="true" default="0" label="COM_GAFINANCE_FORM_LBL_MODIFIED_BY" description="COM_GAFINANCE_FORM_DESC_MODIFIED_BY" hint="COM_GAFINANCE_FORM_LBL_MODIFIED_BY"/>
+	    <field name="created_date" type="Timecreated" label="COM_GAFINANCE_FORM_LBL_CREATED_DATE" description="COM_GAFINANCE_FORM_DESC_CREATED_DATE" hint="COM_GAFINANCE_FORM_LBL_CREATED_DATE"/>
+	    <field name="modified_date" type="Timecreated" label="COM_GAFINANCE_FORM_LBL_MODIFIED_DATE" description="COM_GAFINANCE_FORM_DESC_MODIFIED_DATE" hint="COM_GAFINANCE_FORM_LBL_MODIFIED_DATE"/>
+	</fieldset>
+
+	<fieldset name="general">
+        <field name="user_id" type="Members" required="true" filter="safehtml"
+            label="COM_GAFINANCE_FORM_LBL_TRANSACTION_USER_ID"
+            description="COM_GAFINANCE_FORM_DESC_TRANSACTION_USER_ID" />
+
+        <field name="tran_type" type="list" required="true" default="E"
+            label="COM_GAFINANCE_FORM_LBL_TRANSACTION_TRAN_TYPE"
+            description="COM_GAFINANCE_FORM_DESC_TRANSACTION_TRAN_TYPE">
+            <option value="E">COM_GAFINANCE_TRANSACTIONS_TRAN_TYPE_OPTION_E</option>
+            <option value="I">COM_GAFINANCE_TRANSACTIONS_TRAN_TYPE_OPTION_I</option>
+            <option value="Z">COM_GAFINANCE_TRANSACTIONS_TRAN_TYPE_OPTION_Z</option>
+            <option value="D">COM_GAFINANCE_TRANSACTIONS_TRAN_TYPE_OPTION_D</option>
+        </field>
+
+        <field name="tran_file" type="file" showon="tran_type:E"
+            label="COM_GAFINANCE_FORM_LBL_TRANSACTION_TRAN_FILE"
+            description="COM_GAFINANCE_FORM_DESC_TRANSACTION_TRAN_FILE" />
+
+        <field name="tran_file_txt" type="text" showon="tran_type:E"
+            label="COM_GAFINANCE_FORM_LBL_TRANSACTION_TRAN_FILE"
+            description="COM_GAFINANCE_FORM_DESC_TRANSACTION_TRAN_FILE" />
+
+        <field name="tran_desc" type="text" required="true" filter="safehtml"
+            label="COM_GAFINANCE_FORM_LBL_TRANSACTION_TRAN_DESC"
+            description="COM_GAFINANCE_FORM_DESC_TRANSACTION_TRAN_DESC" />
+
+        <field name="tran_date" type="calendar" class="input-medium"
+            filterFormat="Y-m-d" translateformat="true"
+            label="COM_GAFINANCE_FORM_LBL_TRANSACTION_TRAN_DATE"
+            description="COM_GAFINANCE_FORM_DESC_TRANSACTION_TRAN_DATE" />
+
+        <field name="tran_amount" type="text" default="0.0000" required="true" filter="safehtml"
+            label="COM_GAFINANCE_FORM_LBL_TRANSACTION_TRAN_AMOUNT"
+            description="COM_GAFINANCE_FORM_DESC_TRANSACTION_TRAN_AMOUNT" />
+
+        <field name="tran_ref" type="text" filter="safehtml"
+            label="COM_GAFINANCE_FORM_LBL_TRANSACTION_TRAN_REF"
+            description="COM_GAFINANCE_FORM_DESC_TRANSACTION_TRAN_REF" />
+
+        <field name="cat_id" type="category" extension="com_gafinance" required="true"
+            label="COM_GAFINANCE_FORM_LBL_TRANSACTION_CAT_ID"
+            description="COM_GAFINANCE_FORM_DESC_TRANSACTION_CAT_ID" />
+
+        <field name="accnt_id" type="Account" default="1"
+            label="COM_GAFINANCE_FORM_LBL_TRANSACTION_ACCOUNT"
+            description="COM_GAFINANCE_FORM_DESC_TRANSACTION_ACCOUNT" />
+
+        <field name="gst_flag" type="radio" default="0" layout="joomla.form.field.radio.switcher"
+            label="COM_GAFINANCE_FORM_LBL_TRANSACTION_GST_FLAG"
+            description="COM_GAFINANCE_FORM_DESC_TRANSACTION_GST_FLAG" >
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field name="gst_amt" type="text" default="0.0000" showon="gst_flag:1"
+            label="COM_GAFINANCE_FORM_LBL_TRANSACTION_GST_AMT"
+            description="COM_GAFINANCE_FORM_DESC_TRANSACTION_GST_AMT" />
+
+	</fieldset>
+
+	<fieldset name="extrainfo">
+		<field name="comment" filter="safehtml" type="textarea" label="COM_GAFINANCE_FORM_LBL_COMMENT" description="COM_GAFINANCE_FORM_DESC_COMMENT" hint="COM_GAFINANCE_FORM_LBL_COMMENT"/>
+	</fieldset>
+
+	<fieldset name="other">
+		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+	</fieldset>
+</form>

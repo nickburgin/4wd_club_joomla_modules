@@ -1,0 +1,197 @@
+<?php
+/**
+ * @version    4.1.0
+ * @package    com_gatracklog
+ * @author     Glenn Arkell <glenn@glennarkell.com.au>
+ * @copyright  2021 Glenn Arkell
+ * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+// No direct access
+defined('_JEXEC') or die;
+
+use \Joomla\CMS\HTML\HTMLHelper;
+use \Joomla\CMS\Factory;
+use \Joomla\CMS\Router\Route;
+use \Joomla\CMS\Language\Text;
+use \Joomla\CMS\Uri\Uri;
+use \GlennArkell\Component\Gatracklog\Administrator\Helper\GatracklogHelper;
+
+// load any assets required
+$this->document->getWebAssetManager()
+    ->usePreset('com_gatracklog.gatracklogpreset');
+
+// Load admin language file
+$lang = Factory::getApplication()->getLanguage();
+$lang->load('com_gatracklog', JPATH_ADMINISTRATOR);
+
+$user = GatracklogHelper::getSpecificUser();
+$canEdit = GatracklogHelper::canUserEdit($user, $this->item);
+
+$canDelete = $user->authorise('core.delete','com_gatracklog.tracklog.'.$this->item->id);
+
+// Display a heading for the page
+if ($this->params->get('page_title', '') > '') {
+	echo '<h1>'.$this->params->get('page_title').'</h1>';
+} else { 
+	echo '<h1>'.Text::_('COM_GATRACKLOG_TITLE_TRACKLOG').'</h1>';
+}
+
+// setup the modal links for a member leaving the club
+$lveLink = GatracklogHelper::getHTTPQuery(null, 'view', 'tracklogform', 'id', $this->item->id);
+$lveLink = GatracklogHelper::getHTTPQuery($lveLink, null, null, 'tmpl', 'component');
+$lveLink = GatracklogHelper::getHTTPQuery($lveLink, null, null, 'layout', 'modal');
+$lmodparams = array( 'url'        => 'index.php?'.http_build_query($lveLink, '', '&amp;'),
+        'title'      => Text::_("COM_GATRACKLOG_ADD_COMMENT"), 'closeButton'=> true,
+        'modalWidth' => 60, 'bodyHeight' => 35, 'backdrop'   => 'static' );
+$lmodname = 'modal-myLeftModal'.$this->item->id;
+$lhtml = '<a class="btn btn-success" href="#'.$lmodname.'" data-bs-toggle="modal">';
+$lhtml .= '<i class="fas fa-plus" title="'.Text::_('COM_GATRACKLOG_ADD_COMMENT').'"></i> '.Text::_('COM_GATRACKLOG_ADD_COMMENT').'</a>';
+
+/*
+echo '<pre>Test<br />';
+print_r($this->item->cat->params);
+echo '</pre>';
+*/
+?>
+
+<div class="item_fields">
+
+	<table class="table">
+
+		<tr>
+			<th><?php echo Text::_('COM_GATRACKLOG_FORM_LBL_TRACKLOG_NAME'); ?></th>
+			<td><?php echo $this->item->name; ?></td>
+		</tr>
+
+		<tr>
+			<th><?php echo Text::_('COM_GATRACKLOG_FORM_LBL_TRACKLOG_RATING'); ?></th>
+			<td>
+				<?php $cat_params = json_decode($this->item->cat->params); ?>
+				<?php echo '<img src="'.$cat_params->image.'" style="width:14px;" alt="'.$cat_params->image_alt.'" title="'.$cat_params->image_alt.'"/>'; ?>
+				<?php echo $this->item->rating_name; ?>
+			</td>
+		</tr>
+
+		<tr>
+			<th><?php echo Text::_('COM_GATRACKLOG_FORM_LBL_TRACKLOG_TRACK_ZONE'); ?></th>
+			<td><?php echo $this->item->track_zone_name; ?></td>
+		</tr>
+
+		<tr>
+			<th><?php echo Text::_('COM_GATRACKLOG_FORM_LBL_TRACKLOG_SEASON_CLOSE'); ?></th>
+			<td><?php echo $this->item->season_close_name; ?></td>
+		</tr>
+
+		<tr>
+			<th><?php echo Text::_('COM_GATRACKLOG_FORM_LBL_CREATED_DATE'); ?></th>
+			<td><?php 
+					$tdate = $this->item->created_date;
+					echo $tdate > 0 ? HTMLHelper::_('date', $tdate, Text::_('DATE_FORMAT_LC6')) : '-';
+				?>
+			</td>
+		</tr>
+
+		<tr>
+			<th><?php echo Text::_('COM_GATRACKLOG_FORM_LBL_COMMENT'); ?></th>
+			<td><?php echo nl2br($this->item->comment); ?></td>
+		</tr>
+
+	</table>
+
+	<h3><?php echo Text::_('COM_GATRACKLOG_TRACKCOMMENT_HEADER'); ?></h3>
+	<table class="table table-striped" id="tracklogList">
+		<thead>
+		<tr>
+			<th class=''>
+				<?php echo Text::_('COM_GATRACKLOG_TRACKCOMMENT_USER_ID'); ?>
+			</th>
+			<th class=''>
+				<?php echo Text::_('COM_GATRACKLOG_TRACKCOMMENT_CREATED_DATE'); ?>
+			</th>
+			<th class=''>
+				<?php echo Text::_('COM_GATRACKLOG_TRACKCOMMENT_COMMENT'); ?>
+			</th>
+			<?php if($user->authorise('core.delete','com_gatracklog')):?>
+				<th class=''>
+					<?php echo Text::_('COM_GATRACKLOG_ACTIONS'); ?>
+				</th>
+			<?php endif; ?>
+		</tr>
+		</thead>
+		<tbody>
+			<?php if(!empty($this->item->tracklog_comments)): ?>
+				<?php foreach ($this->item->tracklog_comments as $i => $citem) : ?>
+					<tr class="row<?php echo $i % 2; ?>">
+						<td>
+							<?php if ($citem->user_name != '') { echo $citem->user_name; } ?>
+						</td>
+						<td>
+							<?php $comdate = $citem->created_date; echo $comdate > 0 ? HTMLHelper::_('date', $comdate, Text::_('COM_GATRACKLOG_DISPLAY_DATETIME')) : '-';?>
+						</td>
+						<td>
+							<span class="small"><?php echo $citem->comment; ?></span>
+						</td>
+						<?php if($user->authorise('core.delete','com_gatracklog')):?>
+							<td>
+								<a class="btn btn-danger"
+									href="<?php echo Route::_('index.php?option=com_gatracklog&task=tracklog.removeComment&id='.$citem->id.'&track_id='.$this->item->id, false, 2); ?>"
+									title="Delete Comment">
+									<i class="icon-trash"></i>
+								</a>
+							</td>
+						<?php endif; ?>
+
+					</tr>
+				<?php endforeach; ?>
+			<?php endif; ?>
+		</tbody>
+	</table>
+
+</div>
+
+<?php /* ----------------------   Return button   ------------------------------ */ ?>
+<a class="btn btn-secondary" href="<?php echo Route::_('index.php?option=com_gatracklog&view=tracklogs'); ?>">
+	<i class="icon-undo"></i> <?php echo Text::_("COM_GATRACKLOG_RETURN"); ?>
+</a>
+
+<?php echo $lhtml .= HTMLHelper::_('bootstrap.renderModal', $lmodname, $lmodparams); ?>
+
+<a class="btn btn-info" title="<?php echo Text::_('COM_GATRACKLOG_SEND_LOG_DESC'); ?>"
+	href="<?php echo Route::_('index.php?option=com_gatracklog&task=tracklog.sendtrklog&id='.$this->item->id); ?>">
+	<i class="icon-mail"></i> <?php echo Text::_('COM_GATRACKLOG_SEND_LOG'); ?>
+</a>
+<?php /* ----------------------   Edit button   ------------------------------ */ ?>
+<?php if($canEdit && $this->item->checked_out == 0): ?>
+	<a class="btn btn-primary"
+		href="<?php echo Route::_('index.php?option=com_gatracklog&task=tracklog.edit&id='.$this->item->id); ?>">
+		<i class="icon-edit"></i> <?php echo Text::_("COM_GATRACKLOG_EDIT_ITEM"); ?>
+	</a>
+<?php endif; ?>
+
+<?php /* ----------------------   Delete button and modal  ------------------------------ */ ?>
+<?php if ($canDelete) : ?>
+	<button class="btn btn-danger" data-bs-target="#deleteModal" data-bs-toggle="modal">
+		<i class="icon-trash"></i> <?php echo Text::_("COM_GATRACKLOG_DELETE_ITEM"); ?>
+	</button>
+
+	<?php HTMLHelper::_('bootstrap.renderModal', 'deleteModal'); ?>
+
+	<div id="deleteModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="deleteModal" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3><?php echo Text::_('COM_GATRACKLOG_DELETE_ITEM'); ?></h3>
+		</div>
+		<div class="modal-body">
+			<p><?php echo Text::sprintf('COM_GATRACKLOG_DELETE_CONFIRM', $this->item->id); ?></p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-bs-dismiss="modal">Close</button>
+			<a class="btn btn-danger"
+				href="<?php echo Route::_('index.php?option=com_gatracklog&task=tracklog.remove&id=' . $this->item->id, false, 2); ?>">
+				<?php echo Text::_('COM_GATRACKLOG_DELETE_ITEM'); ?>
+			</a>
+		</div>
+	</div>
+
+<?php endif; ?>

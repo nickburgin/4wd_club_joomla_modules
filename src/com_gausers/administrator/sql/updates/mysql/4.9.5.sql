@@ -1,0 +1,11 @@
+ALTER TABLE `#__gausers_profile_audit` change `ordering` `ordering` int NOT NULL DEFAULT 0;
+ALTER TABLE `#__gausers_profile_audit` change `created_date` `created_date` datetime NULL;
+ALTER TABLE `#__gausers_profile_audit` change `state` `state` tinyint DEFAULT 0;
+ALTER TABLE `#__gausers_profile_audit` change `created_by` `created_by` int NOT NULL DEFAULT 0;
+ALTER TABLE `#__gausers_profile_audit` change `checked_out` `checked_out` int NOT NULL DEFAULT 0;
+ALTER TABLE `#__gausers_profile_audit` change `user_id` `user_id` int NOT NULL DEFAULT 0;
+ALTER TABLE `#__gausers_profile_audit` change `checked_out_time` `checked_out_time` datetime NULL;
+ALTER TABLE `#__gausers_profile_audit` change `data_audit` `data_audit` text NULL;
+ALTER TABLE `#__gausers_profile_audit` change `pre_update` `pre_update` text NULL;
+ALTER TABLE `#__gausers_profile_audit` change `post_update` `post_update` text NULL;
+ALTER TABLE `#__gausers_profile_audit` change `comment` `comment` text NULL;

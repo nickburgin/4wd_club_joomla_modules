@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="sysinfo" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+		<field name="id" type="text" readonly="true" class="readonly" default="0" label="COM_GAUSERS_FORM_LBL_ID" description="COM_GAUSERS_FORM_DESC_ID"/>
+		<field name="ordering" label="COM_GAUSERS_FORM_LBL_ORDERING" description="COM_GAUSERS_FORM_DESC_ORDERING"/>
+		<field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+		<field name="checked_out" type="hidden" filter="unset"/>
+		<field name="checked_out_time" type="hidden" filter="unset"/>
+	    <field name="created_by" type="Createdby" hidden="true" default="0" label="COM_GAUSERS_FORM_LBL_CREATED_BY" description="COM_GAUSERS_FORM_DESC_CREATED_BY" hint="COM_GAUSERS_FORM_LBL_CREATED_BY"/>
+	    <field name="modified_by" type="Modifiedby" hidden="true" default="0" label="COM_GAUSERS_FORM_LBL_MODIFIED_BY" description="COM_GAUSERS_FORM_DESC_MODIFIED_BY" hint="COM_GAUSERS_FORM_LBL_MODIFIED_BY"/>
+	    <field name="created_date" type="Timecreated" label="COM_GAUSERS_FORM_LBL_CREATED_DATE" description="COM_GAUSERS_FORM_DESC_CREATED_DATE" hint="COM_GAUSERS_FORM_LBL_CREATED_DATE"/>
+	    <field name="modified_date" type="Timecreated" label="COM_GAUSERS_FORM_LBL_MODIFIED_DATE" description="COM_GAUSERS_FORM_DESC_MODIFIED_DATE" hint="COM_GAUSERS_FORM_LBL_MODIFIED_DATE"/>
+	</fieldset>
+
+	<fieldset name="general" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
+		<field name="name" type="text" required="true" filter="safehtml"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_NAME"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_NAME" />
+		<field name="partner" type="text" filter="safehtml"
+			description="COM_GAUSERS_FORM_DESC_CURRENTUSER_PARTNER"
+			label="COM_GAUSERS_FORM_LBL_CURRENTUSER_PARTNER" />
+		<field name="name_ro" type="text" readonly="true" class="readonly" filter="safehtml"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_NAME"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_NAME" />
+		<field name="email" type="email" required="true" validate="email" filter="safehtml"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_EMAIL"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_EMAIL"/>
+		<field name="address1" type="text" filter="safehtml" required="true"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_ADDRESS1"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_ADDRESS1" />
+		<field name="address2" type="text" filter="safehtml"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_ADDRESS2"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_ADDRESS2" />
+		<field name="city" type="text" filter="safehtml" required="true"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_SUBURB"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_SUBURB" />
+		<field name="plain_region" type="text" filter="safehtml"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_REGION"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_REGION" />
+		<field name="region" type="list" filter="safehtml"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_REGION"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_REGION" >
+			<option value="VIC">VIC</option>
+			<option value="NSW">NSW</option>
+			<option value="TAS">TAS</option>
+			<option value="SA">SA</option>
+			<option value="QLD">QLD</option>
+			<option value="WA">WA</option>
+			<option value="NT">NT</option>
+			<option value="ACT">ACT</option>
+			<option value="OTHER">OTHER</option>
+		</field>
+		<field name="postal_code" type="text" filter="safehtml" required="true"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_POSTCODE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_POSTCODE" />
+
+		<field name="country" type="text" filter="safehtml"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_COUNTRY"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_COUNTRY" />
+
+		<field name="phone" type="text" filter="safehtml" required="true"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_PHONE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_PHONE" />
+
+		<field
+			name="captcha"
+			type="captcha"
+			label="COM_GAUSERS_CAPTCHA_LABEL"
+			validate="captcha"
+			namespace="newmemberform"
+		/>
+
+	</fieldset>
+
+	<fieldset name="extrainfo">
+		<field name="comment" filter="safehtml" type="textarea" label="COM_GAUSERS_FORM_LBL_COMMENT" description="COM_GAUSERS_FORM_DESC_COMMENT" hint="COM_GAUSERS_FORM_LBL_COMMENT"/>
+		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+	</fieldset>
+</form>

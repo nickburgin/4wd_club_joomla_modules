@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="GlennArkell\Component\Gacalevents\Administrator\Field">
+	<fieldset name="sysinfo">
+        <field name="id" type="text" readonly="true" class="readonly" default="0" description="JGLOBAL_FIELD_ID_DESC"/>
+        <field name="ordering"/>
+        <field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+          <option value="1">GAATTEND</option>
+          <option value="0">GAAPOLOGY</option>
+          <option value="2">JARCHIVED</option>
+          <option value="-2">JTRASHED</option>
+        </field>
+        <field name="checked_out" type="hidden" filter="unset"/>
+        <field name="checked_out_time" type="hidden" filter="unset"/>
+        <field name="created_by" type="createdby" default="0" label="COM_GACALEVENTS_FORM_LBL_CREATED_BY" description="COM_GACALEVENTS_FORM_DESC_CREATED_BY" hidden="true" hint="COM_GACALEVENTS_FORM_LBL_CREATED_BY"/>
+        <field name="modified_by" type="modifiedby" default="0" label="COM_GACALEVENTS_FORM_LBL_MODIFIED_BY" description="COM_GACALEVENTS_FORM_DESC_MODIFIED_BY" hidden="true" hint="COM_GACALEVENTS_FORM_LBL_MODIFIED_BY"/>
+        <field name="created_date" type="timecreated" label="COM_GACALEVENTS_FORM_LBL_CREATED_DATE" description="COM_GACALEVENTS_FORM_DESC_CREATED_DATE" hint="COM_GACALEVENTS_FORM_LBL_CREATED_DATE"/>
+        <field name="modified_date" type="timecreated" label="COM_GACALEVENTS_FORM_LBL_MODIFIED_DATE" description="COM_GACALEVENTS_FORM_DESC_MODIFIED_DATE" hint="COM_GACALEVENTS_FORM_LBL_MODIFIED_DATE"/>
+	</fieldset>
+
+	<fieldset name="general">
+
+        <field name="attendee" class="input-xxlarge" filter="safehtml" type="Attendlist" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_ATTENDEE" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_ATTENDEE" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_ATTENDEE"/>
+        <field name="event" class="input-xxlarge" filter="safehtml" type="Eventlist" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_EVENT" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_EVENT" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_EVENT"/>
+        <field name="qty_att" type="text" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_QTY_ATT" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_QTY_ATT" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_QTY_ATT" />
+        <field name="paid" default="0" type="list" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PAID" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PAID" class="inputbox" size="1">
+          <option value="1">JYES</option>
+          <option value="0">JNO</option>
+        </field>
+        <field name="paid_amt" type="text" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PAID_AMT" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PAID_AMT" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PAID_AMT" />
+        <field name="formal_event" type="hidden" default="0"/>
+
+	</fieldset>
+
+	<fieldset name="publicinfo">
+        <field name="pub_name" type="text" filter="safehtml" class="input-xlarge" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_NAME" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PUBREGO_NAME" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_NAME" />
+        <field name="pub_email" type="text" filter="safehtml" class="input-large" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_EMAIL" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PUBREGO_EMAIL" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_EMAIL" />
+        <field name="pub_phone" type="text" filter="safehtml" class="input-large" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_PHONE" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PUBREGO_PHONE" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_PHONE" />
+        <field name="pub_from" type="text" filter="safehtml" class="input-xxlarge" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_FROM" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PUBREGO_FROM" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_FROM" />
+        <field name="att_cat" type="category" extension="com_gacalevents.attcat" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_ATTCAT" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PUBREGO_ATTCAT" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_ATTCAT"/>
+
+	</fieldset>
+
+	<fieldset name="formalinfo">
+        <field name="pub_title" type="text" filter="safehtml" class="input-large" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_TITLE" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PUBREGO_TITLE" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_TITLE" />
+        <field name="pub_fname" type="text" filter="safehtml" class="input-large" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_FNAME" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PUBREGO_FNAME" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_FNAME" />
+        <field name="pub_sname" type="text" filter="safehtml" class="input-large" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_SNAME" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PUBREGO_SNAME" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_SNAME" />
+        <field name="pub_partner" type="text" filter="safehtml" class="input-large" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_PARTNER" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PUBREGO_PARTNER" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_PARTNER" />
+        <field name="position" type="text" filter="safehtml" class="input-large" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_POSITION" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PUBREGO_POSITION" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_POSITION" />
+        <field name="pub_pcode" type="text" filter="safehtml" class="input-large" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_PCODE" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PUBREGO_PCODE" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_PCODE" />
+        <field name="pub_state" type="list" filter="safehtml" class="input-large" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_STATE" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PUBREGO_STATE" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_STATE" >
+          <option value="Victoria">Victoria</option>
+          <option value="Tasmania">Tasmania</option>
+          <option value="Australian Capital Teritory">Australian Capital Teritory</option>
+          <option value="South Australia">South Australia</option>
+          <option value="Western Australia">Western Australia</option>
+          <option value="Queensland">Queensland</option>
+          <option value="Northern Teritory">Northern Teritory</option>
+          <option value="New South Wales">New South Wales</option>
+          <option value="Other">Other</option>
+        </field>
+        <field name="pub_suburb" type="text" filter="safehtml" class="input-large" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_SUBURB" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PUBREGO_SUBURB" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_SUBURB" />
+        <field name="pub_address1" type="text" filter="safehtml" class="input-large" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_ADDRESS1" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PUBREGO_ADDRESS1" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_ADDRESS1" />
+        <field name="pub_address2" type="text" filter="safehtml" class="input-large" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_ADDRESS2" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PUBREGO_ADDRESS2" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_ADDRESS2" />
+        <field name="pub_address3" type="text" filter="safehtml" class="input-large" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_ADDRESS3" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_PUBREGO_ADDRESS3" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_PUBREGO_ADDRESS3" />
+
+	</fieldset>
+
+	<fieldset name="extrainfo">
+        <field name="comment" filter="safehtml" type="textarea" label="COM_GACALEVENTS_FORM_LBL_COMMENT" description="COM_GACALEVENTS_FORM_DESC_COMMENT" hint="COM_GACALEVENTS_FORM_LBL_ATTENDEE_COMMENT"/>
+	</fieldset>
+
+	<fieldset name="others">
+        <field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+  </fieldset>
+</form>
