@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -13,18 +13,18 @@ namespace GlennArkell\Component\Gacalevents\Site\Service;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Component\Router\RouterViewConfiguration;
-use \Joomla\CMS\Component\Router\RouterView;
-use \Joomla\CMS\Component\Router\Rules\StandardRules;
-use \Joomla\CMS\Component\Router\Rules\NomenuRules;
-use \Joomla\CMS\Component\Router\Rules\MenuRules;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Categories\Categories;
-use \Joomla\CMS\Application\SiteApplication;
-use \Joomla\CMS\Categories\CategoryFactoryInterface;
-use \Joomla\CMS\Categories\CategoryInterface;
-use \Joomla\Database\DatabaseInterface;
-use \Joomla\CMS\Menu\AbstractMenu;
+use Joomla\CMS\Component\Router\RouterViewConfiguration;
+use Joomla\CMS\Component\Router\RouterView;
+use Joomla\CMS\Component\Router\Rules\StandardRules;
+use Joomla\CMS\Component\Router\Rules\NomenuRules;
+use Joomla\CMS\Component\Router\Rules\MenuRules;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Categories\Categories;
+use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Categories\CategoryFactoryInterface;
+use Joomla\CMS\Categories\CategoryInterface;
+use Joomla\Database\DatabaseInterface;
+use Joomla\CMS\Menu\AbstractMenu;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 
 /**
@@ -65,6 +65,17 @@ class Router extends RouterView
 		$eventform->setKey('id');
 		$this->registerView($eventform);
 
+		$attendees = new RouterViewConfiguration('attendees');
+		$this->registerView($attendees);
+
+		$attendee = new RouterViewConfiguration('attendee');
+		$attendee->setKey('id');
+		$this->registerView($attendee);
+
+		$attendeeform = new RouterViewConfiguration('attendeeform');
+		$attendeeform->setKey('id');
+		$this->registerView($attendeeform);
+
 		parent::__construct($app, $menu);
 
 		$this->attachRule(new MenuRules($this));
@@ -97,6 +108,25 @@ class Router extends RouterView
 
 		return array();
 	}
+	public function getAttendeesSegment($id, $query)
+	{
+		$category = $this->getCategories(["access" => true])->get($id);
+
+		if ($category) {
+			$path = array_reverse($category->getPath(), true);
+			$path[0] = '1:root';
+
+			if ($this->noIDs) {
+				foreach ($path as &$segment) {
+					list($id, $segment) = explode(':', $segment, 2);
+				}
+			}
+
+			return $path;
+		}
+
+		return array();
+	}
 
 	/**
 	 * Method to get the segment(s) for an event
@@ -105,6 +135,10 @@ class Router extends RouterView
 	 * @return  array|string  The segments of this item
 	 */
 	public function getEventSegment($id, $query)
+	{
+		return array((int) $id => $id);
+	}
+	public function getAttendeeSegment($id, $query)
 	{
 		return array((int) $id => $id);
 	}
@@ -119,6 +153,10 @@ class Router extends RouterView
 	{
 		return $this->getEventSegment($id, $query);
 	}
+	public function getAttendeeformSegment($id, $query)
+	{
+		return $this->getAttendeeSegment($id, $query);
+	}
 
 	/**
 	 * Method to get the segment(s) for an event
@@ -127,6 +165,10 @@ class Router extends RouterView
 	 * @return  mixed   The id of this item or false
 	 */
 	public function getEventId($segment, $query)
+	{
+		return (int) $segment;
+	}
+	public function getAttendeeId($segment, $query)
 	{
 		return (int) $segment;
 	}
@@ -141,6 +183,10 @@ class Router extends RouterView
 	{
 		return $this->getEventId($segment, $query);
 	}
+	public function getAttendeeformId($segment, $query)
+	{
+		return $this->getAttendeeId($segment, $query);
+	}
 
 	/**
 	 * Method to get the id for a category
@@ -149,6 +195,28 @@ class Router extends RouterView
 	 * @return  mixed   The id of this item or false
 	 */
 	public function getEventsId($segment, $query)
+	{
+		if (isset($query['id'])) {
+			$category = $this->getCategories(["access" => true])->get($query['id']);
+
+			if ($category) {
+				foreach ($category->getChildren() as $child) {
+					if ($this->noIDs) {
+						if ($child->alias == $segment) {
+							return $child->id;
+						}
+					} else {
+						if ($child->id == (int) $segment) {
+							return $child->id;
+						}
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+	public function getAttendeesId($segment, $query)
 	{
 		if (isset($query['id'])) {
 			$category = $this->getCategories(["access" => true])->get($query['id']);

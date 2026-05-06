@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -10,11 +10,11 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
 
 $wa = $this->document->getWebAssetManager();
 $wa->useScript('keepalive')

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2014. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,14 +12,14 @@ namespace GlennArkell\Component\Gausers\Administrator\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Plugin\PluginHelper;
-use \Joomla\CMS\MVC\Model\AdminModel;
-use \Joomla\Event\Dispatcher;
-use \Joomla\CMS\Helper\TagsHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\Event\Dispatcher;
+use Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 /**
@@ -135,7 +135,7 @@ class ClubexecModel extends AdminModel
 	 */
 	public function duplicate(&$pks)
 	{
-		$user = GausersHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		// Access checks.
 		if (!$user->authorise('core.create', 'com_gausers'))

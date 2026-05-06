@@ -35,6 +35,82 @@
 
     </fieldset>
 
+    <!-- Integration parameter settings for the component -->
+	<fieldset
+		name="integration"
+		label="JGLOBAL_INTEGRATION_LABEL"
+		description="COM_GATRACKLOG_CONFIG_INTEGRATION_SETTINGS_DESC"
+		>
+		<fieldset
+			name="integration_test"
+			label="GATEST_TITLE"
+		>
+            <field name="send_email" type="radio" default="1"
+    			layout="joomla.form.field.radio.switcher"
+    			label="COM_GATRACKLOG_SEND_EMAIL_LABEL"
+    			description="COM_GATRACKLOG_SEND_EMAIL_DESC">
+                <option value="0">JNO</option>
+                <option value="1">JYES</option>
+            </field>
+
+            <field name="tmpl_email" type="radio" default="0"
+    			layout="joomla.form.field.radio.switcher"
+    			label="COM_GATRACKLOG_TMPL_EMAIL_LABEL"
+    			description="COM_GATRACKLOG_TMPL_EMAIL_DESC">
+                <option value="0">JNO</option>
+                <option value="1">JYES</option>
+            </field>
+
+		</fieldset>
+
+		<fieldset
+			name="integration_history"
+			label="GAHISTORY_TITLE"
+		>
+            <field name="save_history" type="radio" layout="joomla.form.field.radio.switcher" default="0" label="JGLOBAL_SAVE_HISTORY_OPTIONS_LABEL" description="JGLOBAL_SAVE_HISTORY_OPTIONS_DESC">
+                <option value="0">JNO</option>
+                <option value="1">JYES</option>
+            </field>
+
+            <field name="history_limit" type="text" filter="integer" default="5" showon="save_history:1"
+                label="JGLOBAL_HISTORY_LIMIT_OPTIONS_LABEL"
+                description="JGLOBAL_HISTORY_LIMIT_OPTIONS_DESC" />
+
+		</fieldset>
+
+		<fieldset
+			name="integration_workflows"
+			label="JWORKFLOW_TITLE"
+		>
+    		<field
+    			name="workflow_enabled"
+    			type="radio"
+    			label="JWORKFLOW_ENABLED_LABEL"
+    			layout="joomla.form.field.radio.switcher"
+    			default="0" >
+    			<option value="0">JNO</option>
+    			<option value="1">JYES</option>
+    		</field>
+
+		</fieldset>
+
+		<fieldset
+			name="integration_customfields"
+			label="JGLOBAL_FIELDS_TITLE"
+			>
+    		<field
+    			name="custom_fields_enable"
+    			type="radio"
+    			label="JGLOBAL_CUSTOM_FIELDS_ENABLE_LABEL"
+    			class="btn-group btn-group-yesno"
+    			default="0" >
+    			<option value="0">JNO</option>
+    			<option value="1">JYES</option>
+    		</field>
+		</fieldset>
+
+    </fieldset>
+
     <!-- Permissions parameter settings for the component -->
     <fieldset name="permissions"
 		description="JCONFIG_PERMISSIONS_DESC"
@@ -45,28 +121,4 @@
 
 	</fieldset>
 
-    <!-- History parameter settings for the component -->
-    <fieldset name="component">
-
-        <field name="save_history" type="radio" default="0"
-			class="btn-group btn-group-yesno" 
-			label="JGLOBAL_SAVE_HISTORY_OPTIONS_LABEL"
-			description="JGLOBAL_SAVE_HISTORY_OPTIONS_DESC">
-            <option value="0">JNO</option>
-            <option value="1">JYES</option>
-        </field>
-
-        <field name="history_limit" type="text" filter="integer" default="5"
-			label="JGLOBAL_HISTORY_LIMIT_OPTIONS_LABEL"
-			description="JGLOBAL_HISTORY_LIMIT_OPTIONS_DESC" />
-
-        <field name="sef_ids" type="radio" filter="integer" default="0"
-			class="btn-group btn-group-yesno"
-			label="JGLOBAL_SEF_NOIDS_LABEL"
-			description="JGLOBAL_SEF_NOIDS_DESC" >
-			<option value="1">JYES</option>
-			<option value="0">JNO</option>
-        </field>
-
-    </fieldset>
 </config>

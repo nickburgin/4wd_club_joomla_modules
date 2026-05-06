@@ -1,0 +1,55 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "com_gaforsale",
+  "version": "4.1.0",
+  "description": "This file contains details of the assets used by the For Sale component by Glenn Arkell.",
+  "license": "GPL-2.0-or-later",
+  "assets": [
+    {
+      "name": "com_gaforsale.gaforsale",
+      "description": "Glenn's Component styling.",
+      "type": "style",
+      "uri": "com_gabarebone/gaforsale.css",
+      "dependencies": [
+        "fontawesome"
+      ]
+    },
+    {
+      "name": "com_gaforsale.item",
+      "description": "Glenn's Component styling for an item.",
+      "type": "style",
+      "uri": "com_gaforsale/item.css",
+      "dependencies": [
+        "com_gaforsale.gaforsale"
+      ]
+    },
+    {
+      "name": "com_gaforsale.list",
+      "description": "Glenn's Component styling for a list.",
+      "type": "style",
+      "uri": "com_gaforsale/list.css",
+      "dependencies": [
+        "com_gaforsale.gaforsale"
+      ]
+    },
+    {
+      "name": "com_gaforsale.form",
+      "description": "Glenn's Component styling for a form.",
+      "type": "style",
+      "uri": "com_gaforsale/form.css",
+      "dependencies": [
+        "com_gaforsale.gaforsale"
+      ]
+    },
+    {
+      "name": "com_gaforsale.gaforsalepreset",
+      "type": "preset",
+      "dependencies": [
+        "com_gaforsale.gaforsale#style",
+        "com_gaforsale.form#style",
+        "com_gaforsale.item#style",
+        "com_gaforsale.list#style"
+      ]
+    }
+  ]
+}

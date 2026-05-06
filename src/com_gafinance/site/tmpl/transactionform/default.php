@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.2.3
  * @package    Com_Gafinance
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -9,11 +9,11 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
 use \GlennArkell\Component\Gafinance\Administrator\Helper\GafinanceHelper;
 
 // load any assets required
@@ -26,15 +26,12 @@ $lang->load('com_gafinance', JPATH_ADMINISTRATOR);
 
 $user    = GafinanceHelper::getSpecificUser();
 $canEdit = GafinanceHelper::canUserEdit($this->item, $user);
+$canTreasurer = $user->authorise('core.treasury', 'com_gafinance');
 
 ?>
 
 <div class="transaction-edit front-end-edit">
-	<?php if (!$canEdit) : ?>
-		<h3>
-			<?php throw new \Exception(Text::_('COM_GAFINANCE_ERROR_MESSAGE_NOT_AUTHORISED'), 403); ?>
-		</h3>
-	<?php else : ?>
+	<?php if ($canEdit || $canTreasurer) : ?>
 		<?php if (!empty($this->item->id)): ?>
 			<h1><?php echo Text::sprintf('COM_GAFINANCE_EDIT_ITEM_TITLE', $this->item->id); ?></h1>
 		<?php else: ?>
@@ -118,5 +115,9 @@ $canEdit = GafinanceHelper::canUserEdit($this->item, $user);
 			<input type="hidden" name="task" value="transactionform.save"/>
 			<?php echo HTMLHelper::_('form.token'); ?>
 		</form>
+	<?php else : ?>
+		<h3>
+			<?php throw new \Exception(Text::_('COM_GAFINANCE_ERROR_MESSAGE_NOT_AUTHORISED'), 403); ?>
+		</h3>
 	<?php endif; ?>
 </div>

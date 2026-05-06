@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.0.2
+ * @version    4.2.2
  * @package    Com_Gaforsale
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -40,7 +40,7 @@ class ModifiedbyField extends \Joomla\CMS\Form\FormField
 	{
 		// Initialize variables.
 		$html   = array();
-		$user   = Factory::getUser();
+		$user = Factory::getApplication()->getIdentity();
 		$html[] = '<input type="hidden" name="' . $this->name . '" value="' . $user->id . '" />';
 		if (!$this->hidden)
 		{

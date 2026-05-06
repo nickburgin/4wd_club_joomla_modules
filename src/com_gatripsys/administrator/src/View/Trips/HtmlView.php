@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    com_gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,14 +12,14 @@ namespace GlennArkell\Component\Gatripsys\Administrator\View\Trips;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use \Joomla\CMS\Toolbar\Toolbar;
-use \Joomla\CMS\Toolbar\ToolbarHelper;
-use \Joomla\CMS\Helper\ContentHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 
 /**

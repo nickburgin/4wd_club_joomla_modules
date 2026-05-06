@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.2.3
  * @package    Com_Gafinance
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2020 Glenn Arkell
@@ -12,11 +12,11 @@ namespace GlennArkell\Component\Gafinance\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gafinance\Administrator\Helper\GafinanceHelper;
 
 /**
@@ -32,82 +32,58 @@ class GareportsHelper
 	public static function rptCashBookSummary($data)
 	{
 	    $app		= Factory::getApplication();
-        $params = ComponentHelper::getParams('com_gafinance');
-        $ownerCat = $params->get('ownerCat');
-
-		// work out what accounts to include
+		$openbal = 0;
+		$closebal = 0;
+		$cntr = 0;
+		$pldata = array();
+		$rptFull = '';
+		$params = ComponentHelper::getParams('com_gafinance');
         $combine_accnts = $params->get('combine_accnts', 0);
-        $select_accnts = $params->get('select_accnts', 0);
         $combine_rpt = $params->get('combine_rpt', 0);
-
-        // get the name of the user requesting this update
-        $user	= GafinanceHelper::getSpecificUser();
-        $user_id	= $user->id;
-
-        $req_dtfr = $data['start_date'];
-        $req_dtto = $data['end_date'];
+		$accnts = $params->get('select_accnts');
 
         $rptTitle = '<div class="page-header"><h2>Cash Book Summary</h2></div>';
         $rptTitle .= '<p>For period '.$data['req_dtfr_disp'].' to '.$data['req_dtto_disp'].' (inclusive)</p>';
-        $rptTitle .= '<table class="table finreport">';
-        $rptTitle .= '<tr><td class="trantype">&nbsp;</td><td class="trancat">&nbsp;</td><td class="trandesc">&nbsp;</td>';
-        $rptTitle .= '<td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
-        if ($combine_accnts && $combine_rpt) {
-			$rptTitle .= '<tr style="border-top:1px solid;"><td colspan="6"><h3>All Accounts Combined in this report</h3></td></tr>';
-		}
 
-        if ($combine_accnts && $combine_rpt) {
-			// this should include Journal entries and combined opening balance
-			if (is_array($select_accnts)) {
-				$openbal = 0;
-				$closebal = 0;
-				foreach ($select_accnts AS $accnt) {
-					$obal = GafinanceHelper::getOpeningBalance($req_dtfr, $req_dtto, $accnt);
-					$openbal = $openbal + $obal;
-					$cbal = GafinanceHelper::getClosingBalance($req_dtto, $accnt);
-					$closebal = $closebal + $cbal;
-				}
-				$pldata = GafinanceHelper::getAllTransactions($req_dtfr, $req_dtto, 0);
-			} else {
-				$openbal = GafinanceHelper::getOpeningBalance($req_dtfr, $req_dtto, $select_accnts);
-				$closebal = GafinanceHelper::getClosingBalance($req_dtto, $select_accnts);
-				$pldata = GafinanceHelper::getAllTransactions($req_dtfr, $req_dtto, $select_accnts);
+        if (!$data['rpt_accnt']) {
+            if (is_array($accnts) && !empty($accnts)) {
+                if ($combine_rpt) {
+                    $accntNumbers = implode(',', $accnts);
+                    foreach ($accnts as $accnt) {
+                        $obal = GafinanceHelper::getOpeningBalance($data['start_date'], $data['end_date'], $accnt);
+                        $openbal = $openbal + $obal;
+                		$transVal = GafinanceHelper::getClosingBalance($data['start_date'], $data['end_date'], $accnt);
+                        $cbal = $obal + $transVal;
+                        $closebal = $closebal + $cbal;
+                    }
+                    $tdata = GafinanceHelper::getAllTransactions($data['start_date'], $data['end_date'], $accntNumbers);
+                    $rptFull .= self::setupCashBookSummaryLayout($openbal, $closebal, $tdata);
+                } else {
+                    foreach ($accnts as $accnt) {
+                        $obal = GafinanceHelper::getOpeningBalance($data['start_date'], $data['end_date'], $accnt);
+                        $openbal = $openbal + $obal;
+                		$transVal = GafinanceHelper::getClosingBalance($data['start_date'], $data['end_date'], $accnt);
+                        $cbal = $obal + $transVal;
+                        $closebal = $closebal + $cbal;
+                		$tdata = GafinanceHelper::getAllTransactions($data['start_date'], $data['end_date'], $accnt);
+                		if (!is_array($tdata) || empty($tdata)) { $tdata = GafinanceHelper::getAccount($accnt)->accnt_name; }
+                        $rptFull .= self::setupCashBookSummaryLayout($obal, $cbal, $tdata);
+                    }
+                }
+            } else {
+                $rptTitle .= '<table class="finreport"><tr><td colspan="6">'.Text::_('COM_GAFINANCE_NO_ITEM_SELECTED').'</td></tr></table>';
+                $app->setUserState('com_gafinance.rptprint.data', $rptTitle);
+                return true;
+            }
+        } else {
+            $openbal = GafinanceHelper::getOpeningBalance($data['start_date'], $data['end_date'], $data['rpt_accnt']);
+            $transVal = GafinanceHelper::getClosingBalance($data['start_date'], $data['end_date'], $data['rpt_accnt']);
+            $closebal = $openbal + $transVal;
+            $pldata = GafinanceHelper::getAllTransactions($data['start_date'], $data['end_date'], $data['rpt_accnt']);
+            $rptFull = self::setupCashBookSummaryLayout($openbal, $closebal, $pldata);
+        }
 
-			}
-			$rptFull = self::setupCashBookSummaryLayout($openbal, $closebal, $pldata, $rptTitle);
-		} elseif ($combine_accnts && !$combine_rpt) {
-			// this should include Journal entries but have individual opening balance
-			$accnt_rpt = array();
-			if (is_array($select_accnts)) {
-				$openbal = 0;
-				$closebal = 0;
-				$cntr = 0;
-				foreach ($select_accnts AS $accnt) { $cntr++;
-					$openbal = GafinanceHelper::getOpeningBalance($req_dtfr, $req_dtto, $accnt);
-					$closebal = GafinanceHelper::getClosingBalance($req_dtto, $accnt);
-					$pldata = GafinanceHelper::getAllTransactions($req_dtfr, $req_dtto, $accnt);
-
-					if (empty($pldata)) {
-						$obj = new stdClass();
-						$obj->accnt_name = GafinanceHelper::getAccountName($accnt);
-						$pldata[] = $obj;
-					}
-					$accnt_rpt[] = self::setupCashBookSummaryLayout($openbal, $closebal, $pldata, $rptTitle);
-				}
-                $rptFull = $accnt_rpt;
-			} else {
-				$openbal = GafinanceHelper::getOpeningBalance($req_dtfr, $req_dtto, $select_accnts);
-				$closebal = GafinanceHelper::getClosingBalance($req_dtto, $select_accnts);
-				$pldata = GafinanceHelper::getAllTransactions($req_dtfr, $req_dtto, $select_accnts);
-				$rptFull = self::setupCashBookSummaryLayout($openbal, $closebal, $pldata, $rptTitle);
-			}
-		} else {
-			// this should exclude Journal entries and only have transactions for the menu parameter account
-			$openbal = GafinanceHelper::getOpeningBalance($req_dtfr, $req_dtto, $data['rpt_accnt']);
-			$closebal = GafinanceHelper::getClosingBalance($req_dtto, $data['rpt_accnt']);
-			$pldata = GafinanceHelper::getAllTransactions($req_dtfr, $req_dtto, $data['rpt_accnt']);
-			$rptFull = self::setupCashBookSummaryLayout($openbal, $closebal, $pldata, $rptTitle);
-		}
+        $rptFull = $rptTitle.$rptFull;
 
 		$app->setUserState('com_gafinance.rptprint.data', $rptFull);
 
@@ -122,86 +98,95 @@ class GareportsHelper
 	{
 	    $app		= Factory::getApplication();
         $sitename   = $app->get('sitename');
-        
+        $today  = date_format(Factory::getDate(), 'Y-m-d');
+        $reportDate = $data['end_date'] > $today ? HTMLHelper::date($today, Text::_('COM_GAFINANCE_DISPLAY_DATE'), 'UTC') : $data['req_dtto_disp'];
         $params = ComponentHelper::getParams('com_gafinance');
-        $inc_invoices = $params->get('inc_invoices');
+        $inc_invoices = $params->get('inc_invoices', 2);
         $ownerCat = $params->get('ownerCat');
+        $exch   = $params->get( 'exchange_rates' );
+        $paypalau   = $params->get( 'paypalau' );
+        $paypalus   = $params->get( 'paypalus' );
+        $acctpay    = $params->get( 'acctpay', 0.00 );
         $combine_accnts = $params->get('combine_accnts', 0);
-        $select_accnts = $params->get('select_accnts', 0);
         $combine_rpt = $params->get('combine_rpt', 0);
+		$accnts = $params->get('select_accnts');
+		$accounts = implode(',', $accnts);
+		$totar = 0;
+		$totCash = 0;
 
-        // get the name of the user requesting this update
-        $user	= GafinanceHelper::getSpecificUser();
-        $user_id	= $user->id;
+        $paypal = ($paypalau + ($paypalus * $exch));
+        
+        // setup report header information
+        $rptdata = '<div class="page-header"><h2>Balance Sheet</h2></div><p> &nbsp; &nbsp; &nbsp; &nbsp;';
+        $rptdata .= ' for '.$sitename.' as at '.$reportDate.'</p>';
+        $rptdata .= '<table class="finreport">';
+        $rptdata .= '<tr><td class="trantype"><strong>Assets</strong></td><td class="trancat">&nbsp;</td>';
+        $rptdata .= '<td class="trandesc">&nbsp;</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
 
-        $req_dtto = $data['end_date'];
+        // setup Cash in the bank figures fro each account if combining
+        if (!$data['rpt_accnt'] && $combine_accnts) {
+            $rptdata = self::setupBSTable($rptdata, '<strong>Cash at Bank</strong>', '', '');
+            foreach ( $accnts as $accnt) {
+                // Get the closing balance figure calculated from all transactions since the last reconciliation record.
+                $tranVal = GafinanceHelper::getClosingBalance($data['start_date'], $data['end_date'], $accnt);
+                $openbal = GafinanceHelper::getOpeningBalance($data['start_date'], $data['end_date'], $accnt);
+                $closebal = $openbal + $tranVal;
+                $accnt_name = GafinanceHelper::getAccount($accnt)->accnt_name;
+                $rptdata = self::setupBSTable($rptdata, '', $accnt_name, $closebal);
+                $totCash = $totCash + $closebal;
+            }
+        } else {
+            // Get the closing balance figure calculated from all transactions since the last reconciliation record.
+            $tranVal = GafinanceHelper::getClosingBalance($data['start_date'], $data['end_date'], $data['rpt_accnt']);
+            $openbal = GafinanceHelper::getOpeningBalance($data['start_date'], $data['end_date'], $data['rpt_accnt']);
+            $closebal = $openbal + $tranVal;
+            $accnt_name = GafinanceHelper::getAccount($data['rpt_accnt'])->accnt_name;
+            $rptdata = self::setupBSTable($rptdata, '<strong>Cash at Bank</strong>', $accnt_name, $closebal);
+            $totCash = $totCash + $closebal;
+        }
 
-        // Get the closing balance figure calculated from all transactions since the last reconciliation record.
-		$closebal = 0;
-		if ($combine_accnts) {
-			if (is_array($select_accnts)) {
-				foreach ($select_accnts AS $rpt_accnt) {
-			        $cbal = GafinanceHelper::getClosingBalance($req_dtto, $rpt_accnt);
-			        $closebal = $closebal + $cbal;
-			    }
-			} else {
-				$closebal = GafinanceHelper::getClosingBalance($req_dtto, $select_accnts);
-			}
-		} else {
-			$closebal = GafinanceHelper::getClosingBalance($req_dtto, $data['rpt_accnt']);
-		}
 
+        // get all the assets for reporting
         $assets = GafinanceHelper::getAllAssets();
         $currentassetvalue = 0;
         foreach ($assets AS $asset) {
 			$currentassetvalue = $currentassetvalue + $asset->asset_value;
 		}
 
-        if ($currentassetvalue == 0) {
-            $currentassetvalue = '0.00';
-        }
-        
-        //$params	= $app->getParams();
-        $exch   = $params->get( 'exchange_rates' );
-        $paypalau   = $params->get( 'paypalau' );
-        $paypalus   = $params->get( 'paypalus' );
-        $acctpay    = $params->get( 'acctpay' );
 
-        $paypal = ($paypalau + ($paypalus * $exch));
-
-        $rptdata = '<div class="page-header"><h2>Balance Sheet</h2></div><p> &nbsp; &nbsp; &nbsp; &nbsp; for '.$sitename.' as at '.$data['req_dtto_disp'].'</p>';
-        $rptdata .= '<table class="finreport">';
-        $rptdata .= '<tr><td class="trancat"><strong>Assets</strong></td><td class="trandesc">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
-        $rptdata = self::setupBSTable($rptdata, Text::_('COM_GAFINANCE_EQUIPMENT_LABEL'), $currentassetvalue);
-        $rptdata = self::setupBSTable($rptdata, 'Cash at Bank', $closebal);
+        $rptdata = self::setupBSTable($rptdata, '<strong>'.Text::_('COM_GAFINANCE_EQUIPMENT_LABEL').'</strong>', '', '');
+        $rptdata = self::setupBSTable($rptdata, '', 'All registered assets', $currentassetvalue);
+        //$rptdata = self::setupBSTable($rptdata, 'Cash at Bank', $closebal);
         if ($paypal > 0) {
-            $rptdata = self::setupBSTable($rptdata, Text::_('COM_GAFINANCE_PAYPALAU_LABEL'), $paypal);
+            $rptdata = self::setupBSTable($rptdata, Text::_('COM_GAFINANCE_PAYPALAU_LABEL'), '', '');
+            $rptdata = self::setupBSTable($rptdata, '', 'Total in PayPal', $paypal);
         }
-        $rptdata = self::setupBSTable($rptdata, '<strong>Accounts Receivable</strong>', 'space');
+        $rptdata = self::setupBSTable($rptdata, '<strong>Accounts Receivable</strong>', '', '');
 
-        if ($inc_invoices == 1) {   // this is for getting unpaid invoices and work to be invoiced from the timesheets system
+        if ($inc_invoices == 1) {   
+            // this is for getting unpaid invoices and work to be invoiced from the timesheets system
             // Create a new query object to get the outstanding invoices
             $db = Factory::getContainer()->get('DatabaseDriver');
             $query = $db->getQuery(true);
             $query->clear();
-            $query->select( ' b.name, sum(a.invoice_amt) ' );
+            $query->select( ' b.name, sum(a.invoice_amt) as inv_amt ' );
             $query->from('#__gatimesheet_invoices AS a, #__users AS b ');
             $query->where(' a.state = 1 ');
             $query->where(' a.user_id = b.id ');
-            $query->where(' a.paid_date = "0000-00-00" ' );
+            $query->where(' (a.paid_date IS NULL OR a.paid_date = "0000-00-00") ' );
             $query->group(' b.name ');
             $query->order(' b.name ');
     
             $db->setQuery((string)$query);
 		    try {
-		        $acctrecs = $db->loadRowList();
+		        $acctrecs = $db->loadObjectList();
 		    } catch (RuntimeException $e) {
 		        Factory::getApplication()->enqueueMessage($e->getMessage());
 		        return false;
 		    }
             foreach ( $acctrecs as $acctrec ) {
-                $rptdata = self::setupBSTable($rptdata, $acctrec[0], $acctrec[1]);
-                $totar = $totar + $acctrec[1];
+                $rptdata = self::setupBSTable($rptdata, '', $acctrec->name, $acctrec->inv_amt);
+                $totar = $totar + $acctrec->inv_amt;
             }
 
             // Create a new query object to get the work performed but not invoiced
@@ -225,67 +210,67 @@ class GareportsHelper
 		        return false;
 		    }
 
-            $rptdata .= '<tr><td class="trantype">&nbsp;</td><td class="trandesc"><strong>Accounts Receivable to be invoiced</strong></td><td class="tranamt">&nbsp;</td></tr>';
+            $rptdata .= '<tr><td class="trantype">&nbsp;</td><td class="trancat"><strong>Accounts Receivable to be invoiced</strong></td><td class="trandesc">&nbsp;</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
 
             foreach ( $acctrecs as $acctrec ) {
                 if ($acctrec->charge_amt != 0 ) {
-                    $rptdata = self::setupBSTable($rptdata, $acctrec->name, $acctrec->charge_amt);
+                    $rptdata = self::setupBSTable($rptdata, '', $acctrec->name, $acctrec->charge_amt);
                 }
                 $totar = $totar + $acctrec->charge_amt;
             }
+            $rptdata = self::setupBSTable($rptdata, '', '', $totar);
 
         } else {
-            $totar = 0;
+            $rptdata = self::setupBSTable($rptdata, '', 'Yet to be invoiced', 0);
         }
 
-        $totass = ($currentassetvalue + $paypal + $closebal + $totar);
+        $totass = ($currentassetvalue + $paypal + $totar + $totCash);
 
-        $rptdata .= '<tr><td class="trantype" colspan="3">&nbsp;</td></tr>';
-        $rptdata = self::setupBSTable($rptdata, '<strong>Total Assets</strong>', $totass);
-        $rptdata .= '<tr><td class="trantype" colspan="3">&nbsp;</td></tr>';
+        $rptdata .= '<tr><td class="trantype" colspan="5">&nbsp;</td></tr>';
+        $rptdata = self::setupBSTable($rptdata, '', '<strong>Total Assets</strong>', $totass);
+        $rptdata .= '<tr><td class="trantype" colspan="5">&nbsp;</td></tr>';
 
         // now calculate the liabilities based on unpaid expenses
-        $db = Factory::getContainer()->get('DatabaseDriver');
-        $query = $db->getQuery(true);
-        $query->clear();
-        $query->select( ' a.tran_desc, sum(a.tran_amount) AS tran_amt ' );
-        $query->from('#__gafinance_transactions AS a ');
-        $query->where(' a.state = 1 ');
-        $query->where('a.accnt_id = '.(int) $data['rpt_accnt']);
-        $query->where(' a.created_date >= (select max(tran_date) from #__gafinance_transactions AS b where b.tran_type = "Z" and b.state = 1 and accnt_id = '.(int) $data['rpt_accnt'].' ) ' );
-        $query->where(' a.tran_date = "0000-00-00"' );
-        $query->where(' a.tran_type = "E"'  );
-        $query->group(' a.tran_desc'  );
-
-        $db->setQuery((string)$query);
-	    try {
-	        $accounts_pay = $db->loadObjectList();
-	    } catch (RuntimeException $e) {
-	        Factory::getApplication()->enqueueMessage($e->getMessage());
-	        return false;
+        if ($combine_rpt) {
+            $db = Factory::getContainer()->get('DatabaseDriver');
+            $query = $db->getQuery(true);
+            $query->clear();
+            $query->select( ' a.tran_desc, sum(a.tran_amount) AS tran_amt ' );
+            $query->from('#__gafinance_transactions AS a ');
+            $query->where(' a.state = 1 ');
+            $query->where(' a.accnt_id IN ('.$accounts.')');
+            //$query->where(' a.created_date >= (select max(tran_date) from #__gafinance_transactions AS b where b.tran_type = "Z" and b.state = 1 and accnt_id = '.(int) $data['rpt_accnt'].' ) ' );
+            $query->where(' ( a.tran_date IS NULL OR a.tran_date = "0000-00-00" )' );
+            $query->where(' a.tran_type = "E"' );
+            $query->group(' a.tran_desc' );
+    
+            $db->setQuery((string)$query);
+    	    try {
+    	        $accounts_pay = $db->loadObjectList();
+    	    } catch (RuntimeException $e) {
+    	        Factory::getApplication()->enqueueMessage($e->getMessage());
+    	        return false;
+    	    }
 	    }
 
-        $rptdata .= '<tr><td class="trancat"><strong>Liabilities</strong></td><td class="trandesc">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
-        $rptdata = self::setupBSTable($rptdata, '<strong>Accounts Payable</strong>', 'space');
-		if ($acctpay) {
-			$rptdata = self::setupBSTable($rptdata, Text::_('COM_GAFINANCE_PREPAID_LABEL'), $acctpay);
-		}
+        $rptdata .= '<tr><td class="trantype"><strong>Liabilities</strong></td><td class="trancat">&nbsp;</td><td class="trandesc">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
+        $rptdata = self::setupBSTable($rptdata, '<strong>Accounts Payable</strong>', '', '');
+		$rptdata = self::setupBSTable($rptdata, '', Text::_('COM_GAFINANCE_PREPAID_LABEL'), $acctpay);
 
         $totlib = $acctpay;
 
         foreach ($accounts_pay as $ap) {
-            $ap->tran_amt = ($ap->tran_amt * -1);
-            $rptdata = self::setupBSTable($rptdata, $ap->tran_desc, $ap->tran_amt);
+            $rptdata = self::setupBSTable($rptdata, '', $ap->tran_desc, $ap->tran_amt);
             $totlib = $totlib + $ap->tran_amt ;
         }
 
         $gtass = ($totass - $totlib);
 
-        $rptdata .= '<tr><td colspan="3">&nbsp;</td></tr>';
-        $rptdata = self::setupBSTable($rptdata, '<strong>Total Liabilities</strong>', $totlib);
-        $rptdata .= '<tr><td colspan="3">&nbsp;</td></tr>';
-        $rptdata = self::setupBSTable($rptdata, '<strong>Net Assets</strong>', $gtass);
-        $rptdata .= '<tr><td colspan="3">&nbsp;</td></tr><tr><td colspan="3">&nbsp;</td></tr></table>';
+        $rptdata .= '<tr><td colspan="5">&nbsp;</td></tr>';
+        $rptdata = self::setupBSTable($rptdata, '', '<strong>Total Liabilities</strong>', $totlib);
+        $rptdata .= '<tr><td colspan="5">&nbsp;</td></tr>';
+        $rptdata = self::setupBSTable($rptdata, '', '<strong>Net Assets</strong>', $gtass);
+        $rptdata .= '<tr><td colspan="5">&nbsp;</td></tr><tr><td colspan="5">&nbsp;</td></tr></table>';
         
         $app->setUserState('com_gafinance.rptprint.data', $rptdata);
 
@@ -302,70 +287,104 @@ class GareportsHelper
         $sitename   = $app->get('sitename');
         $params = ComponentHelper::getParams('com_gafinance');
         $ownerCat = $params->get('ownerCat', 0);
+        $combine_accnts = $params->get('combine_accnts', 0);
+        $combine_rpt = $params->get('combine_rpt', 0);
+		$accnts = $params->get('select_accnts');
+		$accounts = implode(',', $accnts);
+		$allAccnts = !$data['rpt_accnt'] ? $accounts : $data['rpt_accnt'];
+        $today  = date_format(Factory::getDate(), 'Y-m-d');
+        $reportDate = $data['end_date'] > $today ? HTMLHelper::date($today, Text::_('COM_GAFINANCE_DISPLAY_DATE'), 'UTC') : $data['req_dtto_disp'];
 
-        // get the name of the user requesting this update
-        $user	= GafinanceHelper::getSpecificUser();
-        $user_id	= $user->id;
+        $pldata = GafinanceHelper::getAllTransactions($data['start_date'], $data['end_date'], $allAccnts);
 
-        $req_dtfr = $data['start_date'];
-        $req_dtto = $data['end_date'];
+        $extraLine = '<tr><td colspan="5">&nbsp;</td></tr>';
 
-        // Create a new query object to get all the transactions between the requested dates.
-        $db = Factory::getContainer()->get('DatabaseDriver');
-        $query = $db->getQuery(true);
-        $query->clear();
-        $query->select( ' a.tran_type, c.title, a.tran_desc, SUM(a.tran_amount) as tranAmt ' );
-        $query->from('#__gafinance_transactions AS a ');
-        $query->join('LEFT', '#__categories AS c ON c.id = a.cat_id ');
-        $query->where(' a.state = 1 ');
-        if ($ownerCat) {
-            $query->where(' a.cat_id != '.$db->Quote($ownerCat) );
-        }
-        $query->where(' a.tran_type <> "Z" ');
-        $query->where(' a.tran_date >= '.$db->Quote($req_dtfr) );
-        $query->where(' a.tran_date <= '.$db->Quote($req_dtto) );
-		// filter on the menu parameter of account id
-        $query->where('a.accnt_id = '.(int) $data['rpt_accnt']);
-        $query->group(' a.tran_type, c.title, a.tran_desc ' );
-        $query->order(' a.tran_type DESC, c.title ASC, a.tran_desc ASC ' );
-        $db->setQuery((string)$query);
-	    try {
-	        $pldata = $db->loadObjectList();
-	    } catch (RuntimeException $e) {
-	        Factory::getApplication()->enqueueMessage($e->getMessage());
-	        return false;
-	    }
-	    
         $revenue = '';
         $expenses = '';
+        $prevAccnt = '';
+        $cntr = 0;
+
+        $rptdata = '<div class="page-header"><h2>Profit &amp; Loss Statement</h2></div>';
+        $rptdata .= '<p>For '.$sitename.' within period '.$data['req_dtfr_disp'].' to '.$reportDate.'</p>';
+        $rptdata .= '<table class="finreport">';
 
         foreach ($pldata as $profloss) {
-            if ($profloss->tran_type == "I") {
-                //$revenue = $revenue + $profloss->tranAmt;
-                $totrev = $totrev + $profloss->tranAmt;
-                $revenue .= '<tr><td class="trantype">&nbsp;</td><td class="trancat">'.$profloss->title.'</td><td class="trandesc">'.$profloss->tran_desc.'</td>';
-                $revenue .= '<td class="tranamt">'.number_format($profloss->tranAmt,2).'</td></tr>';
+            $cntr++;
+            if ($prevAccnt == '') {
+                // this is the first time through so set the account name
+                $prevAccnt = $profloss->accnt_id_name;
+                $accnthead = '<tr><tdcolspan="5"><h4>Account: '.$profloss->accnt_id_name.'</h4></td></tr>';
+                $revenue .= $extraLine.'<tr><td class="trantype"><strong>Revenue</strong></td><td colspan="4">&nbsp;</td></tr>';
+                $expenses .= $extraLine.'<tr><td class="trantype"><strong>Expenses</strong></td><td colspan="4">&nbsp;</td></tr>';
+            }
+
+            if ($profloss->accnt_id_name == $prevAccnt) {
+                if ($profloss->tran_type == "I") {
+                    $totrev = $totrev + $profloss->tranAmt;
+                    $revenue .= '<tr><td class="trantype">&nbsp;</td><td class="trancat">'.$profloss->title.'</td><td class="trandesc">'.$profloss->tran_desc.'</td>';
+                    $revenue .= '<td class="tranamt">'.number_format($profloss->tranAmt,2).'</td><td class="tranamt">&nbsp;</td></tr>';
+                } else {
+                    $expenses .= '<tr><td class="trantype">&nbsp;</td><td class="trancat">'.$profloss->title.'</td><td class="trandesc">'.$profloss->tran_desc.'</td>';
+                    $expenses .= '<td class="tranamt">'.number_format($profloss->tranAmt,2).'</td><td class="tranamt">&nbsp;</td></tr>';
+                    $totexp = $totexp + $profloss->tranAmt;
+                }
             } else {
-                $expenses .= '<tr><td class="trantype">&nbsp;</td><td class="trancat">'.$profloss->title.'</td><td class="trandesc">'.$profloss->tran_desc.'</td>';
-                $expenses .= '<td class="tranamt">'.number_format($profloss->tranAmt,2).'</td></tr>';
-                $totexp = $totexp + $profloss->tranAmt;
+                $rptdata .= $accnthead;
+                // revenue heasding and line items
+                $rptdata .= $revenue;
+                $rptdata .= $extraLine.'<tr><td class="trantype">&nbsp;</td><td colspan="2"><strong>Total Revenue</strong></td>';
+                $rptdata .= '<td class="tranamt"><strong>'.number_format($totrev,2).'</strong></td><td class="tranamt">&nbsp;</td></tr>';
+                $rptdata .= '<tr><td colspan="2">&nbsp;</td><td class="trandesc"><strong>Gross Profit</strong></td>';
+                $rptdata .= '<td class="tranamt">&nbsp;</td><td class="tranamt trantot"><strong>'.number_format($totrev,2).'</strong></td></tr>';
+                $rptdata .= $extraLine.$extraLine;
+                // expenses heasding and line items
+                $rptdata .= $expenses;
+                $rptdata .= $extraLine.'<tr><td class="trantype">&nbsp;</td><td colspan="2"><strong>Total Expenses</strong></td>';
+                $rptdata .= '<td class="tranamt"><strong>'.number_format($totexp,2).'</strong></td><td class="tranamt">&nbsp;</td></tr>';
+                $rptdata .= $extraLine.$extraLine;
+                // total net
+                $rptdata .= '<tr><td colspan="2">&nbsp;</td><td class="trandesc"><strong>Net Profit</strong></td>';
+                $rptdata .= '<td class="tranamt">&nbsp;</td><td class="tranamt trantot"><strong>'.number_format(($totrev + $totexp),2).'</strong></td></tr>';
+                $rptdata .= $extraLine.$extraLine;
+                // now reset revenue and expenses for the next account
+                $prevAccnt = $profloss->accnt_id_name;
+                $accnthead = '<tr><td class="trantype" colspan="5"><h4>Account: '.$profloss->accnt_id_name.'</h4></td></tr>';
+                $revenue = $extraLine.'<tr><td class="trantype"><strong>Revenue</strong></td><td colspan="4">&nbsp;</td></tr>';
+                $expenses = $extraLine.'<tr><td class="trantype"><strong>Expenses</strong></td><td colspan="4">&nbsp;</td></tr>';
+                $totrev = 0;
+                $totexp = 0;
+                if ($profloss->tran_type == "I") {
+                    $totrev = $totrev + $profloss->tranAmt;
+                    $revenue .= '<tr><td class="trantype">&nbsp;</td><td class="trancat">'.$profloss->title.'</td><td class="trandesc">'.$profloss->tran_desc.'</td>';
+                    $revenue .= '<td class="tranamt">'.number_format($profloss->tranAmt,2).'</td><td class="tranamt">&nbsp;</td></tr>';
+                } else {
+                    $expenses .= '<tr><td class="trantype">&nbsp;</td><td class="trancat">'.$profloss->title.'</td><td class="trandesc">'.$profloss->tran_desc.'</td>';
+                    $expenses .= '<td class="tranamt">'.number_format($profloss->tranAmt,2).'</td><td class="tranamt">&nbsp;</td></tr>';
+                    $totexp = $totexp + $profloss->tranAmt;
+                }
             }
         }
 
-        $rptdata = '<div class="page-header"><h2>Profit &amp; Loss Statement</h2></div><p>For '.$sitename.' within period '.$data['req_dtfr_disp'].' to '.$data['req_dtto_disp'].'</p><table class="finreport">';
-        $rptdata .= '<tr><td class="trantype" colspan="4">&nbsp;</td></tr><tr><td class="trantype">Revenue</td><td class="trancat">&nbsp;</td><td class="trandesc">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
+        // revenue heasding and line items
+        $rptdata .= $accnthead;
         $rptdata .= $revenue;
-        $rptdata .= '<tr><td class="trantype">&nbsp;</td><td class="trancat">&nbsp;</td><td class="trandesc"><strong>Gross Profit</strong></td>';
-        $rptdata .= '<td class="tranamt"><strong>'.number_format($totrev,2).'</strong></td></tr>';
-        $rptdata .= '<tr><td class="trantype" colspan="4">&nbsp;</td></tr><tr><td class="trantype">Expenses</td><td class="trancat">&nbsp;</td><td class="trandesc">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
+        $rptdata .= $extraLine.'<tr><td class="trantype">&nbsp;</td><td colspan="2"><strong>Total Revenue</strong></td>';
+        $rptdata .= '<td class="tranamt"><strong>'.number_format($totrev,2).'</strong></td><td class="tranamt">&nbsp;</td></tr>';
+        $rptdata .= '<tr><td colspan="2">&nbsp;</td><td class="trandesc"><strong>Gross Profit</strong></td>';
+        $rptdata .= '<td class="tranamt">&nbsp;</td><td class="tranamt trantot"><strong>'.number_format($totrev,2).'</strong></td></tr>';
+        $rptdata .= $extraLine.$extraLine;
+
+        // expenses heasding and line items
         $rptdata .= $expenses;
-        $rptdata .= '<tr><td class="trantype" colspan="4">&nbsp;</td></tr><tr><td class="trantype">&nbsp;</td><td class="trancat">&nbsp;</td><td class="trandesc"><strong>Total Expenses</strong></td>';
-        $rptdata .= '<td class="tranamt"><strong>'.number_format($totexp,2).'</strong></td></tr>';
-        $rptdata .= '<tr><td class="trantype" colspan="4">&nbsp;</td></tr><tr><td class="trantype" colspan="4">&nbsp;</td></tr>';
-        $rptdata .= '<tr><td class="trantype">&nbsp;</td><td class="trancat">&nbsp;</td><td class="trandesc"><strong>Net Profit</strong></td>';
-        $rptdata .= '<td class="tranamt"><strong>'.number_format(($totrev + $totexp),2).'</strong></td></tr>';
-        $rptdata .= '<tr><td class="trantype" colspan="4">&nbsp;</td></tr><tr><td class="trantype" colspan="4">&nbsp;</td></tr></table>';
-        
+        $rptdata .= $extraLine.'<tr><td class="trantype">&nbsp;</td><td colspan="2"><strong>Total Expenses</strong></td>';
+        $rptdata .= '<td class="tranamt"><strong>'.number_format($totexp,2).'</strong></td><td class="tranamt">&nbsp;</td></tr>';
+        $rptdata .= $extraLine.$extraLine;
+
+        // total net
+        $rptdata .= '<tr><td colspan="2">&nbsp;</td><td class="trandesc"><strong>Net Profit</strong></td>';
+        $rptdata .= '<td class="tranamt">&nbsp;</td><td class="tranamt trantot"><strong>'.number_format(($totrev + $totexp),2).'</strong></td></tr>';
+        $rptdata .= $extraLine.$extraLine.'</table>';
+
         $app->setUserState('com_gafinance.rptprint.data', $rptdata);
 
         return true;
@@ -379,103 +398,18 @@ class GareportsHelper
 	{
 	    $app		= Factory::getApplication();
         $sitename   = $app->get('sitename');
-        // get the name of the user requesting this update
-        $user	= GafinanceHelper::getSpecificUser();
-        $user_id	= $user->id;
+        $params = ComponentHelper::getParams('com_gafinance');
+        $combine_accnts = $params->get('combine_accnts', 0);
+        $combine_rpt = $params->get('combine_rpt', 0);
+		$accnts = $params->get('select_accnts');
+		$accounts = implode(',', $accnts);
+		$allAccnts = $combine_rpt ? $accounts : $data['rpt_accnt'];
 
-        $req_dtfr = $data['start_date'];
-        $req_dtto = $data['end_date'];
+        // Get all the transactions between the requested dates for the requested account.
+        $pldata = GafinanceHelper::getAllTransactions($data['start_date'], $data['end_date'], $allAccnts);
+        $openbal = GafinanceHelper::getLastReconciliation($data['end_date'], $data['rpt_accnt']);
 
-        // Create a new query object to get all the transactions between the requested dates.
-        $db = Factory::getContainer()->get('DatabaseDriver');
-        $query = $db->getQuery(true);
-        $query->clear();
-        $query->select( " a.tran_type, a.tran_desc, a.tran_amount, date_format(a.tran_date,'%Y-%m-%d') AS tran_date, b.name " );
-        $query->from('#__gafinance_transactions AS a ');
-        $query->join('LEFT','#__users AS b ON a.user_id = b.id');
-        $query->where(' a.state = 1 ');
-        $query->where('a.accnt_id = '.(int) $data['rpt_accnt']);
-        $query->where(' a.tran_type <> "Z" ');
-        $query->where(' a.tran_date >= '.$db->Quote($req_dtfr) );
-        $query->where(' a.tran_date <= '.$db->Quote($req_dtto) );
-        $query->order(' a.tran_date ' );
-
-        $db->setQuery((string)$query);
-	    try {
-	        $pldata = $db->loadObjectList();
-	    } catch (RuntimeException $e) {
-	        Factory::getApplication()->enqueueMessage($e->getMessage());
-	        return false;
-	    }
-
-        // Create a new query object to get the opening balance figure & date.
-        $db = Factory::getContainer()->get('DatabaseDriver');
-        $query = $db->getQuery(true);
-        $query->clear();
-        $query->select( " a.tran_amount, date_format(a.tran_date,'%Y-%m-%d') AS tran_date " );
-        $query->from(' #__gafinance_transactions AS a ');
-        $query->where(' a.state = 1 ');
-        $query->where('a.accnt_id = '.(int) $data['rpt_accnt']);
-        $query->where(' a.tran_type = "Z" ');
-        $query->where(' a.tran_date < '.$db->Quote($req_dtto) );
-        $query->where(' a.tran_date >= (select max(tran_date) from #__gafinance_transactions where tran_type = "Z" and state = 1 and tran_date < '.$db->Quote($req_dtto).' and accnt_id = '.(int) $data['rpt_accnt'].' ) ' );
-
-        $db->setQuery((string)$query);
-	    try {
-	        $initbal = $db->loadObject();
-	    } catch (RuntimeException $e) {
-	        Factory::getApplication()->enqueueMessage($e->getMessage());
-	        return false;
-	    }
-
-        $openbal_amt = $initbal->tran_amount;
-        $openbal_dte = $initbal->tran_date;
-
-        // Create a new query object to get the opening balance figure calculated based on dates
-        // starting from the Z transaction date to the start date requested.
-        $db = Factory::getContainer()->get('DatabaseDriver');
-        $query = $db->getQuery(true);
-        $query->clear();
-        $query->select( ' sum(a.tran_amount) ' );
-        $query->from('#__gafinance_transactions AS a ');
-        $query->where(' a.state = 1 ');
-        $query->where('a.accnt_id = '.(int) $data['rpt_accnt']);
-        $query->where(' a.tran_type <> "Z" ');
-        $query->where(' a.tran_date >= '.$db->Quote($openbal_dte) );
-        $query->where(' a.tran_date < '.$db->Quote($req_dtfr) );
-
-        $db->setQuery((string)$query);
-	    try {
-	        $openbal = $db->loadResult();
-	    } catch (RuntimeException $e) {
-	        Factory::getApplication()->enqueueMessage($e->getMessage());
-	        return false;
-	    }
-        $openbal = ($openbal + $openbal_amt);
-
-        // Create a new query object to get the closing balance figure calculated based on dates
-        // starting from the Z transaction date to the End date requested.
-        $db = Factory::getContainer()->get('DatabaseDriver');
-        $query = $db->getQuery(true);
-        $query->clear();
-        $query->select( ' sum(a.tran_amount) ' );
-        $query->from('#__gafinance_transactions AS a ');
-        $query->where(' a.state = 1 ');
-        $query->where('a.accnt_id = '.(int) $data['rpt_accnt']);
-        $query->where(' a.tran_type <> "Z" ');
-        $query->where(' a.tran_date >= '.$db->Quote($openbal_dte) );
-        $query->where(' a.tran_date <= '.$db->Quote($req_dtto) );
-
-        $db->setQuery((string)$query);
-	    try {
-	        $closebal = $db->loadResult();
-	    } catch (RuntimeException $e) {
-	        Factory::getApplication()->enqueueMessage($e->getMessage());
-	        return false;
-	    }
-        $closebal = $closebal + $openbal_amt;
-
-        $balance = $openbal;
+        $balance = $openbal->tran_amount;
         $rptdata = '<div class="page-header"><h2>Bank Reconciliation Statement</h2></div>';
         $rptdata .= '<p>For '.$sitename.' within period '.$data['req_dtfr_disp'].' to '.$data['req_dtto_disp'].'</p>';
         $rptdata .= '<table class="finreport">';
@@ -704,21 +638,6 @@ class GareportsHelper
         return true;
     }
 
-	/**
-	 * Setup the Balance Sheet Table with relevant data based on input data
-	 */
-	public static function setupBSTable($output, $assetlabel, $assetvalue)
-	{
-        $output .= '<tr><td class="trancat">&nbsp;</td><td class="trandesc">'.$assetlabel.'</td>';
-        if ($assetvalue == 'space') {
-            $output .= '<td class="tranamt">&nbsp;</td></tr>';
-        } else {
-            $output .= '<td class="tranamt">'.number_format($assetvalue,2).'</td></tr>';
-        }
-
-        return $output;
-    }
-
 	/** ---------------------------------------------- Travel Log Report ------------------------------
 	/**
 	 * Get the data for the Travel Log report
@@ -869,13 +788,35 @@ class GareportsHelper
         return true;
     }
 
+	/** ---------------------------------------------- Layouts ------------------------------
+	/**
+	 * Layout for Balance Sheet
+	 * Setup the Balance Sheet Table with relevant data based on input data
+	 */
+	public static function setupBSTable($output, $assetlabel, $account, $assetvalue)
+	{
+        $output .= '<tr><td class="trantype">&nbsp;</td><td class="trancat">'.$assetlabel.'</td><td class="trandesc">'.$account.'</td>';
+        if ($assetvalue == '') {
+            $output .= '<td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
+        } else {
+            $output .= '<td class="tranamt">'.number_format($assetvalue,2).'</td><td class="tranamt">&nbsp;</td></tr>';
+        }
+
+        return $output;
+    }
+
 	/**
 	/**
 	 * Layout for Cash Summary
 	 */
-	public static function setupCashBookSummaryLayout($openBal, $closeBal, $transactions, $rptTitle)
+	public static function setupCashBookSummaryLayout($openBal, $closeBal, $transactions)
 	{
-		$rptHead = $rptTitle;
+        $rptHead = '<table class="finreport">';
+        $rptHead .= '<tr><td class="trantype">&nbsp;</td><td class="trancat">&nbsp;</td><td class="trandesc">&nbsp;</td>';
+        $rptHead .= '<td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
+
+        $params = ComponentHelper::getParams('com_gafinance');
+        $combine_rpt = $params->get('combine_rpt', 0);
         // reset all variables
 		$rptFull = '';
         $rptFoot = '';
@@ -890,144 +831,145 @@ class GareportsHelper
         $prev_type = '';
         $cntr = 0;
 
-        if (!$transactions) { // ie an empty list, set up header
-			$rptHead .= '<tr style="border-top:1px solid;"><td colspan="6"><h5>No transactions retrieved for the reporting period</h5></td></tr>';
-           // $rptHead .= '<tr><td class="trantype">&nbsp;</td><td class="trancat">&nbsp;</td><td class="trandesc">&nbsp;</td>';
-            //$rptHead .= '<td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
+        if (!is_array($transactions)) { // ie an empty list, set up header
+			$rptHead .= '<tr style="border-top:1px solid;"><td colspan="6"><h4>Account: '.$transactions.'</h4></td></tr>';
+            $rptHead .= '<tr><td colspan="6"><h5>No transactions retrieved for the reporting period</h5></td></tr>';
             $rptHead .= '<tr><td colspan="4"><strong>Opening Balance</strong></td>';
-            $rptHead .= '<td class="tranamt" colspan="2"><strong>'.number_format($openBal,2).'</strong></td></tr>';
-            $rptHead .= '<tr><td colspan="6">Revenue</td></tr>';
-        }
+            $rptHead .= '<td class="tranamt trantot" colspan="2"><strong>'.number_format($openBal,2).'</strong></td></tr>';
+            $rptHead .= '<tr><td colspan="6"><strong>Revenue</strong></td></tr>';
+        } else {
 
-        foreach ($transactions as $tran) {
-            $cntr++;
-            if ($cntr == 1) {
-				$rptHead .= '<tr style="border-top:1px solid;"><td colspan="6"><h4>Account: '.$tran->accnt_name.'</h4></td></tr>';
-		        $rptHead .= '<tr><td class="trantype">&nbsp;</td><td class="trancat">&nbsp;</td><td class="trandesc">&nbsp;</td>';
-		        $rptHead .= '<td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
-		        $rptHead .= '<tr><td colspan="4"><strong>Opening Balance</strong></td>';
-		        $rptHead .= '<td class="tranamt" colspan="2"><strong>'.number_format($openBal,2).'</strong></td></tr>';
-		        $rptHead .= '<tr><td colspan="6">Revenue</td></tr>';
-                $prev_type = $tran->tran_type;
-		    }
+            foreach ($transactions as $tran) {
+                $cntr++;
+                if ($cntr === 1) {
+                    $accnt_id_name = $combine_rpt ? Text::_('COM_GAFINANCE_COMBINE_ACCNTS_LABEL') : $tran->accnt_id_name;
+    				$rptHead .= '<tr style="border-top:1px solid;"><td colspan="6"><h4>Account: '.$accnt_id_name.'</h4></td></tr>';
+    		        $rptHead .= '<tr><td class="trantype">&nbsp;</td><td class="trancat">&nbsp;</td><td class="trandesc">&nbsp;</td>';
+    		        $rptHead .= '<td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
+    		        $rptHead .= '<tr><td colspan="4"><strong>Opening Balance</strong></td>';
+    		        $rptHead .= '<td class="tranamt trantot" colspan="2"><strong>'.number_format($openBal,2).'</strong></td></tr>';
+    		        $rptHead .= '<tr><td colspan="6"><strong>Revenue</strong></td></tr>';
+                    $prev_type = $tran->tran_type;
+    		    }
 
-		    if ($tran->tran_type != $prev_type && $cntr > 1) {
-				if ($prev_type == 'I') {
-					// set the final row
-					$revenue .= '<tr><td colspan="4">&nbsp;</td><td class="tranamt" style="border-bottom:1px #000 solid;">'.number_format($totcat,2).'</td><td class="tranamt">&nbsp;</td></tr>';
-					$totcat = 0;
-					$prev_cat = '';
-					$cntr = 1;
-				} elseif ($prev_type == 'E') {
-					// set the final row
-					$expenses .= '<tr><td colspan="4">&nbsp;</td><td class="tranamt" style="border-bottom:1px #000 solid;">'.number_format($totcat,2).'</td><td class="tranamt">&nbsp;</td></tr>';
-					$totcat = 0;
-					$prev_cat = '';
-					$cntr = 1;
-				} else {
-					// set the final row
-					$journals .= '<tr><td colspan="4">&nbsp;</td><td class="tranamt" style="border-bottom:1px #000 solid;">'.number_format($totcat,2).'</td><td class="tranamt">&nbsp;</td></tr>';
-					$totcat = 0;
-					$prev_cat = '';
-					$cntr = 1;
-				}
-				$prev_type = $tran->tran_type;
-			}
-
-            // Set up income or expense line item based on the transaction amount due to Journal Entries (D) being introduced
-			if ($tran->tran_type == "I") {
-
-                if ($tran->state == 0) {
-					$unpresent1 = ' <span style="color:red;">';
-					$unpresent2 = '</span>';
-				} else {
-					$unpresent1 = ''; 
-					$unpresent2 = ''; 
-					$totrev = $totrev + $tran->tranAmt;
-				}
-
-				if ($tran->title != $prev_cat) {
-					if ($cntr > 1) {
-						$revenue .= '<tr><td colspan="4">&nbsp;</td><td class="tranamt" style="border-bottom:1px #000 solid;">'.number_format($totcat,2).'</td><td class="tranamt">&nbsp;</td></tr>';
-					}
-					$totcat = 0;
-					$prev_cat = $tran->title;
-                    if ($tran->state != 0) {
-						$totcat = $totcat + $tran->tranAmt;
-					}
-	                $revenue .= '<tr><td>&nbsp;</td><td colspan="5">'.$tran->title.'</td></tr>';
-					$revenue .= '<tr><td colspan="2">&nbsp;</td><td>'.$unpresent1.$tran->tran_desc.$unpresent2.'</td>';
-					$revenue .= '<td class="tranamt">'.$unpresent1.number_format($tran->tranAmt,2).$unpresent2.'</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
-                } else {
-                    if ($tran->state != 0) {
-						$totcat = $totcat + $tran->tranAmt;
-					}
-					$revenue .= '<tr><td colspan="2">&nbsp;</td><td>'.$unpresent1.$tran->tran_desc.$unpresent2.'</td>';
-	                $revenue .= '<td class="tranamt">'.$unpresent1.number_format($tran->tranAmt,2).$unpresent2.'</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
-				}
-
-            } elseif ($tran->tran_type == "E") {
-
-                if ($tran->state == 0) {
-					$unpresent1 = ' <span style="color:red;">';
-					$unpresent2 = '</span>';
-				} else {
-					$unpresent1 = ''; 
-					$unpresent2 = ''; 
-					$totexp = $totexp + $tran->tranAmt;
-				}
-
-				if ($tran->title != $prev_cat) {
-					if ($cntr > 1) {
-						$expenses .= '<tr><td colspan="4">&nbsp;</td><td class="tranamt" style="border-bottom:1px #000 solid;">'.number_format($totcat,2).'</td><td class="tranamt">&nbsp;</td></tr>';
-					}
-					$totcat = 0;
-					$prev_cat = $tran->title;
-                    if ($tran->state != 0) {
-						$totcat = $totcat + $tran->tranAmt;
-					}
-	                $expenses .= '<tr><td>&nbsp;</td><td colspan="5">'.$tran->title.'</td></tr>';
-					$expenses .= '<tr><td colspan="2">&nbsp;</td><td>'.$unpresent1.$tran->tran_desc.$unpresent2.'</td>';
-					$expenses .= '<td class="tranamt">'.$unpresent1.number_format($tran->tranAmt,2).$unpresent2.'</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
-                } else {
-                    if ($tran->state != 0) {
-						$totcat = $totcat + $tran->tranAmt;
-					}
-					$expenses .= '<tr><td colspan="2">&nbsp;</td><td>'.$unpresent1.$tran->tran_desc.$unpresent2.'</td>';
-	                $expenses .= '<td class="tranamt">'.$unpresent1.number_format($tran->tranAmt,2).$unpresent2.'</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
-				}
-			} elseif ($tran->tran_type == "D") {
-
-                if ($tran->state == 0) {
-					$unpresent1 = ' <span style="color:red;">';
-					$unpresent2 = '</span>';
-				} else {
-					$unpresent1 = ''; 
-					$unpresent2 = ''; 
-					$totjnl = $totjnl + $tran->tranAmt;
-				}
-
-				if ($tran->title != $prev_cat) {
-					if ($cntr > 1) {
-						$journals .= '<tr><td colspan="4">&nbsp;</td><td class="tranamt" style="border-bottom:1px #000 solid;">'.number_format($totcat,2).'</td><td class="tranamt">&nbsp;</td></tr>';
-					}
-					$totcat = 0;
-					$prev_cat = $tran->title;
-                    if ($tran->state != 0) {
-						$totcat = $totcat + $tran->tranAmt;
-					}
-	                $journals .= '<tr><td>&nbsp;</td><td colspan="5">'.$tran->title.'</td></tr>';
-					$journals .= '<tr><td colspan="2">&nbsp;</td><td>'.$unpresent1.$tran->tran_desc.$unpresent2.'</td>';
-					$journals .= '<td class="tranamt">'.$unpresent1.number_format($tran->tranAmt,2).$unpresent2.'</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
-                } else {
-                    if ($tran->state != 0) {
-						$totcat = $totcat + $tran->tranAmt;
-					}
-					$journals .= '<tr><td colspan="2">&nbsp;</td><td>'.$unpresent1.$tran->tran_desc.$unpresent2.'</td>';
-	                $journals .= '<td class="tranamt">'.$unpresent1.number_format($tran->tranAmt,2).$unpresent2.'</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
-				}
-            }   // end of plus or minus amount
-		}  // end of foreach
+    		    if ($tran->tran_type != $prev_type && $cntr > 1) {
+    				if ($prev_type == 'I') {
+    					// set the final row
+    					$revenue .= '<tr><td colspan="4">&nbsp;</td><td class="tranamt" style="border-bottom:1px #000 solid;">'.number_format($totcat,2).'</td><td class="tranamt">&nbsp;</td></tr>';
+    					$totcat = 0;
+    					$prev_cat = '';
+    					$cntr = 1;
+    				} elseif ($prev_type == 'E') {
+    					// set the final row
+    					$expenses .= '<tr><td colspan="4">&nbsp;</td><td class="tranamt" style="border-bottom:1px #000 solid;">'.number_format($totcat,2).'</td><td class="tranamt">&nbsp;</td></tr>';
+    					$totcat = 0;
+    					$prev_cat = '';
+    					$cntr = 1;
+    				} else {
+    					// set the final row
+    					$journals .= '<tr><td colspan="4">&nbsp;</td><td class="tranamt" style="border-bottom:1px #000 solid;">'.number_format($totcat,2).'</td><td class="tranamt">&nbsp;</td></tr>';
+    					$totcat = 0;
+    					$prev_cat = '';
+    					$cntr = 1;
+    				}
+    				$prev_type = $tran->tran_type;
+    			}
+    
+                // Set up income or expense line item based on the transaction amount due to Journal Entries (D) being introduced
+    			if ($tran->tran_type == "I") {
+    
+                    if ($tran->state == 0) {
+    					$unpresent1 = ' <span style="color:red;">';
+    					$unpresent2 = '</span>';
+    				} else {
+    					$unpresent1 = ''; 
+    					$unpresent2 = ''; 
+    					$totrev = $totrev + $tran->tranAmt;
+    				}
+    
+    				if ($tran->title != $prev_cat) {
+    					if ($cntr > 1) {
+    						$revenue .= '<tr><td colspan="4">&nbsp;</td><td class="tranamt" style="border-bottom:1px #000 solid;">'.number_format($totcat,2).'</td><td class="tranamt">&nbsp;</td></tr>';
+    					}
+    					$totcat = 0;
+    					$prev_cat = $tran->title;
+                        if ($tran->state != 0) {
+    						$totcat = $totcat + $tran->tranAmt;
+    					}
+    	                $revenue .= '<tr><td>&nbsp;</td><td colspan="5">'.$tran->title.'</td></tr>';
+    					$revenue .= '<tr><td colspan="2">&nbsp;</td><td>'.$unpresent1.$tran->tran_desc.$unpresent2.'</td>';
+    					$revenue .= '<td class="tranamt">'.$unpresent1.number_format($tran->tranAmt,2).$unpresent2.'</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
+                    } else {
+                        if ($tran->state != 0) {
+    						$totcat = $totcat + $tran->tranAmt;
+    					}
+    					$revenue .= '<tr><td colspan="2">&nbsp;</td><td>'.$unpresent1.$tran->tran_desc.$unpresent2.'</td>';
+    	                $revenue .= '<td class="tranamt">'.$unpresent1.number_format($tran->tranAmt,2).$unpresent2.'</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
+    				}
+    
+                } elseif ($tran->tran_type == "E") {
+    
+                    if ($tran->state == 0) {
+    					$unpresent1 = ' <span style="color:red;">';
+    					$unpresent2 = '</span>';
+    				} else {
+    					$unpresent1 = ''; 
+    					$unpresent2 = ''; 
+    					$totexp = $totexp + $tran->tranAmt;
+    				}
+    
+    				if ($tran->title != $prev_cat) {
+    					if ($cntr > 1) {
+    						$expenses .= '<tr><td colspan="4">&nbsp;</td><td class="tranamt" style="border-bottom:1px #000 solid;">'.number_format($totcat,2).'</td><td class="tranamt">&nbsp;</td></tr>';
+    					}
+    					$totcat = 0;
+    					$prev_cat = $tran->title;
+                        if ($tran->state != 0) {
+    						$totcat = $totcat + $tran->tranAmt;
+    					}
+    	                $expenses .= '<tr><td>&nbsp;</td><td colspan="5">'.$tran->title.'</td></tr>';
+    					$expenses .= '<tr><td colspan="2">&nbsp;</td><td>'.$unpresent1.$tran->tran_desc.$unpresent2.'</td>';
+    					$expenses .= '<td class="tranamt">'.$unpresent1.number_format($tran->tranAmt,2).$unpresent2.'</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
+                    } else {
+                        if ($tran->state != 0) {
+    						$totcat = $totcat + $tran->tranAmt;
+    					}
+    					$expenses .= '<tr><td colspan="2">&nbsp;</td><td>'.$unpresent1.$tran->tran_desc.$unpresent2.'</td>';
+    	                $expenses .= '<td class="tranamt">'.$unpresent1.number_format($tran->tranAmt,2).$unpresent2.'</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
+    				}
+    			} elseif ($tran->tran_type == "D") {
+    
+                    if ($tran->state == 0) {
+    					$unpresent1 = ' <span style="color:red;">';
+    					$unpresent2 = '</span>';
+    				} else {
+    					$unpresent1 = ''; 
+    					$unpresent2 = ''; 
+    					$totjnl = $totjnl + $tran->tranAmt;
+    				}
+    
+    				if ($tran->title != $prev_cat) {
+    					if ($cntr > 1) {
+    						$journals .= '<tr><td colspan="4">&nbsp;</td><td class="tranamt" style="border-bottom:1px #000 solid;">'.number_format($totcat,2).'</td><td class="tranamt">&nbsp;</td></tr>';
+    					}
+    					$totcat = 0;
+    					$prev_cat = $tran->title;
+                        if ($tran->state != 0) {
+    						$totcat = $totcat + $tran->tranAmt;
+    					}
+    	                $journals .= '<tr><td>&nbsp;</td><td colspan="5">'.$tran->title.'</td></tr>';
+    					$journals .= '<tr><td colspan="2">&nbsp;</td><td>'.$unpresent1.$tran->tran_desc.$unpresent2.'</td>';
+    					$journals .= '<td class="tranamt">'.$unpresent1.number_format($tran->tranAmt,2).$unpresent2.'</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
+                    } else {
+                        if ($tran->state != 0) {
+    						$totcat = $totcat + $tran->tranAmt;
+    					}
+    					$journals .= '<tr><td colspan="2">&nbsp;</td><td>'.$unpresent1.$tran->tran_desc.$unpresent2.'</td>';
+    	                $journals .= '<td class="tranamt">'.$unpresent1.number_format($tran->tranAmt,2).$unpresent2.'</td><td class="tranamt">&nbsp;</td><td class="tranamt">&nbsp;</td></tr>';
+    				}
+                }   // end of plus or minus amount
+    		}  // end of foreach
+		}  // end of if empty
 
         // final row of expenses or revenue for the category totals
         if ($tran->tran_type == "I") {
@@ -1039,23 +981,16 @@ class GareportsHelper
 		}
 
         $rptdata .= $revenue;
-        //$rptdata .= '<tr><td colspan="6">&nbsp;</td></tr>';
-        $rptdata .= '<tr><td colspan="2">&nbsp;</td><td class="trandesc" colspan="3"><strong>Total Revenue</strong></td><td class="tranamt"><strong>'.number_format($totrev,2).'</strong></td></tr>';
-        //$rptdata .= '<tr><td colspan="6">&nbsp;</td></tr>';
-        $rptdata .= '<tr><td colspan="6">Expenses</td></tr>';
+        $rptdata .= '<tr><td colspan="2">&nbsp;</td><td class="trandesc" colspan="3"><strong>Total Revenue</strong></td><td class="tranamt trantot"><strong>'.number_format($totrev,2).'</strong></td></tr>';
+        $rptdata .= '<tr><td colspan="6"><strong>Expenses</strong></td></tr>';
         $rptdata .= $expenses;
-        //$rptdata .= '<tr><td colspan="6">&nbsp;</td></tr>';
-        $rptdata .= '<tr><td colspan="2">&nbsp;</td><td class="trandesc" colspan="3"><strong>Total Expenses</strong></td><td class="tranamt"><strong>'.number_format($totexp,2).'</strong></td></tr>';
-        //$rptdata .= '<tr><td colspan="6">&nbsp;</td></tr>';
-        $rptdata .= '<tr><td colspan="6">Journal Entries</td></tr>';
+        $rptdata .= '<tr><td colspan="2">&nbsp;</td><td class="trandesc" colspan="3"><strong>Total Expenses</strong></td><td class="tranamt trantot"><strong>'.number_format($totexp,2).'</strong></td></tr>';
+        $rptdata .= '<tr><td colspan="6"><strong>Journal Entries</strong></td></tr>';
         $rptdata .= $journals;
-        //$rptFoot .= '<tr><td colspan="6">&nbsp;</td></tr>';
-        $rptFoot .= '<tr><td colspan="2">&nbsp;</td><td class="trandesc" colspan="3"><strong>Total Journal Entries</strong></td><td class="tranamt"><strong>'.number_format($totjnl,2).'</strong></td></tr>';
-        //$rptFoot .= '<tr><td colspan="6">&nbsp;</td></tr>';
+        $rptFoot .= '<tr><td colspan="2">&nbsp;</td><td class="trandesc" colspan="3"><strong>Total Journal Entries</strong></td><td class="tranamt trantot"><strong>'.number_format($totjnl,2).'</strong></td></tr>';
         $rptFoot .= '<tr><td colspan="6">&nbsp;</td></tr>';
-        $rptFoot .= '<tr><td colspan="4"><strong>Closing Balance</strong></td><td class="tranamt" colspan="2"><strong>'.number_format($closeBal,2).'</strong></td></tr>';
+        $rptFoot .= '<tr><td colspan="4"><strong>Closing Balance</strong></td><td class="tranamt trantot" colspan="2"><strong>'.number_format($closeBal,2).'</strong></td></tr>';
         $rptFoot .= '<tr style="border-bottom:2px solid;"><td colspan="6">&nbsp;</td></tr>';
-        //$rptFoot .= '<tr><td colspan="6">&nbsp;</td></tr>';
         $rptFoot .= '</table>';
         $rptFoot .= '<p class="center small"><span style="color:red;">Entries in red indicate unpresented cheques or unbanked funds.</p>';
 

@@ -70,7 +70,7 @@
 
 	<fieldset name="imageinfo">
 
-        <field name="item_image_txt" type="text" class="readonly" readonly="true"
+        <field name="item_image_txt" type="text" class="input-small readonly" readonly="true"
             label="COM_GAFORSALE_FORM_LBL_FSITEM_ITEM_IMAGE"
             description="COM_GAFORSALE_FORM_DESC_FSITEM_ITEM_IMAGE"
 			hint="COM_GAFORSALE_FORM_LBL_FSITEM_ITEM_IMAGE"  />
@@ -80,10 +80,17 @@
 			description="COM_GAFORSALE_FORM_DESC_FSITEM_ITEM_IMAGE"
 			hint="COM_GAFORSALE_FORM_LBL_FSITEM_ITEM_IMAGE" />
 
+		<field name="MAX_FILE_SIZE" type="hidden" default="250"
+			label="COM_GAFORSALE_FORM_LBL_FSITEM_SIZE_IMAGE"
+			description="COM_GAFORSALE_FORM_DESC_FSITEM_SIZE_IMAGE"/>
+
 	</fieldset>
 
 	<fieldset name="extrainfo">
 		<field name="comment" filter="safehtml" type="textarea" label="COM_GAFORSALE_FORM_LBL_COMMENT" description="COM_GAFORSALE_FORM_DESC_COMMENT" hint="COM_GAFORSALE_FORM_LBL_COMMENT"/>
 		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+	</fieldset>
+	<fieldset name="other">
+		<field name="templt" filter="safehtml" type="text" label="COM_GAFORSALE_FORM_LBL_TEMPLT" description="COM_GAFORSALE_FORM_DESC_TEMPLT" />
 	</fieldset>
 </form>

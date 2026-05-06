@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -13,12 +13,12 @@ namespace GlennArkell\Component\Gacalevents\Site\View\Events;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\MVC\View\GenericDataException;
+use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\MVC\View\GenericDataException;
 
 /**
  * View class for a list of records.

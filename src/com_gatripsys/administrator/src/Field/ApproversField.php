@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    com_gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -13,9 +13,9 @@ namespace GlennArkell\Component\Gatripsys\Administrator\Field;
 defined('_JEXEC') or die;
 
 // import the list field type
-use \Joomla\CMS\Form\FormField;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Form\Field\ListField;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 
 class ApproversField extends ListField

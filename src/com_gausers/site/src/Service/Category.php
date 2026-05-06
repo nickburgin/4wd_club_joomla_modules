@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,7 +12,7 @@ namespace GlennArkell\Component\Gausers\Site\Service;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Categories\Categories;
+use Joomla\CMS\Categories\Categories;
 
 /**
  * Gausers Component Category Tree

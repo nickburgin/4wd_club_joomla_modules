@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    5.1.6
+ * @version    6.0.0
  * @package    com_gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -13,8 +13,8 @@ namespace GlennArkell\Component\Gausers\Administrator\Field;
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die('Restricted access');
 
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Form\FormField;
 
 /**
  * Class JFormFieldSubmit

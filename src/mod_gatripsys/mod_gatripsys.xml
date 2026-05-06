@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" version="3.4" client="site" method="upgrade">
-	<name>MOD_GATRIPSYS_NAME</name>
+<extension type="module" client="site" method="upgrade">
+	<name>MOD_GATRIPSYS</name>
 	<author>Glenn Arkell</author>
 	<authorEmail>glenn@glennarkell.com.au</authorEmail>
 	<authorUrl>http://www.glennarkell.com.au</authorUrl>
 	<copyright>Open Source</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<creationDate>22 January 2016</creationDate>
-	<version>5.0.4</version>
-	<description>Display Trips</description>
+	<version>5.2</version>
+	<description>MOD_GATRIPSYS_XML_DESCRIPTION</description>
 
 	<namespace path="src">GlennArkell\Module\Gatripsys</namespace>
 
+	<scriptfile>script.php</scriptfile>
+
 	<files>
-		<filename module="mod_gatripsys">mod_gatripsys.php</filename>
+		<folder module="mod_gatripsys">services</folder>
 		<folder>src</folder>
 		<folder>tmpl</folder>
     </files>
@@ -26,6 +28,8 @@
 		<language tag="en-GB">language/en-GB/mod_gatripsys.ini</language>
 		<language tag="en-GB">language/en-GB/mod_gatripsys.sys.ini</language>
 	</languages>
+
+	<changelogurl>https://www.glennarkell.com.au/joomlaorg/packages/j6/changes/mod_gatripsys-changelog.xml</changelogurl>
 
 	<config>
 		<fields name="params">

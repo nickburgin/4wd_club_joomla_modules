@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,14 +12,14 @@ namespace GlennArkell\Component\Gausers\Administrator\View\Invoices;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use \Joomla\CMS\Toolbar\Toolbar;
-use \Joomla\CMS\Toolbar\ToolbarHelper;
-use \Joomla\CMS\Helper\ContentHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.2.3
  * @package    Com_Gafinance
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -11,12 +11,12 @@
 defined('_JEXEC') or die;
 
 
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Layout\LayoutHelper;
-use \Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\Language\Text;
 use \GlennArkell\Component\Gafinance\Administrator\Helper\GafinanceHelper;
 
 /** @var \Joomla\CMS\WebAsset\WebAssetManager $wa */
@@ -70,6 +70,9 @@ if ($saveOrder)
 						</th>
 						<th class='left'>
 						<?php echo HTMLHelper::_('searchtools.sort',  'COM_GAFINANCE_TRANSACTIONS_TRAN_TYPE', 'a.tran_type', $listDirn, $listOrder); ?>
+						</th>
+						<th class='left'>
+						<?php echo HTMLHelper::_('searchtools.sort',  'COM_GAFINANCE_TRANSACTIONS_ACCOUNT', 'accnt_id_name', $listDirn, $listOrder); ?>
 						</th>
 						<th class='left'>
 						<?php echo HTMLHelper::_('searchtools.sort',  'COM_GAFINANCE_TRANSACTIONS_TRAN_DATE', 'a.tran_date', $listDirn, $listOrder); ?>
@@ -150,6 +153,9 @@ if ($saveOrder)
 							</td>
 							<td>
 								<?php echo $item->tran_type; ?>
+							</td>
+							<td>
+								<?php echo $item->accnt_id_name; ?>
 							</td>
 							<td>
 								<?php echo $item->tran_date > 0 ? HTMLHelper::_('date', $item->tran_date, Text::_('COM_GAFINANCE_DISPLAY_DATE')) : '-'; ?>

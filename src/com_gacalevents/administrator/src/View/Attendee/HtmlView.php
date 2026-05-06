@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,15 +12,15 @@ namespace GlennArkell\Component\Gacalevents\Administrator\View\Attendee;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use \Joomla\CMS\Toolbar\ToolbarHelper;
-use \Joomla\CMS\Factory;
+use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Factory;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\MVC\View\GenericDataException;
-use \Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\MVC\View\GenericDataException;
+use Joomla\CMS\Helper\ContentHelper;
 
 /**
  * View class for a record.
@@ -68,7 +68,7 @@ class HtmlView extends BaseHtmlView
 		$compName = 'gacalevents';
 		$progNameL = 'attendee';
 
-		$user  = GacaleventsHelper::getSpecificUser();
+		$user  = Factory::getApplication()->getIdentity();
 		$isNew = ($this->item->id == 0);
 
 		if (isset($this->item->checked_out)) {

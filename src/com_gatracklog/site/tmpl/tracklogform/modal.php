@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.1.0
+ * @version    4.2.0
  * @package    com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -10,10 +10,10 @@
 // no direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gatracklog\Administrator\Helper\GatracklogHelper;
 
 // load any assets required
@@ -21,10 +21,9 @@ $this->document->getWebAssetManager()
     ->usePreset('com_gatracklog.gatracklogpreset');
 
 //Load admin language file
-$lang = Factory::getLanguage();
-$lang->load('com_gatracklog', JPATH_ADMINISTRATOR);
+Factory::getApplication()->getLanguage()->load('com_gatracklog', JPATH_ADMINISTRATOR, 'en-GB', true);
 
-$user = GatracklogHelper::getSpecificUser();
+$user = Factory::getApplication()->getIdentity();
 
 ?>
 

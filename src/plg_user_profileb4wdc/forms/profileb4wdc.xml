@@ -159,6 +159,13 @@
 				label="PLG_USER_PROFILEB4WDC_FIELD_2ND_PHONE_LABEL"
 				message="PLG_USER_PROFILEB4WDC_FIELD_2ND_PHONE_MESSAGE" />
 
+			<field name="privacy" type="radio" default="0" class="btn-group btn-group-yesno"
+			    label="PLG_USER_PROFILEB4WDC_FIELD_PRIVACY_LABEL"
+			    description="PLG_USER_PROFILEB4WDC_FIELD_PRIVACY_DESC">
+			    <option	value="1">JYES</option>
+			    <option	value="0">JNO</option>
+			</field>
+
 		</fieldset>
 	</fields>
 
@@ -198,6 +205,8 @@
 				<option value="Petrol">Petrol</option>
 				<option value="Gas">Gas</option>
 				<option value="Petrol-Gas">Petrol-Gas</option>
+				<option value="Hybrid">Hybrid</option>
+				<option value="Electric">Electric</option>
 			</field>
 
 			<field name="vehicle_winch" type="radio" default="0" class="btn-group btn-group-yesno"
@@ -271,7 +280,7 @@
 				message="PLG_USER_PROFILEB4WDC_FIELD_M_USI_MESSAGE" />
 
 			<field
-				name="trg_prof" type="calendar" format="%Y-%m-%d"
+				name="trg_prof" type="calendar" filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROF_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROF_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -282,7 +291,7 @@
 				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROFC_MESSAGE" />
 
 			<field
-				name="trg_lead" type="calendar" format="%Y-%m-%d"
+				name="trg_lead" type="calendar" filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEAD_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEAD_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -293,7 +302,7 @@
 				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEADC_MESSAGE" />
 
 			<field
-				name="trg_inst" type="calendar" format="%Y-%m-%d"
+				name="trg_inst" type="calendar" filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_INST_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_INST_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -304,7 +313,7 @@
 				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_INSTC_MESSAGE" />
 
 			<field
-				name="trg_csaw" type="calendar" format="%Y-%m-%d"
+				name="trg_csaw" type="calendar" filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAW_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAW_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -315,7 +324,7 @@
 				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAWC_MESSAGE" />
 
 			<field
-				name="trg_faid" type="calendar" format="%Y-%m-%d"
+				name="trg_faid" type="calendar" filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAID_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAID_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -326,7 +335,7 @@
 				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAIDC_MESSAGE" />
 
 			<field
-				name="trg_trck" type="calendar" format="%Y-%m-%d"
+				name="trg_trck" type="calendar" filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCK_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCK_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -337,7 +346,7 @@
 				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCKC_MESSAGE" />
 
 			<field
-				name="trg_food" type="calendar" format="%Y-%m-%d"
+				name="trg_food" type="calendar" filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOOD_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOOD_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -358,7 +367,7 @@
 				message="PLG_USER_PROFILEB4WDC_FIELD_WWK_REG_MESSAGE" />
 
 			<field
-				name="wwk_exp" type="calendar" format="%Y-%m-%d"
+				name="wwk_exp" type="calendar" filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_WWK_EXP_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_WWK_EXP_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -376,7 +385,7 @@
 				hint="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVCT_LABEL"
 				message="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVCT_MESSAGE" />
 			<field
-				name="cert4_dvdt" type="calendar" format="%Y-%m-%d"
+				name="cert4_dvdt" type="calendar" filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVDT_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVDT_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -392,7 +401,7 @@
 				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSCT_LABEL"
 				message="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSCT_MESSAGE" />
 			<field
-				name="cert4_csdt" type="calendar" format="%Y-%m-%d"
+				name="cert4_csdt" type="calendar" filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSDT_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSDT_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -415,7 +424,7 @@
 				message="PLG_USER_PROFILEB4WDC_FIELD_P_USI_MESSAGE" />
 
 			<field
-				name="trg_profp" type="calendar"  format="%Y-%m-%d"
+				name="trg_profp" type="calendar"  filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROF_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROF_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -426,7 +435,7 @@
 				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_PROFC_MESSAGE" />
 
 			<field
-				name="trg_leadp" type="calendar"  format="%Y-%m-%d"
+				name="trg_leadp" type="calendar"  filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEAD_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEAD_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -437,7 +446,7 @@
 				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_LEADC_MESSAGE" />
 
 			<field
-				name="trg_instp" type="calendar"  format="%Y-%m-%d"
+				name="trg_instp" type="calendar"  filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_INST_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_INST_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -448,7 +457,7 @@
 				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_INSTC_MESSAGE" />
 
 			<field
-				name="trg_csawp" type="calendar"  format="%Y-%m-%d"
+				name="trg_csawp" type="calendar"  filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAW_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAW_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -459,7 +468,7 @@
 				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_CSAWC_MESSAGE" />
 
 			<field
-				name="trg_faidp" type="calendar"  format="%Y-%m-%d"
+				name="trg_faidp" type="calendar"  filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAID_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAID_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -470,7 +479,7 @@
 				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAIDC_MESSAGE" />
 
 			<field
-				name="trg_trckp" type="calendar"  format="%Y-%m-%d"
+				name="trg_trckp" type="calendar"  filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCK_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCK_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -481,7 +490,7 @@
 				message="PLG_USER_PROFILEB4WDC_FIELD_TRG_TRCKC_MESSAGE" />
 
 			<field
-				name="trg_foodp" type="calendar"  format="%Y-%m-%d"
+				name="trg_foodp" type="calendar"  filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOOD_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FOOD_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -502,7 +511,7 @@
 				message="PLG_USER_PROFILEB4WDC_FIELD_WWK_REG_MESSAGE" />
 
 			<field
-				name="wwk_expp" type="calendar"  format="%Y-%m-%d"
+				name="wwk_expp" type="calendar"  filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_WWK_EXP_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_WWK_EXP_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -520,7 +529,7 @@
 				hint="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVCT_LABEL"
 				message="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVCT_MESSAGE" />
 			<field
-				name="cert4_dvdtp" type="calendar"  format="%Y-%m-%d"
+				name="cert4_dvdtp" type="calendar"  filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVDT_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_DVDT_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"
@@ -536,7 +545,7 @@
 				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSCT_LABEL"
 				message="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSCT_MESSAGE" />
 			<field
-				name="cert4_csdtp" type="calendar"  format="%Y-%m-%d"
+				name="cert4_csdtp" type="calendar"  filterFormat="Y-m-d" translateformat="true"
 				description="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSDT_DESC"
 				label="PLG_USER_PROFILEB4WDC_FIELD_CERT4_CSDT_LABEL"
 				hint="PLG_USER_PROFILEB4WDC_FIELD_DATE_HINT"

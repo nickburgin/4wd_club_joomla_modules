@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,14 +12,14 @@ namespace GlennArkell\Component\Gacalevents\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\CMS\Helper\TagsHelper;
-use \Joomla\CMS\Layout\FileLayout;
-use \Joomla\Database\ParameterType;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Layout\FileLayout;
+use Joomla\Database\ParameterType;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Component\ComponentHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 
 /**
@@ -127,7 +127,7 @@ class EventsModel extends ListModel
 	 */
 	protected function getListQuery()
 	{
-        $user	= GacaleventsHelper::getSpecificUser();
+        $user	= Factory::getApplication()->getIdentity();
         $showUnpub = false;
 		$params = ComponentHelper::getParams('com_gacalevents');
 		$siteFilter = $params->get('site_data_filter', 1);
@@ -179,7 +179,7 @@ class EventsModel extends ListModel
     		$query->where(' a.depart_date <= '.$db->Quote($dateto) );
 		} else {
     		$query->where(' (a.depart_date >= DATE_SUB(now(), INTERVAL '.(int)$siteFilter.' DAY) OR a.return_date >= DATE_SUB(now(), INTERVAL '.(int)$siteFilter.' DAY))');
-    		$query->where(' a.depart_date <= DATE_ADD(now(), INTERVAL 12 MONTH)');
+    		$query->where(' a.depart_date <= DATE_ADD(now(), INTERVAL 18 MONTH)');
 		}
 
         // Filter by search in title

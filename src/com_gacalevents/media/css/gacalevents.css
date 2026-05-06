@@ -1,5 +1,5 @@
 /**
- * @version     3.0.0
+ * @version     3.3.1
  * @package     com_gacalevents
  * @copyright   2021 Glenn Arkell
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -8,6 +8,12 @@
 
 .icon-minus:before {
     color: #eac42a;
+}
+/* .icon-publish:before{
+    color: var(--success);
+} */
+.btn-btn{
+    color: var(--success) !important;
 }
 
 div.calgaevents {
@@ -68,4 +74,14 @@ div.apologies {
 
 .modal-body {
 	max-height: 450px !important;
+}
+@media (max-width: 480px) {
+    .modal-lg {
+        width: 95vw !important;
+    }
+    .joomla-dialog-container,
+    .joomla-dialog, dialog {
+        width: 95vw !important;
+        height: 80vh !important;
+    }
 }

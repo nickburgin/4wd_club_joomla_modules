@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.6
+ * @version    6.0.0
  * @package    Com_Gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
@@ -10,11 +10,11 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 // load any assets required
@@ -22,10 +22,10 @@ $this->document->getWebAssetManager()
     ->usePreset('com_gausers.gauserspreset');
 
 //Load admin language file
-$lang = Factory::getLanguage();
+$lang = Factory::getApplication()->getLanguage();
 $lang->load('com_gausers', JPATH_ADMINISTRATOR);
 
-$user    = GausersHelper::getSpecificUser();
+$user    = Factory::getApplication()->getIdentity();
 $canEdit = GausersHelper::canUserEdit($this->item, $user);
 
 $filterFin = $this->params->get('include_userfilter');

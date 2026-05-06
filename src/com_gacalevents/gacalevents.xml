@@ -7,11 +7,12 @@
     <author>Glenn Arkell</author>
     <authorEmail>glenn@glennarkell.com.au</authorEmail>
     <authorUrl>https://www.glennarkell.com.au</authorUrl>
-    <version>3.0.0</version>
+    <version>3.3.1</version>
     <description>COM_GACALEVENTS_XML_DESCRIPTION</description>
+
     <namespace path="src">GlennArkell\Component\Gacalevents</namespace>
 
-    <scriptfile>script.php</scriptfile>
+    <scriptfile>com_gacalevents_script.php</scriptfile>
     
 	<dashboards>
 		<dashboard title="COM_GACALEVENTS_DASHBOARD_TITLE" icon="fas fa-calendar-alt">COM_GACALEVENTS_DASHBOARD_TITLE</dashboard>
@@ -64,11 +65,5 @@
 			<language tag="en-GB">language/en-GB/com_gacalevents.sys.ini</language>
         </languages>
     </administration>
-
-	<changelogurl>https://www.glennarkell.com.au/joomlaorg/components/j6/gacalevents-changelog.xml</changelogurl>
-
-	<updateservers>
-		<server type="extension" priority="1" name="Calendar Events Management">https://www.glennarkell.com.au/joomlaorg/components/j6/gacalevents-update.xml</server>
-	</updateservers>
 
 </extension>

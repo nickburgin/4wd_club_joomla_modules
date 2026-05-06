@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    4.5.0
+ * @version    5.4.4
  * @package    com_gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell

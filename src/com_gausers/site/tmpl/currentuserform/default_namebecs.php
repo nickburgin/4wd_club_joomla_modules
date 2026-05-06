@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -9,12 +9,12 @@
 
 defined('JPATH_BASE') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Session\Session;
-use \Joomla\CMS\Plugin\PluginHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 
 $data = $displayData;
 $item = $data['view']->get('item');
@@ -37,10 +37,10 @@ $fld_clubnumber = $params->get('fld_clubnumber',0);
 				<?php if (!$canAdmin) : ?>
     				<?php $form->setFieldAttribute('mdod', 'type', 'hidden'); ?>
     				<?php $form->setFieldAttribute('mship_id', 'type', 'hidden'); ?>
-                <?php else : ?>
-    				<?php $form->setFieldAttribute('mship_id', 'readonly', 'true'); ?>
+    				<?php $form->setFieldAttribute('group_id', 'type', 'hidden'); ?>
                 <?php endif; ?>
 
+                <?php echo $form->renderField('group_id'); ?>
                 <?php echo $form->renderField('mship_id'); ?>
                 <?php echo $form->renderField('mdod'); ?>
                 <?php echo $form->renderField('id'); ?>

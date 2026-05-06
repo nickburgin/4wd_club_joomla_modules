@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.2.1
+ * @version    4.3.3
  * @package    com_gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -72,7 +72,7 @@ class HtmlView extends BaseHtmlView
 		Factory::getApplication()->input->set('hidemainmenu', true);
 
 		$progNameL = 'usernew';
-		$user  = GabroadcastHelper::getSpecificUser();
+		$user  = Factory::getApplication()->getIdentity();
 		$isNew = ($this->item->id == 0);
 
 		if (isset($this->item->checked_out)) {

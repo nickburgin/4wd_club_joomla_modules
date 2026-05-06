@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -10,12 +10,12 @@
 // no direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Plugin\PluginHelper;
-use \Joomla\CMS\Layout\LayoutHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GaauditHelper;
 
@@ -24,13 +24,12 @@ $this->document->getWebAssetManager()
     ->usePreset('com_gausers.gauserspreset');
 
 //Load admin language file
-$lang = Factory::getLanguage();
-$lang->load('com_gausers', JPATH_ADMINISTRATOR);
+Factory::getApplication()->getLanguage()->load('com_gausers', JPATH_ADMINISTRATOR);
 
 $newMember = $this->params->get('newMember',0);
 $incPartner = $this->params->get('incl_partner',0);
 
-$user       = GausersHelper::getSpecificUser();
+$user       = Factory::getApplication()->getIdentity();
 $this->form->setFieldAttribute('name', 'required', 'required');
 $this->form->setFieldAttribute('email', 'required', 'required');
 $this->form->setFieldAttribute('address1', 'required', 'required');
@@ -38,12 +37,13 @@ $this->form->setFieldAttribute('city', 'required', 'required');
 $this->form->setFieldAttribute('postal_code', 'required', 'required');
 $this->form->setFieldAttribute('phone', 'required', 'required');
 
+// Try to identify IP address
+$user_ip = GausersHelper::get_user_ip();
+
 /*
-echo '<pre>Test<br />';
-print_r(Factory::getApplication()->getUserState('com_gausers.test.data'));
-echo '</pre>';
-print_r(Factory::getApplication()->getUserState('com_gausers.test.data'));
-print_r($this->item);
+echo "User IP Address is: " . $user_ip;
+GausersHelper::gaPrint($ignoreMship);
+GausersHelper::gaPrint(Factory::getApplication()->getUserState('com_gausers.test.data'));
 */
 ?>
 
@@ -64,6 +64,7 @@ print_r($this->item);
         	            <div class="row-fluid">
         	                <div class="span12 form-horizontal">
         	                
+            	                <?php echo $this->form->renderField('mship_id'); ?>
             	                <?php echo $this->form->renderField('name'); ?>
             	                <?php if ($incPartner) : ?>
                 	                <?php echo $this->form->renderField('partner'); ?>

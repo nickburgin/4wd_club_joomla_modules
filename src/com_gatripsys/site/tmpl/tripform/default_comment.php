@@ -10,11 +10,11 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 
 // Load admin language file
@@ -40,26 +40,20 @@ $submitLink = GatripsysHelper::getHTTPQuery(null, 'task', 'tripform.saveComment'
 			<?php throw new \Exception(Text::_('COM_GATRIPSYS_ERROR_MESSAGE_NOT_AUTHORISED'), 403); ?>
 		</h3>
 	<?php else : ?>
-		<h1><?php echo Text::sprintf('COM_GATRIPSYS_ADD_COMMENT', $this->item->title); ?></h1>
+		<h1><?php echo Text::sprintf('COM_GATRIPSYS_ADD_COMMENT_TRIP', $this->item->title); ?></h1>
 
 		<form id="form-attendee" action="<?php echo Route::_('index.php?'.http_build_query($submitLink, '', '&amp;')); ?>"
 			method="post" class="form-validate form-horizontal" enctype="multipart/form-data" target="_parent">
 
-			<?php echo HTMLHelper::_('uitab.startTabSet', 'myTab', array('active' => 'extrainfo')); ?>
-
-			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'extrainfo', Text::_('COM_GATRIPSYS_TITLE_EXTRAINFO', true)); ?>
-				<div class="row-fluid">
-					<div class="span10 form-horizontal">
-						<fieldset name="extrainfo" class="adminform">
-							<?php echo $this->form->renderFieldset('extrainfo'); ?>
-							<input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>"/>
-							<input type="hidden" name="jform[title]" value="<?php echo $this->item->title; ?>" />
-						</fieldset>
-					</div>
+			<div class="row-fluid">
+				<div class="span10 form-horizontal">
+					<fieldset name="extrainfo" class="adminform" style="padding: 0 10px !important;">
+						<?php echo $this->form->renderFieldset('extrainfo'); ?>
+						<input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>"/>
+						<input type="hidden" name="jform[title]" value="<?php echo $this->item->title; ?>" />
+					</fieldset>
 				</div>
-			<?php echo HTMLHelper::_('uitab.endTab'); ?>
-
-			<?php echo HTMLHelper::_('uitab.endTabSet'); ?>
+			</div>
 
 			<div class="control-group">
 				<div class="controls">

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.0.7
+ * @version    4.1.2
  * @package    com_gamerchandise
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -9,21 +9,21 @@
 
 namespace GlennArkell\Component\Gamerchandise\Site\Dispatcher;
 
-defined('JPATH_PLATFORM') or die;
+\defined('_JEXEC') or die;
 
 use Joomla\CMS\Dispatcher\ComponentDispatcher;
 use Joomla\CMS\Language\Text;
 
 /**
  * ComponentDispatcher class
- * @since  4.0.7
+ * @since  4.1.2
  */
 class Dispatcher extends ComponentDispatcher
 {
 	/**
 	 * Dispatch a controller task. Redirecting the user if appropriate.
 	 * @return  void
-	 * @since   4.0.7
+	 * @since   4.1.2
 	 */
 	public function dispatch()
 	{

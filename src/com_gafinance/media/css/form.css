@@ -1,5 +1,5 @@
 /**
- * @version     5.1.0
+ * @version     5.2.3
  * @package     com_gafinance
  * @copyright   2021 Glenn Arkell
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -24,6 +24,39 @@
 div.controls > fieldset {
     margin-bottom: 0 !important;
 }
+
+.tranamt {
+    text-align: right;
+}
+.tranamt.trantot {
+    border-top:2px solid #000;
+    border-bottom:1px solid #000;
+}
+
+table.finreport {
+    width: 95%;
+}
+
+table.finreport tr {
+    border:none;
+    border-collapse: collapse;
+}
+
+td.trantype {
+    min-width: 10%;
+}
+
+td.trancat {
+    min-width: 20%;
+}
+
+td.trandesc {
+    min-width: 40%;
+}
+td.tranamt {
+    min-width: 10%;
+}
+
 
 /*
 .front-end-edit ul {

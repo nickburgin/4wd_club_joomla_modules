@@ -27,7 +27,7 @@ class DisplayController extends BaseController
 	 * @var    string
 	 * @since  1.6
 	 */
-	protected $default_view = 'bcasts';
+	protected $default_view = 'usernews';
 
 	/**
 	 * Method to display a view.

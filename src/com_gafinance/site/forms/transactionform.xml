@@ -39,6 +39,7 @@
         <field name="tran_date" type="calendar"
             filterFormat="Y-m-d" translateformat="true"
             label="COM_GAFINANCE_FORM_LBL_TRANSACTION_TRAN_DATE"
+            hint="COM_GAFINANCE_HINT_DATE_FORMAT"
             description="COM_GAFINANCE_FORM_DESC_TRANSACTION_TRAN_DATE" />
 
         <field name="tran_amount" type="text" default="0.0000" required="true" filter="safehtml"

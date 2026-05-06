@@ -1,135 +1,103 @@
 <?php
 
 /**
- * @version    4.0.2
- * @package    Com_Gaforsale
- * @author     Glenn Arkell <glenn@glennarkell.com.au>
- * @copyright  2021 Glenn Arkell
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @package     Joomla.Site
+ * @subpackage  Layout
+ *
+ * @copyright   (C) 2013 Open Source Matters, Inc. <https://www.joomla.org>
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('JPATH_BASE') or die;
+defined('_JEXEC') or die;
 
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Session\Session;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 
 $data = $displayData;
-
-// setup component name to save hassels using on different components
-$comp_name = 'GAFORSALE';
 
 // Receive overridable options
 $data['options'] = !empty($data['options']) ? $data['options'] : array();
 
-// insert this to have pagination selection available
-$pages = $data['view']->get('pagination');
+$noResultsText     = '';
+$hideActiveFilters = false;
+$showFilterButton  = false;
+$showSelector      = false;
+$selectorFieldName = $data['options']['selectorFieldName'] ?? 'client_id';
 
-// Check if any filter field has been filled
-$filters       = false;
-$filtered      = false;
-$search_filter = false;
-$show_filter = false;
+// If a filter form exists.
+if (isset($data['view']->filterForm) && !empty($data['view']->filterForm)) {
+    // Checks if a selector (e.g. client_id) exists.
+    if ($selectorField = $data['view']->filterForm->getField($selectorFieldName)) {
+        $showSelector = $selectorField->getAttribute('filtermode', '') === 'selector' ? true : $showSelector;
 
-if (isset($data['view']->filterForm))
-{
-	$filters = $data['view']->filterForm->getGroup('filter');
+        // Checks if a selector should be shown in the current layout.
+        if (isset($data['view']->layout)) {
+            $showSelector = $selectorField->getAttribute('layout', 'default_filter') != $data['view']->layout ? false : $showSelector;
+        }
+
+        // Unset the selector field from active filters group.
+        unset($data['view']->activeFilters[$selectorFieldName]);
+    }
+
+    // Checks if the filters button should exist.
+    $filters = $data['view']->filterForm->getGroup('filter');
+    $showFilterButton = isset($filters['filter_search']) && count($filters) === 1 ? false : true;
+
+    // Checks if it should show the be hidden.
+    $hideActiveFilters = empty($data['view']->activeFilters);
+
+    // Check if the no results message should appear.
+    if (isset($data['view']->total) && (int) $data['view']->total === 0) {
+        $noResults = $data['view']->filterForm->getFieldAttribute('search', 'noresults', '', 'filter');
+        if (!empty($noResults)) {
+            $noResultsText = Text::_($noResults);
+        }
+    }
 }
 
-// Check if there are filters set.
-if ($filters !== false)
-{
-	$filterFields = array_keys($filters);
-	$filled       = false;
-
-	foreach ($filterFields as $filterField)
-	{
-		$filterField = substr($filterField, 7);
-		$filter      = $data['view']->getState('filter.' . $filterField);
-
-		if (!empty($filter))
-		{
-			$filled = $filter;
-		}
-
-		if (!empty($filled))
-		{
-			$filtered = true;
-			break;
-		}
-	}
-
-	$search_filter = $filters['filter_search'];
-	unset($filters['filter_search']);
-}
-
-$options = $data['options'];
-
-// Set some basic options
+// Set some basic options.
 $customOptions = array(
-	'filtersHidden'       => isset($options['filtersHidden']) ? $options['filtersHidden'] : empty($data['view']->activeFilters) && !$filtered,
-	'defaultLimit'        => isset($options['defaultLimit']) ? $options['defaultLimit'] : Factory::getApplication()->get('list_limit', 20),
-	'searchFieldSelector' => '#filter_search',
-	'orderFieldSelector'  => '#list_fullordering'
+    'filtersHidden'       => isset($data['options']['filtersHidden']) && $data['options']['filtersHidden'] ? $data['options']['filtersHidden'] : $hideActiveFilters,
+    'filterButton'        => isset($data['options']['filterButton']) && $data['options']['filterButton'] ? $data['options']['filterButton'] : $showFilterButton,
+    'defaultLimit'        => $data['options']['defaultLimit'] ?? Factory::getApplication()->get('list_limit', 20),
+    'searchFieldSelector' => '#filter_search',
+    'selectorFieldName'   => $selectorFieldName,
+    'showSelector'        => $showSelector,
+    'orderFieldSelector'  => '#list_fullordering',
+    'showNoResults'       => !empty($noResultsText),
+    'noResultsText'       => !empty($noResultsText) ? $noResultsText : '',
+    'formSelector'        => !empty($data['options']['formSelector']) ? $data['options']['formSelector'] : '#adminForm',
 );
 
-$data['options'] = array_unique(array_merge($customOptions, $data['options']));
+// Merge custom options in the options array.
+$data['options'] = array_merge($customOptions, $data['options']);
 
-$formSelector = !empty($data['options']['formSelector']) ? $data['options']['formSelector'] : '#adminForm';
+// Add class to hide the active filters if needed.
+$filtersActiveClass = $hideActiveFilters ? '' : ' js-stools-container-filters-visible';
 
 // Load search tools
-HTMLHelper::_('searchtools.form', $formSelector, $data['options']);
+HTMLHelper::_('searchtools.form', $data['options']['formSelector'], $data['options']);
 ?>
-
-<div class="com-content__filter btn-group">
-
-	<label for="filter_search" class="filter-search-lbl visually-hidden element-invisible"
-		aria-invalid="false"><?php echo Text::_('COM_'.$comp_name.'_SEARCH_FILTER_SUBMIT'); ?>
-	</label>
-	<?php echo $search_filter->input; ?>
-	<button type="submit" class="btn btn-primary" title=""
-		data-original-title="<?php echo Text::_('COM_'.$comp_name.'_SEARCH_FILTER_SUBMIT'); ?>">
-		<i class="icon-search"></i>
-	</button>
-
-	<?php if ($show_filter): ?>
-		<?php if ($filters): ?>
-			<div class="btn-wrapper float-left hidden-phone" style="margin-left: 5px;">
-				<button type="button" class="btn btn-secondary hasTooltip js-stools-btn-filter" title=""
-					data-original-title="<?php echo Text::_('COM_'.$comp_name.'_SEARCH_TOOLS_DESC'); ?>">
-					<?php echo Text::_('COM_'.$comp_name.'_SEARCH_TOOLS'); ?> <i class="caret"></i>
-				</button>
-			</div>
-		<?php endif; ?>
-	<?php endif; ?>
-
-	<button type="reset" name="filter-clear-button" class="btn btn-secondary"
-		onclick="jQuery(this).closest('form').find('input').val('');submit();">
-		<?php echo Text::_('COM_'.$comp_name.'_SEARCH_FILTER_CLEAR'); ?>
-	</button>
-
-	<?php // insert this to have pagination selection available   ?>
-	<div class="com-content-category__pagination btn-group float-end">
-		<label for="limit" class="visually-hidden element-invisible"><?php echo Text::_('JGLOBAL_DISPLAY_NUM');?></label>
-		<?php echo $pages->getLimitBox(); ?>
-	</div>
-
+<div class="js-stools" role="search">
+    <?php if ($data['options']['showSelector']) : ?>
+    <div class="js-stools-container-selector">
+        <?php echo $this->sublayout('selector', $data); ?>
+    </div>
+    <?php endif; ?>
+    <div class="js-stools-container-bar">
+        <div class="btn-toolbar">
+            <?php echo $this->sublayout('bar', $data); ?>
+            <?php echo $this->sublayout('list', $data); ?>
+        </div>
+    </div>
+    <!-- Filters div -->
+    <div class="js-stools-container-filters clearfix<?php echo $filtersActiveClass; ?>">
+        <?php if ($data['options']['filterButton']) : ?>
+            <?php echo $this->sublayout('filters', $data); ?>
+        <?php endif; ?>
+    </div>
 </div>
-
-<!-- Filters div -->
-<?php if ($show_filter): ?>
-	<div class="js-stools-container-filters hidden-phone clearfix" style="">
-		<?php // Load the form filters ?>
-		<?php if ($filters) : ?>
-			<?php foreach ($filters as $fieldName => $field) : ?>
-				<?php if ($fieldName != 'filter_search') : ?>
-					<div class="js-stools-field-filter">
-						<?php echo $field->renderField(array('hiddenLabel' => false)); ?>
-					</div>
-				<?php endif; ?>
-			<?php endforeach; ?>
-		<?php endif; ?>
-	</div>
+<?php if ($data['options']['showNoResults']) : ?>
+    <?php echo $this->sublayout('noitems', $data); ?>
 <?php endif; ?>

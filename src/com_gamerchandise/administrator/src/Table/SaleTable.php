@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    4.0.7
+ * @version    4.1.2
  * @package    Com_Gamerchandise
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -22,7 +22,7 @@ use \Joomla\CMS\Table\Table as Table;
 use \Joomla\CMS\Versioning\VersionableTableInterface;
 use \Joomla\Database\DatabaseDriver;
 use \Joomla\CMS\Filter\OutputFilter;
-use \Joomla\CMS\Filesystem\File;
+use \Joomla\Filesystem\File;
 use \GlennArkell\Component\Gamerchandise\Administrator\Helper\GamerchandiseHelper;
 
 /**
@@ -46,7 +46,7 @@ class SaleTable extends Table implements VersionableTableInterface
     /**
 	 * Get the type alias for the history table
 	 * @return  string  The alias as described above
-	 * @since   4.0.7
+	 * @since   4.1.2
 	 */
 	public function getTypeAlias()
 	{
@@ -58,7 +58,7 @@ class SaleTable extends Table implements VersionableTableInterface
 	 * @param   array  $array   Named array
 	 * @param   mixed  $ignore  Optional array or list of parameters to ignore
 	 * @return  null|string  null is operation was satisfactory, otherwise returns an error
-	 * @see     JTable:bind
+	 * @see     Table:bind
 	 * @since   1.5
      * @throws Exception
 	 */
@@ -168,7 +168,7 @@ class SaleTable extends Table implements VersionableTableInterface
 
 	/**
 	 * Returns the parent asset's id. If you have a tree structure, retrieve the parent's id using the external key field
-	 * @param   JTable   $table  Table name
+	 * @param   Table   $table  Table name
 	 * @param   integer  $id     Id
 	 * @see Table::_getAssetParentId
 	 * @return mixed The id on success, false on failure.

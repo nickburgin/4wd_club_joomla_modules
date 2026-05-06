@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -10,11 +10,11 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 
 // load any assets required
@@ -22,10 +22,9 @@ $wa = $this->document->getWebAssetManager()
     ->usePreset('com_gacalevents.gacaleventspreset');
 
 // Load admin language file
-$lang = Factory::getApplication()->getLanguage();
-$lang->load('com_gacalevents', JPATH_ADMINISTRATOR);
+Factory::getApplication()->getLanguage()->load('com_gacalevents', JPATH_ADMINISTRATOR);
 
-$user = GacaleventsHelper::getSpecificUser();
+$user = Factory::getApplication()->getIdentity();
 $canEdit = $user->authorise('core.edit', 'com_gacalevents');
 
 if (!$canEdit && $user->authorise('core.edit.own', 'com_gacalevents'))
@@ -58,51 +57,18 @@ $delURL = 'index.php?'.http_build_query($delLink, '', '&amp;');
 		</tr>
 
 		<tr>
-			<th><?php echo Text::_('COM_GACALEVENTS_FORM_LBL_EVENT_USER_ID'); ?></th>
-			<td><?php echo $this->item->user_id_name; ?></td>
+			<th><?php echo Text::_('COM_GACALEVENTS_FORM_LBL_EVENT_TITLE'); ?></th>
+			<td><?php echo $this->item->title; ?></td>
 		</tr>
 
 		<tr>
-			<th><?php echo Text::_('COM_GACALEVENTS_FORM_LBL_EVENT_TRAN_TYPE'); ?></th>
-			<td><?php echo $this->item->tran_type; ?></td>
+			<th><?php echo Text::_('COM_GACALEVENTS_FORM_LBL_EVENT_BRIEF_DESC'); ?></th>
+			<td><?php echo $this->item->brief_desc; ?></td>
 		</tr>
 
 		<tr>
-			<th><?php echo Text::_('COM_GACALEVENTS_FORM_LBL_EVENT_TRAN_DATE'); ?></th>
-			<td><?php echo $this->item->tran_date; ?></td>
-		</tr>
-
-		<tr>
-			<th><?php echo Text::_('COM_GACALEVENTS_FORM_LBL_EVENT_TRAN_AMOUNT'); ?></th>
-			<td><?php echo $this->item->tran_amount; ?></td>
-		</tr>
-
-		<tr>
-			<th><?php echo Text::_('COM_GACALEVENTS_FORM_LBL_EVENT_TRAN_DESC'); ?></th>
-			<td><?php echo $this->item->tran_desc; ?></td>
-		</tr>
-
-		<tr>
-			<th><?php echo Text::_('COM_GACALEVENTS_FORM_LBL_EVENT_TRAN_FILE'); ?></th>
-			<td>
-			<?php
-			foreach ((array) $this->item->tran_file as $singleFile) : 
-				if (!is_array($singleFile)) : 
-					$uploadPath = 'treasury/receipts' . DIRECTORY_SEPARATOR . $singleFile;
-					 echo '<a href="' . Route::_(Uri::root() . $uploadPath, false) . '" target="_blank">' . $singleFile . '</a> ';
-				endif;
-			endforeach;
-		?></td>
-		</tr>
-
-		<tr>
-			<th><?php echo Text::_('COM_GACALEVENTS_FORM_LBL_EVENT_ACCNT_ID'); ?></th>
-			<td><?php echo $this->item->accnt_id_name; ?></td>
-		</tr>
-
-		<tr>
-			<th><?php echo Text::_('COM_GACALEVENTS_FORM_LBL_EVENT_GST_AMT'); ?></th>
-			<td><?php echo $this->item->gst_amt; ?></td>
+			<th><?php echo Text::_('COM_GACALEVENTS_FORM_LBL_EVENT_EVENT_DETAILS'); ?></th>
+			<td><?php echo $this->item->event_details; ?></td>
 		</tr>
 
 		<tr>

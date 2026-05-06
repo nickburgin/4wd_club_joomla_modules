@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    Com_Gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -13,22 +13,22 @@ namespace GlennArkell\Component\Gatripsys\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\CMS\MVC\Model\BaseDatabaseModel;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\Data\DataObject;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\Filesystem\Path;
-use \Joomla\CMS\Toolbar\Toolbar;
-use \Joomla\CMS\Toolbar\ToolbarHelper;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\Data\DataObject;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\Installer\Installer;
+use Joomla\Filesystem\Path;
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GanotificationsHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GapdfHelper;
@@ -47,6 +47,7 @@ class GatriprptHelper
 	/**
 	* Create pdf report based on the trip data
 	* @param trip record id
+	* @param final flag to indicate final report
 	* @return true
 	*/
 	public static function createTripReport($trip = 0, $final = 0)
@@ -70,6 +71,14 @@ class GatriprptHelper
         if(!empty($attendees)) {
             $attendCount = count($attendees);
         }
+        
+        // set up vehicle labelling
+        $vmake = Text::_('COM_GATRIPSYS_FORM_LBL_VEH_MAKE').': ';
+        $vmod = Text::_('COM_GATRIPSYS_FORM_LBL_VEH_MODEL').': ';
+        $vyear = Text::_('COM_GATRIPSYS_FORM_LBL_VEH_YEAR').': ';
+        $vfuel = Text::_('COM_GATRIPSYS_FORM_LBL_VEH_FUEL').': ';
+        $vtrans = Text::_('COM_GATRIPSYS_FORM_LBL_VEH_TRANS').': ';
+        $vrego = Text::_('COM_GATRIPSYS_FORM_LBL_VEH_REGO').': ';
 
         $pdf=new GapdfHelper("P","mm","A4");
 
@@ -219,13 +228,19 @@ class GatriprptHelper
 
 			// rip out quotes from standard profile data
 			$primary_contact = str_replace('"','',$attend->primary_contact);
+			$vehicle_make = str_replace('"','',$attend->vehicle_make);
+			$vehicle_model = str_replace('"','',$attend->vehicle_model);
+			$vehicle_rego = str_replace('"','',$attend->vehicle_rego);
+			$vehicle_year = str_replace('"','',$attend->vehicle_year);
+			$vehicle_trans = str_replace('"','',$attend->vehicle_trans);
+			$vehicle_fuel = str_replace('"','',$attend->vehicle_fuel);
 
 	        if ($incl_email ) {
 		        $pdf->Cell(45, $lh, $attend->attend_name, 0, 0, "L");
 		        $pdf->Cell(2, $lh, " ", 0, 0, "L"); // Sets an spacer
 				$x = $pdf->GetX();
 				$y = $pdf->GetY();
-		        $pdf->MultiCell(53, $lh, "Make: ".$attend->vehicle_make."\nModel: ".$attend->vehicle_model."\nRego: ".$attend->vehicle_rego, 0, "L", false);
+		        $pdf->MultiCell(65, $lh, $vmake.$vehicle_make." - ".$vmod.$vehicle_model."\n".$vrego.$vehicle_rego." - ".$vyear.$vehicle_year."\n".$vfuel.$vehicle_fuel." - ".$vtrans.$vehicle_trans, 0, "L", false);
 				$w = $pdf->GetY();
 		        $pdf->SetXY($x + 53, $y);
 				$pdf->Cell(2, $lh, " ", 0, 0, "L"); // Sets an spacer
@@ -249,7 +264,7 @@ class GatriprptHelper
 		        $pdf->Cell(5, $lh, " ", 0, 0, "L"); // Sets an spacer
 				$x = $pdf->GetX();
 				$y = $pdf->GetY();
-		        $pdf->MultiCell(65, $lh, "Make: ".$attend->vehicle_make." - Model: ".$attend->vehicle_model."\nRego: ".$attend->vehicle_rego, 0, "L", false);
+		        $pdf->MultiCell(65, $lh, $vmake.$vehicle_make." - ".$vmod.$vehicle_model."\n".$vrego.$vehicle_rego." - ".$vyear.$vehicle_year."\n".$vfuel.$vehicle_fuel." - ".$vtrans.$vehicle_trans, 0, "L", false);
 				$w = $pdf->GetY();
 		        $pdf->SetXY($x + 65, $y);
 		        $pdf->Cell(5, $lh, " ", 0, 0, "L"); // Sets an spacer

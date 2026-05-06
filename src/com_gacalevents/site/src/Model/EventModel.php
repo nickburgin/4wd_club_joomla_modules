@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,13 +12,14 @@ namespace GlennArkell\Component\Gacalevents\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\CMS\Helper\TagsHelper;
-use \Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Component\ComponentHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacommunicationsHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GanamesHelper;
@@ -41,7 +42,7 @@ class EventModel extends ItemModel
 	protected function populateState()
 	{
 		$app  = Factory::getApplication('com_gacalevents');
-		$user = GacaleventsHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		// Check published state
 		if ((!$user->authorise('core.edit.state', 'com_gacalevents')) && (!$user->authorise('core.edit', 'com_gacalevents'))) {
@@ -211,7 +212,7 @@ class EventModel extends ItemModel
 			$table = $this->getTable();
 
 			// Get the current user object.
-			$user = GacaleventsHelper::getSpecificUser();
+			$user = Factory::getApplication()->getIdentity();
 
 			// Attempt to check the row out.
 			if (method_exists($table, 'checkout')) {
@@ -259,6 +260,36 @@ class EventModel extends ItemModel
 	}
 
 	/**
+	 * Method to repeat an item
+	 * @param   int $id Element id
+	 * @return  bool
+	 */
+	public function repeatEvent($id)
+	{
+		//$table = $this->getTable();
+        $params = ComponentHelper::getParams('com_gacalevents');
+        $repeatEvent = $params->get('repeat_event', 0);
+        $repeatQty = $params->get('repeat_qty', 1);
+        $repeatNumber = $params->get('repeat_setting', 0);
+        $repeatType = $params->get('repeat_type', 'DAYS');
+
+        $record_id = $id;
+        for ($x = 1; $x <= $repeatQty; $x++) {
+            $table = $this->getTable();
+            $table->load($record_id);
+			$fdate = new \DateTime($table->depart_date);
+			$tdate = new \DateTime($table->return_date);
+            $table->depart_date = \date_format($fdate->modify('+'.$repeatNumber.' '.$repeatType),'Y-m-d H:i:s');
+            $table->return_date = \date_format($tdate->modify('+'.$repeatNumber.' '.$repeatType),'Y-m-d H:i:s');
+            $table->id = 0;
+            $table->store();
+            $record_id = $table->id;
+        }
+
+        return true;
+	}
+
+	/**
 	 * Method to delete an attendance record
 	 * @param   int $id Element id
 	 * @return  bool
@@ -294,10 +325,10 @@ class EventModel extends ItemModel
 		$psuf  = $params->get( 'profile_suffix', 'b4wdc' );
 		$ppart  = $params->get( 'profile_partner', 'partner' );
 		$locProfKey = 'profile'.$psuf.'.'.$ppart;
-		$user  = GacaleventsHelper::getSpecificUser();
+		$user  = Factory::getApplication()->getIdentity();
 
 		// get the current date-time based on timezone
-		$today = GacaleventsHelper::getTodaysDate();
+		$today = Factory::getDate()->toSql();
 		$attRecord = GacaleventsHelper::checkAttendee($event_id, $attendee);
 
 		$table = $this->getAttTable();
@@ -308,47 +339,48 @@ class EventModel extends ItemModel
 			$table->state = $status;
 	
 			return $table->store();
-		}
-
-		$data = array();
-		$data['event'] = $event_id;
-        $data['attendee'] = $attendee;
-        $data['created_date'] = $today;
-        $data['created_by'] = $user->id;
-		$data['att_cat'] = 0;
-        $data['state'] = $status;
-
-		if ($attendee) {
-			$member = GanamesHelper::breakdownNamesFromUserID($attendee, $locProfKey);
-			if ($partnerShip) {
-				$data['pub_name'] = GanamesHelper::combineNames($member);
-				$data['qty_att'] = 2;
-			} else {
-				$data['pub_name'] = $member->name;
-				$data['qty_att'] = 1;
-			}
-
-		    $name = $data['pub_name'];
-		    $last_name = (strpos($name, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $name);
-		    $first_name = trim( preg_replace('#'.$last_name.'#', '', $name ) );
-
-			$data['pub_fname'] = $first_name;
-			$data['pub_sname'] = $last_name;
-			$data['pub_partner'] = $member->partner;
-		}
-
-		if ($table->save($data) === true) {
-			Factory::getApplication()->enqueueMessage(Text::_('COM_GACALEVENTS_ATTEND_REGO_ATTEND_SUCC_MSG'), 'notice');
-			/* ---------------------------------------------------------------- */
-			if ($act_log && $table->id) {
-				// gather information and log in a new action log record
-				GacaleventsHelper::recordActionLog($member, $event_id, $status);
-			}
-			/* ---------------------------------------------------------------- */
-			return $table->id;
 		} else {
-			Factory::getApplication()->enqueueMessage(Text::_('COM_GACALEVENTS_ATTEND_REGO_ATTEND_FAIL_MSG'), 'warning');
-			return false;
+
+    		$data = array();
+    		$data['event'] = $event_id;
+            $data['attendee'] = $attendee;
+            $data['created_date'] = $today;
+            $data['created_by'] = $user->id;
+    		$data['att_cat'] = 0;
+            $data['state'] = $status;
+    
+    		if ($attendee) {
+    			$member = GanamesHelper::breakdownNamesFromUserID($attendee, $locProfKey);
+    			if ($partnerShip) {
+    				$data['pub_name'] = GanamesHelper::combineNames($member);
+    				$data['qty_att'] = 2;
+    			} else {
+    				$data['pub_name'] = $member->name;
+    				$data['qty_att'] = 1;
+    			}
+    
+    		    $name = $data['pub_name'];
+    		    $last_name = (strpos($name, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $name);
+    		    $first_name = trim( preg_replace('#'.$last_name.'#', '', $name ) );
+    
+    			$data['pub_fname'] = $first_name;
+    			$data['pub_sname'] = $last_name;
+    			$data['pub_partner'] = $member->partner;
+    		}
+    
+    		if ($table->save($data) === true) {
+    			Factory::getApplication()->enqueueMessage(Text::_('COM_GACALEVENTS_ATTEND_REGO_ATTEND_SUCC_MSG'), 'notice');
+    			/* ---------------------------------------------------------------- */
+    			if ($act_log && $table->id) {
+    				// gather information and log in a new action log record
+    				GacaleventsHelper::recordActionLog($member, $event_id, $status);
+    			}
+    			/* ---------------------------------------------------------------- */
+    			return $table->id;
+    		} else {
+    			Factory::getApplication()->enqueueMessage(Text::_('COM_GACALEVENTS_ATTEND_REGO_ATTEND_FAIL_MSG'), 'warning');
+    			return false;
+    		}
 		}
 	}
 
@@ -366,7 +398,7 @@ class EventModel extends ItemModel
 
     public function extractAttendees($event_id)
     {
-        $user  = GacaleventsHelper::getSpecificUser();
+        $user  = Factory::getApplication()->getIdentity();
 		// get the current date-time based on timezone
 		$date = new DateTime();
 		$config = Factory::getConfig();

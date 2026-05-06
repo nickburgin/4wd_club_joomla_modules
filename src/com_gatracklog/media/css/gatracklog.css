@@ -1,14 +1,29 @@
 /**
- * @version     4.1.0
- * @package     com_gatracklog
- * @copyright   2021 Glenn Arkell
+ * @version     4.2.0
+ * @subpackage  com_gatracklog
+ * @copyright   2024 Glenn Arkell
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Glenn Arkell <glenn@glennarkell.com.au>
  */
 
+/* reduce the size of pagination panel on small screens */
+@media (max-width: 480px) {
+    div.pagination > p.counter {
+        font-size: 11px;
+        padding-right: 1px;
+    }
+    div.pagination > nav.pagination__wrapper > ul.pagination.ms-0 {
+        margin-left: 0.2rem !important;
+    }
+    div.pagination > nav.pagination__wrapper > ul > li.page-item > span.page-link,
+    div.pagination > nav.pagination__wrapper > ul > li.page-item > a.page-link {
+        padding: 0.2rem 0.4rem !important;
+    }
+}
 p.center,
 table th.center,
 table td.center {
 	text-align: center;
 	margin: 0 auto;
 }
+

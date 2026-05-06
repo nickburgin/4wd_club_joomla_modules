@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    5.1.0
+ * @version    5.2.3
  * @package    Com_Gafinance
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -13,8 +13,8 @@ namespace GlennArkell\Component\Gafinance\Administrator\Field;
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die('Restricted access');
 
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Form\FormField;
 
 /**
  * Class JFormFieldSubmit

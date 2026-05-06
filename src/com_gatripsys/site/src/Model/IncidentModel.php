@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    Com_Gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -13,11 +13,11 @@ namespace GlennArkell\Component\Gatripsys\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Language\Text;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 
 /**

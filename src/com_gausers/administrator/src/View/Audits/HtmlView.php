@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    5.1.6
+ * @version    6.0.0
  * @package    Com_Gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2017 Glenn Arkell
@@ -13,15 +13,15 @@ namespace GlennArkell\Component\Gausers\Administrator\View\Audits;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use \Joomla\CMS\Toolbar\Toolbar;
-use \Joomla\CMS\Toolbar\ToolbarHelper;
-use \Joomla\CMS\Helper\ContentHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Plugin\PluginHelper;
 
 /**
  * View class for a list of records.
@@ -171,7 +171,7 @@ class HtmlView extends BaseHtmlView
 			'a.`state`' => Text::_('JSTATUS'),
 			'a.`user_id`' => Text::_('COM_GAUSERS_AUDITS_USER_ID'),
 			'a.`act_name`' => Text::_('COM_GAUSERS_AUDITS_ACT_NAME'),
-			'a.`cat_id`' => Text::_('COM_GAUSERS_AUDITS_CAT_ID'),
+			'a.`category_id`' => Text::_('COM_GAUSERS_AUDITS_CAT_ID'),
 			'a.`created_date`' => Text::_('COM_GAUSERS_AUDITS_CREATED_DATE'),
 		);
 	}

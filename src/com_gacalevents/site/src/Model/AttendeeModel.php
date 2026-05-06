@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,12 +12,12 @@ namespace GlennArkell\Component\Gacalevents\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\CMS\Helper\TagsHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 
 /**
@@ -38,7 +38,7 @@ class AttendeeModel extends ItemModel
 	protected function populateState()
 	{
 		$app  = Factory::getApplication('com_gacalevents');
-		$user = GacaleventsHelper::getSpecificUser();
+		$user = $app->getIdentity();
 
 		// Check published state
 		if ((!$user->authorise('core.edit.state', 'com_gacalevents')) && (!$user->authorise('core.edit', 'com_gacalevents'))) {
@@ -47,15 +47,19 @@ class AttendeeModel extends ItemModel
 		}
 
 		// Load state from the request userState on edit or from the passed variable on default
-		if (Factory::getApplication()->input->get('layout') == 'edit') {
-			$id = Factory::getApplication()->getUserState('com_gacalevents.edit.attendee.id');
+		if ($app->input->get('layout') == 'edit') {
+			$id = $app->getUserState('com_gacalevents.edit.attendee.id');
+            $event_id = $app->getUserState('com_gacalevents.edit.attendee.event_id');
 		} else {
-			$id = Factory::getApplication()->input->get('id');
-			Factory::getApplication()->setUserState('com_gacalevents.edit.attendee.id', $id);
+			$id = $app->input->get('id');
+			$event_id = $app->input->get('event_id');
+			$app->setUserState('com_gacalevents.edit.attendee.id', $id);
+			$app->setUserState('com_gacalevents.edit.attendee.event_id', $event_id);
 		}
 
 		$this->setState('attendee.id', $id);
-
+		$this->setState('attendee.event_id', $event_id);
+        
 		// Load the parameters.
 		$params       = $app->getParams();
 		$params_array = $params->toArray();
@@ -113,9 +117,21 @@ class AttendeeModel extends ItemModel
 			if (isset($this->_item->modified_by)) {
 				$this->_item->modified_by_name = GacaleventsHelper::getSpecificUser($this->_item->modified_by)->name;
 			}
-	
+
+			if (isset($this->_item->event)) {
+				$event = GacaleventsHelper::getRecord($this->_item->event,'#__gacalevents_events','*');
+				$this->_item->event_title = $event->title;
+				$this->_item->depart_date = $event->depart_date;
+				$this->_item->return_date = $event->return_date;
+				$this->_item->disp_depart_date = HTMLHelper::date($event->depart_date, Text::_('COM_GACALEVENTS_DISPLAY_DATETXT'), 'UTC');
+			}
+
 			if (isset($this->_item->attendee)) {
-				$this->_item->attendee_name = GacaleventsHelper::getSpecificUser($this->_item->attendee)->name;
+				if (empty($this->_item->pub_name)) {
+                    $this->_item->attendee_name = GacaleventsHelper::getSpecificUser($this->_item->attendee)->name;
+                } else {
+                    $this->_item->attendee_name = $this->_item->pub_name;
+                }
 			}
 
             return $this->_item;
@@ -203,7 +219,7 @@ class AttendeeModel extends ItemModel
 			$table = $this->getTable();
 
 			// Get the current user object.
-			$user = GacaleventsHelper::getSpecificUser();
+			$user = Factory::getApplication()->getIdentity();
 
 			// Attempt to check the row out.
 			if (method_exists($table, 'checkout')) {

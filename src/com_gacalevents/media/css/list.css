@@ -1,8 +1,20 @@
 /**
- * @version     3.0.0
+ * @version     3.3.1
  * @package     com_gacalevents
  * @copyright   2021 Glenn Arkell
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Glenn Arkell <glenn@glennarkell.com.au>
  */
+
+.btn-incident {
+	color: #fff !important;
+	background-color: #e93f8e !important;
+	border-color: #e93f8e !important;
+}
+
+@media (max-width: 480px) {
+    div.pagination > nav.pagination__wrapper > ul > li.page-item:nth-child(n+6) { display: none; }
+    div.pagination > nav.pagination__wrapper > ul > li.page-item:nth-last-child(2) { display: inline-block; }
+    div.pagination > nav.pagination__wrapper > ul > li.page-item:last-child { display: inline-block; }
+}
 

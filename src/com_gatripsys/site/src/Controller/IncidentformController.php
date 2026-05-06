@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    Com_Gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -13,11 +13,12 @@ namespace GlennArkell\Component\Gatripsys\Site\Controller;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\MVC\Controller\FormController;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Session\Session;
-use \Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
 
 /**
  * Controller class.
@@ -76,7 +77,8 @@ class IncidentformController extends FormController
 		$model = $this->getModel('Incidentform', 'Site');
 
 		// Get the user data.
-		$data = Factory::getApplication()->input->get('jform', array(), 'array');
+		$data = $app->input->get('jform', array(), 'array');
+		$files = $app->input->files->get('jform', '', 'array');
         $trip_id = $data['trip_id'];
 
 		// Validate the posted data.
@@ -113,6 +115,20 @@ class IncidentformController extends FormController
 			$id = (int) $app->getUserState('com_gatripsys.edit.incident.id');
 			$this->setRedirect(Route::_('index.php?option=com_gatripsys&view=incidentform&layout=edit&id=' . $id, false));
 			return false;
+		}
+
+		// Attempt to load images.
+		$params = ComponentHelper::getParams('com_gatripsys');
+        foreach ($files as $file) { $cntr++;
+			if ($file['size']) {
+				$data['inc_img'] = $model->uploadAttachment($file, $params, 'trip');
+			} else {
+				if (empty($data['inc_img_disp'])) {
+					$data['inc_img'] = '';
+				} else {
+					$data['inc_img'] = $data['inc_img_disp'];
+				}
+			}
 		}
 
 		// Attempt to save the data.

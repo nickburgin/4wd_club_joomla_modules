@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.6
+ * @version    6.0.0
  * @package    com_gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,14 +12,14 @@ namespace GlennArkell\Component\Gausers\Administrator\View\Mshiptype;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use \Joomla\CMS\Toolbar\ToolbarHelper;
-use \Joomla\CMS\Factory;
+use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Factory;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Helper\ContentHelper;
 
 /**
  * View class for a record.
@@ -72,7 +72,7 @@ class HtmlView extends BaseHtmlView
 
 		$compName = 'gausers';
 		$progNameL = 'mshiptype';
-		$user  = GausersHelper::getSpecificUser();
+		$user  = Factory::getApplication()->getIdentity();
 		$isNew = ($this->item->id == 0);
 
 		if (isset($this->item->checked_out)) {

@@ -1,7 +1,8 @@
 <?php
 /**
- * @version    4.1.0
- * @package    com_gatracklog
+ * @version    4.2.0
+ * @package    pkg_mypackage
+ * @subpackage com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,11 +13,11 @@ namespace GlennArkell\Component\Gatracklog\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\MVC\Model\FormModel;
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\MVC\Model\FormModel;
 use \GlennArkell\Component\Gatracklog\Administrator\Helper\GatracklogHelper;
 
 /**
@@ -80,7 +81,7 @@ class TracklogformModel extends FormModel
             $table = $this->getTable();
 
             if ($table !== false && $table->load($id) && !empty($table->id)) {
-                $user = GatracklogHelper::getSpecificUser();
+                $user = Factory::getApplication()->getIdentity();
                 $id   = $table->id;
 
                 $canEdit = $user->authorise('core.edit', 'com_gatracklog') || $user->authorise('core.create', 'com_gatracklog');
@@ -100,9 +101,9 @@ class TracklogformModel extends FormModel
                     }
                 }
 
-                // Convert the Table to a clean JObject.
+                // Convert the Table to a clean Object.
                 $properties = $table->getProperties(1);
-                $this->item = ArrayHelper::toObject($properties, 'JObject');
+                $this->item = ArrayHelper::toObject($properties, 'stdClass');
 
             }
         }
@@ -186,7 +187,7 @@ class TracklogformModel extends FormModel
             $table = $this->getTable();
 
             // Get the current user object.
-            $user = GatracklogHelper::getSpecificUser();
+            $user = Factory::getApplication()->getIdentity();
 
             // Attempt to check the row out.
             if (method_exists($table, 'checkout')) {
@@ -254,7 +255,7 @@ class TracklogformModel extends FormModel
     {
         $id    = (!empty($data['id'])) ? $data['id'] : (int) $this->getState('tracklog.id');
         $state = (!empty($data['state'])) ? 1 : 0;
-        $user  = GatracklogHelper::getSpecificUser();
+        $user  = Factory::getApplication()->getIdentity();
 
         if ($id) {
             // Check the user can edit this item
@@ -287,14 +288,14 @@ class TracklogformModel extends FormModel
      */
     public function delete($pk)
     {
-        $user = GatracklogHelper::getSpecificUser();
+        $user = Factory::getApplication()->getIdentity();
 
         if (empty($pk)) {
             $pk = (int) $this->getState('tracklog.id');
         }
 
         if ($pk == 0 || $this->getItem($pk) == null) {
-            throw new \Exception(Text::_('COM_GATRACKLOG_ITEM_DOESNT_EXIST'), 404);
+            throw new \Exception(Text::_('COM_GAGATRACKLOG_ITEM_DOESNT_EXIST'), 404);
         }
 
         if ($user->authorise('core.delete', 'com_gatracklog') !== true) {
@@ -304,7 +305,7 @@ class TracklogformModel extends FormModel
         $table = $this->getTable();
 
         if ($table->delete($pk) !== true) {
-            throw new \Exception(Text::_('JERROR_FAILED'), 501);
+            throw new \Exception(Text::_('COM_GAGATRACKLOG_ITEM_DELETED_FAILED'), 501);
         }
 
         return $pk;
@@ -323,6 +324,17 @@ class TracklogformModel extends FormModel
     }
     
 	/**
+	 * Checks if a given date is valid and in a specified format (YYYY-MM-DD)
+	 * @param   string  $date  Date to be checked
+	 * @return bool
+	 */
+	public function isValidDate($date)
+	{
+		$date = \str_replace('/', '-', $date);
+		return (\date_create($date)) ? Factory::getDate($date)->format("Y-m-d") : null;
+	}
+
+	/**
 	 * Method to save the form data.
 	 * @param   array  $data  The form data
 	 * @return bool
@@ -332,9 +344,9 @@ class TracklogformModel extends FormModel
 	public function saveComment($data)
 	{
 		$id    = (!empty($data['track_id'])) ? $data['track_id'] : 0;
-		$user = GatracklogHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 		// get the current date-time based on timezone
-		$today = GatracklogHelper::getTodaysDate();
+		$today = Factory::getDate()->toSql();
 
 		if ($id) {
 			$data['state'] = 1;

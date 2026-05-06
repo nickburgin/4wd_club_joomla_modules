@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -11,14 +11,14 @@ namespace GlennArkell\Component\Gacalevents\Site\Controller;
 
 \defined('_JEXEC') or die;
 
-use \Joomla\CMS\Application\SiteApplication;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Multilanguage;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Controller\BaseController;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Multilanguage;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Utilities\ArrayHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 
 /**
@@ -78,7 +78,7 @@ class AttendeeController extends BaseController
 		$item = GacaleventsHelper::getRecord($id, '#__gacalevents_attendees', '*');
 
 		// Checking if the user can remove object
-		$user = GacaleventsHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
         $canEdit = $user->authorise('core.edit', 'com_gacalevents') || $user->authorise('core.edit.state', 'com_gacalevents') ? true : false;
         if (!$canEdit) {
             $canEdit = $user->authorise('core.edit.own', 'com_gacalevents') && $item->attendee == $user->id ? true : false;
@@ -129,7 +129,7 @@ class AttendeeController extends BaseController
 		$app = Factory::getApplication();
 
 		// Checking if the user can remove object
-		$user = GacaleventsHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		if ($user->authorise('core.delete', 'com_gacalevents')) {
 			$model = $this->getModel('Attendee', 'Site');

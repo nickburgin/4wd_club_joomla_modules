@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -10,12 +10,12 @@
 // no direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Plugin\PluginHelper;
-use \Joomla\CMS\Layout\LayoutHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GaauditHelper;
 
@@ -24,10 +24,14 @@ $this->document->getWebAssetManager()
     ->usePreset('com_gausers.gauserspreset');
 
 //Load admin language file
-$lang = Factory::getLanguage();
+$lang = Factory::getApplication()->getLanguage();
 $lang->load('com_gausers', JPATH_ADMINISTRATOR);
 $lang->load('plg_user_profileifmr', JPATH_ADMINISTRATOR);
 $lang->load('plg_user_profilertry', JPATH_ADMINISTRATOR);
+$lang->load('plg_user_profilebrb', JPATH_ADMINISTRATOR);
+$lang->load('plg_user_profileb4wdc', JPATH_ADMINISTRATOR);
+$lang->load('plg_user_profilebdgs', JPATH_ADMINISTRATOR);
+$lang->load('plg_user_profilebecs', JPATH_ADMINISTRATOR);
 
 $this->incl_partner = $this->params->get( 'incl_partner' );
 $trg_group = $this->params->get('trg_group',0);
@@ -38,7 +42,7 @@ $this->localProfile = $this->params->get('profile_suffix','');
 $this->hideVax = $this->params->get('hide_vax',1);
 $this->default_mship = $this->params->get('default_mship',1);
 
-$user       = GausersHelper::getSpecificUser();
+$user       = Factory::getApplication()->getIdentity();
 $this->canMembers  = $user->authorise('core.members', 'com_gausers');
 $this->canAdmin  = $user->authorise('core.admin', 'com_gausers');
 $this->canAdmin = ($this->canMembers || $this->canAdmin);
@@ -59,12 +63,7 @@ if (!isset($this->item->mship_id) || empty($this->item->mship_id)) { $this->item
 $tabActive = $this->localProfile == 'b4wdc' ? 'contact' : 'details';
 
 /*
-echo '<pre>Test<br />';
-print_r($this->useProfArray);
-echo '</pre>';
-print_r(Factory::getApplication()->getUserState('com_gausers.test.data'));
-print_r($this->item);
-*/
+GausersHelper::gaPrint(Factory::getApplication()->getUserState('com_gausers.test.data'));*/
 ?>
 
 
@@ -100,6 +99,8 @@ print_r($this->item);
     						<?php echo LayoutHelper::render('default_nameifmr', array('view' => $this), dirname(__FILE__)); ?>
     					<?php elseif ($this->localProfile == 'brb') : ?>
     						<?php echo LayoutHelper::render('default_namebrb', array('view' => $this), dirname(__FILE__)); ?>
+    					<?php elseif ($this->localProfile == 'raf') : ?>
+    						<?php echo LayoutHelper::render('default_nameraf', array('view' => $this), dirname(__FILE__)); ?>
     					<?php else : ?>
     						<?php echo LayoutHelper::render('default_name', array('view' => $this), dirname(__FILE__)); ?>
     					<?php endif; ?>
@@ -157,7 +158,6 @@ print_r($this->item);
     							<?php echo LayoutHelper::render('default_contbecs', array('view' => $this), dirname(__FILE__)); ?>
     						<?php elseif ($this->localProfile == 'ifmr' || $this->localProfile == 'rtry') : ?>
     							<?php echo LayoutHelper::render('default_contifmr', array('view' => $this), dirname(__FILE__)); ?>
-    						<?php elseif ($this->localProfile == 'bdgs') : ?>
     						<?php else : ?>
     							<?php echo LayoutHelper::render('default_contact', array('view' => $this), dirname(__FILE__)); ?>
     						<?php endif; ?>
@@ -262,6 +262,15 @@ print_r($this->item);
     			            <div class="row-fluid">
     			                <div class="span12 form-horizontal">
     							    <?php echo LayoutHelper::render('default_ifmr', array('view' => $this), dirname(__FILE__)); ?>
+    					        </div>
+    				        </div>
+			            <?php echo HTMLHelper::_('uitab.endTab'); ?>
+		            <?php /* *********************************** BDGS ***************************************************/ ?>
+		            <?php elseif ($this->localProfile == 'bdgs') : ?>
+                        <?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'wwc', Text::_('COM_GAUSERS_MEMBER_WWC', true)); ?>
+    			            <div class="row-fluid">
+    			                <div class="span12 form-horizontal">
+    							    <?php echo LayoutHelper::render('default_wwc', array('view' => $this), dirname(__FILE__)); ?>
     					        </div>
     				        </div>
 			            <?php echo HTMLHelper::_('uitab.endTab'); ?>

@@ -1,7 +1,8 @@
 <?php
 /**
- * @version    4.1.0
- * @package    com_gatracklog
+ * @version    4.2.0
+ * @package    pkg_mypackage
+ * @subpackage com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -11,14 +12,10 @@ namespace GlennArkell\Component\Gatracklog\Site\Controller;
 
 \defined('_JEXEC') or die;
 
-use \Joomla\CMS\Application\SiteApplication;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Multilanguage;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Controller\BaseController;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\Router\Route;
 use \GlennArkell\Component\Gatracklog\Administrator\Helper\GatracklogHelper;
 
 /**
@@ -71,17 +68,22 @@ class TracklogController extends BaseController
 	{
 		// Initialise variables.
 		$app = Factory::getApplication();
+		// Set up Redirect URL.
+        $menu = $app->getMenu()->getActive();
+        $url = (empty($menu->link) ? 'index.php?option=com_gatracklog&view=tracklogs' : $menu->link.'&Itemid='.$menu->id);
+
+		// Get the user data.
+		$id    = $app->input->getInt('id');
+		$state = $app->input->getInt('state');
 
 		// Checking if the user can action the object
-		$user = GatracklogHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
+		$item = GatracklogHelper::getTracklog($id);
+		$canEdit = GatracklogHelper::canUserEdit($user, $item);
 
-		if ($user->authorise('core.edit', 'com_gatracklog') || $user->authorise('core.edit.state', 'com_gatracklog'))
+		if ($canEdit)
 		{
 			$model = $this->getModel('Tracklog', 'Site');
-
-			// Get the user data.
-			$id    = $app->input->getInt('id');
-			$state = $app->input->getInt('state');
 
 			// Attempt to save the data.
 			$return = $model->publish($id, $state);
@@ -89,7 +91,7 @@ class TracklogController extends BaseController
 			// Check for errors.
 			if ($return === false)
 			{
-				$this->setMessage(Text::sprintf('COM_GATRACKLOG_SAVE_FAILED', $model->getError()), 'warning');
+				$app->enqueueMessage(Text::sprintf('COM_GAGATRACKLOG_SAVE_FAILED', $model->getError()), 'warning');
 			}
 
 			// Clear the record id from the session.
@@ -99,19 +101,12 @@ class TracklogController extends BaseController
 			$app->setUserState('com_gatracklog.edit.tracklog.data', null);
 
 			// Redirect to the list screen.
-			$this->setMessage(Text::_('COM_GATRACKLOG_ITEM_SAVED_SUCCESSFULLY'));
-			$menu = Factory::getApplication()->getMenu();
-			$item = $menu->getActive();
-
-			if (!$item) {
-				// If there isn't any menu item active, redirect to list view
-				$this->setRedirect(Route::_('index.php?option=com_gatracklog&view=tracklogs', false));
-			} else {
-                $this->setRedirect(Route::_('index.php?Itemid='. $item->id, false));
-			}
+			$app->enqueueMessage(Text::_('COM_GAGATRACKLOG_ITEM_SAVED_SUCCESSFULLY'), 'success');
 		} else {
 			throw new \Exception(500);
 		}
+		// Redirect to the list screen.
+		$this->setRedirect(Route::_($url, false));
 	}
 
 	/**
@@ -123,9 +118,12 @@ class TracklogController extends BaseController
 	{
 		// Initialise variables.
 		$app = Factory::getApplication();
+		// Set up Redirect URL.
+        $item = $app->getMenu()->getActive();
+        $url = (empty($item->link) ? 'index.php?option=com_gatracklog&view=tracklogs' : $item->link.'&Itemid='.$item->id);
 
 		// Checking if the user can remove object
-		$user = GatracklogHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		if ($user->authorise('core.delete', 'com_gatracklog'))
 		{
@@ -139,7 +137,7 @@ class TracklogController extends BaseController
 
 			// Check for errors.
 			if ($return === false) {
-				$this->setMessage(Text::sprintf(Text::_('COM_GATRACKLOG_ITEM_DELETED_FAILED'), $model->getError()), 'warning');
+				$app->enqueueMessage(Text::sprintf(Text::_('COM_GAGATRACKLOG_ITEM_DELETED_FAILED'), $model->getError()), 'warning');
 			} else {
 				// Check in the record.
 				if ($return) {
@@ -149,14 +147,13 @@ class TracklogController extends BaseController
                 $app->setUserState('com_gatracklog.edit.tracklog.id', null);
                 $app->setUserState('com_gatracklog.edit.tracklog.data', null);
 
-                $app->enqueueMessage(Text::_('COM_GATRACKLOG_ITEM_DELETED_SUCCESSFULLY'), 'success');
+                $app->enqueueMessage(Text::_('COM_GAGATRACKLOG_ITEM_DELETED_SUCCESSFULLY'), 'success');
                 $app->redirect(Route::_('index.php?option=com_gatracklog&view=tracklogs', false));
 			}
 
 			// Redirect to the list screen.
-			$menu = Factory::getApplication()->getMenu();
-			$item = $menu->getActive();
-			$this->setRedirect(Route::_($item->link, false));
+			$this->setRedirect(Route::_($url, false));
+
 		} else {
 			throw new \Exception(500);
 		}
@@ -234,5 +231,4 @@ class TracklogController extends BaseController
 		// Flush the data from the session.
 		$app->setUserState('com_gatracklog.edit.tracklog.data', null);
 	}
-
 }

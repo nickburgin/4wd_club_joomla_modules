@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package     com_gatripsys
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -11,13 +11,13 @@ namespace GlennArkell\Component\Gatripsys\Administrator\Helper;
 
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\fpdf\fpdf;
 
 class GapdfHelper extends FPDF

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    5.1.6
+ * @version    6.0.0
  * @package    Com_Gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2018 Glenn Arkell
@@ -13,15 +13,15 @@ namespace GlennArkell\Component\Gausers\Site\Controller;
 // No direct access
 \defined('_JEXEC') or die;
 
-use \Joomla\CMS\Application\SiteApplication;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Multilanguage;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Controller\BaseController;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Multilanguage;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\Utilities\ArrayHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 /**
@@ -76,7 +76,7 @@ class InvoiceController extends BaseController
 		$app = Factory::getApplication();
 
 		// Checking if the user can remove object
-		$user = GausersHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		if ($user->authorise('core.edit', 'com_gausers') || $user->authorise('core.edit.state', 'com_gausers'))
 		{
@@ -128,7 +128,7 @@ class InvoiceController extends BaseController
 		$app = Factory::getApplication();
 
 		// Checking if the user can remove object
-		$user = GausersHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		if ($user->authorise('core.delete', 'com_gausers')) {
 			$model = $this->getModel('Invoice', 'Site');
@@ -274,6 +274,28 @@ class InvoiceController extends BaseController
 		// Redirect to the list screen.
 		if ($return) {
 			$this->setMessage(Text::_('COM_GAUSERS_INV_GEN_SUCCESSFULLY'));
+		}
+		$this->setRedirect(Route::_('index.php?option=com_gausers&view=invoices', false));
+
+    }
+
+    public function regenInvoice()
+	{
+		// Check for request forgeries.
+		$this->checkToken('get');
+
+		// Initialise variables.
+		$app   = Factory::getApplication();
+		$model	= $this->getModel('Invoice', 'Site');
+
+		$id = $app->input->get('id');
+
+		// Attempt to generate new invoices.
+		$return = $model->regenInvoice($id);
+
+		// Redirect to the list screen.
+		if (is_file($return)) {
+			$this->setMessage(Text::_('COM_GAUSERS_REGEN_SUCCESSFULLY'));
 		}
 		$this->setRedirect(Route::_('index.php?option=com_gausers&view=invoices', false));
 

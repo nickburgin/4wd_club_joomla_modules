@@ -1,25 +1,26 @@
 <?php
 /**
- * @version    4.1.0
- * @package    com_gatracklog
+ * @version    4.2.0
+ * @package    pkg_mypackage
+ * @subpackage com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 // No direct access
-defined('_JEXEC') or die;
+\defined('_JEXEC') or die;
 
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
 
-HTMLHelper::_('bootstrap.tooltip');
-HTMLHelper::_('behavior.core');
-HTMLHelper::_('behavior.formvalidator');
-HTMLHelper::_('behavior.keepalive');
+$wa = $this->document->getWebAssetManager();
+$wa->getRegistry()->addExtensionRegistryFile('com_gatracklog');
+$wa->useScript('keepalive')
+	->useScript('form.validate');
 
 ?>
 <form
@@ -31,7 +32,7 @@ HTMLHelper::_('behavior.keepalive');
 	<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'general', Text::_('COM_GATRACKLOG_TAB_TRACKLOG', true)); ?>
 
 		<div class="row-fluid">
-			<div class="span10 form-horizontal">
+			<div class="span12 form-horizontal">
 				<fieldset name="general" class="adminform">
 					<legend><?php echo Text::_('COM_GATRACKLOG_FIELDSET_TRACKLOG'); ?></legend>
 					<?php echo $this->form->renderFieldset('general'); ?>
@@ -44,7 +45,7 @@ HTMLHelper::_('behavior.keepalive');
 	<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'extrainfo', Text::_('COM_GATRACKLOG_TITLE_EXTRAINFO', true)); ?>
 
 		<div class="row-fluid">
-			<div class="span10 form-horizontal">
+			<div class="span12 form-horizontal">
 				<fieldset name="extrainfo" class="adminform">
 					<?php echo $this->form->renderFieldset('extrainfo'); ?>
 				</fieldset>
@@ -56,7 +57,7 @@ HTMLHelper::_('behavior.keepalive');
 	<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'sysinfo', Text::_('COM_GATRACKLOG_TITLE_SYSINFO', true)); ?>
 
 		<div class="row-fluid">
-			<div class="span10 form-horizontal">
+			<div class="span12 form-horizontal">
 				<fieldset name="sysinfo" class="adminform">
 					<?php echo $this->form->renderFieldset('sysinfo'); ?>
 				</fieldset>

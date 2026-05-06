@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.0.2
+ * @version    4.2.2
  * @package    Com_Gaforsale
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  Copyright (C) 2013. All rights reserved.
@@ -14,7 +14,16 @@ use \Joomla\CMS\Router\Route;
 use \Joomla\CMS\Language\Text;
 use \GlennArkell\Component\Gaforsale\Administrator\Helper\GaforsaleHelper;
 
+// load any assets required
+$wa = $this->document->getWebAssetManager()
+    ->usePreset('com_gaforsale.gaforsalepreset');
+
+// Load admin language file
+$lang = Factory::getApplication()->getLanguage();
+$lang->load('com_gaforsale', JPATH_ADMINISTRATOR);
+
 $user = GaforsaleHelper::getSpecificUser();
+$canDelete = $user->authorise('core.delete','com_gaforsale');
 $canEdit = $user->authorise('core.edit', 'com_gaforsale');
 if (!$canEdit && $user->authorise('core.edit.own', 'com_gaforsale')) {
 	$canEdit = $user->id == $this->item->created_by;
@@ -84,7 +93,7 @@ if (!$canEdit && $user->authorise('core.edit.own', 'com_gaforsale')) {
 	<?php if($canEdit && $this->item->checked_out == 0): ?>
 		<a class="btn" href="<?php echo Route::_('index.php?option=com_gaforsale&task=fsitem.edit&id='.$this->item->id); ?>"><?php echo Text::_("COM_GAFORSALE_EDIT_ITEM"); ?></a>
 	<?php endif; ?>
-	<?php if(Factory::getUser()->authorise('core.delete','com_gaforsale')):?>
+	<?php if($canDelete):?>
 		<a class="btn" href="<?php echo Route::_('index.php?option=com_gaforsale&task=fsitem.remove&id=' . $this->item->id, false, 2); ?>"><?php echo Text::_("COM_GAFORSALE_DELETE_ITEM"); ?></a>
 	<?php endif; ?>
 <?php

@@ -27,7 +27,7 @@
 		    <option value="1">JYES</option>
 	    </field>
 
-        <field name="usergroup_only" type="usergrouplist" multiple="true" default="2"
+        <field name="usergroup_only" type="usergrouplist" default="2"
             checksuperusergroup="1"
             label="COM_GABROADCAST_FORM_LBL_USERNEW_USERGROUP_ONLY"
             description="COM_GABROADCAST_FORM_DESC_USERNEW_USERGROUP_ONLY" />
@@ -38,6 +38,7 @@
 	    <field name="news_subject" filter="safehtml" type="text" required="true" label="COM_GABROADCAST_FORM_LBL_USERNEW_NEWS_SUBJECT" description="COM_GABROADCAST_FORM_DESC_USERNEW_NEWS_SUBJECT" hint="COM_GABROADCAST_FORM_LBL_USERNEW_NEWS_SUBJECT"/>
 	    <field name="news_detail" editor="|" buttons="true" filter="safehtml" type="editor" label="COM_GABROADCAST_FORM_LBL_USERNEW_NEWS_DETAIL" description="COM_GABROADCAST_FORM_DESC_USERNEW_NEWS_DETAIL" hint="COM_GABROADCAST_FORM_LBL_USERNEW_NEWS_DETAIL"/>
 		<field name="attach_file" type="Attachlist" class="input-xxlarge" description="COM_GABROADCAST_FORM_DESC_USERNEW_ATTACHFILE" label="COM_GABROADCAST_FORM_LBL_USERNEW_ATTACHFILE" />
+		<field name="incl_article" type="Articlelist" description="COM_GABROADCAST_FORM_DESC_USERNEW_INCL_ARTICLE" label="COM_GABROADCAST_FORM_LBL_USERNEW_INCL_ARTICLE" />
 	</fieldset>
 
 	<fieldset name="uploadinfo">

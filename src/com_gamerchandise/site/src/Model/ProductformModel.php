@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.0.7
+ * @version    4.1.2
  * @package    Com_Gamerchandise
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -104,7 +104,7 @@ class ProductformModel extends FormModel
 
 				// Convert the Table to a clean JObject.
 				$properties  = $table->getProperties(1);
-				$this->item = ArrayHelper::toObject($properties, 'JObject');
+				$this->item = ArrayHelper::toObject($properties, 'stdClass');
 			}
 		}
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -10,15 +10,15 @@
 // no direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Layout\LayoutHelper;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\User\UserHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\User\UserHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 /** @var \Joomla\CMS\WebAsset\WebAssetManager $wa */
@@ -26,7 +26,7 @@ $wa = $this->document->getWebAssetManager();
 $wa->useScript('table.columns')
     ->useScript('multiselect');
 
-$user	= GausersHelper::getSpecificUser();
+$user	= Factory::getApplication()->getIdentity();
 $listOrder	= $this->state->get('list.ordering', 'member.name');
 $listDirn	= $this->state->get('list.direction', 'ASC');
 $saveOrder	= $listOrder == 'a.ordering';
@@ -39,6 +39,9 @@ if ($saveOrder) {
 }
 
 /*
+echo '<pre>Test<br />';
+print_r(Factory::getDate()->toSql());
+echo '</pre>';
 echo '<pre>Test <br />';
 print_r($profile);
 echo '</pre>';
@@ -83,7 +86,7 @@ print_r(\Joomla\CMS\Factory::getApplication()->getUserState('com_gausers.test.da
             				<?php echo HTMLHelper::_('searchtools.sort',  'COM_GAUSERS_INVOICES_INVOICE_AMT', 'a.invoice_amt', $listDirn, $listOrder); ?>
             				</th>
             				<th class='nowrap center hidden-phone'>
-            				<?php echo HTMLHelper::_('searchtools.sort',  'COM_GAUSERS_CREATED_DATE', 'a.created_date', $listDirn, $listOrder); ?>
+            				<?php echo HTMLHelper::_('searchtools.sort',  'COM_GAUSERS_INVOICES_END_DATE', 'a.end_date', $listDirn, $listOrder); ?>
             				</th>
             				<th class='nowrap center'>
             				<?php echo HTMLHelper::_('searchtools.sort',  'COM_GAUSERS_INVOICES_PAID_DATE', 'a.paid_date', $listDirn, $listOrder); ?>
@@ -151,7 +154,7 @@ print_r(\Joomla\CMS\Factory::getApplication()->getUserState('com_gausers.test.da
             					<?php echo $item->invoice_amt; ?>
             				</td>
             				<td class="nowrap center hidden-phone">
-             					<?php echo !empty($item->created_date) ? HTMLHelper::date($item->created_date, Text::_('COM_GAUSERS_ABRV_DISPLAY_DATE')) : ''; ?>
+             					<?php echo !empty($item->end_date) ? HTMLHelper::date($item->end_date, Text::_('COM_GAUSERS_ABRV_DISPLAY_DATE')) : ''; ?>
             				</td>
             				<td class="nowrap center hidden-phone">
             					<?php echo !empty($item->paid_date) ? HTMLHelper::date($item->paid_date, Text::_('COM_GAUSERS_ABRV_DISPLAY_DATE')) : ''; ?>

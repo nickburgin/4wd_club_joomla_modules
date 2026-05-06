@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,12 +12,12 @@ namespace GlennArkell\Component\Gacalevents\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\MVC\Model\FormModel;
-use \Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\MVC\Model\FormModel;
+use Joomla\CMS\Component\ComponentHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacommunicationsHelper;
 
@@ -83,7 +83,7 @@ class EventformModel extends FormModel
             $table = $this->getTable();
 
             if ($table !== false && $table->load($id) && !empty($table->id)) {
-                $user = GacaleventsHelper::getSpecificUser();
+                $user = Factory::getApplication()->getIdentity();
                 $id   = $table->id;
 
                 $canEdit = $user->authorise('core.edit', 'com_gacalevents') || $user->authorise('core.create', 'com_gacalevents');
@@ -190,7 +190,7 @@ class EventformModel extends FormModel
             $table = $this->getTable();
 
             // Get the current user object.
-            $user = GacaleventsHelper::getSpecificUser();
+            $user = Factory::getApplication()->getIdentity();
 
             // Attempt to check the row out.
             if (method_exists($table, 'checkout')) {
@@ -259,7 +259,7 @@ class EventformModel extends FormModel
     {
         $id    = (!empty($data['id'])) ? $data['id'] : (int) $this->getState('event.id');
         $state = (!empty($data['state'])) ? 1 : 0;
-        $user  = GacaleventsHelper::getSpecificUser();
+        $user  = Factory::getApplication()->getIdentity();
 
         if ($id) {
             // Check the user can edit this item
@@ -292,7 +292,7 @@ class EventformModel extends FormModel
      */
     public function delete($pk)
     {
-        $user = GacaleventsHelper::getSpecificUser();
+        $user = Factory::getApplication()->getIdentity();
 
         if (empty($pk)) {
             $pk = (int) $this->getState('event.id');
@@ -338,7 +338,7 @@ class EventformModel extends FormModel
 		$params = ComponentHelper::getParams('com_gacalevents');
 		$exclude_email  = $params->get( 'reminder_ignore', 0 );
 		$exLen = strlen($exclude_email);
-        $user  = GacaleventsHelper::getSpecificUser();
+        $user  = Factory::getApplication()->getIdentity();
         $attendees  = GacaleventsHelper::getAttendees($data['event_id']);
 
         $recipients = array();

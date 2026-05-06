@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -11,14 +11,10 @@ namespace GlennArkell\Component\Gacalevents\Site\Controller;
 
 \defined('_JEXEC') or die;
 
-use \Joomla\CMS\Application\SiteApplication;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Multilanguage;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Controller\FormController;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\Router\Route;
 
 /**
  * Form class.
@@ -41,6 +37,7 @@ class AttendeeformController extends FormController
 		$editId     = $app->input->getInt('id', 0);
 		$event_id     = $app->input->getInt('event_id', 0);
 		$attendee     = $app->input->getInt('attendee', 0);
+		$layout     = !empty($app->input->get('layout')) ? $app->input->get('layout') : 'edit';
 
 		// Set the user id for the user to edit in the session.
 		$app->setUserState('com_gacalevents.edit.attendee.id', $editId);
@@ -49,6 +46,7 @@ class AttendeeformController extends FormController
 
 		// Get the model.
 		$model = $this->getModel('Attendeeform', 'Site');
+		//Factory::getApplication()->setUserState('com_gacalevents.test.data', $event_id);
 
 		// Check out the item
 		if ($editId) {
@@ -61,7 +59,7 @@ class AttendeeformController extends FormController
 		}
 
 		// Redirect to the edit screen.
-		$this->setRedirect(Route::_('index.php?option=com_gacalevents&view=attendeeform&layout=edit', false));
+		$this->setRedirect(Route::_('index.php?option=com_gacalevents&view=attendeeform&layout='.$layout, false));
 	}
 
 	/**
@@ -81,6 +79,12 @@ class AttendeeformController extends FormController
 
 		// Get the user data.
 		$data = Factory::getApplication()->input->get('jform', array(), 'array');
+        
+//         $setRedir = false;
+//         if (!empty($data['from_modal']) && $data['from_modal']) {
+//             // set redirect
+//             $setRedir = true;
+//         }
 
 		// Validate the posted data.
 		$form = $model->getForm();
@@ -142,15 +146,12 @@ class AttendeeformController extends FormController
 		$app->setUserState('com_gacalevents.edit.attendee.id', null);
 		$app->setUserState('com_gacalevents.edit.attendee.event_id', null);
 		$app->setUserState('com_gacalevents.edit.attendee.attendee', null);
-
-		// Redirect to the list screen.
-		$this->setMessage(Text::_('COM_GACALEVENTS_ATTEND_REGO_ATTEND_SUCC_MSG'));
-		$item = Factory::getApplication()->getMenu()->getActive();
-		$url  = (empty($item->link) ? 'index.php?option=com_gacalevents&view=events' : $item->link);
-		$this->setRedirect(Route::_($url, false));
-
 		// Flush the data from the session.
 		$app->setUserState('com_gacalevents.edit.attendee.data', null);
+
+		// Redirect to the list screen.
+        $this->setRedirect(Route::_('index.php?option=com_gacalevents&view=events', false));
+
 	}
 
 	/**

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    0.0.1
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -8,8 +8,6 @@
  */
 
 namespace GlennArkell\Component\Gacalevents\Administrator\Extension;
-
-defined('JPATH_PLATFORM') or die;
 
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Association\AssociationServiceInterface;
@@ -22,6 +20,8 @@ use Joomla\CMS\Extension\MVCComponent;
 use Joomla\CMS\HTML\HTMLRegistryAwareTrait;
 use Joomla\CMS\Tag\TagServiceTrait;
 use Psr\Container\ContainerInterface;
+
+\defined('_JEXEC') or die;
 
 /**
  * Component class for Com_Gacalevents

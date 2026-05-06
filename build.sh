@@ -111,10 +111,10 @@ build_pkg() {
 
 # ── targets ───────────────────────────────────────────────────────────────────
 
-PACKAGES="pkg_gafinance pkg_gatripsys pkg_gausers"
-STANDALONES="com_gabroadcast com_gacalevents com_gaforsale com_gamerchandise com_gatracklog
-             mod_gacalevents mod_gaforsale mod_glennslideshow mod_glennsnewsletters
-             plg_user_profileb4wdc rkic41site"
+PACKAGES="pkg_gafinance pkg_gatripsys pkg_gausers pkg_gacalevents"
+STANDALONES="com_gabroadcast com_gaforsale com_gamerchandise com_gatracklog
+             mod_gaforsale mod_glennslideshow mod_glennsnewsletters
+             plg_user_profileb4wdc plg_task_gasubscriptions rkic41site"
 
 cmd="${1:-all}"
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    com_gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -14,8 +14,8 @@ namespace GlennArkell\Component\Gatripsys\Site\View\Tripform;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 /**
  * View class for a record form.

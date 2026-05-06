@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="task" method="upgrade">
+	<name>PLG_TASK_GASUBSCRIPTIONS</name>
+	<author>Glenn Arkell</author>
+	<creationDate>19 April 2024</creationDate>
+	<copyright>(C) 2024 - Glenn Arkell. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>glenn@glennarkell.com.au</authorEmail>
+	<authorUrl>https://www.glennarkell.com.au</authorUrl>
+	<version>5.3</version>
+	<description>Task plug-in, to schedule renewal process for subscriptions.</description>
+
+    <namespace path="src">GlennArkell\Plugin\Task\Gasubscriptions</namespace>
+
+	<scriptfile>script.php</scriptfile>
+
+	<files>
+		<folder>forms</folder>
+		<folder plugin="gasubscriptions">services</folder>
+		<folder>src</folder>
+	</files>
+	<languages>
+		<language tag="en-GB">language/en-GB/plg_task_gasubscriptions.ini</language>
+		<language tag="en-GB">language/en-GB/plg_task_gasubscriptions.sys.ini</language>
+		<language tag="it-IT">language/it-IT/plg_task_gasubscriptions.ini</language>
+		<language tag="it-IT">language/it-IT/plg_task_gasubscriptions.sys.ini</language>
+	</languages>
+
+	<changelogurl>https://www.glennarkell.com.au/joomlaorg/packages/j6/changes/plg_task_gasubscriptions-changelog.xml</changelogurl>
+
+</extension>

@@ -78,6 +78,10 @@
 	</fieldset>
 
 	<fieldset name="extrainfo">
+		<field name="mship_id" type="Availmemtype"
+			description="COM_GAUSERS_FORM_DESC_GAUSER_MEMTYPE"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_MEMTYPE" />
+
 		<field name="comment" filter="safehtml" type="textarea" label="COM_GAUSERS_FORM_LBL_COMMENT" description="COM_GAUSERS_FORM_DESC_COMMENT" hint="COM_GAUSERS_FORM_LBL_COMMENT"/>
 		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
 	</fieldset>

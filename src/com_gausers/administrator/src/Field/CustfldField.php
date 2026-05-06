@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.6
+ * @version    6.0.0
  * @package    Com_Gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -13,9 +13,9 @@ namespace GlennArkell\Component\Gausers\Administrator\Field;
 \defined('_JEXEC') or die;
 
 // import the list field type
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Form\Field\ListField;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 class CustfldField extends ListField

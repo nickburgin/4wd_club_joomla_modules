@@ -1,7 +1,7 @@
 <?php
 /**
- * @version    4.1.0
- * @package    com_gatracklog
+ * @version    4.2.0
+ * @subpackage com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,14 +12,14 @@ namespace GlennArkell\Component\Gatracklog\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
-use \Joomla\CMS\Helper\TagsHelper;
-use \Joomla\CMS\Layout\FileLayout;
-use \Joomla\Database\ParameterType;
-use \Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
+use Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Layout\FileLayout;
+use Joomla\Database\ParameterType;
+use Joomla\Utilities\ArrayHelper;
 use \GlennArkell\Component\Gatracklog\Administrator\Helper\GatracklogHelper;
 
 /**
@@ -43,6 +43,10 @@ class TracklogsModel extends ListModel
 				'ordering', 'a.ordering',
 				'state', 'a.state',
 				'created_date', 'a.created_date',
+				'name', 'a.name',
+				'rating', 'a.rating', 'rating_name', 'r.title',
+				'track_zone', 'a.track_zone', 'track_zone_name', 't.title',
+				'season_close', 'a.season_close', 'season_close_name', 's.title',
 			);
 		}
 
@@ -69,13 +73,13 @@ class TracklogsModel extends ListModel
 		if(empty($ordering)) {
 			$ordering = $app->getUserStateFromRequest($this->context . '.filter_order', 'filter_order', $app->get('filter_order'));
 			if (!in_array($ordering, $this->filter_fields)) {
-				$ordering = "a.track_zone";
+				$ordering = "t.title";
 			}
 			$this->setState('list.ordering', $ordering);
 		}
 		if(empty($direction)) {
 			$direction = $app->getUserStateFromRequest($this->context . '.filter_order_Dir', 'filter_order_Dir', $app->get('filter_order_Dir'));
-			if (!in_array(strtoupper($direction), array('ASC', 'DESC', ''))) {
+			if (!in_array(strtoupper($direction ?? ''), array('ASC', 'DESC', ''))) {
 				$direction = "ASC";
 			}
 			$this->setState('list.direction', $direction);
@@ -104,12 +108,12 @@ class TracklogsModel extends ListModel
         $this->setState('filter.season_close', $season_close);
 
         // Split context into component and optional section
-        $parts = FieldsHelper::extract($context);
-
-        if ($parts) {
-            $this->setState('filter.component', $parts[0]);
-            $this->setState('filter.section', $parts[1]);
-        }
+//         $parts = FieldsHelper::extract($context);
+// 
+//         if ($parts) {
+//             $this->setState('filter.component', $parts[0]);
+//             $this->setState('filter.section', $parts[1]);
+//         }
 	}
 
 	/**
@@ -121,75 +125,76 @@ class TracklogsModel extends ListModel
 	{
         // Create a new query object.
         $db    = $this->getDbo();
-        $query = $db->getQuery(true);
-
-        // Select the required fields from the table.
-        $query->select( $this->getState( 'list.select', 'DISTINCT a.*' ) );
-
-        $query->from('#__gatracklog_tracklogs AS a');
-
-		// Join over the users for the checked out user.
-		$query->select('uc.name AS uEditor');
-		$query->join('LEFT', '#__users AS uc ON uc.id=a.checked_out');
-
-		// Join over the created by field 'created_by'
-		$query->select('created_by.name AS created_by_name');
-		$query->join('LEFT', '#__users AS created_by ON created_by.id = a.created_by');
-
-		// Join over the created by field 'modified_by'
-		$query->select('modified_by.name AS modified_by_name');
-		$query->join('LEFT', '#__users AS modified_by ON modified_by.id = a.modified_by');
-
-		// Join over the category
-		$query->select('r.title AS rating_name');
-		$query->join('LEFT', '#__categories AS r ON r.id = a.rating');
-		$query->select('z.title AS track_zone_name');
-		$query->join('LEFT', '#__categories AS z ON z.id = a.track_zone');
-		$query->select('s.title AS season_close_name');
-		$query->join('LEFT', '#__categories AS s ON s.id = a.season_close');
-
-		// Filter by published state
-        $status = $this->getState('filter.state');
-		if (is_numeric($status)) {
-			$query->where('a.state = ' . (int) $status);
-		} elseif ($status === '*') {
-			// show all and don't filter on status
-		} else {
-			$query->where('a.state = 1');
-        }
+        $query = $db->getQuery(true)
+            ->select('a.*')
+            ->select(
+                [
+                    $db->quoteName('uChecked.name', 'uEditor'),
+                    $db->quoteName('uCreated.name', 'uCreator'),
+                    $db->quoteName('uModified.name', 'uModifier'),
+                    $db->quoteName('r.title', 'rating_name'),
+                    $db->quoteName('t.title', 'track_zone_name'),
+                    $db->quoteName('s.title', 'season_close_name'),
+                ]
+            )
+            ->from($db->quoteName('#__gatracklog_tracklogs', 'a'))
+            ->join('LEFT', $db->quoteName('#__users', 'uChecked'), $db->quoteName('uChecked.id') . ' = ' . $db->quoteName('a.checked_out'))
+            ->join('LEFT', $db->quoteName('#__users', 'uCreated'), $db->quoteName('uCreated.id') . ' = ' . $db->quoteName('a.created_by'))
+            ->join('LEFT', $db->quoteName('#__users', 'uModified'), $db->quoteName('uModified.id') . ' = ' . $db->quoteName('a.modified_by'))
+            ->join('LEFT', $db->quoteName('#__categories', 'r'), $db->quoteName('r.id') . ' = ' . $db->quoteName('a.rating'))
+            ->join('LEFT', $db->quoteName('#__categories', 't'), $db->quoteName('t.id') . ' = ' . $db->quoteName('a.track_zone'))
+            ->join('LEFT', $db->quoteName('#__categories', 's'), $db->quoteName('s.id') . ' = ' . $db->quoteName('a.season_close'));
 
 		// Filter by category
         $rating = $this->getState('filter.rating');
 		if ($rating) {
-			$query->where('a.rating = ' . (int) $rating);
+            $rating = (int) $rating;
+			$query->where('a.rating = :rating')
+                ->bind(':rating', $rating, ParameterType::INTEGER);
         }
         $track_zone = $this->getState('filter.track_zone');
 		if ($track_zone) {
-			$query->where('a.track_zone = ' . (int) $track_zone);
+            $track_zone = (int) $track_zone;
+			$query->where('a.track_zone = :track_zone')
+                ->bind(':track_zone', $track_zone, ParameterType::INTEGER);
         }
         $season_close = $this->getState('filter.season_close');
 		if ($season_close) {
-			$query->where('a.season_close = ' . (int) $season_close);
+            $season_close = (int) $season_close;
+			$query->where('a.season_close = :season_close')
+                ->bind(':season_close', $season_close, ParameterType::INTEGER);
         }
 
-        // Filter by search in title
-        $search = $this->getState('filter.search');
-        if (!empty($search)) {
-            if (stripos($search, 'id:') === 0) {
-                $query->where('a.id = ' . (int) substr($search, 3));
+		// Filter by state
+        $status = $this->getState('filter.state');
+		if (is_numeric($status)) {
+            $status = (int) $status;
+            $query->where($db->quoteName('a.state') . ' = :status')
+                ->bind(':status', $status, ParameterType::INTEGER);
+		} elseif ($status === '*') {
+			// show all and don't filter on status
+		} else {
+			$query->where($db->quoteName('a.state') . ' IN (0, 1) ');
+        }
+
+		// Filter by search in field
+		if (!empty($search)) {
+			if (stripos($search, 'id:') === 0) {
+				$query->where('a.id = ' . (int) substr($search, 3));
             } else {
-                $search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('( a.name LIKE ' . $search . ' )');
+                $search = '%' . str_replace(' ', '%', trim($search)) . '%';
+                $query->where($db->quoteName('t.title') . ' LIKE :search')
+                    ->bind(':search', $search);
             }
-        }
-            
-        // Add the list ordering clause.
-        $orderCol  = $this->state->get('list.ordering', "a.track_zone");
-        $orderDirn = $this->state->get('list.direction', "ASC");
+		}
+                
+		// Add the list ordering clause.
+		$orderCol  = $this->state->get('list.ordering', "t.title");
+		$orderDirn = $this->state->get('list.direction', "ASC");
 
-        if ($orderCol && $orderDirn) {
-            $query->order($db->escape($orderCol . ' ' . $orderDirn));
-        }
+		if ($orderCol && $orderDirn) {
+			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		}
 
         return $query;
 	}
@@ -224,7 +229,7 @@ class TracklogsModel extends ListModel
 		}
 
 		if ($error_dateformat) {
-			$app->enqueueMessage(Text::_("COM_GATRACKLOG_SEARCH_FILTER_DATE_FORMAT"), "warning");
+			$app->enqueueMessage(Text::_("COM_GAGATRACKLOG_SEARCH_FILTER_DATE_FORMAT"), "warning");
 			$app->setUserState($this->context . '.filter', $filters);
 		}
 

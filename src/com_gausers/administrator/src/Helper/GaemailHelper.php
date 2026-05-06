@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @author      Glenn Arkell <glenn@glennarkell.com.au>
@@ -12,23 +12,23 @@ namespace GlennArkell\Component\Gausers\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\User\UserFactoryInterface;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\Filesystem\Path;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\CMS\User\User;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\Mail\MailTemplate;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\Session\SessionInterface;
-use \Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\User\UserFactoryInterface;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\Filesystem\Path;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\CMS\User\User;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Mail\MailTemplate;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Installer\Installer;
+use Joomla\Session\SessionInterface;
+use Joomla\CMS\Application\SiteApplication;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GanamesHelper;
 
@@ -51,6 +51,7 @@ class GaemailHelper
 	 */
     public static function sendEmail($recipients, $body, $subject, $attachfile, $bcc = false, $reply_sender = false)
 	{
+        $user = Factory::getApplication()->getIdentity();
         $params = ComponentHelper::getParams('com_gausers');
 	    $app		= Factory::getApplication();
         $mailfrom	= $app->get('mailfrom');       // system email address
@@ -59,16 +60,17 @@ class GaemailHelper
         // Build the email and send
         $mail = Factory::getMailer();
         $mail->isHTML(true);
-		if ($bcc) {
-			foreach ($recipients as $name => $email) {
-                $mail->addBcc($email, $name);
+		if (is_array($recipients)) {
+            foreach ($recipients as $email) {
+                if ($bcc) {
+                    $mail->addBcc($email);
+                    $mail->addRecipient($mailfrom);
+                } else {
+                    $mail->addRecipient($email);
+                }
             }
-			$mail->addRecipient($mailfrom);
-		} else {
-			foreach ($recipients as $name => $email) {
-                $mail->addRecipient($email, $name);
-            }
-		}
+        }
+
 		$mail->setSender(array($mailfrom, $fromname));
 		$mail->setSubject($subject);
 		$mail->setBody($body);
@@ -115,7 +117,7 @@ class GaemailHelper
 	 */
     public static function sendEmailTmpl($template_id, $item, $link = null, $filename = null, $attachfile = null)
 	{
-        $lang = Factory::getLanguage();
+        $lang = Factory::getApplication()->getLanguage();
         $lang->load('com_gausers', JPATH_ADMINISTRATOR);
         $params = ComponentHelper::getParams('com_gausers');
 	    $app		= Factory::getApplication();
@@ -212,7 +214,7 @@ class GaemailHelper
 	    $app		= Factory::getApplication();
         $mailfrom	= $app->get('mailfrom');
         $fromname	= $app->get('fromname');
-        $lang = Factory::getLanguage();
+        $lang = Factory::getApplication()->getLanguage();
         $lang->load('com_gausers', JPATH_ADMINISTRATOR);
         $lang->load('com_gausers', JPATH_SITE);
 

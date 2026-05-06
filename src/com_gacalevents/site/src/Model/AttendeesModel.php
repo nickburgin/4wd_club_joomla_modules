@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,13 +12,13 @@ namespace GlennArkell\Component\Gacalevents\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\CMS\Helper\TagsHelper;
-use \Joomla\CMS\Layout\FileLayout;
-use \Joomla\Database\ParameterType;
-use \Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Layout\FileLayout;
+use Joomla\Database\ParameterType;
+use Joomla\Utilities\ArrayHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 
 /**
@@ -46,6 +46,7 @@ class AttendeesModel extends ListModel
 				'created_date', 'a.created_date',
 				'modified_date', 'a.modified_date',
 				'attendee', 'a.attendee', 'attendee_name',
+				'pub_name', 'a.pub_name',
 				'event', 'a.event', 'event_title',
 				'paid', 'a.paid',
 				'paid_amt', 'a.paid_amt',
@@ -76,7 +77,7 @@ class AttendeesModel extends ListModel
 		if(empty($ordering)) {
 			$ordering = $app->getUserStateFromRequest($this->context . '.filter_order', 'filter_order', $app->get('filter_order'));
 			if (!in_array($ordering, $this->filter_fields)) {
-				$ordering = "a.id";
+				$ordering = "a.pub_name";
 			}
 			$this->setState('list.ordering', $ordering);
 		}
@@ -133,7 +134,7 @@ class AttendeesModel extends ListModel
 		$query->join('LEFT', '#__users AS modified_by ON modified_by.id = a.modified_by');
 
 		// Join over the user field 'attendee'
-		$query->select('att.name AS attendee_name');
+		$query->select('if (pub_name = "", att.name, pub_name) AS attendee_name');
 		$query->join('LEFT', '#__users AS att ON att.id = a.attendee');
 
 		// Join over the events field 'event'
@@ -154,7 +155,7 @@ class AttendeesModel extends ListModel
                 $query->where('a.id = ' . (int) substr($search, 3));
             } else {
                 $search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('( att.name LIKE ' . $search . ' OR  e.title LIKE '.$search.' )');
+				$query->where('( att.name LIKE ' . $search . ' OR  e.title LIKE '.$search.' OR  a.pub_name LIKE '.$search.' )');
             }
         }
             

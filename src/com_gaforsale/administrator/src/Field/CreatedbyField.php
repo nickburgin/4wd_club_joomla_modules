@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.0.2
+ * @version    4.2.2
  * @package    Com_Gaforsale
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -13,6 +13,7 @@ defined('JPATH_BASE') or die;
 
 use \Joomla\CMS\Factory;
 use \Joomla\CMS\Form\FormField;
+use \GlennArkell\Component\Gaforsale\Administrator\Helper\GaforsaleHelper;
 
 /**
  * Supports an HTML select list of categories
@@ -46,11 +47,11 @@ class CreatedbyField extends FormField
 
 		if ($user_id)
 		{
-			$user = Factory::getUser($user_id);
+			$user = GaforsaleHelper::getSpecificUser($user_id);
 		}
 		else
 		{
-			$user   = Factory::getUser();
+			$user = Factory::getApplication()->getIdentity();
 			$html[] = '<input type="hidden" name="' . $this->name . '" value="' . $user->id . '" />';
 		}
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    com_gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,17 +12,17 @@ namespace GlennArkell\Component\Gatripsys\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\CMS\Helper\TagsHelper;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\Date\Date;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Path;
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\Date\Date;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Path;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatriprptHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GanotificationsHelper;
@@ -286,6 +286,7 @@ class TripModel extends ItemModel
 	 */
 	public function publish($id, $state)
 	{
+		$params  = ComponentHelper::getParams('com_gatripsys');
 		$user = GatripsysHelper::getSpecificUser();
         $today = GatripsysHelper::getTodaysDate();
 		// Trip Status - each passed state represents a change to the following
@@ -300,17 +301,17 @@ class TripModel extends ItemModel
 		$table->modified_by = $user->id;
 		$table->modified_date = $today;
 
-		try { 
+		try {
             $allOK = $table->store();
             if ($state == 2) {
-        		$params  = ComponentHelper::getParams('com_gatripsys');
-        		$notif_users = $params->get('notif_users', 0);
                 // approved the trip so notify leader & users
                 $data = array('trip_id'=>$id, 'not_attendee'=>1);
                 GanotificationsHelper::notifyLeader($data, 'tripaprvtl', 0);
                 GatripsysHelper::createNewRecord('#__gatripsys_attendees', $data['trip_id'], $table->leader, $params);
-                if ($notif_users) {
+                Factory::getApplication()->enqueueMessage(Text::_('COM_GATRIPSYS_TL_NOTIFIED_MESSAGE'), 'message');
+                if ($params->get('notif_users', 0)) {
                     GanotificationsHelper::notifyUsersNewTrip($id, 'tripaprv');
+                    Factory::getApplication()->enqueueMessage(Text::_('COM_GATRIPSYS_NOTIFICATION_APPROVAL'), 'message');
                 }
             } elseif ($state == 4) { // closed - generate report
                 $rptOK = GatriprptHelper::createTripReport($id, 0);
@@ -318,7 +319,9 @@ class TripModel extends ItemModel
             } elseif ($state == 6) { // finalised - generate report
                 $rptOK = GatriprptHelper::createTripReport($id, 1);
             } elseif ($state == 5) { // cancel trip
-                GanotificationsHelper::notifyMembers($id, 'tripcan');
+                if ($params->get('notif_users', 0)) {
+                    GanotificationsHelper::notifyMembers($id, 'tripcan');
+                }
                 GanotificationsHelper::notifyTripCoord($id);
             }
             return $allOK;

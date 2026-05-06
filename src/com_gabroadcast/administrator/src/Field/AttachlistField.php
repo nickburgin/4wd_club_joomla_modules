@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     4.2.1
+ * @version     4.3.3
  * @package     com_gabroadcast
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -33,7 +33,7 @@ class AttachlistField extends ListField
 	/**
 	 * Name of the layout being used to render the field
 	 * @var    string
-	 * @since  4.2.1
+	 * @since  4.3.3
 	 */
 	protected $layout = 'joomla.form.field.list';
 
@@ -56,7 +56,7 @@ class AttachlistField extends ListField
         if ($pc_filter && $bcType > 1) {
             $attach = GabroadcastHelper::getBcastTypes($bcType);
             // get the user data
-            $user = GabroadcastHelper::getSpecificUser();
+            $user = Factory::getApplication()->getIdentity();
             $profile = UserHelper::getProfile($user->id);
             // setup the profile field
             $profile_suffix = $params->get('profile_suffix','b4wdc');

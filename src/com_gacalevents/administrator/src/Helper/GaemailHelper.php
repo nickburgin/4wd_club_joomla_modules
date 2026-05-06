@@ -1,7 +1,8 @@
 <?php
 /**
- * @version    3.0.0
- * @package    Com_Gacalevents
+ * @version    3.3.1
+ * @package    pkg_gacalevents
+ * @subpackage com_gacalevents
  * @copyright  Copyright (C) 2013. All rights reserved.
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,23 +13,23 @@ namespace GlennArkell\Component\Gacalevents\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\User\UserFactoryInterface;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\Filesystem\Path;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\CMS\User\User;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\Mail\MailTemplate;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\Session\SessionInterface;
-use \Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\User\UserFactoryInterface;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\Filesystem\Path;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\CMS\User\User;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Mail\MailTemplate;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Installer\Installer;
+use Joomla\Session\SessionInterface;
+use Joomla\CMS\Application\SiteApplication;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 
 /**

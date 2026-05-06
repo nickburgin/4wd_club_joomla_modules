@@ -1,37 +1,31 @@
 <?php
 
 /**
- * @version     5.1.0
- * @package    com_gatripsys
+ * @version     5.3.0
+ * @package    pkg_gatripsys
+ * @subpackage com_gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
-define('MODIFIED', 1);
-define('NOT_MODIFIED', 2);
-
-use \Joomla\CMS\Factory;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\Filesystem\Path;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\MVC\Model\AdminModel;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\CMS\Installer\InstallerScript;
-use \Joomla\CMS\Mail\MailTemplate;
-use \Joomla\CMS\Filter\OutputFilter;
+use Joomla\CMS\Factory;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\Path;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Installer\InstallerScript;
+use Joomla\CMS\Mail\MailTemplate;
+use Joomla\CMS\Filter\OutputFilter;
 
 /**
  * Updates the database structure of the component
- *
- * @version  Release: 0.2b
- * @author   Component Creator <support@component-creator.com>
- * @since    0.1b
  */
 class com_gatripsysInstallerScript extends InstallerScript
 {
@@ -42,19 +36,19 @@ class com_gatripsysInstallerScript extends InstallerScript
 	protected $extension = 'Trip Management System';
 
 	public $compName = 'gatripsys';
-	public $version = '5.1.0';
+	public $version = '5.3.0';
 	public $dbName = 'j4idlers_db';
 
 	public $mainView = 'trips';
 
     public $mailTags = array("coord_name","leader_name","member_name","booking_status","sitename","link_text","trip_title","dept_date");
-    public $mailTmplSuffixs = array("tripnewtc","tripnewad","tripnew","tripaprvtl","tripaprv","tripcan","tripcantc","tripclose","tripfinal","booknew","bookaprv","bookcan");
+    public $mailTmplSuffixs = array("tripnewtc","tripnewad","tripnew","tripaprvtl","tripaprv","tripcan","tripcantc","tripclose","tripfinal","booknew","bookaprv","bookcan","trippend");
 
 	/**
 	 * The minimum Joomla! version required to install this extension
 	 * @var   string
 	 */
-	protected $minimumJoomla = '4.2';
+	protected $minimumJoomla = '5.0';
 
 	/**
 	 * Method called before install/update the component. Note: This method won't be called during uninstall process.
@@ -95,6 +89,7 @@ class com_gatripsysInstallerScript extends InstallerScript
 		$this->createFolders('images', 'trips/trip_plans');
 		$this->createFolders('images', 'trips/invoices');
 		$this->createFolders('images', 'trips/trip_images');
+		$this->createFolders('images', 'trips/trip_incidents');
 
 		$this->setupMainCategories();
 
@@ -216,6 +211,7 @@ class com_gatripsysInstallerScript extends InstallerScript
 			$this->deleteFiles($pathAdmin, '4.2.2','.sql');
 
 // 			$this->updateDateFields('#__gatripsys_trips', 'checked_out_time');
+    		$this->createFolders('images', 'trips/trip_incidents');
 
             // check if Guided Tours is ok for install
             if (JVERSION <= '4.4.3') {

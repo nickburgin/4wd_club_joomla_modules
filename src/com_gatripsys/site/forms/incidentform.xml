@@ -32,7 +32,6 @@
             description="COM_GATRIPSYS_FORM_DESC_INCIDENT_USER_ID" />
 
         <field name="incid_date" type="calendar" default="NOW"
-            filter="server_utc" format="%Y-%m-%d %H:%i:%s"
             filterFormat="Y-m-d H:i:s" translateformat="true"
             label="COM_GATRIPSYS_FORM_LBL_INCIDENT_INCID_DATE"
             description="COM_GATRIPSYS_FORM_DESC_INCIDENT_INCID_DATE" />
@@ -64,6 +63,13 @@
 
 	<fieldset name="extrainfo">
         <field name="from_modal" type="hidden" default="0" />
+
+		<field name="inc_img" type="file" accept="image/*"
+			description="COM_GATRIPSYS_FORM_DESC_INCIDENT_INC_IMG"
+			label="COM_GATRIPSYS_FORM_LBL_INCIDENT_INC_IMG" />
+		<field name="inc_img_disp" type="text" class="input-xxlarge readonly" readonly="true"
+			description="COM_GATRIPSYS_FORM_DESC_INCIDENT_INC_IMG"
+			label="COM_GATRIPSYS_FORM_LBL_INCIDENT_INC_IMG" />
 
 		<field name="comment" filter="safehtml" type="textarea" label="COM_GATRIPSYS_FORM_LBL_COMMENT" description="COM_GATRIPSYS_FORM_DESC_COMMENT" hint="COM_GATRIPSYS_FORM_LBL_COMMENT"/>
 		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>

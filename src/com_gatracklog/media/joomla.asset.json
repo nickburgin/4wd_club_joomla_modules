@@ -1,8 +1,8 @@
 {
   "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
   "name": "com_gatracklog",
-  "version": "4.1.0",
-  "description": "This file contains details of the assets used by the Track Log component by Glenn Arkell.",
+  "version": "4.2.0",
+  "description": "This file contains details of the assets used by the Tracklog component by Glenn Arkell.",
   "license": "GPL-2.0-or-later",
   "assets": [
     {

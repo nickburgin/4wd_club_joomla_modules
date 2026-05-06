@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -11,10 +11,10 @@ namespace GlennArkell\Component\Gacalevents\Administrator\Field;
 
 defined('JPATH_BASE') or die;
 
-use \Joomla\CMS\Form\FormField;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Date\Date;
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Date\Date;
 
 /**
  * Supports an HTML select list of categories

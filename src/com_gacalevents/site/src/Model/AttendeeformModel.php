@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,12 +12,12 @@ namespace GlennArkell\Component\Gacalevents\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\MVC\Model\FormModel;
-use \Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\MVC\Model\FormModel;
+use Joomla\CMS\Component\ComponentHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GanamesHelper;
 
@@ -45,15 +45,23 @@ class AttendeeformModel extends FormModel
                 $id = $app->getUserState('com_gacalevents.edit.attendee.id');
                 $event_id = $app->getUserState('com_gacalevents.edit.attendee.event_id');
                 $attendee = $app->getUserState('com_gacalevents.edit.attendee.attendee');
-        } else {
+                //$app->setUserState('com_gacalevents.test.data', 'edit');
+        } elseif ($app->input->get('layout') == 'modalattend') {
                 $id = $app->input->get('id');
                 $event_id = $app->input->get('event_id');
                 $attendee = $app->input->get('attendee');
+                //$app->setUserState('com_gacalevents.test.data', 'Event: '.$event_id);
+                $app->setUserState('com_gacalevents.edit.attendee.event_id', $event_id);
+         } else {
+                $id = $app->input->get('id');
+                $event_id = $app->input->get('event_id');
+                $attendee = $app->input->get('attendee');
+                //$app->setUserState('com_gacalevents.test.data', 'no layout');
                 $app->setUserState('com_gacalevents.edit.attendee.id', $id);
                 $app->setUserState('com_gacalevents.edit.attendee.event_id', $event_id);
                 $app->setUserState('com_gacalevents.edit.attendee.attendee', $attendee);
         }
-
+        //Factory::getApplication()->setUserState('com_gacalevents.testmps.data', $event_id);
         $this->setState('attendee.id', $id);
         $this->setState('attendee.event_id', $event_id);
         $this->setState('attendee.attendee', $attendee);
@@ -82,13 +90,14 @@ class AttendeeformModel extends FormModel
 
             if (empty($id)) {
                 $id = $this->getState('attendee.id');
+                $event_id = $this->getState('attendee.event_id');
             }
-
+            Factory::getApplication()->setUserState('com_gacalevents.testmgi.data', $event_id);
             // Get a level row instance.
             $table = $this->getTable();
 
             if ($table !== false && $table->load($id) && !empty($table->id)) {
-                $user = GacaleventsHelper::getSpecificUser();
+                $user = Factory::getApplication()->getIdentity();
                 $id   = $table->id;
 
                 $canEdit = $user->authorise('core.edit', 'com_gacalevents') || $user->authorise('core.create', 'com_gacalevents');
@@ -115,8 +124,13 @@ class AttendeeformModel extends FormModel
             }
 
 			if (isset($this->item->attendee)) {
-				$this->item->attendee_name = Factory::getUser($this->item->attendee)->name;
+				$this->item->attendee_name = GacaleventsHelper::getSpecificUser($this->item->attendee)->name;
 			}
+
+        }
+
+		if (isset($this->item->depart_date)) {
+			$this->item->disp_depart_date = HTMLHelper::date($this->item->depart_date, Text::_('COM_GACALEVENTS_DISPLAY_DATETXT'), 'UTC');;
         }
 
         return $this->item;
@@ -199,7 +213,7 @@ class AttendeeformModel extends FormModel
             $table = $this->getTable();
 
             // Get the current user object.
-            $user = GacaleventsHelper::getSpecificUser();
+            $user = Factory::getApplication()->getIdentity();
 
             // Attempt to check the row out.
             if (method_exists($table, 'checkout')) {
@@ -268,8 +282,11 @@ class AttendeeformModel extends FormModel
     {
         $id    = (!empty($data['id'])) ? $data['id'] : (int) $this->getState('attendee.id');
         $attendee    = (!empty($data['attendee'])) ? $data['attendee'] : 0;
+        $attending    = (!empty($data['attending'])) ? $data['attending'] : 0;
         $state = (!empty($data['state'])) ? 1 : 1;
-        $user  = GacaleventsHelper::getSpecificUser();
+        $user  = Factory::getApplication()->getIdentity();
+
+        Factory::getApplication()->setUserState('com_gacalevents.test.data', $data);
 
         if ($id) {
             // Check the user can edit this item
@@ -289,22 +306,30 @@ class AttendeeformModel extends FormModel
 			$psuf  = $params->get( 'profile_suffix', 'b4wdc' );
 			$ppart  = $params->get( 'profile_partner', 'partner' );
 			$locProfKey = 'profile'.$psuf.'.'.$ppart;
+			$data['user_id'] = $data['attendee'];
+			$data['event'] = $data['event_id'];
 
 			$member = GanamesHelper::breakdownNamesFromUserID($attendee, $locProfKey);
 
 			if ($partnerShip) {
-				$data['pub_name'] = GanamesHelper::combineNames($member);
+				$data['pub_name'] = $member->fullname;
 			} else {
 				$data['pub_name'] = $member->name;
 			}
 
-		    $name = $data['pub_name'];
-		    $last_name = (strpos($name, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $name);
-		    $first_name = trim( preg_replace('#'.$last_name.'#', '', $name ) );
+		    //$name = $data['pub_name'];
+		    //$last_name = (strpos($name, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $name);
+		    //$first_name = trim( preg_replace('#'.$last_name.'#', '', $name ) );
 
-			$data['pub_fname'] = $first_name;
-			$data['pub_sname'] = $last_name;
+			$data['pub_fname'] = $member->first_name;
+			$data['pub_sname'] = $member->last_name;
 			$data['pub_partner'] = $member->partner;
+		}
+        if ($attending) {
+			$data['attendee'] = $data['user_id'];
+			$data['event'] = $data['event_id'];
+			$data['pub_name'] = $attending;
+			if (strpos($attending ?? '','&')) { $data['qty_att'] = 2; } else { $data['qty_att'] = 1; }
 		}
 
         $table = $this->getTable();
@@ -326,7 +351,7 @@ class AttendeeformModel extends FormModel
      */
     public function delete($pk)
     {
-        $user = GacaleventsHelper::getSpecificUser();
+        $user = Factory::getApplication()->getIdentity();
 
         if (empty($pk)) {
             $pk = (int) $this->getState('attendee.id');

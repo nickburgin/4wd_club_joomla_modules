@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -9,12 +9,12 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\LayoutHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GanamesHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GabuttonsHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
@@ -25,11 +25,10 @@ $wa = $this->document->getWebAssetManager()
     ->usePreset('com_gacalevents.gacaleventspreset');
 
 // Load admin language file
-$lang = Factory::getApplication()->getLanguage();
-$lang->load('com_gacalevents', JPATH_ADMINISTRATOR);
+Factory::getApplication()->getLanguage()->load('com_gacalevents', JPATH_ADMINISTRATOR);
 
 $app  = Factory::getApplication();
-$user       = GacaleventsHelper::getSpecificUser();
+$user       = Factory::getApplication()->getIdentity();
 $listOrder  = $this->state->get('list.ordering', 'a.depart_date');
 $listDirn   = $this->state->get('list.direction', 'ASC');
 $canCreate  = $user->authorise('core.create', 'com_gacalevents');
@@ -120,7 +119,6 @@ $edURL = 'index.php?'.http_build_query($edLink, '', '&amp;');
 						<?php endif; ?>
 						<?php echo $eventitem->event_details; ?><br />
 						<div class="clearfix"> </div>
-						<?php echo $attendList; echo $apologyList; ?>
 					</td>
 				</tr>
 			<?php else: ?>

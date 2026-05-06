@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.2.1
+ * @version    4.3.3
  * @package    com_gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -9,7 +9,7 @@
 
 namespace GlennArkell\Component\Gabroadcast\Administrator\Extension;
 
-defined('JPATH_PLATFORM') or die;
+\defined('_JEXEC') or die;
 
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Association\AssociationServiceInterface;
@@ -25,7 +25,7 @@ use Psr\Container\ContainerInterface;
 
 /**
  * Component class for com_gabarebone
- * @since  4.2.1
+ * @since  4.3.3
  */
 class GabroadcastComponent extends MVCComponent implements RouterServiceInterface
 {

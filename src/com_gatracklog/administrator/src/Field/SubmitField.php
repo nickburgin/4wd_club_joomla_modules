@@ -1,8 +1,9 @@
 <?php
 
 /**
- * @version    4.1.0
- * @package    com_gatracklog
+ * @version     4.2.0
+ * @package     pkg_mypackage
+ * @subpackage  com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -13,8 +14,8 @@ namespace GlennArkell\Component\Gatracklog\Administrator\Field;
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die('Restricted access');
 
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Form\FormField;
 
 /**
  * Class JFormFieldSubmit

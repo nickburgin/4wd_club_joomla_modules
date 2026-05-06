@@ -1,31 +1,29 @@
 <?php
 /**
- * @version    4.2.1
+ * @version    4.3.3
  * @package    Com_Gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  Copyright (C) 2013. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-define('MODIFIED', 1);
-define('NOT_MODIFIED', 2);
-
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\Filesystem\Path;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\CMS\Installer\InstallerScript;
-use \Joomla\CMS\Installer\Adapter\InstallerAdapter;
-use \Joomla\CMS\Installer\Adapter\ComponentAdapter;
-use \Joomla\CMS\Installer\Adapter\ModuleAdapter;
-use \Joomla\CMS\Installer\Adapter\PluginAdapter;
-use \Joomla\CMS\Filter\OutputFilter;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\Path;
+use Joomla\CMS\Mail\MailTemplate;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Installer\InstallerScript;
+use Joomla\CMS\Installer\Adapter\InstallerAdapter;
+use Joomla\CMS\Installer\Adapter\ComponentAdapter;
+use Joomla\CMS\Installer\Adapter\ModuleAdapter;
+use Joomla\CMS\Installer\Adapter\PluginAdapter;
+use Joomla\CMS\Filter\OutputFilter;
 
 class com_gabroadcastInstallerScript extends InstallerScript
 {
@@ -43,6 +41,10 @@ class com_gabroadcastInstallerScript extends InstallerScript
 	protected $minimumJoomla = '4.0';
 
 	public $comp_name = 'gabroadcast';
+
+	public $mailTmplSuffixs = array("message");
+
+	public $mailTags = array("sitename","link_text","subject","body", "name", "sender");
 
 	/**
 	 * method to run before an install/update/uninstall method
@@ -73,12 +75,18 @@ class com_gabroadcastInstallerScript extends InstallerScript
 		//$parent->getParent()->setRedirectURL('index.php?option=com_gaadvertising');
 		echo '<p>' . Text::_('COM_' . STRTOUPPER($this->comp_name) . '_INSTALL_TEXT') . '</p>';
 
-		//$this->installPlugins($parent);
-		//$this->installModules($parent);
-
 		// Set a Dashboard Entry
 		// @params string $dashboard and string $preset
 		$this->addDashboardMenu($this->comp_name, $this->comp_name);
+
+		// setup id for the template
+        foreach ($this->mailTmplSuffixs as $tmpl) {
+            $template_id = 'com_'.$this->comp_name.'.'.$tmpl;
+            $tmplExists = $this->checkMailTemplates($template_id);
+            if (!$tmplExists) {
+                $this->addMailTemplate($tmpl, $this->mailTags);
+            }
+        }
 	}
 
 	/**
@@ -90,11 +98,9 @@ class com_gabroadcastInstallerScript extends InstallerScript
 		// $parent is the class calling this method
 		echo '<p>' . Text::_('COM_' . STRTOUPPER($this->comp_name) . '_UNINSTALL_TEXT') . '</p>';
 
-		//$this->uninstallPlugins($parent);
-		//$this->uninstallModules($parent);
 		$this->removeDashboard($this->comp_name);
 	}
- 
+
 	/**
 	 * method to update the component
 	 * @return void
@@ -104,9 +110,6 @@ class com_gabroadcastInstallerScript extends InstallerScript
 		// $parent is the class calling this method
 		echo '<p>' . Text::_('COM_' . STRTOUPPER($this->comp_name) . '_UPDATE_TEXT') . '</p>';
 		
-		//$this->installPlugins($parent);
-		//$this->installModules($parent);
-
 		$dashB = $this->checkDashboard($this->comp_name);
 		if (!$dashB) {
 			$this->addDashboardMenu($this->comp_name, $this->comp_name);
@@ -132,6 +135,22 @@ class com_gabroadcastInstallerScript extends InstallerScript
 			$this->deleteFiles($pathAdmin, '0.0.01','.sql');
 			$this->deleteFiles($pathAdmin, '1.0.02','.sql');
 			$this->deleteFiles($pathAdmin, '4.0.0','.sql');
+
+			//cleanup old language files
+ 			$pathLangS = Path::clean( JPATH_SITE . '/language/en-GB/' );
+			$this->deleteFiles($pathLangS, 'en-GB.com_'.$this->comp_name,'.ini');
+ 			$pathLangA = Path::clean( JPATH_ADMINISTRATOR . '/language/en-GB/' );
+			$this->deleteFiles($pathLangA, 'en-GB.com_'.$this->comp_name,'.ini');
+			$this->deleteFiles($pathLangA, 'en-GB.com_'.$this->comp_name,'.sys.ini');
+
+    		// setup id for the template
+            foreach ($this->mailTmplSuffixs as $tmpl) {
+                $template_id = 'com_'.$this->comp_name.'.'.$tmpl;
+                $tmplExists = $this->checkMailTemplates($template_id);
+                if (!$tmplExists) {
+                    $this->addMailTemplate($tmpl, $this->mailTags);
+                }
+            }
 		}
 
 		return true;
@@ -188,6 +207,88 @@ class com_gabroadcastInstallerScript extends InstallerScript
 	    }
 
 		return $result;
+	}
+
+	/**
+	 * *********************  MailTemplate stuff  *******************************
+	 */
+	/**
+	 * Update template records until core updated
+	 * NO LONGER NEEDED since 4.3.4
+	 */
+	public function updateMailTemplates($template_id)
+	{
+		$table = '#__mail_templates';
+        $db    = Factory::getContainer()->get('DatabaseDriver');
+		$query = $db->getQuery(true);
+		$db->setQuery('SELECT * FROM #__mail_templates WHERE '.$db->quotename('template_id').' = '.$db->quote($template_id));
+		try {
+		    $tmpl = $db->loadObject();
+            if (!isset($tmpl->extension) || $tmpl->extension == '') {
+                $params = json_decode($tmpl->params);
+                $params->tags = $params->tags[0];
+                $tmpl->params = json_encode($params);
+                $tmpl->extension = 'com_'.$this->comp_name;
+                $result = Factory::getContainer()->get('DatabaseDriver')->updateObject('#__mail_templates', $tmpl, 'template_id');
+            }
+            return true;
+		} catch (RuntimeException $e) {
+		    Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+		    return false;
+		}
+
+	}
+
+	/**
+	 * Check if a MailTemplate entry exists
+	 * @param   string $template_id (component + ext)
+	 * @return boolean or object
+	 */
+	public function checkMailTemplates($template_id = 0)
+	{
+        $result = false;
+		if ($template_id) {
+			$db = Factory::getContainer()->get('DatabaseDriver');
+	        $db->setQuery(' SELECT * FROM #__mail_templates WHERE template_id = '.$db->Quote($template_id) );
+		    try {
+		        $result = $db->loadObject();
+		    } catch (RuntimeException $e) {
+		        Factory::getApplication()->enqueueMessage($e->getMessage(), 'danger');
+		    }
+	    }
+
+		return $result;
+	}
+
+	/**
+	 * Removes the mailTemplate records
+	 * @param   string $template_id (component + ext)
+	 * @return  void
+	 */
+	public function removeMailTemplate($template_id)
+	{
+		$this->deleteData('#__mail_templates', 'template_id', $template_id, '=');
+		Factory::getApplication()->enqueueMessage(Text::_('COM_'.STRTOUPPER($this->comp_name ?? '').'_EMAILTMPL_REMOVE_SUCCESS', 'notice'));
+	}
+
+	/**
+	 * Create a new Mail Template
+	 * @param   string $template_id (just the ext)
+	 * @param   array $tags
+	 * @return  void
+	 */
+	public function addMailTemplate($template_id, $tags)
+	{
+        $result = MailTemplate::createTemplate(
+        	'com_'.$this->comp_name.'.'.$template_id,
+        	'COM_'.STRTOUPPER($this->comp_name).'_EMAILTMPL_'.STRTOUPPER($template_id).'_SUBJECT',
+        	'COM_'.STRTOUPPER($this->comp_name).'_EMAILTMPL_'.STRTOUPPER($template_id).'_BODY',
+        	$tags,
+        	'COM_'.STRTOUPPER($this->comp_name).'_EMAILTMPL_'.STRTOUPPER($template_id).'_HTMLBODY'
+        );
+
+		Factory::getApplication()->enqueueMessage('Email Template Record Created . . . '.$template_id);
+
 	}
 
 	/**
@@ -255,281 +356,6 @@ class com_gabroadcastInstallerScript extends InstallerScript
         echo '<p>' . Text::_('New categories created') . '</p>';
 
 		return true;
-	}
-
-	/**
-	 * *********************  All the plugin installation stuff  *******************************
-	 */
-
-	/**
-	 * Installs plugins for this component
-	 * @param   mixed $parent Object who called the install/update method
-	 * @return void
-	 */
-	private function installPlugins($parent)
-	{
-		$installation_folder = $parent->getParent()->getPath('source');
-		$app                 = Factory::getApplication();
-
-		/* @var $plugins SimpleXMLElement */
-		if (method_exists($parent, 'getManifest'))
-		{
-			$plugins = $parent->getManifest()->plugins;
-		}
-		else
-		{
-			$plugins = $parent->get('manifest')->plugins;
-		}
-
-		if (count($plugins->children()))
-		{
-			$db = Factory::getContainer()->get('DatabaseDriver');
-			$query = $db->getQuery(true);
-
-			foreach ($plugins->children() as $plugin)
-			{
-				$pluginName  = (string) $plugin['plugin'];
-				$pluginGroup = (string) $plugin['group'];
-				$path        = $installation_folder . '/plugins/' . $pluginGroup . '/' . $pluginName;
-				$installer   = new Installer;
-
-				if (!$this->isAlreadyInstalled('plugin', $pluginName, $pluginGroup))
-				{
-					$result = $installer->install($path);
-				}
-				else
-				{
-					$result = $installer->update($path);
-				}
-
-				if ($result)
-				{
-					$app->enqueueMessage('Plugin ' . $pluginName . ' was installed successfully');
-				}
-				else
-				{
-					$app->enqueueMessage('There was an issue installing the plugin ' . $pluginName,
-						'error');
-				}
-
-				$query
-					->clear()
-					->update('#__extensions')
-					->set('enabled = 1')
-					->where(
-						array(
-							'type LIKE ' . $db->quote('plugin'),
-							'element LIKE ' . $db->quote($pluginName),
-							'folder LIKE ' . $db->quote($pluginGroup)
-						)
-					);
-				$db->setQuery($query);
-				$db->execute();
-			}
-		}
-	}
-
-	/**
-	 * Uninstalls plugins
-	 * @param   mixed $parent Object who called the uninstall method
-	 * @return void
-	 */
-	private function uninstallPlugins($parent)
-	{
-		$app     = Factory::getApplication();
-
-		if (method_exists($parent, 'getManifest'))
-		{
-			$plugins = $parent->getManifest()->plugins;
-		}
-		else
-		{
-			$plugins = $parent->get('manifest')->plugins;
-		}
-
-		if (count($plugins->children()))
-		{
-			$db = Factory::getContainer()->get('DatabaseDriver');
-			$query = $db->getQuery(true);
-
-			foreach ($plugins->children() as $plugin)
-			{
-				$pluginName  = (string) $plugin['plugin'];
-				$pluginGroup = (string) $plugin['group'];
-				$query
-					->clear()
-					->select('extension_id')
-					->from('#__extensions')
-					->where(
-						array(
-							'type LIKE ' . $db->quote('plugin'),
-							'element LIKE ' . $db->quote($pluginName),
-							'folder LIKE ' . $db->quote($pluginGroup)
-						)
-					);
-				$db->setQuery($query);
-				$extension = $db->loadResult();
-
-				if (!empty($extension))
-				{
-					$installer = new Installer;
-					$result    = $installer->uninstall('plugin', $extension);
-
-					if ($result)
-					{
-						$app->enqueueMessage('Plugin ' . $pluginName . ' was uninstalled successfully');
-					}
-					else
-					{
-						$app->enqueueMessage('There was an issue uninstalling the plugin ' . $pluginName,
-							'error');
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * *********************  All the module installation stuff  *******************************
-	 */
-
-	/**
-	 * Installs modules for this component
-	 * @param   mixed $parent Object who called the install/update method
-	 * @return void
-	 */
-	private function installModules($parent)
-	{
-		$installation_folder = $parent->getParent()->getPath('source');
-		$app                 = Factory::getApplication();
-
-		if (method_exists($parent, 'getManifest'))
-		{
-			$modules = $parent->getManifest()->modules;
-		}
-		else
-		{
-			$modules = $parent->get('manifest')->modules;
-		}
-
-		if (!empty($modules))
-		{
-
-			if (count($modules->children()))
-			{
-				foreach ($modules->children() as $module)
-				{
-					$moduleName = (string) $module['module'];
-					$path       = $installation_folder . '/modules/' . $moduleName;
-					$installer  = new Installer;
-
-					if (!$this->isAlreadyInstalled('module', $moduleName))
-					{
-						$result = $installer->install($path);
-					}
-					else
-					{
-						$result = $installer->update($path);
-					}
-
-					if ($result)
-					{
-						$app->enqueueMessage('Module ' . $moduleName . ' was installed successfully');
-					}
-					else
-					{
-						$app->enqueueMessage('There was an issue installing the module ' . $moduleName,
-							'error');
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Uninstalls modules
-	 * @param   mixed $parent Object who called the uninstall method
-	 * @return void
-	 */
-	private function uninstallModules($parent)
-	{
-		$app = Factory::getApplication();
-
-		if (method_exists($parent, 'getManifest'))
-		{
-			$modules = $parent->getManifest()->modules;
-		}
-		else
-		{
-			$modules = $parent->get('manifest')->modules;
-		}
-
-		if (!empty($modules))
-		{
-
-			if (count($modules->children()))
-			{
-				$db = Factory::getContainer()->get('DatabaseDriver');
-				$query = $db->getQuery(true);
-
-				foreach ($modules->children() as $plugin)
-				{
-					$moduleName = (string) $plugin['module'];
-					$query
-						->clear()
-						->select('extension_id')
-						->from('#__extensions')
-						->where(
-							array(
-								'type LIKE ' . $db->quote('module'),
-								'element LIKE ' . $db->quote($moduleName)
-							)
-						);
-					$db->setQuery($query);
-					$extension = $db->loadResult();
-
-					if (!empty($extension))
-					{
-						$installer = new Installer;
-						$result    = $installer->uninstall('module', $extension);
-
-						if ($result)
-						{
-							$app->enqueueMessage('Module ' . $moduleName . ' was uninstalled successfully');
-						}
-						else
-						{
-							$app->enqueueMessage('There was an issue uninstalling the module ' . $moduleName,
-								'error');
-						}
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Check if an extension is already installed in the system
-	 * @param   string $type   Extension type
-	 * @param   string $name   Extension name
-	 * @param   mixed  $folder Extension folder(for plugins)
-	 * @return boolean
-	 */
-	private function isAlreadyInstalled($type, $name, $folder = null)
-	{
-		$result = false;
-
-		switch ($type)
-		{
-			case 'plugin':
-				$result = file_exists(JPATH_PLUGINS . '/' . $folder . '/' . $name);
-				break;
-			case 'module':
-				$result = file_exists(JPATH_SITE . '/modules/' . $name);
-				break;
-		}
-
-		return $result;
 	}
 
 	/**

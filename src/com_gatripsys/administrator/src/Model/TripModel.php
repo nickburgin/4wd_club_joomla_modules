@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    com_gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,13 +12,13 @@ namespace GlennArkell\Component\Gatripsys\Administrator\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Plugin\PluginHelper;
-use \Joomla\CMS\MVC\Model\AdminModel;
-use \Joomla\Event\Dispatcher;
-use \Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\Event\Dispatcher;
+use Joomla\CMS\Helper\TagsHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 
 /**

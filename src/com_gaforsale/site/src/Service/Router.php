@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    4.0.2
+ * @version    4.2.2
  * @package    Com_Gaforsale
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -37,14 +37,14 @@ class Router extends RouterView
 	/**
 	 * The category factory
 	 * @var CategoryFactoryInterface
-	 * @since  4.0.2
+	 * @since  4.2.2
 	 */
 	private $categoryFactory;
 
 	/**
 	 * The category cache
 	 * @var  array
-	 * @since  4.0.2
+	 * @since  4.2.2
 	 */
 	private $categoryCache = [];
 
@@ -158,7 +158,7 @@ class Router extends RouterView
 	 * Method to get categories from cache
 	 * @param   array  $options   The options for retrieving categories
 	 * @return  CategoryInterface  The object containing categories
-	 * @since   4.0.2
+	 * @since   4.2.2
 	 */
 	private function getCategories(array $options = []): CategoryInterface
 	{

@@ -47,15 +47,6 @@
 		/>
 
 		<menuitem
-			title="COM_GAMERCHANDISE_TITLE_PRODL_SIZES"
-			type="component"
-			element="com_categories"
-			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gamerchandise.prodl_sizes"
-			quicktask="index.php?option=com_categories&amp;extension=com_gamerchandise.prodl_sizes&amp;task=category.add"
-			quicktask-title="COM_CONTENT_MENUS_NEW_CATEGORY"
-		/>
-
-		<menuitem
 			title="COM_GAMERCHANDISE_TITLE_SALES"
 			type="component"
 			element="com_gamerchandise"

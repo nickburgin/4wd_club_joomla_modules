@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     4.0.7
+ * @version     4.1.2
  * @package     com_gamerchandise
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -30,7 +30,7 @@ class ArticlelistField extends ListField
 	/**
 	 * Name of the layout being used to render the field
 	 * @var    string
-	 * @since  4.0.7
+	 * @since  4.1.2
 	 */
 	protected $layout = 'joomla.form.field.list';
 

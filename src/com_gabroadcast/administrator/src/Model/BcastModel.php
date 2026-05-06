@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.2.1
+ * @version    4.3.3
  * @package    Com_Gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
@@ -52,7 +52,7 @@ class BcastModel extends AdminModel
 	 * @param   string  $type    The table type to instantiate
 	 * @param   string  $prefix  A prefix for the table class name. Optional.
 	 * @param   array   $config  Configuration array for model. Optional.
-	 * @return    JTable    A database object
+	 * @return    Table    A database object
 	 * @since    1.6
 	 */
 	public function getTable($type = 'Bcast', $prefix = 'Administrator', $config = array())
@@ -122,7 +122,7 @@ class BcastModel extends AdminModel
 
 	/**
 	 * Prepare and sanitise the table prior to saving.
-	 * @param   JTable  $table  Table Object
+	 * @param   Table  $table  Table Object
 	 * @return void
 	 * @since    1.6
 	 */

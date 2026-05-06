@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    3.0.09
+ * @version    4.2.2
  * @package    Com_Gaforsale
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  Copyright (C) 2013. All rights reserved.
@@ -89,7 +89,7 @@ class FsitemController extends BaseController
 			if ($return === false) {
 				$this->setMessage(Text::sprintf('Save failed: %s', $model->getError()), 'warning');
 			}
-
+            
 			// Clear the profile id from the session.
 			$app->setUserState('com_gaforsale.edit.fsitem.id', null);
 
@@ -228,4 +228,26 @@ class FsitemController extends BaseController
 			throw new \Exception(500);
 		}
 	}
+
+	/**
+	 * Method to change the state to unpublished which marks the item as sold.
+	 */
+	public function sendReminder() {
+        
+		$app = Factory::getApplication();
+        $id	= $app->input->get('id');
+        
+		// Get the model.
+		$model = $this->getModel('Fsitem', 'Site');
+
+		// Mark the item as sold
+		if ($id) {
+            $model->sendReminder($id);
+			$app->enqueueMessage(Text::_('COM_GAFORSALE_FSITEM_REMINDER_SENT'), 'notice');
+		}
+		// Redirect to the list screen.
+		$this->setRedirect(Route::_('index.php?option=com_gaforsale&view=fsitems', false));
+
+	}
+
 }

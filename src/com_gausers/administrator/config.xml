@@ -95,9 +95,16 @@
              label="COM_GAUSERS_MBRSEC_GROUP_LABEL"
              description="COM_GAUSERS_MBRSEC_GROUP_DESC" />
 
+        <field name="not_mbrsec" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_NOT_MBRSEC_LABEL"
+             description="COM_GAUSERS_NOT_MBRSEC_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+        </field>
+
 	</fieldset>
 
-    <fieldset name="finparams"
+    <fieldset name="finparams" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field"
 		label="COM_GAUSERS_FINPARAMS_LABEL"
 		description="COM_GAUSERS_FINPARAMS_DESC" >
 
@@ -112,15 +119,19 @@
              label="COM_GAUSERS_FINANCE_CAT_LABEL"
              description="COM_GAUSERS_FINANCE_CAT_DESC" />
 
-        <field name="bank_desc" type="text" default="Bendigo Bank"
+        <field name="finance_accnt" type="Account" showon="incl_finance:1" default="1"
+             label="COM_GAUSERS_FINANCE_ACCNT_LABEL"
+             description="COM_GAUSERS_FINANCE_ACCNT_DESC" />
+
+        <field name="bank_desc" type="text" default="Bendigo Bank" showon="incl_finance:0"
              label="COM_GAUSERS_BANK_DESC_LABEL"
              description="COM_GAUSERS_BANK_DESC_DESC" />
 
-        <field name="bank_bsb" type="text" default="633-000"
+        <field name="bank_bsb" type="text" default="633-000" showon="incl_finance:0"
              label="COM_GAUSERS_BANK_BSB_LABEL"
              description="COM_GAUSERS_BANK_BSB_DESC" />
 
-        <field name="bank_accnt" type="text" default="123456789"
+        <field name="bank_accnt" type="text" default="123456789" showon="incl_finance:0"
              label="COM_GAUSERS_BANK_ACCNT_LABEL"
              description="COM_GAUSERS_BANK_ACCNT_DESC" />
 
@@ -131,6 +142,10 @@
                  <option value="0">JNO</option>
          </field>
 
+        <field name="pp_cat" type="Account" default="0" showon="pp_pay:1[AND]incl_finance:1"
+             label="COM_GAUSERS_FIN_ACCNT_LABEL"
+             description="COM_GAUSERS_FIN_ACCNT_DESC" />
+
         <field name="pp_accnt" type="text" showon="pp_pay:1"
              label="COM_GAUSERS_PP_ACCNT_LABEL"
              description="COM_GAUSERS_PP_ACCNT_DESC" />
@@ -138,6 +153,17 @@
         <field name="pp_img" type="media" directory="" showon="pp_pay:1"
              label="COM_GAUSERS_PP_IMG_LABEL"
              description="COM_GAUSERS_PP_IMG_DESC" />
+
+        <field name="cc_pay" type="radio" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_CC_PAY_LABEL"
+             description="COM_GAUSERS_CC_PAY_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="cc_cat" type="Account" default="0" showon="cc_pay:1[AND]incl_finance:1"
+             label="COM_GAUSERS_FIN_ACCNT_LABEL"
+             description="COM_GAUSERS_FIN_ACCNT_DESC" />
 
         <field name="admin_id" type="user" default=""
              label="COM_GAUSERS_ADMIN_ID_LABEL"
@@ -168,8 +194,8 @@
              label="COM_GAUSERS_EXCLUDE_MEMBER_LABEL"
              description="COM_GAUSERS_EXCLUDE_MEMBER_DESC" />
 
-        <field name="invoice_date" type="calendar"
-             filterFormat="Y-m-d" translateformat="true"
+        <field name="invoice_date" type="calendar" showtime="false"
+             filterFormat="Y-m-d" translateformat="true" filter="none"
              label="COM_GAUSERS_INVOICE_DATE_LABEL"
              description="COM_GAUSERS_INVOICE_DATE_DESC" />
 
@@ -181,7 +207,7 @@
          </field>
 
         <field name="cutoff_date" type="calendar" showon="use_cutoff:1"
-             filterFormat="Y-m-d" translateformat="true"
+             filterFormat="Y-m-d" translateformat="true" filter="none" showtime="false"
              label="COM_GAUSERS_CUTOFF_DATE_LABEL"
              description="COM_GAUSERS_CUTOFF_DATE_DESC" />
 
@@ -273,11 +299,19 @@
              description="COM_GAUSERS_MSHIP_PERIOD_DESC">
                  <option value="1">GAMSHIP_PERIOD_FINANCIAL</option>
                  <option value="2">GAMSHIP_PERIOD_CALENDAR</option>
+                 <option value="3">GAMSHIP_PERIOD_SUBSCRIPTION</option>
          </field>
 
         <field name="new_users" type="radio" default="0" class="btn-group btn-group-yesno"
              label="COM_GAUSERS_NEW_USERS_LABEL"
              description="COM_GAUSERS_NEW_USERS_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="pwd_reset" type="radio" default="1" class="btn-group btn-group-yesno" showon="new_users:1"
+             label="COM_GAUSERS_PWD_RESET_LABEL"
+             description="COM_GAUSERS_PWD_RESET_DESC">
                  <option value="1">JYES</option>
                  <option value="0">JNO</option>
          </field>
@@ -517,11 +551,15 @@
              description="COM_GAUSERS_EXTRACT_MEMBERS_DESC">
                  <option value="1">JYES</option>
                  <option value="0">JNO</option>
-         </field>
+        </field>
 
         <field name="profile_params" type="Proflist" multiple="true" showon="extract_members:1"
              label="COM_GAUSERS_USERLIST_FIELD_XTRAINFO_LABEL"
              description="COM_GAUSERS_USERLIST_FIELD_XTRAINFO_DESC" />
+
+        <field name="cust_params" type="Custfld" multiple="true" showon="extract_members:1"
+             label="COM_GAUSERS_USERLIST_FIELD_XTRACUSTINFO_LABEL"
+             description="COM_GAUSERS_USERLIST_FIELD_XTRACUSTINFO_DESC" />
 
         <field name="club_id" type="text" showon="extract_members:1" default="0"
              label="COM_GAUSERS_CLUB_ID_LABEL"
@@ -617,6 +655,13 @@
         <field name="newMember" type="radio" default="0" class="btn-group btn-group-yesno"
              label="COM_GAUSERS_NEWMEMBER_LABEL"
              description="COM_GAUSERS_NEWMEMBER_DESC">
+                 <option value="1">JYES</option>
+                 <option value="0">JNO</option>
+         </field>
+
+        <field name="copyToSec" type="radio" default="1" class="btn-group btn-group-yesno"
+             label="COM_GAUSERS_NEWMBR_COPYSEC_LABEL"
+             description="COM_GAUSERS_NEWMBR_COPYSEC_DESC">
                  <option value="1">JYES</option>
                  <option value="0">JNO</option>
          </field>

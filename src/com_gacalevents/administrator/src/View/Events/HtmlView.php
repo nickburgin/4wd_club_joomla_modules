@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,15 +12,16 @@ namespace GlennArkell\Component\Gacalevents\Administrator\View\Events;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use \Joomla\CMS\Toolbar\Toolbar;
-use \Joomla\CMS\Toolbar\ToolbarHelper;
-use \Joomla\CMS\Helper\ContentHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\MVC\View\GenericDataException;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\MVC\View\GenericDataException;
+use Joomla\CMS\Component\ComponentHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 
 /**
@@ -70,6 +71,8 @@ class HtmlView extends BaseHtmlView
 	 */
 	protected function addToolbar()
 	{
+		$params = ComponentHelper::getParams('com_gacalevents');
+		$repeatEvent = $params->get('repeat_event', );
 		$compName = 'gacalevents';
 		$progNameL = 'event';
 		$progNameC = 'Event';
@@ -108,7 +111,9 @@ class HtmlView extends BaseHtmlView
 				$childBar->publish($progNameL.'s.publish')->listCheck(true);
 				$childBar->unpublish($progNameL.'s.unpublish')->listCheck(true);
 				$childBar->archive($progNameL.'s.archive')->listCheck(true);
-				$childBar->save2copy($progNameL.'s.duplicate', 'Duplicate')->listCheck(true);
+				if ($repeatEvent) {
+                    $childBar->save2copy($progNameL.'s.duplicate', 'Duplicate')->listCheck(true);
+                }
 			} elseif (isset($this->items[0])) {
 				// If this component does not use state then show a direct delete button as we can not trash
 				$toolbar->delete($progNameL.'s.delete')

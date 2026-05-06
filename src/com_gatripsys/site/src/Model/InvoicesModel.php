@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     5.1.0
+ * @version     5.3.0
  * @package     com_gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
@@ -13,13 +13,13 @@ namespace GlennArkell\Component\Gatripsys\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\Language\Text;
-use \Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
-use \Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Language\Text;
+use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
+use Joomla\CMS\Component\ComponentHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GainvoiceHelper;
 
@@ -165,10 +165,11 @@ class InvoicesModel extends ListModel
 		}
 
         // Add the list ordering clause.
+        $orderDir = $this->getState('list.direction', 'ASC');
         if ($orderBy) {
 			$query->order('a.id ASC ');
 		} else {
-			$query->order('substr(u.name, (LENGTH(u.name) - LOCATE(" ", REVERSE(u.name))+1)) ' . $orderDirn);
+			$query->order('substr(u.name, (LENGTH(u.name) - LOCATE(" ", REVERSE(u.name))+1)) ' . $orderDir);
 		}
 
         return $query;

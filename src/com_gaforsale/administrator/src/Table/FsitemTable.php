@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    4.0.2
+ * @version    4.2.2
  * @package    com_gaforsale
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  Copyright (C) 2013. All rights reserved.
@@ -22,7 +22,7 @@ use \Joomla\CMS\Table\Table as Table;
 use \Joomla\CMS\Versioning\VersionableTableInterface;
 use \Joomla\Database\DatabaseDriver;
 use \Joomla\CMS\Filter\OutputFilter;
-use \Joomla\CMS\Filesystem\File;
+use \Joomla\Filesystem\File;
 use \GlennArkell\Component\Gaforsale\Administrator\Helper\GaforsaleHelper;
 
 /**
@@ -46,7 +46,7 @@ class FsitemTable extends Table implements VersionableTableInterface
     /**
 	 * Get the type alias for the history table
 	 * @return  string  The alias as described above
-	 * @since   4.0.2
+	 * @since   4.2.2
 	 */
 	public function getTypeAlias()
 	{

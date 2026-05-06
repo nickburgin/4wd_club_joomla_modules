@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    Com_Gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2023 Glenn Arkell
@@ -12,12 +12,13 @@ namespace GlennArkell\Component\Gatripsys\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 /**
  * Modal helper.
+ * Version 2
  */
 class GamodalHelper
 {
@@ -40,18 +41,21 @@ class GamodalHelper
 	 */
     public static function setupModalButton($type, $controller, $field, $value, $layout, $modname, $button, $label, $title, $icon, $name)
 	{
+        $name = $name > '' ? ' - '.$name : '';
         // modal form
         $link = self::getHTTPQuery(null, $type, $controller, $field, $value);
         if ($field != 'id') { $link = self::getHTTPQuery($link, null, null, 'id', 0); } // add this line to create a new record
         $link = self::getHTTPQuery($link, null, null, 'tmpl', 'component');
-        $link = self::getHTTPQuery($link, null, null, 'layout', $layout);
+        if ($layout > '') {
+            $link = self::getHTTPQuery($link, null, null, 'layout', $layout);
+        }
         $modalparams = array( 
                         'url' => 'index.php?'.http_build_query($link, '', '&amp;'),
-        		        'title'      => Text::_($title).' - '.$name, 
+        		        'title'      => Text::_($title).$name,
                         'closeButton'=> true,
-				        'modalWidth' => 40,
-				        'bodyHeight' => 35,
-				        'viewHeight' => 40,
+				        'modalWidth' => 55,
+				        'bodyHeight' => 50,
+				        'viewHeight' => 55,
                         'backdrop'   => 'static'
                         );
         $modalname = 'modal-'.$modname.$value;
@@ -94,6 +98,27 @@ class GamodalHelper
 		}
 
 		return $query_string;
+	}
+
+    public static function linkedModalButton($link, $id, $button, $label, $title, $icon, $name)
+	{
+        $modalparams = array(
+                        'url' => 'index.php?'.http_build_query($link, '', '&amp;'),
+        		        'title'      => Text::_($name),
+                        'closeButton'=> true,
+				        'modalWidth' => 50,
+				        'bodyHeight' => 45,
+				        'viewHeight' => 50,
+                        'backdrop'   => 'static'
+                        );
+        $modalname = 'modal-myDelete'.$id;
+        $html = '<a class="btn btn-'.$button.'" href="#'.$modalname.'" data-bs-toggle="modal">';
+        $html .= '<i class="'.$icon.'" title="'.Text::_($title).'"></i> '.Text::_($label).'</a>';
+        
+        $html .= HTMLHelper::_('bootstrap.renderModal', $modalname, $modalparams);
+
+		return $html;
+
 	}
 
 }

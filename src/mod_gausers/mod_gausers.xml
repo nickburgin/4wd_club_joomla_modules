@@ -7,13 +7,15 @@
 	<copyright>Open Source</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<creationDate>5 May 2018</creationDate>
-	<version>5.1.6</version>
-	<description>Display Members</description>
+	<version>5.4</version>
+	<description>MOD_GAUSERS_XML_DESCRIPTION</description>
 
 	<namespace path="src">GlennArkell\Module\Gausers</namespace>
 
+	<scriptfile>script.php</scriptfile>
+
 	<files>
-		<filename module="mod_gausers">mod_gausers.php</filename>
+		<folder module="mod_gausers">services</folder>
 		<folder>src</folder>
 		<folder>tmpl</folder>
     </files>
@@ -25,7 +27,11 @@
 	<languages>
 		<language tag="en-GB">language/en-GB/mod_gausers.ini</language>
 		<language tag="en-GB">language/en-GB/mod_gausers.sys.ini</language>
+		<language tag="it-IT">language/it-IT/mod_gausers.ini</language>
+		<language tag="it-IT">language/it-IT/mod_gausers.sys.ini</language>
 	</languages>
+
+	<changelogurl>https://www.glennarkell.com.au/joomlaorg/packages/j6/changes/mod_gausers-changelog.xml</changelogurl>
 
 	<config>
 		<fields name="params">
@@ -40,11 +46,18 @@
 		             label="MOD_GAUSERS_DISPLAY_GROUP_LABEL"
 		             description="MOD_GAUSERS_DISPLAY_GROUP_DESC" />
 
-		        <field name="prof_suffix" type="text"
+				<field name="prof_mship" type="radio" default="0" class="btn-group btn-group-yesno" filter="int"
+					label="MOD_GAUSERS_FIELD_PROF_MSHIP_LABEL"
+					description="MOD_GAUSERS_FIELD_PROF_MSHIP_DESC" >
+					<option value="0">GAPROFILE</option>
+					<option value="1">GAMSHIP</option>
+				</field>
+
+		        <field name="prof_suffix" type="text" showon="prof_mship:0"
 		             label="MOD_GAUSERS_PROF_SUFFIX_LABEL"
 		             description="MOD_GAUSERS_PROF_SUFFIX_DESC" />
 
-		        <field name="prof_field" type="text"
+		        <field name="prof_field" type="text" showon="prof_mship:0"
 		             label="MOD_GAUSERS_PROF_FIELD_LABEL"
 		             description="MOD_GAUSERS_PROF_FIELD_DESC" />
 

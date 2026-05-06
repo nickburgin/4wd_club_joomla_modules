@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.6
+ * @version    6.0.0
  * @package    com_gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -11,8 +11,8 @@ namespace GlennArkell\Component\Gausers\Administrator\Field;
 
 defined('JPATH_BASE') or die;
 
-use \Joomla\CMS\Form\FormField;
-use \Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Factory;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 /**
@@ -37,7 +37,7 @@ class ModifiedbyField extends FormField
 	{
 		// Initialize variables.
 		$html   = array();
-		$user   = GausersHelper::getSpecificUser();
+		$user   = Factory::getApplication()->getIdentity();
 		$html[] = '<input type="hidden" name="' . $this->name . '" value="' . $user->id . '" />';
 		if (!$this->hidden) {
 			$html[] = "<div>" . $user->name . " (" . $user->username . ")</div>";

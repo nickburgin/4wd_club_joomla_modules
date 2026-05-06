@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.09
+ * @version    4.2.2
  * @package    Com_Gaforsale
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  Copyright (C) 2013. All rights reserved.

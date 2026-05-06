@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    3.0.09
+ * @version    4.2.2
  * @package    Com_Gaforsale
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  Copyright (C) 2013. All rights reserved.
@@ -21,6 +21,7 @@ use \Joomla\Filesystem\Folder;
 use \Joomla\Filesystem\Path;
 use \Joomla\CMS\MVC\Model\ItemModel;
 use \Joomla\CMS\Helper\TagsHelper;
+use \Joomla\CMS\Component\ComponentHelper;
 use \GlennArkell\Component\Gaforsale\Administrator\Helper\GaforsaleHelper;
 
 /**
@@ -40,11 +41,11 @@ class FsitemModel extends ItemModel
 		$app = Factory::getApplication('com_gaforsale');
 
 		// Load state from the request userState on edit or from the passed variable on default
-		if (Factory::getApplication()->input->get('layout') == 'edit') {
-			$id = Factory::getApplication()->getUserState('com_gaforsale.edit.fsitem.id');
+		if ($app->input->get('layout') == 'edit') {
+			$id = $app->getUserState('com_gaforsale.edit.fsitem.id');
 		} else {
-			$id = Factory::getApplication()->input->get('id');
-			Factory::getApplication()->setUserState('com_gaforsale.edit.fsitem.id', $id);
+			$id = $app->input->get('id');
+			$app->setUserState('com_gaforsale.edit.fsitem.id', $id);
 		}
 
 		$this->setState('fsitem.id', $id);
@@ -207,11 +208,19 @@ class FsitemModel extends ItemModel
 	 */
 	public function publish($id, $state)
 	{
-		$table = $this->getTable();
+		$notify  = ComponentHelper::getParams('com_gaforsale')->get('notif_mbrs');
+        $table = $this->getTable();
 		$table->load($id);
 		$table->state = $state;
 
-		return $table->store();
+		if ($table->store() === true) {
+			if ($state == 1 && $notify) {
+                GaforsaleHelper::notifyForsale($id, 'fstombrs');
+            }
+            return $id;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -268,5 +277,12 @@ class FsitemModel extends ItemModel
         return $result;
                 
 	}
+
+    public function sendReminder($id)
+	{
+		GaforsaleHelper::notifyForsale($id, 'fsremind');
+
+		return true;
+    }
 
 }

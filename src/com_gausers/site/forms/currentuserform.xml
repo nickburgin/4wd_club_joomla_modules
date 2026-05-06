@@ -261,7 +261,7 @@
                     <option value="1">JYES</option>
                     <option value="0">JNO</option>
             </field>
-    
+
     	</fieldset>
 
 	<fieldset name="gausers_pers" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
@@ -1021,11 +1021,45 @@
 
 	<fieldset name="mbractions">
 		<field name="user_id" type="hidden" />
+		<field name="act_id" type="hidden" />
 
 		<field name="act_name" type="text"
 			description="COM_GAUSERS_FORM_DESC_ACTION_ACT_NAME"
 			hint="COM_GAUSERS_FORM_MESS_ACTION_ACT_NAME"
 			label="COM_GAUSERS_FORM_LBL_ACTION_ACT_NAME" />
+
+		<field name="cat_id" type="category" extension="com_gausers.actions"
+			description="COM_GAUSERS_FORM_DESC_ACTION_CAT_ID"
+			label="COM_GAUSERS_FORM_LBL_ACTION_CAT_ID" />
+
+	</fieldset>
+
+	<fieldset name="connections" addfieldprefix="GlennArkell\Component\Garafsqn\Administrator\Field">
+
+		<field name="crew_connect" type="Crewmbr"
+			description="COM_GAUSERS_FORM_DESC_CREW"
+			label="COM_GAUSERS_FORM_LBL_CREW" />
+
+		<field name="crew_relation" type="Crewrelat"
+			description="COM_GAUSERS_FORM_DESC_RELAT"
+			label="COM_GAUSERS_FORM_LBL_RELAT" />
+
+		<field name="closest" type="radio" default="0"
+			layout="joomla.form.field.radio.switcher"
+            description="COM_GAUSERS_FORM_DESC_CLOSEST"
+			label="COM_GAUSERS_FORM_LBL_CLOSEST" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="upd_notif" type="radio" default="1"
+			layout="joomla.form.field.radio.switcher"
+            description="COM_GAUSERS_FORM_DESC_UPDNOTIF"
+			label="COM_GAUSERS_FORM_LBL_UPDNOTIF" >
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
 	</fieldset>
 
 	<fieldset name="other">
@@ -1094,6 +1128,16 @@
 			validate="equals"
 		/>
 
+		<field name="new_end_date" type="calendar"
+			filterFormat="Y-m-d" translateformat="true"
+            description="COM_GAUSERS_FORM_DESC_GAUSER_NEW_END_DATE"
+			hint="COM_GAUSERS_DATE_HINT"
+			label="COM_GAUSERS_FORM_LBL_GAUSER_NEW_END_DATE" />
+
+		<field name="group_id" type="usergrouplist" default="2"
+			description="COM_GAUSERS_FORM_DESC_GROUP_ID"
+			hint="COM_GAUSERS_FORM_LBL_GROUP_ID"
+			label="COM_GAUSERS_FORM_LBL_GROUP_ID" />
 
 	</fieldset>
 </form>

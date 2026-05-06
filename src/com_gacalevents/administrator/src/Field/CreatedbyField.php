@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -11,8 +11,8 @@ namespace GlennArkell\Component\Gacalevents\Administrator\Field;
 
 defined('JPATH_BASE') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Form\FormField;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormField;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 
 /**
@@ -51,7 +51,7 @@ class CreatedbyField extends FormField
 		}
 		else
 		{
-			$user   = GacaleventsHelper::getSpecificUser();
+			$user   = Factory::getApplication()->getIdentity();
 			$html[] = '<input type="hidden" name="' . $this->name . '" value="' . $user->id . '" />';
 		}
 

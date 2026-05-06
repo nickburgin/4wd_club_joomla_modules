@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
@@ -13,17 +13,19 @@ namespace GlennArkell\Component\Gausers\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Component\ComponentHelper;
-use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
-use \GlennArkell\Component\Gausers\Administrator\Helper\GainvoiceHelper;
-use \GlennArkell\Component\Gausers\Administrator\Helper\GaemailHelper;
-use \GlennArkell\Component\Gausers\Administrator\Helper\GafamilyHelper;
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\User\UserHelper;
+use GlennArkell\Component\Gausers\Administrator\Helper\GanamesHelper;
+use GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
+use GlennArkell\Component\Gausers\Administrator\Helper\GainvoiceHelper;
+use GlennArkell\Component\Gausers\Administrator\Helper\GaemailHelper;
+use GlennArkell\Component\Gausers\Administrator\Helper\GafamilyHelper;
 
 /**
  * Item model.
@@ -43,7 +45,7 @@ class InvoiceModel extends ItemModel
 	protected function populateState()
 	{
 		$app  = Factory::getApplication('com_gausers');
-		$user = GausersHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		// Check published state
 		if ((!$user->authorise('core.edit.state', 'com_gausers')) && (!$user->authorise('core.edit', 'com_gausers')))
@@ -194,7 +196,7 @@ class InvoiceModel extends ItemModel
 			$table = $this->getTable();
 
 			// Get the current user object.
-			$user = GausersHelper::getSpecificUser();
+			$user = Factory::getApplication()->getIdentity();
 
 			// Attempt to check the row out.
 			if (method_exists($table, 'checkout')) {
@@ -293,23 +295,20 @@ class InvoiceModel extends ItemModel
 	 */
 	public function generateInv()
 	{
-		$financialOnly = 1;
-		$compname = 'com_gausers';
+		$app = Factory::getApplication();
+		$app->getLanguage()->load('com_gausers', JPATH_ADMINISTRATOR);
+		$sitename = $app->get('sitename');
 
-		$lang = Factory::getLanguage();
-		$lang->load($compname, JPATH_ADMINISTRATOR);
-		$sitename = Factory::getConfig()->get('sitename');
+		$params = ComponentHelper::getParams('com_gausers');
 
-		$params = ComponentHelper::getParams($compname);
-
-		$cutoff_date  = substr($params->get('cutoff_date'),0,10);
+		$useCutoff  = $params->get('use_cutoff');
+		$cutoff_date  = $params->get('cutoff_date');
 		$exclude_email_pref  = $params->get('exclude_email_pref');
 		$mship_exempt  = $params->get('mship_exempt');
 		$mship_extend  = $params->get('mship_extend');
 		$group_exempt  = $params->get('group_exempt');
 		$preLen = strlen($exclude_email_pref);
 		$default_mship  = $params->get('default_mship', 1);
-		$useCutoff  = $params->get('use_cutoff');
 		$exclude_member  = $params->get('exclude_member');
 		$prof_pref  = $params->get('profile_suffix', 'b4wdc');
 
@@ -320,30 +319,53 @@ class InvoiceModel extends ItemModel
         $link_family  = $params->get('link_family', 'mship_no');
         $linkFamily  = $prof_pref.'.'.$link_family;
         $mship_family  = $params->get('mship_family', array());
+        
+		$defMship = GausersHelper::getMshiptypeID($default_mship);
 
-		$members = GausersHelper::getMembersDetails($params, $financialOnly);
+        // get dates using the start date in params
+        $oldExpDate = GainvoiceHelper::setupOldEndDate($params, $defMship);
+        $newExpDate = GainvoiceHelper::setupNewEndDate($params, $defMship);
+
+        // flash up a message to show dates
+        $app->enqueueMessage($oldExpDate.' - '.$newExpDate, 'notice');
+
+		// get all the members - currently financial only
+        $members = GausersHelper::getMembersDetails($params, 1);
+
 		// cycle through the member records to generate the invoice and send
 		if (is_array($members)) {
 			foreach ($members AS $m) {
 
+                $m->oldExpDate = $oldExpDate;
+                $m->newExpDate = $newExpDate;
+
                 // get last mship record
-                $mship = GainvoiceHelper::getLastInvoiceMship($m->id);
+                $lastInv = GainvoiceHelper::getLastInvoiceMship($m->id);
 
                 $groups = GausersHelper::getSpecificUser($m->id)->get('groups');
 
-                if (empty($mship)) {
+                if (!$lastInv || empty($lastInv)) {
                     // if no past mship invoice, set default details
-                    $mship = GausersHelper::getMshiptypeID($default_mship);
+                    $lastInv = $defMship;
+                }
+
+                // if paid up for next year, skip
+                if (isset($lastInv->end_date) && $lastInv->end_date > $newExpDate) {
+                    $app->enqueueMessage(Text::sprintf('COM_GAUSERS_USER_PAID_INADVANCE', $m->name), 'notice');
+                    continue;
                 }
 
                 // if to be excluded don't do anymore go to next record
                 if (in_array($m->id, $exclude_member)) {
-                    Factory::getApplication()->enqueueMessage(Text::sprintf('COM_GAUSERS_USER_TOBE_EXCLUDED', $m->name));
+                    $app->enqueueMessage(Text::sprintf('COM_GAUSERS_USER_TOBE_EXCLUDED', $m->name), 'notice');
                     continue;
                 }
 
-                // check for action record switching to life member
-                if (strtolower($mship->title) == 'life') { continue; }
+                // check for membership record for life member
+                if (strtolower($lastInv->title) == 'life') {
+                    GainvoiceHelper::createNewInvoiceRec($m->id, 0.00, $m->mship, $newExpDate);
+                    continue;
+                }
 
                 // check if an action identifying a change to life member to add zero mship record
                 $acts = GausersHelper::getRecordList('#__gausers_actions', 'a.user_id', $m->id, 'a.created_date', 'DESC');
@@ -355,10 +377,7 @@ class InvoiceModel extends ItemModel
                             $msLife = GausersHelper::getRecord('#__gausers_mshiptypes', 'title', $msTitle);
                             $msLife->mship_id = $msLife->id;
                             // Create a new mship record for new life membership
-                            $lastInvDate = new Date(strtotime($params->get('invoice_date') ?? ''));
-                            $eDate = $lastInvDate->modify('+2 YEAR');
-                            $expDate = date_format($eDate,'Y-m-d H:i:s');
-                            GainvoiceHelper::createNewInvoiceRec($m->id, 0.00, $msLife, $expDate);
+                            GainvoiceHelper::createNewInvoiceRec($m->id, 0.00, $msLife, $newExpDate);
                             $moveToNextMbr = true;
                         }
                     }
@@ -367,19 +386,16 @@ class InvoiceModel extends ItemModel
                     }
                 }
 
-                $m->mship = $mship;
+                $m->mship = $lastInv;
 
                 // if exempt don't do anymore go to next record
-                if (in_array($m->mship->mship_id, $mship_exempt)) {
-                    Factory::getApplication()->enqueueMessage(Text::sprintf('COM_GAUSERS_USER_MSHIP_EXEMPT', $m->name));
+                if (is_array($mship_exempt) && in_array($m->mship->mship_id, $mship_exempt)) {
+                    $app->enqueueMessage(Text::sprintf('COM_GAUSERS_USER_MSHIP_EXEMPT', $m->name), 'notice');
 
                     // check for life member to update expiry date
                     if (in_array($m->mship->mship_id, $mship_extend)) {
                         // setup new expiry date
-                        $new_expDate = new Date($m->mship->end_date);
-                        $new_expDate = $new_expDate->modify('+1 years');
-                        $new_expDate = $new_expDate->format('Y-m-d');
-                        self::extendExpiry($mship->id, $new_expDate);
+                        self::extendExpiry($lastInv->id, $newExpDate);
                     }
                     continue;
                 }
@@ -387,7 +403,7 @@ class InvoiceModel extends ItemModel
                 // check if member belongs to the group to be ignored
                 $ignoreMember = false;
                 foreach ($groups as $g) {
-                    if (in_array($g, $group_exempt)) { 
+                    if (is_array($group_exempt) && in_array($g, $group_exempt)) {
                         $ignoreMember = true;
                     }
                 }
@@ -396,18 +412,25 @@ class InvoiceModel extends ItemModel
                 }
 
                 // if registered after cut-off date skip to next record
-                $registerDate = substr($m->registerDate,0,10);
-                if ($useCutoff && $registerDate >= $cutoff_date) {
-                    Factory::getApplication()->enqueueMessage(Text::sprintf('COM_GAUSERS_CUTOFF_MESSAGE', $m->name.' - '.$registerDate, $cutoff_date), 'warning');
+                //$registerDate = substr($m->registerDate,0,10);
+                $registerDate = new Date(strtotime($m->registerDate));
+                $regDate = date_format($registerDate,'Y-m-d');
+                if ($useCutoff && $regDate >= $cutoff_date) {
+                    $app->enqueueMessage(Text::sprintf('COM_GAUSERS_CUTOFF_MESSAGE', $m->name.' - '.$regDate, $cutoff_date), 'notice');
+                    $body = Text::sprintf('COM_GAUSERS_INVOICE_EMAIL_SALUTATION',$m->name);
+                    $body .= Text::sprintf('COM_GAUSERS_CUTOFF_MESSAGE', $regDate, $cutoff_date);
+                    $subject = Text::_('COM_GAUSERS_INVOICE_EMAIL_SUBJECT');
+                    GaemailHelper::sendEmail(array($m->email), $body, $subject, null);
+                    self::extendExpiry($lastInv->id, $newExpDate);
                     continue;
                 }
 
         		// set up if family groups are being used
-                if ($allowFamily && in_array($m->mship->mship_id, $mship_family)) {
+                if ($allowFamily && is_array($mship_family) && in_array($m->mship->mship_id, $mship_family)) {
                     // get family member records
                     $family_mbrs = GafamilyHelper::getFamilyMembers($m->id, $linkFamily);
                     if ($family_mbrs === false) {
-                        Factory::getApplication()->enqueueMessage(Text::_('Family member of Primary - '.$m->name), 'warning');
+                        $app->enqueueMessage(Text::_('Family member of Primary - '.$m->name), 'notice');
                         continue;
                     } else {
                         // load returned array of family members (id,mship_no)
@@ -416,13 +439,12 @@ class InvoiceModel extends ItemModel
                 } else {
                     $m->family_mbrs = 0;
                 }
-
                 // now generate the invoice pdf and db record
                 $inv = GainvoiceHelper::mainInvoiceCreation($m->id, $m, $params);
 
                 // if no invoice generated then skip to next record
-                if (!is_file($inv) && $inv) { 
-                    Factory::getApplication()->enqueueMessage(Text::_('Invoice zero - '.$m->name), 'warning');
+                if (!is_file($inv) && $inv) {
+                    $app->enqueueMessage(Text::_('Invoice zero - '.$m->name), 'warning');
                     continue;
                 }
 
@@ -432,21 +454,55 @@ class InvoiceModel extends ItemModel
 					if (is_file($inv)) {
 						$body .= Text::_('COM_GAUSERS_INVOICE_EMAIL_BODY');
 					} elseif ($inv) {
-						$body .= Text::sprintf('COM_GAUSERS_CUTOFF_MESSAGE', $registerDate, $cutoff_date);
+						$body .= Text::sprintf('COM_GAUSERS_CUTOFF_MESSAGE', $regDate, $cutoff_date);
 					}
 					$body .= Text::sprintf('COM_GAUSERS_INVOICE_EMAIL_SIGNOFF',$sitename);
 					$subject = Text::_('COM_GAUSERS_INVOICE_EMAIL_SUBJECT');
 					GaemailHelper::sendEmail(array($m->email), $body, $subject, $inv);
 				}
 			}
+    		GausersHelper::updateExtensionParams('com_gausers');
 		} else {
 			// no members found
-			Factory::getApplication()->enqueueMessage(Text::_('COM_GAUSERS_NO_MEMBERS_FOUND'), 'danger');
+			$app->enqueueMessage(Text::_('COM_GAUSERS_NO_MEMBERS_FOUND'), 'danger');
 		}
-		GausersHelper::updateExtensionParams($compname);
 
 		return true;
 
 	}
 
+	/**
+	 * Method to create a PDF invoice
+	 * @return  bool
+	 */
+	public function regenInvoice($id = 0)
+	{
+		$app = Factory::getApplication();
+		$app->getLanguage()->load('com_gausers', JPATH_ADMINISTRATOR);
+
+		$params = ComponentHelper::getParams('com_gausers');
+
+		$invRec = GausersHelper::getRecord('#__gausers_invoices', 'id', $id);
+		$user = GanamesHelper::breakdownNamesFromUserID($invRec->user_id, 'partner');
+		$app->setUserState('com_gausers.user.data', $user);
+
+		$mship = GausersHelper::getRecord('#__gausers_mshiptypes', 'id', $invRec->mship_id);
+		$nextinv  = str_pad($id, 6, '0', STR_PAD_LEFT);
+		$app->setUserState('com_gausers.nextinv.data', $nextinv);
+
+        $data = array();
+		$data['nextinv'] = $nextinv;
+		$data['invRec'] = $invRec;
+		$data['mship'] = $mship;
+		
+		$invFile = GainvoiceHelper::createAdHocPDF($data, $id, $params);
+		if (\is_file($invFile) && $invFile) {
+            $app->enqueueMessage(Text::_('COM_GAUSERS_NO_MEMBERS_FOUND'), 'danger');
+            return $invFile;
+        }
+        
+        return false;
+
+
+	}
 }

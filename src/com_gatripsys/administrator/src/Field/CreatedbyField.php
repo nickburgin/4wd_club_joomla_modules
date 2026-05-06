@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    Com_Gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -11,8 +11,8 @@ namespace GlennArkell\Component\Gatripsys\Administrator\Field;
 
 defined('JPATH_BASE') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Form\FormField;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormField;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 
 /**

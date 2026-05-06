@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.0.7
+ * @version    4.1.2
  * @package    Com_Gamerchandise
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -17,9 +17,12 @@ use \Joomla\CMS\HTML\HTMLHelper;
 use \Joomla\CMS\Layout\LayoutHelper;
 use \GlennArkell\Component\Gamerchandise\Administrator\Helper\GamerchandiseHelper;
 
-HTMLHelper::_('bootstrap.tooltip');
-HTMLHelper::_('behavior.multiselect');
-HTMLHelper::_('formbehavior.chosen', 'select');
+// load any assets required
+$wa = $this->document->getWebAssetManager();
+$wa->usePreset('com_gamerchandise.gamerchandisepreset');
+$wa->useScript('keepalive')
+	->useScript('form.validate');
+
 
 // Load admin language file
 $lang = Factory::getLanguage();

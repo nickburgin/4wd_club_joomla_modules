@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,23 +12,23 @@ namespace GlennArkell\Component\Gausers\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\Data\DataObject;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\Filesystem\Path;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\CMS\User\User;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\Data\DataObject;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\Filesystem\Path;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\User\User;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Plugin\PluginHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 /**

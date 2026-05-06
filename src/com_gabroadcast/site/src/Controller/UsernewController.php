@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    4.2.1
+ * @version    4.3.3
  * @package    Com_Gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
@@ -75,7 +75,7 @@ class UsernewController extends BaseController
 		$app = Factory::getApplication();
 
 		// Checking if the user can remove object
-		$user = GabroadcastHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		if ($user->authorise('core.edit', 'com_gabroadcast') || $user->authorise('core.edit.state', 'com_gabroadcast')) {
 			$model = $this->getModel('Usernew', 'Site');
@@ -126,7 +126,7 @@ class UsernewController extends BaseController
 		$app = Factory::getApplication();
 
 		// Checking if the user can remove object
-		$user = GabroadcastHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 		$Itemid = $app->getUserState('com_gabroadcast.menu.Itemid');
 
 		if ($user->authorise('core.delete', 'com_gabroadcast')) {
@@ -188,7 +188,7 @@ class UsernewController extends BaseController
 		$app = Factory::getApplication();
 
 		// Checking if the user can remove object
-		$user = GabroadcastHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		if ($user->authorise('core.manage', 'com_gabroadcast')) {
 			$model = $this->getModel('Usernew', 'Site');

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    5.1.6
+ * @version    6.0.0
  * @package    Com_Gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2017 Glenn Arkell
@@ -13,14 +13,14 @@ namespace GlennArkell\Component\Gausers\Administrator\View\Audit;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use \Joomla\CMS\Toolbar\ToolbarHelper;
-use \Joomla\CMS\Factory;
+use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Factory;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Helper\ContentHelper;
 
 /**
  * View to edit
@@ -69,7 +69,7 @@ class HtmlView extends BaseHtmlView
 		Factory::getApplication()->input->set('hidemainmenu', true);
 
 		$progNameL = 'audit';
-		$user  = GausersHelper::getSpecificUser();
+		$user  = Factory::getApplication()->getIdentity();
 		$isNew = ($this->item->id == 0);
 
 		if (isset($this->item->checked_out)) {

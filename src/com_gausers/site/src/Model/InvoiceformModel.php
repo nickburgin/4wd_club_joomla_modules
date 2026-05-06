@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
@@ -12,19 +12,21 @@ namespace GlennArkell\Component\Gausers\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\MVC\Model\FormModel;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\Filesystem\Path;
-use \Joomla\CMS\User\User;
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\MVC\Model\FormModel;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\User\UserFactoryInterace;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\Path;
+use Joomla\CMS\User\User;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GainvoiceHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GaemailHelper;
+
 
 /**
  * Form model.
@@ -84,7 +86,7 @@ class InvoiceformModel extends FormModel
             $table = $this->getTable();
 
             if ($table !== false && $table->load($id)) {
-                $user = GausersHelper::getSpecificUser();
+                $user = Factory::getApplication()->getIdentity();
                 $id   = $table->id;
 
                 $canEdit = $user->authorise('core.edit', 'com_gausers') || $user->authorise('core.create', 'com_gausers');
@@ -189,7 +191,7 @@ class InvoiceformModel extends FormModel
             $table = $this->getTable();
 
             // Get the current user object.
-            $user = GausersHelper::getSpecificUser();
+            $user = Factory::getApplication()->getIdentity();
 
             // Attempt to check the row out.
             if (method_exists($table, 'checkout')) {
@@ -254,13 +256,13 @@ class InvoiceformModel extends FormModel
     public function save($data)
     {
 		// get the current date-time based on timezone
-		//$date = GausersHelper::getTodaysDate();
+		//$date = Factory::getDate();
 		//$today = date_format($date,'Y-m-d H:i:s');
 		$today = Factory::getDate()->toSql;
 
         $id    = (!empty($data['id'])) ? $data['id'] : (int) $this->getState('invoice.id');
         $data['state'] = (!empty($data['state'])) ? $data['state'] : 1;
-        $user  = GausersHelper::getSpecificUser();
+        $user  = Factory::getApplication()->getIdentity();
         $data['created_by'] = (!empty($data['created_by'])) ? $data['created_by'] : $user->id;
         $data['created_date'] = (!empty($data['created_date'])) ? $data['created_date'] : $today;
 		$params = ComponentHelper::getParams('com_gausers');
@@ -337,7 +339,7 @@ class InvoiceformModel extends FormModel
      */
     public function delete($pk)
     {
-        $user = GausersHelper::getSpecificUser();
+        $user = Factory::getApplication()->getIdentity();
 
         
         if (empty($pk)) {
@@ -383,11 +385,11 @@ class InvoiceformModel extends FormModel
 	public function markAsPaid($data)
 	{
 		$params = ComponentHelper::getParams('com_gausers');
-		$user = GausersHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		$today = Factory::getDate()->toSql();
 
-		$data['paid_date'] = !empty($data['paid_date']) ? $data['paid_date'] : $today;
+		$data['paid_date'] = isset($data['paid_date']) && !empty($data['paid_date']) ? $data['paid_date'] : $today;
 
 		$table = $this->getTable();
 		$table->load($data['id']);
@@ -413,15 +415,18 @@ class InvoiceformModel extends FormModel
 		// trigger transaction creation in finance if necessary
 		$incl_finance = $params->get('incl_finance', 0);
 		if ($incl_finance) {
-			$data['mship_id'] = $table->mship_id;
+			$data['mship_id'] = $table->mship_id; // identifies single/family etc
             GausersHelper::createFinanceTrans($data);
 		}
 		/* ---------------------------------------------------------------- */
         $temp_mship  = $params->get('temp_mship', 0);
 		if ($table->mship_id == $temp_mship) {
             Factory::getApplication()->enqueueMessage(Text::_("COM_GAUSERS_TEMPMBR_BLOCK"), "message");
+            return $table->id;
         } else {
-            $u = User::getInstance((int) $table->user_id);
+            // get the user details for the email
+            $u = GausersHelper::getSpecificUser($table->user_id);
+
     		if ($u->block && !$tempMbr) {
                 // set user record to be unblocked
                 $unblockedOK = GausersHelper::unblockUser($table->user_id, 0);

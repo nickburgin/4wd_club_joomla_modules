@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,14 +12,14 @@ namespace GlennArkell\Component\Gausers\Site\Controller;
 // No direct access
 \defined('_JEXEC') or die;
 
-use \Joomla\CMS\Application\SiteApplication;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Multilanguage;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Controller\BaseController;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Multilanguage;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Utilities\ArrayHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 /**
@@ -74,7 +74,7 @@ class CurrentuserController extends BaseController
 		$app = Factory::getApplication();
 
 		// Checking if the user can remove object
-		$user = GausersHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		if ($user->authorise('core.edit', 'com_gausers') || $user->authorise('core.edit.state', 'com_gausers')) {
 			$model = $this->getModel('Currentuser', 'Site');
@@ -118,7 +118,7 @@ class CurrentuserController extends BaseController
             $this->setMessage(Text::_('COM_GAUSERS_CANCELLED_SAFELY'));
             $this->setRedirect(Route::_('index.php?option=com_gausers&view=currentuser&id='.$fromScrn, false));
         } else {
-            $user = GausersHelper::getSpecificUser();
+            $user = Factory::getApplication()->getIdentity();
             $app->enqueueMessage(Text::_('COM_GAUSERS_CANCELLED_SAFELY'), 'message');
             if ($user->authorise('core.manage', 'com_gausers')) {
                 $this->setRedirect(Route::_('index.php?option=com_gausers&view=currentusers', false));
@@ -218,6 +218,27 @@ class CurrentuserController extends BaseController
 			$this->setMessage(Text::_('COM_GAUSERS_BULKBLOCK_SUCCESSFULLY'));
 		}
 		$this->setRedirect(Route::_('index.php?option=com_gausers&view=invoices', false));
+
+    }
+
+    public function delAction()
+	{
+		// Check for request forgeries.
+		$this->checkToken('get');
+
+		// Initialise variables.
+		$app   = Factory::getApplication();
+		$model = $this->getModel('Currentuserform', 'Site');
+        $act_id	= $app->input->get('act_id');
+
+		// Attempt to block all users with outstanding invoices.
+		$return = $model->delAction($act_id);
+
+		// Redirect to the list screen.
+		if ($return) {
+			$this->setMessage(Text::_('COM_GAUSERS_ITEM_DELETED_SUCCESSFULLY'));
+		}
+		$this->setRedirect(Route::_('index.php?option=com_gausers&view=currentuser&id='.$return, false));
 
     }
 
@@ -372,16 +393,24 @@ class CurrentuserController extends BaseController
 
     }
 
+	/**
+	 * Method to generate a members attendance list
+	 * @params    $finstatus filter on financial status
+	 * @params    $mship filter on membership type
+	 * @return    void
+	 */
     public function genMembersList()
 	{
 		// Check for request forgeries.
 		$this->checkToken('get');
+		$finstatus	= Factory::getApplication()->input->get('finstatus');
+		$mship	= Factory::getApplication()->input->get('mship');
 
 		// Initialise variables.
 		$model = $this->getModel('Currentuserform', 'Site');
 
 		// Process the request.
-		$return = $model->genMembersList();
+		$return = $model->genMembersList($finstatus, $mship);
 
 		// Redirect to the list screen.
 		$this->setRedirect(Route::_('index.php?option=com_gausers&view=currentusers', false));

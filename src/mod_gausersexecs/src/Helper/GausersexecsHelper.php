@@ -1,7 +1,7 @@
 <?php
 /*
 # ------------------------------------------------------------------------
-# @version     5.1.6
+# @version     5.3
 # @copyright   Copyright (C) 2014. All rights reserved.
 # @license     GNU General Public License version 2 or later; see LICENSE.txt
 # Author:      Glenn Arkell
@@ -14,48 +14,50 @@ namespace GlennArkell\Module\Gausersexecs\Site\Helper;
 // no direct access
 defined('_JEXEC') or die( 'Restricted access' );
 
-use \Joomla\CMS\Application\CMSApplication;
 use \Joomla\CMS\Factory;
 use \Joomla\Filesystem\Path;
 use \Joomla\Filesystem\File;
 use \Joomla\Filesystem\Folder;
 use \Joomla\CMS\HTML\HTMLHelper;
 use \Joomla\CMS\Language\Text;
+use \Joomla\CMS\Application\SiteApplication;
+use \Joomla\Database\DatabaseAwareInterface;
+use \Joomla\Database\DatabaseAwareTrait;
 use \Joomla\Registry\Registry;
 
-class GausersexecsHelper
+class GausersexecsHelper implements DatabaseAwareInterface
 {
-	var $execs;
+    use DatabaseAwareTrait;
 
     /**
      * Retrieves the designated slides to show
      * @param array $params An object containing the module parameters
      * @access public
      */
-    public static function getExecMembers(Registry $params)
+    public static function getList( Registry $params, SiteApplication $app )
     {
 		$show_past = $params->get('show_past', 0);
     	// Query the adverts table to get the ads to display
    		$db = Factory::getContainer()->get('DatabaseDriver');
    		$query = $db->getQuery(true);
-   		$query->select(' a.*, DATE_FORMAT(end_term, "%D %b %Y") AS disp_edate');
-   		$query->from('#__gausers_club_execs AS a');
+   		$query->select(' * ');
+   		$query->from($db->quoteName('#__gausers_club_execs'));
    		if ($show_past) {
-		    $query->where('a.state IN (0,1) ');
+		    $query->where($db->quoteName('state') . ' IN (0,1) ');
 		} else {
-			$query->where('a.state = 1 ');
+			$query->where($db->quoteName('state') . ' = ' . (int) 1);
 		}	
-   		$query->order('a.end_term DESC ');
+   		$query->order($db->quoteName('end_term') . ' DESC ');
    		$db->setQuery((string)$query);
 
 	    try {
-	        $execs = $db->loadObjectList();
+	        $items = $db->loadObjectList();
 	    } catch (RuntimeException $e) {
 	        Factory::getApplication()->enqueueMessage($e->getMessage());
 	        return false;
 	    }
 
-    	return $execs;
+    	return $items;
     }
 }
 

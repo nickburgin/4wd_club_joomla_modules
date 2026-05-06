@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -11,15 +11,16 @@ namespace GlennArkell\Component\Gausers\Administrator\Helper;
 
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\Filesystem\Path;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\Path;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GalistmembersPDFHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GanamesHelper;
+use \GlennArkell\Component\Gausers\Administrator\Helper\GainvoiceHelper;
 
 class GalistmembersHelper
 {
@@ -41,7 +42,7 @@ class GalistmembersHelper
 		$query	= $db->getQuery(true);
         $query->clear();
         // primary member name
-        $query->select(' id, SUBSTRING_INDEX(SUBSTRING_INDEX(name, \' \', 1), \' \', -1) AS first_name ');
+        $query->select(' id, name, SUBSTRING_INDEX(SUBSTRING_INDEX(name, \' \', 1), \' \', -1) AS first_name ');
         $query->select(' If( length(name) - length(replace(name, \' \', \'\'))>1, SUBSTRING_INDEX(SUBSTRING_INDEX(name, \' \', 2), \' \', -1) ,NULL) as middle1_name ');
         $query->select(' If( If( length(name) - length(replace(name, \' \', \'\'))>1, SUBSTRING_INDEX(SUBSTRING_INDEX(name, \' \', 3), \' \', -1) ,NULL) = SUBSTRING_INDEX(SUBSTRING_INDEX(name, \' \', 4), \' \', -1), null, If( length(name) - length(replace(name, \' \', \'\'))>1, SUBSTRING_INDEX(SUBSTRING_INDEX(name, \' \', 3), \' \', -1) ,NULL)) as middle2_name ');
         $query->select(' SUBSTRING_INDEX(SUBSTRING_INDEX(name, \' \', 4), \' \', -1) AS last_name ');
@@ -101,7 +102,7 @@ class GalistmembersHelper
 	 *  This is a mechanism to create a PDF list of members
 	 *
 	*/
-	public static function createPDF()
+	public static function createPDF($finstatus = null, $mship = null)
 	{
 		Factory::getLanguage()->load('com_gausers', JPATH_ADMINISTRATOR);
 		$params = ComponentHelper::getParams('com_gausers');
@@ -124,14 +125,29 @@ class GalistmembersHelper
         // 40 lines per page
 
         $pdf->SetFont('Arial','',10); // font-family, font-weight (B), font-size
-
+        $data = array();
         foreach ($members AS $m) {
+            // get last inv
+            $lastInv = GainvoiceHelper::getLastInvoiceMship($m->id);
+
+            // test if member needs to be included
+            if ($finstatus == 1) {
+                if (!isset($lastInv) || !$lastInv || $lastInv === null) { continue; }
+            }
+            if ($mship) {
+                if ($mship != $lastInv->mship_id) { continue; }
+            }
+
             if ($joint_mship) {
                 $name = self::combineNames($m);
             } else {
-                $name = $mbr->last_name.', '.$mbr->first_name;
+                $name = $m->name;
             }
-
+            if ($m->id == 531) {
+            $data['mbr'] = $m;
+            $data['inv'] = $lastInv;
+            Factory::getApplication()->setUserState('com_gausers.test.data', $data);
+            }
             $cntr++;
             if ($cntr == 1) { $m1 = $name; continue; }
             if ($cntr == 2) {
@@ -151,7 +167,7 @@ class GalistmembersHelper
 
         // clean up
         if ($cntr == 1) {
-            $pdf->Cell(5, $lh, "", 0, 0, "L"); // Sets an spacer
+            $pdf->Cell(10, $lh, "", 0, 0, "L"); // Sets an spacer
             $pdf->Cell(5, $lh, "", "TRBL", 0, "L");
             $pdf->Cell(10, $lh, "", 0, 0, "L"); // Sets an spacer
             $pdf->Cell(40, $lh, $m1, 0, 0, "L");

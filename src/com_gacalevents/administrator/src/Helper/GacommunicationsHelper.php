@@ -1,7 +1,8 @@
 <?php
 /**
- * @version    3.0.0
- * @package    Com_Gacalevents
+ * @version    3.3.1
+ * @package    pkg_gacalevents
+ * @subpackage com_gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,17 +13,17 @@ namespace GlennArkell\Component\Gacalevents\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\Data\DataObject;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\Filesystem\Path;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\Data\DataObject;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Installer\Installer;
+use Joomla\Filesystem\Path;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GaemailHelper;
 
@@ -43,7 +44,7 @@ class GacommunicationsHelper
         $recipients = array();
 	    $app		= Factory::getApplication();
         // get the name of the user loading this record
-        $user	= GacaleventsHelper::getSpecificUser();
+        $user	= Factory::getApplication()->getIdentity();
         $user_id	= $user->get('id');
         $user_name	= $user->get('name');
         $user_email	= $user->get('email');
@@ -123,7 +124,7 @@ class GacommunicationsHelper
         $event = GacaleventsHelper::getEvent($id);
 
         // get the name of the user loading this record
-        $user	= GacaleventsHelper::getSpecificUser();
+        $user	= Factory::getApplication()->getIdentity();
         $userEmail[] = $user->email;
         $bcc[] = $user->email;
 		$allUsers = Access::getUsersByGroup($reminder_gp);
@@ -185,6 +186,8 @@ class GacommunicationsHelper
         $mailfrom	= $app->get('mailfrom');       // system email address
         $fromname	= $app->get('fromname');       // Site name or system name
         $bcc[] = $mailfrom;
+        $params = ComponentHelper::getParams('com_gacalevents');
+        $test = $params->get('set_test', 0);
 
         // Build the email and send
         $mail = Factory::getMailer();
@@ -208,9 +211,12 @@ class GacommunicationsHelper
             $mail->addAttachment($attachfile);
         }
 
-		$sent = $mail->Send();
+		if (!$test) {
+            $sent = $mail->Send();
+            return $sent;
+        }
 
-        return $sent;
+        return true;
 	}
 
 }

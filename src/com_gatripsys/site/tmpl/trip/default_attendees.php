@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    Com_Gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -9,14 +9,15 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\Session\Session;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GainvoiceHelper;
+use \GlennArkell\Component\Gatripsys\Administrator\Helper\GamodalHelper;
 
 $tripRec = $displayData['view'];
 
@@ -29,10 +30,35 @@ $user = GatripsysHelper::getSpecificUser();
 $exEmail = strlen($tripRec->exclude_email);
 $bookCntr = 0;
 $persons = 0;
+$totPeople = 0;
 $wlHeader = 0;
 $waitList = '';
 $totBookings = count($tripRec->bookings);
+foreach ($tripRec->bookings as $b) {$totPeople = $totPeople + $b->in_party;}
+/*
+						<a class="btn btn-danger btn-mini pull-right" href="<?php echo Route::_('index.php?'.http_build_query($attdel, '', '&amp;'), false); ?>"
+                            title="<?php echo Text::_('GABOOKING_CANCEL'); ?>"><i class="icon-trash"></i>
+						</a>
 
+                        	<a class="btn btn-danger btn-mini" href="#deleteModal" role="button" data-bs-toggle="modal"
+                                title="<?php echo Text::_('GABOOKING_CANCEL'); ?>"><i class="icon-trash"></i>
+                        	</a>
+                        	<div id="deleteModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="deleteModal">
+                        		<div class="modal-header">
+                        			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        			<h3><?php echo Text::_('GABOOKING_CANCEL'); ?></h3>
+                        		</div>
+                        		<div class="modal-body">
+                        			<p><?php echo Text::sprintf('GABOOKING_DELETE_CONFIRM', $booking->id); ?></p>
+                        		</div>
+                        		<div class="modal-footer">
+                        			<button class="btn" data-dismiss="modal">Close</button>
+                        			<a href="<?php echo Route::_($attdelLink, false); ?>" class="btn btn-danger">
+                        				<?php echo Text::_('GABOOKING_CANCEL'); ?>
+                        			</a>
+                        		</div>
+                        	</div>
+*/
 ?>
 <table class="table table-striped" id="attendList">
 	<thead>
@@ -76,7 +102,10 @@ $totBookings = count($tripRec->bookings);
 
                 // set the style to show attendee on a wait list
 				if ( $tripRec->waitlist_avail ) {
-                    if ( $tripRec->waitlist_all && $tripRec->max_no && $totBookings > $tripRec->max_no) {
+                    if ( $tripRec->waitlist_all && (
+                            ($tripRec->max_no && $totBookings > $tripRec->max_no) || ($tripRec->max_people && $totPeople > $tripRec->max_people)
+                            )
+                        ) {
                         $waitList = ' color:red;';
                     } else {
                         if (($tripRec->max_no && $bookCntr > $tripRec->max_no) || ($tripRec->max_people && $persons > $tripRec->max_people)) {
@@ -135,11 +164,17 @@ $totBookings = count($tripRec->bookings);
 						<?php if ($tripRec->trip_cost == '0.00' || ($booking->state == 0 && $tripRec->invOnApproval)) : ?>
 							<?php echo $bhtml .= HTMLHelper::_('bootstrap.renderModal', $bmodname, $bookparams); ?>
 						<?php endif; ?>
-						<?php $attdel = GatripsysHelper::getHTTPQuery(null, 'task', 'attendee.removeAttendee', 'id', $booking->id); ?>
+						<?php // Remove atttendee's booking - use a warning popup ?>
+                        <?php $attdel = GatripsysHelper::getHTTPQuery(null, 'view', 'attendeeform', 'id', $booking->id); ?>
 						<?php $attdel = GatripsysHelper::getHTTPQuery($attdel, null, null, 'trip_id', $tripRec->id); ?>
-						<a class="btn btn-danger btn-mini pull-right" href="<?php echo Route::_('index.php?'.http_build_query($attdel, '', '&amp;'), false); ?>"
-                            title="<?php echo Text::_('GABOOKING_CANCEL'); ?>"><i class="icon-trash"></i>
-						</a>
+						<?php $attdel = GatripsysHelper::getHTTPQuery($attdel, null, null, 'layout', 'modaldelete'); ?>
+						<?php $attdel = GatripsysHelper::getHTTPQuery($attdel, null, null, 'tmpl', 'component'); ?>
+                        <?php
+                            $actionDelBtn = GamodalHelper::linkedModalButton($attdel, $booking->id, 'danger btn-mini', '', 'GABOOKING_DELETE_CONFIRM', 'icon-trash', $booking->attend_name);
+                            echo $actionDelBtn;
+                        ?>
+
+
 					<?php endif; ?>
 					<?php if($tripRec->trip_cost > '0.00' && $tripRec->canInvoice && $booking->inv_state == null && $tripRec->manual_inv) : ?>
 						<?php $crInv = GatripsysHelper::getHTTPQuery(null, 'task', 'attendeeform.createInvoice', 'att_id', $booking->id); ?>

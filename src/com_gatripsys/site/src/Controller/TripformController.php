@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    com_gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -19,7 +19,7 @@ use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Component\ComponentHelper;
 
 /**
  * Form class.
@@ -77,8 +77,8 @@ class TripformController extends FormController
 		$model = $this->getModel('Tripform', 'Site');
 
 		// Get the user data.
-		$data = Factory::getApplication()->input->get('jform', array(), 'array');
-		$files = Factory::getApplication()->input->files->get('jform', '', 'array');
+		$data = $app->input->get('jform', array(), 'array');
+		$files = $app->input->files->get('jform', '', 'array');
 
 		// Validate the posted data.
 		$form = $model->getForm();
@@ -166,7 +166,7 @@ class TripformController extends FormController
 		$app->setUserState('com_gatripsys.edit.trip.id', null);
 
 		// Redirect to the list screen.
-		$this->setMessage(Text::_('COM_GATRIPSYS_ITEM_SAVED_SUCCESSFULLY'));
+		$app->enqueueMessage(Text::_('COM_GATRIPSYS_ITEM_SAVED_SUCCESSFULLY'), 'message');
 		$menu = Factory::getApplication()->getMenu();
 		$item = $menu->getActive();
 		$url  = (empty($item->link) ? 'index.php?option=com_gatripsys&view=trips' : $item->link);

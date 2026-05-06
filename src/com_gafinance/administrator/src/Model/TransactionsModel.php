@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.2.3
  * @package    Com_Gafinance
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -11,12 +11,12 @@ namespace GlennArkell\Component\Gafinance\Administrator\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Helper\TagsHelper;
-use \Joomla\Database\ParameterType;
-use \Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Helper\TagsHelper;
+use Joomla\Database\ParameterType;
+use Joomla\Utilities\ArrayHelper;
 
 /**
  * Multiples model.
@@ -48,7 +48,7 @@ class TransactionsModel extends ListModel
 				'tran_amount', 'a.tran_amount',
 				'tran_desc', 'a.tran_desc',
 				'tran_file', 'a.tran_file',
-				'accnt_id', 'a.accnt_id',
+				'accnt_id', 'a.accnt_id', 'accnt_id_name',
 				'gst_amt', 'a.gst_amt',
 				'comment', 'a.comment',
 			);
@@ -132,6 +132,10 @@ class TransactionsModel extends ListModel
 		$query->select('user_id.name AS user_id_name');
 		$query->join('LEFT', '#__users AS user_id ON user_id.id = a.user_id');
                 
+		// Join over the user field 'user_id'
+		$query->select('accnt.accnt_name AS accnt_id_name');
+		$query->join('LEFT', '#__gafinance_accounts AS accnt ON accnt.id = a.accnt_id');
+                
 		// Filter by published state
 		$published = $this->getState('filter.state');
 		if (is_numeric($published)) {
@@ -173,9 +177,10 @@ class TransactionsModel extends ListModel
 		$orderCol  = $this->state->get('list.ordering', "a.tran_date");
 		$orderDirn = $this->state->get('list.direction', "DESC");
 
-		if ($orderCol && $orderDirn) {
-			$query->order($db->escape($orderCol . ' ' . $orderDirn));
-		}
+		$query->order($db->escape('a.tran_date DESC'));
+// 		if ($orderCol && $orderDirn) {
+// 			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+// 		}
 
 		return $query;
 	}

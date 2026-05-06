@@ -7,8 +7,8 @@
     <author>Glenn Arkell</author>
     <authorEmail>glenn@glennarkell.com.au</authorEmail>
     <authorUrl>https://www.glennarkell.com.au</authorUrl>
-    <version>4.2.1</version>
-    <description>A Simple Broadcast news to registered users</description>
+    <version>4.3.3</version>
+    <description>Broadcast news to registered users</description>
     
     <namespace path="src">GlennArkell\Component\Gabroadcast</namespace>
 
@@ -48,12 +48,7 @@
 			<language tag="en-GB">language/en-GB/com_gabroadcast.ini</language>
     </languages>
     <administration>
-        <menu img="class:fas fa-broadcast-tower">
-			COM_GABROADCAST
-			<params>
-				<dashboard>gabroadcast</dashboard>
-			</params>
-		</menu>
+        <menu img="class:fas fa-broadcast-tower">COM_GABROADCAST<params><dashboard>gabroadcast</dashboard></params></menu>
 
         <files folder="administrator">
             <filename>access.xml</filename>
@@ -71,10 +66,10 @@
         </languages>
     </administration>
 
-	<changelogurl>https://www.glennarkell.com.au/joomlaorg/components/j4/gabroadcast-changelog.xml</changelogurl>
+	<changelogurl>https://www.glennarkell.com.au/joomlaorg/components/j6/changes/com_gabroadcast-changelog.xml</changelogurl>
 
 	<updateservers>
-		<server type="extension" priority="1" name="Broadcast">https://www.glennarkell.com.au/joomlaorg/components/j4/gabroadcast-update.xml</server>
+		<server type="extension" priority="1" name="Broadcast">https://www.glennarkell.com.au/joomlaorg/components/j6/updates/com_gabroadcast-update.xml</server>
 	</updateservers>
 
 </extension>

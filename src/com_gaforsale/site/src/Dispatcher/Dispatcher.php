@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.0.2
+ * @version    4.2.2
  * @package    Com_Gaforsale
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -9,21 +9,21 @@
 
 namespace GlennArkell\Component\Gaforsale\Site\Dispatcher;
 
-defined('JPATH_PLATFORM') or die;
+\defined('_JEXEC') or die;
 
 use Joomla\CMS\Dispatcher\ComponentDispatcher;
 use Joomla\CMS\Language\Text;
 
 /**
  * ComponentDispatcher class
- * @since  4.0.2
+ * @since  4.2.2
  */
 class Dispatcher extends ComponentDispatcher
 {
 	/**
 	 * Dispatch a controller task. Redirecting the user if appropriate.
 	 * @return  void
-	 * @since   4.0.2
+	 * @since   4.2.2
 	 */
 	public function dispatch()
 	{

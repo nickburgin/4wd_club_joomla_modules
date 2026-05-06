@@ -1,5 +1,5 @@
 /**
- * @version     5.1.0
+ * @version     5.3.0
  * @package     com_gatripsys
  * @copyright   2021 Glenn Arkell
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -32,3 +32,19 @@ fieldset.radio label{
     width: 50px !important;
 }
 
+@media (max-width: 480px) {
+    .modal-dialog.jviewport-width60 {
+        width: 95vw !important;
+    }
+    .front-end-edit label {
+        margin-right: 5px;
+        display: block;
+        float: left;
+        text-align: left;
+        width: 130px !important;
+    }
+    
+    .front-end-edit .controls {
+        margin-left: 15px !important;
+    }
+}

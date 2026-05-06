@@ -83,7 +83,7 @@
 	</fieldset>
 
 	<fieldset name="general" addfieldprefix="GlennArkell\Component\Gausers\Administrator\Field">
-        <field name="pres_id" type="user" required="false"
+        <field name="pres_id" type="user" required="false" 
             label="COM_GAUSERS_FORM_LBL_CLUBEXEC_PRES_ID"
             description="COM_GAUSERS_FORM_DESC_CLUBEXEC_PRES_ID" />
         <field name="pres_idp" type="radio" class="btn-group btn-group-mempart" default="0"

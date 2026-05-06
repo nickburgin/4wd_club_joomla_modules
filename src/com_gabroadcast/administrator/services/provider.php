@@ -1,13 +1,13 @@
 <?php
 /**
- * @version    4.2.1
+ * @version    4.3.3
  * @package    com_gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('_JEXEC') or die;
+\defined('_JEXEC') or die;
 
 use Joomla\CMS\Categories\CategoryFactoryInterface;
 use Joomla\CMS\Component\Router\RouterFactoryInterface;
@@ -26,7 +26,7 @@ use Joomla\DI\ServiceProviderInterface;
 
 /**
  * The service provider.
- * @since  4.2.1
+ * @since  4.3.3
  */
 return new class implements ServiceProviderInterface
 {
@@ -34,7 +34,7 @@ return new class implements ServiceProviderInterface
 	 * Registers the service provider with a DI container.
 	 * @param   Container  $container  The DI container.
 	 * @return  void
-	 * @since   4.2.1
+	 * @since   4.3.3
 	 */
 	public function register(Container $container)
 	{

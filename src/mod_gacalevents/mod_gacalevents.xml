@@ -7,28 +7,31 @@
     <author>Glenn Arkell</author>
     <authorEmail>glenn@glennarkell.com.au</authorEmail>
     <authorUrl>http://www.glennarkell.com.au</authorUrl>
-    <version>2.1.2</version>
+    <version>5.3</version>
     <description>MOD_GACALEVENTS_DESCRIPTION</description>
+
 	<namespace path="src">GlennArkell\Module\Gacalevents</namespace>
 
+	<scriptfile>script.php</scriptfile>
+
     <files>
-        <filename module="mod_gacalevents">mod_gacalevents.php</filename>
+        <folder module="mod_gacalevents">services</folder>
         <folder>src</folder>
         <folder>tmpl</folder>
     </files>
 
 	<media destination="mod_gacalevents" folder="media">
 		<folder>css</folder>
-		<folder>js</folder>
 	</media>
 
     <languages folder="language">
 			<language tag="en-GB">en-GB/mod_gacalevents.ini</language>
 			<language tag="en-GB">en-GB/mod_gacalevents.sys.ini</language>
     </languages>
+
     <config>
         <fields name="params">
-            <fieldset 
+            <fieldset
                 name="content_type" 
                 label="MOD_GACALEVENTS_CONTENT_TYPE_TAB_LBL"
                 description="MOD_GACALEVENTS_CONTENT_TYPE_TAB_DESC">

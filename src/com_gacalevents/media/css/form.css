@@ -1,5 +1,5 @@
 /**
- * @version     3.0.0
+ * @version     3.3.1
  * @package     com_gacalevents
  * @copyright   2021 Glenn Arkell
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -23,4 +23,15 @@
 /* this reduces the space between field and help text */
 div.controls > fieldset {
     margin-bottom: 0 !important;
+}
+
+@media (max-width: 480px) {
+    .front-end-edit label {
+        width: 95% !important;
+        text-align: left !important;
+        margin-left: 10px !important;
+    }
+    .front-end-edit .controls {
+        margin-left: 25px !important;
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.09
+ * @version    4.2.2
  * @package    Com_Gaforsale
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  Copyright (C) 2013. All rights reserved.
@@ -17,9 +17,9 @@ use \Joomla\CMS\Language\Text;
 use \Joomla\CMS\Layout\LayoutHelper;
 use \GlennArkell\Component\Gaforsale\Administrator\Helper\GaforsaleHelper;
 
-HTMLHelper::_('bootstrap.tooltip');
-HTMLHelper::_('behavior.multiselect');
-HTMLHelper::_('formbehavior.chosen', 'select');
+// load any assets required
+$wa = $this->document->getWebAssetManager()
+    ->usePreset('com_gaforsale.gaforsalepreset');
 
 // Load admin language file
 $lang = Factory::getLanguage();
@@ -39,6 +39,16 @@ $canState = $user->authorise('core.edit.state','com_gaforsale');
 $canDelete = ($user->authorise('core.edit.own','com_gaforsale') && $user->id == $this->item->user_id) ? true : false;
 $canEdit = GaforsaleHelper::canUserEdit($this->item, $user);
 
+$templt = isset($this->item->id) && $this->item->id == 0 ? 'fsitems' : '';
+$this->form->setFieldAttribute('templt', 'type', 'hidden');
+$this->form->setFieldAttribute('templt', 'default', $templt);
+$this->form->setFieldAttribute('id', 'type', 'hidden');
+
+//GaforsaleHelper::gaPrint($this->item);
+/*
+GaforsaleHelper::gaPrint(Factory::getApplication()->getUserState('com_gaforsale.test.data'));
+print_r(Factory::getApplication()->getUserState('com_garesearch.test.data'));
+*/
 ?>
 
 <div class="fsitem-edit front-end-edit">
@@ -69,6 +79,7 @@ $canEdit = GaforsaleHelper::canUserEdit($this->item, $user);
                             <?php else: ?>
 								<?php echo $this->form->renderField('user_id_name'); ?>
 								<input type="hidden" name="jform[user_id]" value="<?php echo $this->item->user_id; ?>" />
+								<?php echo $this->form->renderField('id'); ?>
                             <?php endif; ?>
 
 							<?php echo $this->form->renderFieldset('general'); ?>
@@ -82,17 +93,18 @@ $canEdit = GaforsaleHelper::canUserEdit($this->item, $user);
 				<div class="row-fluid">
 					<div class="span10 form-horizontal">
 						<fieldset name="imageinfo" class="adminform">
-							<?php if (isset($this->item->item_image) && $this->item->item_image > '') : ?>
+							<?php if (isset($this->item->item_image) && !empty($this->item->item_image)) : ?>
 								<div class="control-group">
 									<div class="control-label"><?php echo $this->form->getLabel('item_image_txt'); ?></div>
 									<div class="controls"><?php echo $this->form->getInput('item_image_txt'); ?>
 										<a class="btn btn-danger btn-mini pull-left"
 											href="<?php echo Route::_('index.php?option=com_gaforsale&task=fsitem.removeFile&id='.$this->item->id); ?>"
-											title="<?php echo Text::_('JREMOVE_FILE'); ?>">
+											title="<?php echo Text::_('GAREMOVE_FILE'); ?>">
 											<i class="icon-trash"></i>
 										</a>
 									</div>
 							    </div>
+							    <input type="hidden" name="jform[item_image]" value="" />
 							<?php else: ?>
 								<?php echo $this->form->renderField('item_image'); ?>
 								<input type="hidden" name="jform[item_image_txt]" value="" />
@@ -102,29 +114,32 @@ $canEdit = GaforsaleHelper::canUserEdit($this->item, $user);
 				</div>
 			<?php echo HTMLHelper::_('uitab.endTab'); ?>
 		
-			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'extrainfo', Text::_('COM_GAFORSALE_XTRAINFO', true)); ?>
-				<div class="row-fluid">
-					<div class="span10 form-horizontal">
-						<fieldset name="extrainfo" class="adminform">
-							<?php echo $this->form->renderFieldset('extrainfo'); ?>
-						</fieldset>
-					</div>
-				</div>
-			<?php echo HTMLHelper::_('uitab.endTab'); ?>
-		
-			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'sysinfo', Text::_('COM_GAFORSALE_SYSINFO', true)); ?>
-				<div class="row-fluid">
-					<div class="span10 form-horizontal">
-						<fieldset name="sysinfo" class="adminform">
-							<?php echo $this->form->renderFieldset('sysinfo'); ?>
-						</fieldset>
-					</div>
-				</div>
-			<?php echo HTMLHelper::_('uitab.endTab'); ?>
-		
+			<?php if ($canAdmin) : ?>
+                <?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'extrainfo', Text::_('COM_GAFORSALE_XTRAINFO', true)); ?>
+    				<div class="row-fluid">
+    					<div class="span10 form-horizontal">
+    						<fieldset name="extrainfo" class="adminform">
+    							<?php echo $this->form->renderFieldset('extrainfo'); ?>
+    						</fieldset>
+    					</div>
+    				</div>
+    			<?php echo HTMLHelper::_('uitab.endTab'); ?>
+    		
+    			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'sysinfo', Text::_('COM_GAFORSALE_SYSINFO', true)); ?>
+    				<div class="row-fluid">
+    					<div class="span10 form-horizontal">
+    						<fieldset name="sysinfo" class="adminform">
+    							<?php echo $this->form->renderFieldset('sysinfo'); ?>
+    							<?php echo $this->form->renderField('templt'); ?>
+    						</fieldset>
+    					</div>
+    				</div>
+    			<?php echo HTMLHelper::_('uitab.endTab'); ?>
+		    <?php endif; ?>
+
 			<?php echo HTMLHelper::_('uitab.endTabSet'); ?>
 
-			<div class="control-group">
+			<div class="control-group" >
 				<div class="controls">
 
 					<?php if ($this->canSave): ?>
@@ -136,8 +151,7 @@ $canEdit = GaforsaleHelper::canUserEdit($this->item, $user);
 					<a class="btn btn-danger"
 					   href="<?php echo Route::_('index.php?option=com_gaforsale&task=fsitemform.cancel'); ?>"
 					   title="<?php echo Text::_('JCANCEL'); ?>">
-					   <span class="fas fa-times" aria-hidden="true"></span>
-						<?php echo Text::_('JCANCEL'); ?>
+					   <span class="fas fa-times" aria-hidden="true"></span> <?php echo Text::_('JCANCEL'); ?>
 					</a>
 				</div>
 			</div>

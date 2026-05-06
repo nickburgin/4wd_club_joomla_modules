@@ -1,7 +1,7 @@
 <?php
 /**
- * @version    4.2.1
- * @package    Com_Gabroadcast
+ * @version     4.3.3
+ * @package     com_gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -9,23 +9,23 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\User\UserHelper;
-use \GlennArkell\Component\Gabroadcast\Administrator\Helper\GabroadcastHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\Access\Access;
+use GlennArkell\Component\Gabroadcast\Administrator\Helper\GabroadcastHelper;
 
 // load any assets required
 $this->document->getWebAssetManager()
     ->usePreset('com_gabroadcast.gabroadcastpreset');
 
 //Load admin language file
-$lang = Factory::getLanguage();
-$lang->load('com_gabroadcast', JPATH_ADMINISTRATOR);
+Factory::getApplication()->getLanguage()->load('com_gabroadcast', JPATH_ADMINISTRATOR);
 
-$user = GabroadcastHelper::getSpecificUser();
+$user = Factory::getApplication()->getIdentity();
 $canEdit = GabroadcastHelper::canUserEdit($this->item, $user);
 
 $filterFin = $this->params->get('include_userfilter', 0);
@@ -89,6 +89,7 @@ if (!$filterFin) {
 }
 if (!$this->sendto_filter) {
     $this->form->setFieldAttribute('usergroup_only', 'type', 'hidden');
+    $this->form->setFieldAttribute('usergroup_only', 'default', 0);
 }
 if (!$showRetAddr) {
     $this->form->setFieldAttribute('user_retaddr', 'type', 'hidden');
@@ -97,14 +98,7 @@ if (!$this->broadcast_type) {
     $this->form->setFieldAttribute('attach_file', 'type', 'hidden');
 }
 
-/*
-echo '<pre>Test<br />'; print_r(Factory::getApplication()->getUserState('com_gabroadcast.test.data')); echo '</pre>';
-echo '<pre>Filter Users<br />'; print_r($this->params->get('filter_users')); echo '</pre>';
-echo '<pre>Filter Type<br />'; print_r($this->params->get('filter_type','c')); echo '</pre>';
-echo '<pre>Filter P/C<br />'; print_r($this->pc_filter); echo '</pre>';
-echo '<pre>Filter Users<br />'; print_r($this->params->get('prof_field')); echo '</pre>';
-
-*/
+//GabroadcastHelper::print_r2(Factory::getApplication()->getUserState('com_gabroadcast.test.data'));
 ?>
 
 <div class="usernew-edit front-end-edit">

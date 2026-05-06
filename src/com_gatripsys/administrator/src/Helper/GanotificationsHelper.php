@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    Com_Gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -13,22 +13,22 @@ namespace GlennArkell\Component\Gatripsys\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\CMS\MVC\Model\BaseDatabaseModel;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\Data\DataObject;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\Filesystem\Path;
-use \Joomla\CMS\Toolbar\Toolbar;
-use \Joomla\CMS\Toolbar\ToolbarHelper;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\Data\DataObject;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\Installer\Installer;
+use Joomla\Filesystem\Path;
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GainvoiceHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GaemailHelper;
@@ -57,6 +57,8 @@ class GanotificationsHelper
 		$bcc  = $params->get('bcc_users',0);
 		$exclude_email = $params->get('exclude_email', 'noemail');
 		$exLen = strlen($exclude_email);
+		$notifMbrs = $params->get('notif_users', 1);
+		$ignorMbrs = $params->get('ignore_mbrs', array());
 
 		$trip = GatripsysHelper::getTripInformation($trip_id);
 
@@ -80,6 +82,9 @@ class GanotificationsHelper
 		}
 
     	foreach ($members as $m) {
+            // test for ignore switch
+            if (in_array($m->user_id, $ignorMbrs)) { continue; }
+
             if (substr($m->email,0,$exLen) != $exclude_email) {
                 $mbrs[] = $m;
             }
@@ -275,6 +280,40 @@ class GanotificationsHelper
             }
 		} else {
 			Factory::getApplication()->enqueueMessage(Text::_('COM_GATRIPSYS_NO_ATTID_MESSAGE'), 'warning');
+        }
+
+		return true;
+	}
+
+	/**
+	* Notify the Trip Leader of the trip being created
+	* @param   array   $data passed by booking screen
+	* @param   string  $tmpl  mandatory (template ext)
+	* @return true
+	*/
+	public static function notifyLeaderNewTrip($data, $tmpl)
+	{
+		if ($data['trip_id']) {
+    		$params  = ComponentHelper::getParams('com_gatripsys');
+    		
+    		$trip = GatripsysHelper::getTripInformation($data['trip_id']);
+
+    		// setup the data to include in email
+    		$data['coord_name'] = null;
+    		$data['leader_name'] = $trip->leader_name;
+    		$data['trip_title'] = $trip->title;
+    		$data['dept_date'] = HtmlHelper::date($trip->dept_date, Text::_('COM_GATRIPSYS_DISPLAY_DATE'));
+
+            $data['recips'] = array(array('email'=>$trip->leader_email, 'name'=>$trip->leader_name));
+
+			$viewLink = GatripsysHelper::getHTTPQuery(null, 'view', 'trip', 'id', $trip->id);
+			$link = 'index.php?'.http_build_query($viewLink, '', '&amp;');
+
+            if ($params->get('tmpl_email', 0)) {
+                GaemailHelper::sendEmailTemplate('com_gatripsys.'.$tmpl, $data, $link, null, null);
+            }
+		} else {
+			Factory::getApplication()->enqueueMessage(Text::_('COM_GATRIPSYS_NO_TRIPSET_MESSAGE'), 'warning');
         }
 
 		return true;

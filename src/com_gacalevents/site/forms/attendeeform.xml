@@ -73,6 +73,10 @@
 	</fieldset>
 
 	<fieldset name="others">
+        <field name="attending" type="Attending" label="COM_GACALEVENTS_FORM_LBL_ATTENDEE_ATTENDING" description="COM_GACALEVENTS_FORM_DESC_ATTENDEE_ATTENDING"/>
+        <field name="user_id" type="hidden" />
+        <field name="event_id" type="hidden" />
+        <field name="from_modal" type="hidden" />
         <field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
     </fieldset>
 </form>

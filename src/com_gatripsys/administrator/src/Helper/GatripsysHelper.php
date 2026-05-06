@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    com_gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,19 +12,19 @@ namespace GlennArkell\Component\Gatripsys\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\User\UserFactoryInterface;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\Filesystem\Path;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\CMS\User\User;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\User\UserFactoryInterface;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\Filesystem\Path;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\CMS\User\User;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Installer\Installer;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GainvoiceHelper;
 
 /**
@@ -96,6 +96,15 @@ class GatripsysHelper
 
 		return $user;
 	}
+
+    /**
+     * Prints out a variable value in human readable format
+     */
+    public static function gaPrint($val){
+        echo '<pre>Test<br />';
+        \print_r($val);
+        echo  '</pre>';
+    }
 
 	/**
 	 * Get the version of the component
@@ -323,9 +332,12 @@ class GatripsysHelper
 	public static function createNewRecord($table, $key, $value, $params)
 	{
         $state = $params->get('auto_book_apprv', 0) ? 1 : 0;
+        $today = Factory::getDate()->toSql();
         $new_rec = new \stdClass();
         $new_rec->id = 0;
         $new_rec->state = $state;
+        $new_rec->created_by = Factory::getApplication()->getIdentity()->id;
+        $new_rec->created_date = $today;
         $new_rec->trip_id = $key;
         $new_rec->user_id = $value;
         $new_rec->approved_by = $value;
@@ -688,6 +700,7 @@ class GatripsysHelper
         $query->select(" SUBSTRING_INDEX(SUBSTRING_INDEX(g.profile_value, ' ', 1), ' ', -1) AS first_namep " );
         $query->select(" SUBSTRING_INDEX(SUBSTRING_INDEX(g.profile_value, ' ', 4), ' ', -1) AS surnamep " );
         $query->select(" SUBSTRING_INDEX(SUBSTRING_INDEX(g.profile_value, ' ', 4), ' ', -1) AS last_namep " );
+		$query->select(' a.id AS user_id ');
 		$query->from(' #__users AS a ');
 		$query->join('LEFT', '#__user_profiles AS p ON a.id = p.user_id AND p.profile_key = '.$db->Quote($p_key));
 		$query->join('LEFT', '#__user_profiles AS e ON a.id = e.user_id AND e.profile_key = '.$db->Quote($e_key));
@@ -763,9 +776,13 @@ class GatripsysHelper
         $query->select(' a.*, att.name AS attend_name, apprv.name AS approver_name, if(a.state = 1, "Approved", "Pending") AS status ');
         $query->select(' prof.profile_value AS primary_contact, att.email AS attend_email ');
         $query->select(' vk.profile_value AS vehicle_make, vd.profile_value AS vehicle_model, vr.profile_value AS vehicle_rego ');
+        $query->select(' vt.profile_value AS vehicle_trans, vy.profile_value AS vehicle_year, vf.profile_value AS vehicle_fuel ');
         $query->select(' inv.id AS inv_id, inv.state AS inv_state ');
         $query->select(' if(ipe.profile_value IS NULL, 0, ipe.profile_value) AS inc_altemail ');
         $query->select(' if(pe.profile_value IS NULL, "", pe.profile_value) AS altemail ');
+
+
+
 		$query->from(' #__gatripsys_attendees AS a');
 		$query->join('LEFT', '#__users AS att ON att.id=a.user_id');
 		$query->join('LEFT', '#__users AS apprv ON apprv.id=a.approved_by');
@@ -773,6 +790,9 @@ class GatripsysHelper
 		$query->join('LEFT', '#__user_profiles AS vk ON vk.user_id=a.user_id AND vk.profile_key = "profile'.$profsuf.'.vehicle_make"');
 		$query->join('LEFT', '#__user_profiles AS vd ON vd.user_id=a.user_id AND vd.profile_key = "profile'.$profsuf.'.vehicle_model"');
 		$query->join('LEFT', '#__user_profiles AS vr ON vr.user_id=a.user_id AND vr.profile_key = "profile'.$profsuf.'.vehicle_rego"');
+		$query->join('LEFT', '#__user_profiles AS vt ON vt.user_id=a.user_id AND vt.profile_key = "profile'.$profsuf.'.vehicle_trans"');
+		$query->join('LEFT', '#__user_profiles AS vy ON vy.user_id=a.user_id AND vy.profile_key = "profile'.$profsuf.'.vehicle_year"');
+		$query->join('LEFT', '#__user_profiles AS vf ON vf.user_id=a.user_id AND vf.profile_key = "profile'.$profsuf.'.vehicle_fuel"');
 		$query->join('LEFT', '#__user_profiles AS pe ON pe.user_id=a.user_id AND pe.profile_key = "profile'.$profsuf.'.altemail"');
 		$query->join('LEFT', '#__user_profiles AS ipe ON ipe.user_id=a.user_id AND ipe.profile_key = "profile'.$profsuf.'.inc_altemail"');
 		$query->join('LEFT', '#__gatripsys_invoices AS inv ON inv.att_id=a.id AND inv.state IN (1,2) ');

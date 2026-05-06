@@ -6,20 +6,14 @@
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <author>Glenn Arkell</author>
     <authorEmail>glenn@glennarkell.com.au</authorEmail>
-    <authorUrl>http://www.glennarkell.com.au</authorUrl>
-    <version>4.1.0</version>
+    <authorUrl>https://www.glennarkell.com.au</authorUrl>
+    <version>4.2.0</version>
     <description>COM_GATRACKLOG_XML_DESCRIPTION</description>
 
     <namespace path="src">GlennArkell\Component\Gatracklog</namespace>
 
     <scriptfile>script.php</scriptfile>
     
-	<dashboards>
-		<dashboard title="COM_GATRACKLOG_DASHBOARD_TITLE" icon="icon-fas fa-settings">
-			COM_GATRACKLOG_DASHBOARD_TITLE
-		</dashboard>
-	</dashboards>
-
     <install> <!-- Runs on install -->
         <sql>
             <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
@@ -42,15 +36,15 @@
         <folder>tmpl</folder>
     </files>
     <media destination="com_gatracklog" folder="media">
-        <file>joomla.asset.json</file>
         <folder>css</folder>
         <folder>images</folder>
+        <file>joomla.asset.json</file>
     </media>
     <languages folder="site">
 			<language tag="en-GB">language/en-GB/com_gatracklog.ini</language>
     </languages>
     <administration>
-        <menu img="class:settings" >COM_GATRACKLOG<params><dashboard>gatracklog</dashboard></params></menu>
+        <menu img="class:fa fa-settings" >COM_GATRACKLOG<params><dashboard>gatracklog</dashboard></params></menu>
 
         <files folder="administrator">
             <filename>access.xml</filename>
@@ -62,16 +56,26 @@
             <folder>presets</folder>
             <folder>sql</folder>
         </files>
-        <languages folder="administrator">
-			<language tag="en-GB">language/en-GB/com_gatracklog.ini</language>
-			<language tag="en-GB">language/en-GB/com_gatracklog.sys.ini</language>
+        <languages folder="administrator/language">
+			<language tag="en-GB">en-GB/com_gatracklog.ini</language>
+			<language tag="en-GB">en-GB/com_gatracklog.sys.ini</language>
+			<language tag="en-GB">en-GB/guidedtours.gatracklog_configuration.ini</language>
+			<language tag="en-GB">en-GB/guidedtours.gatracklog_menu.ini</language>
+			<language tag="en-GB">en-GB/guidedtours.gatracklog_tracklog.ini</language>
+			<language tag="en-GB">en-GB/guidedtours.gatracklog_welcome.ini</language>
         </languages>
     </administration>
 
-	<changelogurl>https://www.glennarkell.com.au/joomlaorg/components/j5/gatracklog-changelog.xml</changelogurl>
+	<dashboards>
+		<dashboard title="COM_GATRACKLOG_DASHBOARD_TITLE" icon="icon-none fa fa-settings">
+			COM_GATRACKLOG_DASHBOARD_TITLE
+		</dashboard>
+	</dashboards>
+
+	<changelogurl>https://www.glennarkell.com.au/joomlaorg/packages/j6/changes/com_gatracklog-changelog.xml</changelogurl>
 
 	<updateservers>
-		<server type="extension" priority="1" name="Tracklog System">https://www.glennarkell.com.au/joomlaorg/components/j5/gatracklog-update.xml</server>
+		<server type="extension" priority="1" name="Tracklog System">https://www.glennarkell.com.au/joomlaorg/components/j6/updates/com_gatracklog-update.xml</server>
 	</updateservers>
 
 </extension>

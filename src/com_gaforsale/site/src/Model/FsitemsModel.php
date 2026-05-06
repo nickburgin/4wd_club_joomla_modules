@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    4.0.2
+ * @version    4.2.2
  * @package    Com_Gaforsale
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  Copyright (C) 2013. All rights reserved.
@@ -88,7 +88,7 @@ class FsitemsModel extends ListModel
 		}
 		if(empty($direction)) {
 			$direction = $app->getUserStateFromRequest($this->context . '.filter_order_Dir', 'filter_order_Dir', $app->get('filter_order_Dir'));
-			if (!in_array(strtoupper($direction), array('ASC', 'DESC', ''))) {
+			if (!in_array(strtoupper($direction ?? ''), array('ASC', 'DESC', ''))) {
 				$direction = "DESC";
 			}
 			$this->setState('list.direction', $direction);

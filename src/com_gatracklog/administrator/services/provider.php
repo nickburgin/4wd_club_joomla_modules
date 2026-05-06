@@ -1,7 +1,7 @@
 <?php
 /**
- * @version    4.1.0
- * @package    com_gatracklog
+ * @version    4.2.0
+ * @subpackage com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -26,7 +26,7 @@ use Joomla\DI\ServiceProviderInterface;
 
 /**
  * The service provider.
- * @since  4.1.0
+ * @since  4.0.0
  */
 return new class implements ServiceProviderInterface
 {
@@ -34,7 +34,7 @@ return new class implements ServiceProviderInterface
 	 * Registers the service provider with a DI container.
 	 * @param   Container  $container  The DI container.
 	 * @return  void
-	 * @since   4.1.0
+	 * @since   4.0.0
 	 */
 	public function register(Container $container)
 	{

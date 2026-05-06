@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -9,29 +9,31 @@
 // no direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Date\Date;
-use \Joomla\Filesystem\Path;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Date\Date;
+use Joomla\Filesystem\Path;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\Layout\LayoutHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GainvoiceHelper;
+use \GlennArkell\Component\Gausers\Administrator\Helper\GamodalHelper;
 
 // load any assets required
 $this->document->getWebAssetManager()
     ->usePreset('com_gausers.gauserspreset');
 
 //Load admin language file
-$lang = Factory::getLanguage();
+$lang = Factory::getApplication()->getLanguage();
 $lang->load('com_gausers', JPATH_ADMINISTRATOR);
 
-$user       = GausersHelper::getSpecificUser();
+$user       = Factory::getApplication()->getIdentity();
 $canTrg = $user->authorise('core.trgcerts', 'com_gausers');
 $canEdit = $user->authorise('core.edit', 'com_gausers');
 if (!$canEdit && $user->authorise('core.edit.own', 'com_gausers')) {
@@ -42,30 +44,24 @@ $filePath = $this->params->get('invoice_loc', 'images/members/invoices');
 $profileSuff = $this->params->get('profile_suffix', 'b4wdc');
 $locProf = 'profile'.$profileSuff;
 $mshipCalFin = $this->params->get('mship_period', 1);  // 1 = Financial, 2 = Calendar
-$incPartner = $this->params->get('incl_partner', 0);  
+$incPartner = $this->params->get('incl_partner', 0);
 
-$parentID = isset($this->item->profile->$locProf['fwdvic_no']) ? $this->item->profile->$locProf['fwdvic_no'] : 0;
-$parentAssoc = $parentID ? ' ('.$parentID.')' : '';
+$parentID = $profileSuff == 'b4wdc' && isset($this->item->profile->$locProf['fwdvic_no']) ? $this->item->profile->$locProf['fwdvic_no'] : 0;
+$bdgsID = $profileSuff == 'bdgs' && isset($this->item->profile->$locProf['mship_no']) ? $this->item->profile->$locProf['mship_no'] : 0;
+if ($parentID) {
+    $parentAssoc = $this->item->id . ' ('.$parentID.')';
+} elseif ($bdgsID) {
+    $parentAssoc = $bdgsID;
+} else {
+    $parentAssoc = $this->item->id;
+}
 
 // setup password button
-$formLink = GausersHelper::getHTTPQuery(null, 'view', 'currentuserform', 'id', $this->item->id);
-$formLink = GausersHelper::getHTTPQuery($formLink, null, null, 'tmpl', 'component');
-$updPWLink = GausersHelper::getHTTPQuery($formLink, null, null, 'layout', 'modalpwupd');
-$pwmodparams = array( 'url'        => 'index.php?'.http_build_query($updPWLink, '', '&amp;'),
-		        'title'      => Text::_("COM_GAUSERS_PWUPD_DESC"), 'closeButton'=> true,
-		        'modalWidth' => 60, 'bodyHeight' => 25, 'backdrop'   => 'static' );
-$pwmodname = 'modal-myPWModal'.$this->item->id;
-$pwhtml = '<a class="btn btn-primary pull-right" href="#'.$pwmodname.'" data-bs-toggle="modal">';
-$pwhtml .= '<i class="fas fa-user-shield" title="'.Text::_('COM_GAUSERS_PWUPD_DESC').'"></i> '.Text::_('COM_GAUSERS_PWUPD_LBL').'</a>';
+$pwhtml = GamodalHelper::setupModalButton('view', 'currentuserform', 'id', $this->item->id, 'modalpwupd', 'myPWModal', 'danger pull-right', 'PW Reset', 'COM_GAUSERS_PWUPD_DESC', 'fas fa-user-shield', $this->item->fullname);
 
 // action modal form
-$actLink = GausersHelper::getHTTPQuery($formLink, null, null, 'layout', 'modalact');
-$actmodparams = array( 'url'        => 'index.php?'.http_build_query($actLink, '', '&amp;'),
-		        'title'      => Text::_("COM_GAUSERS_ACT_LBL").' for - '.$this->item->fullname, 'closeButton'=> true,
-		        'modalWidth' => 60, 'bodyHeight' => 30, 'backdrop'   => 'static' );
-$actmodname = 'modal-myActModal'.$this->item->id;
-$acthtml = '<a class="btn btn-info" href="#'.$actmodname.'" data-bs-toggle="modal">';
-$acthtml .= '<i class="fas fa-exclamation" title="'.Text::_('COM_GAUSERS_ACT_DESC').'"></i> '.Text::_('COM_GAUSERS_ACT_LBL').'</a>';
+$acthtml = GamodalHelper::setupModalButton('view', 'currentuserform', 'id', $this->item->id, 'modalact', 'myActModal', 'info', 'Action', 'COM_GAUSERS_ACT_DESC', 'fas fa-exclamation', $this->item->fullname);
+$advhtml = GamodalHelper::setupModalButton('view', 'currentuserform', 'id', $this->item->id, 'modaladv', 'myAdvModal', 'success', 'Adv Pay', 'COM_GAUSERS_ADV_LBL', 'fas fa-dollar', $this->item->fullname);
 
 // set up dates
 $regDate = !empty($this->item->registerDate) ? HtmlHelper::date($this->item->registerDate, Text::_('COM_GAUSERS_DISPLAY_DATE')) : '';
@@ -82,27 +78,33 @@ if ($this->params->get('disp_address', 1)) {
         $contact_details .= $this->item->profile->$locProf['postal_city'].', '.$this->item->profile->$locProf['postal_post_code'].'<br />';
         $contact_details .= $this->item->profile->profile['phone'];
     } else {
-        if (!$this->params->get('suburb_only', 0)) {
-            $contact_details .= $this->item->profile->profile['address1'].'<br />';
+        if (isset($this->item->profile->profile['address1'])) {
+            if (!$this->params->get('suburb_only', 0)) {
+                $contact_details .= $this->item->profile->profile['address1'].'<br />';
+            }
+            $contact_details .= $this->item->profile->profile['city'].', '.$this->item->profile->profile['postal_code'].'<br />';
+            $contact_details .= $this->item->profile->profile['phone'];
         }
-        $contact_details .= $this->item->profile->profile['city'].', '.$this->item->profile->profile['postal_code'].'<br />';
-        $contact_details .= $this->item->profile->profile['phone'];
     }
 }
+
+// test for privacy
+if (isset($this->item->profile->$locProf['privacy']) && $this->item->profile->$locProf['privacy'] == 1) {
+    $private = '<span style="color:'.$this->params->get('privacy_color', '#5879a3').';">'.Text::_('COM_GAUSERS_PRIVATE_MESSAGE').'</span>';
+    $privFlag = 1;
+} else {
+    $private = '';
+    $privFlag = 0;
+}
+
 /*
-echo '<pre>Test<br />';
-print_r($up);
-echo '</pre>';
-print_r(JPATH_SITE.'images/members/invoices/Invoice000459.pdf');
-print_r(Factory::getApplication()->getUserState('com_gausers.test.data'));
-print_r(Factory::getApplication()->getUserState('com_gausers.test.data'));
-print_r($expDate);
-print_r(Factory::getApplication()->getUserState('com_gausers.test.data'));
+GausersHelper::gaPrint(Factory::getApplication()->getUserState('com_gausers.test.data'));
 */
 ?>
 
 <div class="item_fields">
     <h2>Details for <?php echo $this->item->fullname; ?></h2>
+    <p><?php echo $private; ?></p>
 	<table class="table">
 
 		<tr>
@@ -116,7 +118,7 @@ print_r(Factory::getApplication()->getUserState('com_gausers.test.data'));
 
 		<tr>
 			<th><?php echo Text::_('COM_GAUSERS_FORM_LBL_CURRENTUSER_ID'); ?></th>
-			<td><?php echo $this->item->id . $parentAssoc; ?></td>
+			<td><?php echo $parentAssoc; ?></td>
 			<td> </td>
 		</tr>
 
@@ -247,9 +249,10 @@ print_r(Factory::getApplication()->getUserState('com_gausers.test.data'));
 	</a>
 <?php endif; ?>
 <?php if($canMembers): ?>
-    <?php echo $acthtml .= HTMLHelper::_('bootstrap.renderModal', $actmodname, $actmodparams); ?>
+    <?php echo $acthtml; ?>
+    <?php echo $advhtml; ?>
 <?php endif; ?>
-<?php echo $pwhtml .= HTMLHelper::_('bootstrap.renderModal', $pwmodname, $pwmodparams); ?>
+<?php echo $pwhtml; ?>
 
 <?php if($this->item->invoices): ?>
 
@@ -259,9 +262,9 @@ print_r(Factory::getApplication()->getUserState('com_gausers.test.data'));
 		<tr>
 			<th><?php echo Text::_('COM_GAUSERS_FORM_LBL_ID'); ?></th>
 			<th><?php echo Text::_('COM_GAUSERS_FINANCIAL_YEAR'); ?></th>
-			<th class="center"><?php echo Text::_('COM_GAUSERS_FORM_LBL_INVOICE_MSHIP_ID'); ?></th>
-			<th><?php echo Text::_('JSTATUS'); ?></th>
-			<th style="text-align:right;"><?php echo Text::_('COM_GAUSERS_FORM_LBL_INVOICE_INVOICE_AMT'); ?></th>
+			<th class="center hidden-phone"><?php echo Text::_('COM_GAUSERS_FORM_LBL_INVOICE_MSHIP_ID'); ?></th>
+			<th class="hidden-phone"><?php echo Text::_('JSTATUS'); ?></th>
+			<th class="hidden-phone" style="text-align:right;"><?php echo Text::_('COM_GAUSERS_FORM_LBL_INVOICE_INVOICE_AMT'); ?></th>
 			<th class="center"><?php echo Text::_('COM_GAUSERS_FORM_LBL_INVOICE_PAID_DATE'); ?></th>
 		</tr>
 		</thead>
@@ -277,9 +280,9 @@ print_r(Factory::getApplication()->getUserState('com_gausers.test.data'));
 					<td><?php echo $inv->inv_no; ?></td>
 				<?php endif; ?>
 				<td><?php echo $FinYear; ?></td>
-				<td class="center"><?php echo $inv->title; ?></td>
-				<td><?php echo $inv->status; ?></td>
-				<td style="text-align:right;"><?php echo '$'.number_format($inv->invoice_amt,2); ?></td>
+				<td class="center hidden-phone"><?php echo $inv->title; ?></td>
+				<td class="hidden-phone"><?php echo '<span title="'.$inv->pay_type_name.'">'.$inv->status.'</span>'; ?></td>
+				<td class="hidden-phone" style="text-align:right;"><?php echo '$'.number_format($inv->invoice_amt,2); ?></td>
 				<td class="center"><?php echo $pdate = (!empty($inv->paid_date)) ? HtmlHelper::date($inv->paid_date, Text::_('COM_GAUSERS_DISPLAY_DATE')) : ''; ?></td>
 			</tr>
 		<?php endforeach; ?>
@@ -296,19 +299,35 @@ print_r(Factory::getApplication()->getUserState('com_gausers.test.data'));
     		<thead>
     		<tr>
     			<th><?php echo Text::_('COM_GAUSERS_CREATED_DATE'); ?></th>
-    			<th><?php echo Text::_('COM_GAUSERS_CREATED_BY'); ?></th>
-    			<th class="center"><?php echo Text::_('COM_GAUSERS_MEMBER_DETAILS'); ?></th>
+    			<th class="hidden-phone"><?php echo Text::_('COM_GAUSERS_CREATED_BY'); ?></th>
+    			<th><?php echo Text::_('COM_GAUSERS_MEMBER_DETAILS'); ?></th>
+    			<th class="hidden-phone"><?php echo Text::_('COM_GAUSERS_ACTIONS_CAT_ID'); ?></th>
+    			<th class="center hidden-phone"><?php echo Text::_('COM_GAUSERS_ACT_LBL'); ?></th>
     		</tr>
     		</thead>
     		<tbody>
     		<?php foreach ($this->item->actions as $act) : ?>
+                <?php
+                    if ($act->state == -2) { $act_style = '<span style="text-decoration:line-through !important;">'; } else { $act_style = '<span>'; }
+                    // modify actions options
+                    $updacthtml = GamodalHelper::setupModalButton('view', 'currentuserform', 'act_id', $act->id, 'modalupdact', 'myUpdActModal', 'outline-warning btn-sm', '', 'Update Action', 'fas fa-edit', $this->item->fullname);
+                    $delActLink = GamodalHelper::getHTTPQuery(null, 'task', 'currentuser.delAction', 'act_id', $act->id);
+                    $delActLink = GamodalHelper::getHTTPQuery($delActLink, null, null, Session::getFormToken(), 1);
+                    $delAct = 'index.php?'.http_build_query($delActLink, '', '&amp;');
+                    $cat = GausersHelper::getRecord('#__categories', 'id', $act->category_id);
+                ?>
                 <tr class="border-top border-success">
-    				<td><?php echo $act->created_date ? HtmlHelper::date($act->created_date, Text::_('COM_GAUSERS_DISPLAY_DATE')) : ''; ?></td>
-    				<td><?php echo GausersHelper::getSpecificUser($act->created_by)->name; ?></td>
-    				<td><?php echo $act->act_name; ?></td>
+    				<td><?php echo $act_style; ?><?php echo $act->created_date ? HtmlHelper::date($act->created_date, Text::_('COM_GAUSERS_DISPLAY_DATE')) : ''; ?></span></td>
+    				<td class="hidden-phone"><?php echo $act_style; ?><?php echo GausersHelper::getSpecificUser($act->created_by)->name; ?></span></td>
+    				<td><?php echo $act_style; ?><?php echo $act->act_name; ?></span></td>
+    				<td class="hidden-phone"><?php echo $act_style; ?><?php echo empty($cat) ? '' : $cat->title; ?></span></td>
+    				<td class="hidden-phone">
+                        <?php echo $updacthtml; ?> &nbsp;
+                    	<a class="btn btn-outline-danger btn-sm" href="<?php echo Route::_($delAct); ?>"><i class="icon-delete"></i></a>
+                    </td>
     			</tr>
                 <tr class="border-bottom border-success border-2">
-    				<td colspan="3"><?php echo str_replace("\r\n", "<br />", $act->comment); ?></td>
+    				<td colspan="5"><?php echo $act_style; ?><?php echo str_replace("\r\n", "<br />", $act->comment); ?></span></td>
     			</tr>
     		<?php endforeach; ?>
     		</thead>

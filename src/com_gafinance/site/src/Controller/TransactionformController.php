@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.2.3
  * @package    Com_Gafinance
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -100,6 +100,13 @@ class TransactionformController extends FormController
 
 		// Validate the posted data.
 		$data = $model->validate($form, $data);
+
+		// check date format entered
+        $goodDateFormat = $model->isValidDate($data['tran_date']);
+		if (!$goodDateFormat) { 
+            $data = false; 
+            $app->enqueueMessage('COM_GAFINANCE_BAD_DATE_FORMAT', 'danger');
+        }
 
 		// Check for errors.
 		if ($data === false) {

@@ -1,8 +1,8 @@
 <?php
 /**
- * @package     com_gatripsys
+ * @package     pkg_gatripsys
  * @subpackage  mod_gatripsys
- * @version     5.0.4
+ * @version     5.2
  * @author      Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright   2021 Glenn Arkell
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -14,28 +14,34 @@ namespace GlennArkell\Module\Gatripsys\Site\Helper;
 defined('_JEXEC') or die( 'Restricted access' );
 
 use \Joomla\CMS\Factory;
+use \Joomla\CMS\Application\SiteApplication;
 use \Joomla\CMS\HTML\HTMLHelper;
 use \Joomla\CMS\Date\Date;
 use \Joomla\CMS\Uri\Uri;
+use \Joomla\Database\DatabaseAwareInterface;
+use \Joomla\Database\DatabaseAwareTrait;
+use \Joomla\Registry\Registry;
 
-class GatripsysHelper
+class GatripsysHelper implements DatabaseAwareInterface
 {
+    use DatabaseAwareTrait;
+
     /**
      * Retrieves the records
 	 * @param   Joomla\Registry\Registry &$params module parameters
 	 * @return array Array with all the elements
      */
-    public static function getList( &$params )
+    public static function getList( Registry $params, SiteApplication $app )
     {
-        HTMLHelper::stylesheet(Uri::base().'media/mod_gatripsys/css/default.css');
 		$trips_history = $params->get('trips_history', 0);
 		$history_age = $params->get('history_age', 0);
 		$max_age = $params->get('max_age', 600);
 		$only_pub = $params->get('only_pub', 1);
 		$past = $params->get('only_past', 1);
 		$trips_order = $params->get('trips_order', 1);
-		// get the current date-time based on timezone
-		$today = new Date();
+
+		//$today = Factory::getDate()->toSql();
+        $today = new Date();
 		if ($history_age) {
 			$today5 = new Date( 'now -' . $history_age . ' day');
 		} else {
@@ -93,13 +99,13 @@ class GatripsysHelper
 		}
    		$db->setQuery((string)$query);
         try {
-            $rows = $db->loadObjectList();
+            $items = $db->loadObjectList();
 	    } catch (RuntimeException $e) {
 	        Factory::getApplication()->enqueueMessage($e->getMessage());
-	        return false;
+	        $items = false;
 	    }
 
-    	return $rows;
+    	return $items;
     }
 }
 ?>

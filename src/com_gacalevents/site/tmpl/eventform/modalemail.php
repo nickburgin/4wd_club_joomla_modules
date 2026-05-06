@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    1.2.4
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -21,10 +21,9 @@ $wa = $this->document->getWebAssetManager();
 $wa->usePreset('com_gacalevents.gacaleventspreset');
 
 //Load admin language file
-$lang = Factory::getLanguage();
-$lang->load('com_gacalevents', JPATH_ADMINISTRATOR);
+Factory::getApplication()->getLanguage()->load('com_gacalevents', JPATH_ADMINISTRATOR);
 
-$user = GacaleventsHelper::getSpecificUser();
+$user    = Factory::getApplication()->getIdentity();
 $event_id = Factory::getApplication()->getUserState('com_gacalevents.edit.event.id', 0);
 $event = GacaleventsHelper::getEvent($event_id);
 
@@ -36,12 +35,6 @@ $submitLink = GacaleventsHelper::getHTTPQuery($submitLink, null, null, 'tmpl', '
 
 // check what template is used to add specific styling
 //GacaleventsHelper::loadTmplStyleModal($wa);
-
-/*
-echo '<pre>Test<br />';
-print_r($event_id);
-echo '</pre>';
-*/
 
 ?>
 

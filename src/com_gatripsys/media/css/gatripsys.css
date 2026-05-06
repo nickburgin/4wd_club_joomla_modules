@@ -1,5 +1,5 @@
 /**
- * @version     5.1.0
+ * @version     5.3.0
  * @package     com_gatripsys
  * @copyright   2016 Glenn Arkell
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -53,3 +53,11 @@ div.pull-left {
 	padding: 0.4rem 0.5rem !important;
 }
 
+.field-width98 {
+    width: 98%;
+}
+
+.right {
+    text-align: right;
+}
+    

@@ -1,0 +1,14 @@
+/*
+# ------------------------------------------------------------------------
+# @copyright   Copyright (C) 2024. All rights reserved.
+# @license     GNU General Public License version 2 or later; see LICENSE.txt
+# Author:      Glenn Arkell
+# Websites:    https://www.glennarkell.com.au
+# ------------------------------------------------------------------------
+*/
+
+table.events-inner {
+    overflow:hidden;
+	overflow-y:scroll;
+	width: 100%;
+}

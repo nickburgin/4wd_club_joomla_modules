@@ -35,15 +35,6 @@
              label="COM_GAFORSALE_HEADER_TEXT_LABEL"
              description="COM_GAFORSALE_HEADER_TEXT_DESC" />
 
-        <field name="email_text" type="textarea" class="input-xxlarge" required="false" rows="3"
-             default="Thank you for advertising this item on the website.  Please be sure to advise us of the items disposal."
-             label="COM_GAFORSALE_EMAIL_TEXT_LABEL"
-             description="COM_GAFORSALE_EMAIL_TEXT_DESC" />
-
-        <field name="email_user" type="user"
-             label="COM_GAFORSALE_EMAIL_USER_LABEL"
-             description="COM_GAFORSALE_EMAIL_USER_DESC" />
-
         <field name="attach_dir" type="text" required="true" class="input-xlarge"
              default="images/forsale"
              label="COM_GAFORSALE_ATTACH_DIR_LABEL"
@@ -53,29 +44,74 @@
              label="COM_GAFORSALE_SAFE_FILES_LABEL"
              description="COM_GAFORSALE_SAFE_FILES_DESC">
                  <option value="pdf">pdf</option>
-                 <option value="PDF">PDF</option>
                  <option value="jpg">jpg</option>
-                 <option value="JPG">JPG</option>
                  <option value="png">png</option>
-                 <option value="PNG">PNG</option>
                  <option value="gif">gif</option>
-                 <option value="GIF">GIF</option>
          </field>
+
+        <field name="max_size" type="text" default="300"
+               label="COM_GAFORSALE_MAX_SIZE_LABEL"
+               description="COM_GAFORSALE_MAX_SIZE_DESC" />
 
     </fieldset>
 
-    <fieldset name="permissions"
-              description="JCONFIG_PERMISSIONS_DESC"
-              label="JCONFIG_PERMISSIONS_LABEL">
+    <fieldset name="notifications"
+              description="COM_GAFORSALE_NOTIFICATIONS_DESC"
+              label="COM_GAFORSALE_NOTIFICATIONS_LABEL">
 
-        <field name="rules" type="rules" component="com_gaforsale"
-               class="inputbox" filter="rules" validate="rules"
-               label="JCONFIG_PERMISSIONS_LABEL"
-               section="component"
-        />
-	</fieldset>
+        <field name="tmpl_email" type="radio" default="1" class="btn-group btn-group-yesno"
+             label="COM_GAFORSALE_TMPL_EMAIL_LABEL"
+             description="COM_GAFORSALE_TMPL_EMAIL_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+        </field>
+
+        <field name="email_text" type="textarea" class="input-xxlarge" required="false" rows="3"
+             default="Thank you for advertising this item on the website.  Please be sure to advise us of the items disposal."
+             label="COM_GAFORSALE_EMAIL_TEXT_LABEL"
+             description="COM_GAFORSALE_EMAIL_TEXT_DESC" />
+
+        <field name="email_user" type="user"
+             label="COM_GAFORSALE_EMAIL_USER_LABEL"
+             description="COM_GAFORSALE_EMAIL_USER_DESC" />
+
+        <field name="notif_mbrs" type="radio" default="0" class="btn-group btn-group-yesno"
+             label="COM_GAFORSALE_NOTIF_MBRS_LABEL"
+             description="COM_GAFORSALE_NOTIF_MBRS_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+        </field>
+
+        <field name="incl_details" type="radio" default="0"
+             class="btn-group btn-group-yesno" showon="notif_mbrs:1"
+             label="COM_GAFORSALE_INCL_DETAILS_LABEL"
+             description="COM_GAFORSALE_INCL_DETAILS_DESC">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+        </field>
+
+        <field name="prof_suffix" type="text" default=""
+             label="COM_GAFORSALE_PROF_SUFFIX_LABEL"
+             description="COM_GAFORSALE_PROF_SUFFIX_DESC" />
+
+        <field name="ignor_email" type="text" default="noemail"
+             label="COM_GAFORSALE_IGNORE_EMAIL_LABEL"
+             description="COM_GAFORSALE_IGNORE_EMAIL_DESC" />
+
+    </fieldset>
 
     <fieldset name="component">
+        <field name="set_test"
+               type="radio"
+               class="btn-group btn-group-yesno"
+               default="0"
+               label="COM_GAFORSALE_SET_TEST_LABEL"
+               description="COM_GAFORSALE_SET_TEST_DESC"
+        >
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
         <field name="save_history"
                type="radio"
                class="btn-group btn-group-yesno"
@@ -95,4 +131,16 @@
                default="5"
         />
     </fieldset>
+
+    <fieldset name="permissions"
+              description="JCONFIG_PERMISSIONS_DESC"
+              label="JCONFIG_PERMISSIONS_LABEL">
+
+        <field name="rules" type="rules" component="com_gaforsale"
+               class="inputbox" filter="rules" validate="rules"
+               label="JCONFIG_PERMISSIONS_LABEL"
+               section="component"
+        />
+	</fieldset>
+
 </config>

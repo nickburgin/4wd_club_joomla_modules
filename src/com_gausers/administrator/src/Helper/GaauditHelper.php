@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2014. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,14 +12,14 @@ namespace GlennArkell\Component\Gausers\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\Date\Date;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\Date\Date;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Plugin\PluginHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 /**
  * Gaaudit helper.
@@ -58,7 +58,7 @@ class GaauditHelper {
 
 		$comment = $data['comment'];
 		$ignorArray = self::getProfileFieldsToIgnore($localprof);
-		$u = GausersHelper::getSpecificUser();
+		$u = Factory::getApplication()->getIdentity();
 		$newData = array();
 
 		if ($newUser) {
@@ -111,7 +111,7 @@ class GaauditHelper {
 		$newData = json_encode($newData);
 
 		// get the current date-time based on timezone
-		//$date = GausersHelper::getTodaysDate();
+		//$date = Factory::getDate();
 		//$today = date_format($date,'Y-m-d H:i:s');
 		$today = Factory::getDate()->toSql();
 
@@ -119,7 +119,7 @@ class GaauditHelper {
 		$newAudit->id=0;
 		$newAudit->ordering=0;
 		$newAudit->state=1;
-		$newAudit->checked_out=0;
+		$newAudit->checked_out=null;
 		$newAudit->created_by=$u->id;
 		$newAudit->created_date=$today;
 		$newAudit->user_id = $user_id;
@@ -154,17 +154,17 @@ class GaauditHelper {
 	{
 		// get the current date-time based on timezone
 		$today = Factory::getDate()->toSql();
-		$u = GausersHelper::getSpecificUser();
+		$u = Factory::getApplication()->getIdentity();
 
 		$newAct = new \stdClass();
 		$newAct->id=0;
 		$newAct->ordering=0;
 		$newAct->state=1;
-		$newAct->checked_out=0;
+		$newAct->checked_out=null;
 		$newAct->created_by=$u->id;
 		$newAct->created_date=$today;
 		$newAct->user_id = $user->id;
-		$newAct->cat_id=0;
+		$newAct->category_id=0;
 		$newAct->act_name= $data['act_name'];
 		$newAct->comment = '<p>Reason - '.$data['left_reason'].'<br />Comment - '.$data['left_comment']. '</p>';
 
@@ -195,7 +195,7 @@ class GaauditHelper {
 				$field = substr($key,16);
 				if (substr($key,0,16) == 'profile-require_') {
 					if ($value) {
-						$profArray[] = $field;
+						$profArray[$field] = $field;
 					}
 				}
 			}
@@ -274,7 +274,6 @@ class GaauditHelper {
 		$body .= '<p><strong>Record Changes </strong></p><p style="margin-left:20px;">';
 		$body .= $displayResult;
 		$body .= '</p><p><strong>End of Changes</strong></p>';
-		//Factory::getApplication()->setUserState('com_gausers.test.data', $body);
 		GaemailHelper::sendEmail($recipients, $body, $subject, '');
 
         Factory::getApplication()->enqueueMessage(Text::_('COM_GAUSERS_MBRSEC_NOTIFIED'));

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.1.1
  * @package    com_gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,19 +12,17 @@ namespace GlennArkell\Component\Gatripsys\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\MVC\Model\FormModel;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\Date\Date;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\Filesystem\Path;
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\MVC\Model\FormModel;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Date\Date;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GanotificationsHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatriprptHelper;
+use \GlennArkell\Component\Gatripsys\Administrator\Helper\GauploadimgHelper;
 
 /**
  * Form model.
@@ -300,7 +298,7 @@ class TripformModel extends FormModel
             $authorised = $user->authorise('core.create', 'com_gatripsys');
             if ($authorised && $params->get('notif_tc',0) && $data['state'] == 0) {
                 $data['state'] = 1;
-                Factory::getApplication()->enqueueMessage(Text::_('COM_GATRIPSYS_TC_NOTIFIED_MESSAGE'), 'message');
+
             } else {
                 $data['state'] = 1;
             }
@@ -318,23 +316,64 @@ class TripformModel extends FormModel
 
 			if (!$id) {
 				// notify of new trip record
-                if (!$params->get('auto_trip_apprv',0) && $table->state == 1) {
-                    GanotificationsHelper::notifyTripCoord($table->id);
-                } else {
-                    if ($params->get('notif_tc',0) && ($table->state == 1 || $table->state == 2)) {
-                        GanotificationsHelper::notifyTripCoord($table->id);
+				GanotificationsHelper::notifyTripCoord($table->id);
+				Factory::getApplication()->enqueueMessage(Text::_('COM_GATRIPSYS_TC_NOTIFIED_MESSAGE'), 'message');
+
+				if ($params->get('notif_leader',0)) {
+                    $data['trip_id'] = $table->id;
+                    $data['not_attendee'] = null;
+                    GanotificationsHelper::notifyLeaderNewTrip($data, 'tripnew');
+                }
+
+				if ($params->get('notif_users',0)) {
+                    if ($table->state == 1) {
+                        // only in here if auto approved set to NO
+                        Factory::getApplication()->enqueueMessage(Text::_('COM_GATRIPSYS_NOTIFICATION_NOAUTO_APPROVAL'), 'message');
+                        if (!$params->get('trip_approval',0)) {
+                            // send notif to users if set to advise them even if only proposed
+                            GanotificationsHelper::notifyUsersNewTrip($table->id, 'trippend');
+                            Factory::getApplication()->enqueueMessage(Text::_('COM_GATRIPSYS_NOTIFICATION_NOT_APPROVED'), 'message');
+                        }
+                    } else {
+                        // send notif to users because it's approved
+                        GanotificationsHelper::notifyUsersNewTrip($table->id, 'tripaprv');
+                        Factory::getApplication()->enqueueMessage(Text::_('COM_GATRIPSYS_NOTIFICATION_APPROVAL'), 'message');
                     }
                 }
-				if ($params->get('notif_users',0)) {
-					if ($table->state == 2) {
-						GanotificationsHelper::notifyUsersNewTrip($table->id, 'tripaprv');
-						Factory::getApplication()->enqueueMessage(Text::_('COM_GATRIPSYS_NOTIFICATION_APPROVAL'), 'message');
-		 			} elseif ($table->state == 1 && !$params->get('trip_approval',0)) {
-						GanotificationsHelper::notifyUsersNewTrip($table->id, 'tripnew');
-						Factory::getApplication()->enqueueMessage(Text::_('COM_GATRIPSYS_NO_NOTIFICATION_PENDING'), 'message');
-					}
-	 			}
+
 	        }
+
+
+//                 if ($table->state == 1) {
+//                     // only in here if auto approved set to NO
+//                     Factory::getApplication()->enqueueMessage(Text::_('COM_GATRIPSYS_NOTIFICATION_NOAUTO_APPROVAL'), 'message');
+//                     if (!$params->get('trip_approval',0)) {
+//                         // send notif to users if set to advise them even if only proposed
+//                         GanotificationsHelper::notifyUsersNewTrip($table->id, 'tripaprv');
+//                         Factory::getApplication()->enqueueMessage(Text::_('COM_GATRIPSYS_NOTIFICATION_NOT_APPROVED'), 'message');
+//                     }
+//                 } else {
+//     				if ($params->get('notif_users',0)) {
+//                         GanotificationsHelper::notifyUsersNewTrip($table->id, 'tripaprv');
+//                         Factory::getApplication()->enqueueMessage(Text::_('COM_GATRIPSYS_NOTIFICATION_APPROVAL'), 'message');
+//                     }
+//                     if ($params->get('auto_trip_apprv',0)) {
+//                     if ($params->get('notif_tc',0) && ($table->state == 1 || $table->state == 2)) {
+//                         GanotificationsHelper::notifyTripCoord($table->id);
+//                     }
+//                 }
+// 				if ($params->get('notif_users',0)) {
+// 					if ($table->state == 2) {
+// 						// this is for approved trips
+//                         GanotificationsHelper::notifyUsersNewTrip($table->id, 'tripaprv');
+// 						Factory::getApplication()->enqueueMessage(Text::_('COM_GATRIPSYS_NOTIFICATION_APPROVAL'), 'message');
+// 		 			} elseif ($table->state == 1 && !$params->get('trip_approval',0)) {
+//                         // this is for proposed status trips and when trip approval is set to NO
+// 						GanotificationsHelper::notifyUsersNewTrip($table->id, 'tripnew');
+// 						Factory::getApplication()->enqueueMessage(Text::_('COM_GATRIPSYS_NO_NOTIFICATION_PENDING'), 'message');
+// 					}
+// 	 			}
+// 	        }
 
             return $table->id;
         } else {
@@ -454,7 +493,7 @@ class TripformModel extends FormModel
 	}
 
     /**
-     * Method to upload an attachment
+     * Method to upload an attachment using the helper
      */
     public function uploadAttachment($tran_file = null, $params = null, $file_type = 'trip')
     {
@@ -469,25 +508,7 @@ class TripformModel extends FormModel
 			return false;
 		}
 
-        if (file_exists('file://'.$tran_file['tmp_name'])) {
-			$fileName = File::makeSafe($tran_file['name']);
-			$fileName = str_replace(' ', '_', $fileName);
-			$src = $tran_file['tmp_name'];
-			$fileName = $dir.'/'.$fileName;
-
-			$path = Path::clean( JPATH_SITE . '/' );
-			$destfile = $path.'/'.$fileName;
-
-			if ( File::upload($src, $destfile, false, false, $safeFileOptions) ) {
-				Factory::getApplication()->enqueueMessage(Text::_('File ('.$fileName.') Uploaded Successfully'), 'success');
-				return $fileName;
-			} else {
-				Factory::getApplication()->enqueueMessage(Text::_('File ('.$fileName.') Upload Failed'), 'danger');
-				return null;
-			}
-  		} else {
-			Factory::getApplication()->enqueueMessage(Text::_('File ('.$fileName.') Does Not Exist'), 'danger');
-			return null;
-		}
+        return GauploadimgHelper::uploadAttachment($dir, $tran_file);
     }
+
 }

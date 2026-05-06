@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.0.7
+ * @version    4.1.2
  * @package    Com_Gamerchandise
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -21,7 +21,7 @@ $wa->useScript('keepalive')
 
 ?>
 <form
-	action="<?php echo JRoute::_('index.php?option=com_gamerchandise&layout=edit&id=' . (int) $this->item->id); ?>"
+	action="<?php echo Route::_('index.php?option=com_gamerchandise&layout=edit&id=' . (int) $this->item->id); ?>"
 	method="post" enctype="multipart/form-data" name="adminForm" id="sale-form" class="form-validate">
 
 	<?php echo HTMLHelper::_('uitab.startTabSet', 'myTab', array('active' => 'general')); ?>

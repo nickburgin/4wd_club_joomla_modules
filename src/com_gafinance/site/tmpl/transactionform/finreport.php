@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.0
+ * @version     5.2.3
  * @package     com_gafinance
  * @copyright   Copyright (C) 2011. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -10,12 +10,12 @@
 // no direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gafinance\Administrator\Helper\GafinanceHelper;
 
 // load any assets required
@@ -57,9 +57,9 @@ $rptReq = GafinanceHelper::getHTTPQuery($rptReq, null, null, 'Itemid', $menu->id
 $rptURL = $baseURL.\http_build_query($rptReq, '', '&amp;');
 
 /*
-echo '<pre>Test<br />';
-print_r($menu);
-echo '</pre>';
+GafinanceHelper::gaprint($app->getUserState('com_gafinance.test.data'));
+$BAL = GafinanceHelper::getClosingBalance('2024-07-01', '2024-07-31', 1);
+GafinanceHelper::gaprint($BAL);
 */
 ?>
 

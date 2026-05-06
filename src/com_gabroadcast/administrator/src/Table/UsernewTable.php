@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    4.2.1
+ * @version    4.3.3
  * @package    Com_Gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
@@ -46,7 +46,7 @@ class UsernewTable extends Table implements VersionableTableInterface
     /**
 	 * Get the type alias for the history table
 	 * @return  string  The alias as described above
-	 * @since   4.2.1
+	 * @since   4.3.3
 	 */
 	public function getTypeAlias()
 	{
@@ -58,12 +58,12 @@ class UsernewTable extends Table implements VersionableTableInterface
 	 * @param   array  $array   Named array
 	 * @param   mixed  $ignore  Optional array or list of parameters to ignore
 	 * @return  null|string  null is operation was satisfactory, otherwise returns an error
-	 * @see     JTable:bind
+	 * @see     Table:bind
 	 * @since   1.5
 	 */
 	public function bind($array, $ignore = '')
 	{
-	    $user = GabroadcastHelper::getSpecificUser();
+	    $user = Factory::getApplication()->getIdentity();
 	    $date = Factory::getDate();
 		$task = Factory::getApplication()->input->get('task');
 
@@ -161,42 +161,13 @@ class UsernewTable extends Table implements VersionableTableInterface
 	/**
 	 * Define a namespaced asset name for inclusion in the #__assets table
 	 * @return string The asset name
-	 * @see JTable::_getAssetName
+	 * @see Table::_getAssetName
 	 */
 	protected function _getAssetName()
 	{
 		$k = $this->_tbl_key;
 
 		return 'com_gabroadcast.usernew.' . (int) $this->$k;
-	}
-
-	/**
-	 * Returns the parent asset's id. If you have a tree structure, retrieve the parent's id using the external key field
-	 *
-	 * @param   JTable   $table  Table name
-	 * @param   integer  $id     Id
-	 *
-	 * @see JTable::_getAssetParentId
-	 *
-	 * @return mixed The id on success, false on failure.
-	 */
-	protected function _getAssetParentId(Table $table = null, $id = null)
-	{
-		// We will retrieve the parent-asset from the Asset-table
-		$assetParent = Table::getInstance('Asset');
-
-		// Default: if no asset-parent can be found we take the global asset
-		$assetParentId = $assetParent->getRootId();
-
-		// The item has the component as asset-parent
-		$assetParent->loadByName('com_gabroadcast');
-
-		// Return the found asset-parent-id
-		if ($assetParent->id) {
-			$assetParentId = $assetParent->id;
-		}
-
-		return $assetParentId;
 	}
 
 	/**

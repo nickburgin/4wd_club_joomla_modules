@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,22 +12,22 @@ namespace GlennArkell\Component\Gausers\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\Data\DataObject;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\Filesystem\Path;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\User\User;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\Data\DataObject;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\Filesystem\Path;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\User\User;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GaemailHelper;
 
@@ -83,6 +83,41 @@ class GainvoiceHelper
         return $userId;
     }
 
+    /**
+     * Setup the new end date for the next period of membership
+     * @params $date object of the invoice_date from parameters
+     * @params $defMship object of the default membership record
+     * @return date string
+     */
+    public static function setupOldEndDate($params, $defMship)
+	{
+        $oldStartDate = new Date(strtotime($params->get('invoice_date') ?? ''));  //2025-07-01
+        $oldEndDate = $oldStartDate->modify('+'.$defMship->mship_term.' '.$defMship->term_type);
+        $oldEndDate = $oldEndDate->modify('-1 DAY');  //2025-06-30
+
+        $oldExpDate = date_format($oldEndDate,'Y-m-d');  //2025-06-30
+
+        return $oldExpDate;
+    }
+
+    /**
+     * Setup the new end date for the next period of membership
+     * @params $date object of the invoice_date from parameters
+     * @params $defMship object of the default membership record
+     * @return date string
+     */
+    public static function setupNewEndDate($params, $defMship)
+	{
+        $invoice_date = new Date(strtotime($params->get('invoice_date') ?? ''));
+        $oldEndDate = $invoice_date->modify('+'.$defMship->mship_term.' '.$defMship->term_type);    //2025-07-01
+        $oldEndDate = $oldEndDate->modify('-1 DAY');  //2025-06-30
+
+        $newEndDate = $oldEndDate->modify('+'.$defMship->mship_term.' '.$defMship->term_type); //2025-06-30
+        $newExpDate = date_format($newEndDate,'Y-m-d');
+
+        return $newExpDate;
+    }
+
     public static function getLastInvoiceMship($userId)
 	{
 		// get the users types from the database
@@ -100,7 +135,7 @@ class GainvoiceHelper
 	    try {
 	        $lastMship = $db->loadObject();
 	    } catch (RuntimeException $e) {
-	        Factory::getApplication()->enqueueMessage($e->getMessage().' Failed Get Last Paid Invoice for Membership Type', 'danger');
+	        Factory::getApplication()->enqueueMessage($e->getMessage().' Failed to Get Last Paid Invoice for Member', 'danger');
 	        return false;
 	    }
 
@@ -149,7 +184,7 @@ class GainvoiceHelper
     public static function checkNewInvoicesDue($mship, $params)
 	{
 		$lastInvDate = strtotime($params->get('invoice_date'));
-        $date = GausersHelper::getTodaysDate();
+        $date = Factory::getDate();
         $prevDate = $lastInvDate->modify('+'.$mship->mship_term.' '.$mship->mship_type);
         $today = date_format($date,'Y-m-d H:i:s');
 
@@ -184,6 +219,13 @@ class GainvoiceHelper
     public static function mainInvoiceCreation($id, $u, $params)
 	{
         Factory::getApplication()->setUserState('com_gausers.user.data', $u);
+        
+        // test for new user and load old expiry date
+        if (!isset($u->oldExpDate)) {
+            $oldStartDate = new Date(strtotime($params->get('invoice_date') ?? ''));
+            $oldEndDate = $oldStartDate->modify('-1 DAY');
+            $u->oldExpDate = date_format($oldEndDate,'Y-m-d');
+        }
 
 		// set up expiry date based on last invoice run and mship type
         if ($u->mship->subscrib_amt == 0.00) {
@@ -193,18 +235,23 @@ class GainvoiceHelper
             if (isset($u->mship->end_date)) {
                 $lastInvDate = new Date(strtotime($u->mship->end_date));
             } else {
-                $lastInvDate = new Date(strtotime($params->get('invoice_date') ?? ''));
+                $lastInvDate = new Date(strtotime($u->oldExpDate));
             }
         }
 
+        $lastExpDate = date_format($lastInvDate,'Y-m-d');
         $eDate = $lastInvDate->modify('+'.$u->mship->mship_term.' '.$u->mship->term_type);
-        //$endDate = $eDate->modify('+1 '.$u->mship->term_type);
         $expDate = date_format($eDate,'Y-m-d');
+        $amt = self::calcInvoiceAmt($id, $u, $lastExpDate, $params);
 
-        $amt = self::calcInvoiceAmt($id, $u, $params);
-
-        // test for an invoice value and skip if zero
-        if ($amt == 0) { return true; }
+        // check if old member returning
+        if (isset($u->mship->end_date) && $u->mship->end_date < $u->oldExpDate) {
+            // set new expiry date to be the new expiry date and not there old exp date plus 1 year
+            $expDate = $u->newExpDate;
+            Factory::getApplication()->enqueueMessage('Past member returning - '.$u->name, 'notice');
+        }
+        
+        Factory::getApplication()->enqueueMessage($amt .' - '. $u->name.' - joined: '.$u->regoDate . ' - lastExp: '.$lastExpDate . ' - newExp: '.$expDate, 'notice');
 
         $invRec = self::createNewInvoiceRec($u->id, $amt, $u->mship, $expDate);
 
@@ -228,7 +275,7 @@ class GainvoiceHelper
      * @params $mship = the object for the membership type record
      * @return $amt = calculated amount of the invoice
      */
-    public static function calcInvoiceAmt($id, $u, $params)
+    public static function calcInvoiceAmt($id, $u, $lastExpDate, $params)
 	{
         $minProrata  = $params->get('min_prorata', 0);
         $discAllow  = $params->get('discount_allowed', 0);
@@ -237,13 +284,11 @@ class GainvoiceHelper
         $yearProrata  = $params->get('year_prorata', 2);
         // financial year = 1 , 2 calendar year
         $mship_period  = $params->get('mship_period', 1);
-
-        // invoice date when renewals last run so the end date will
-        // be this date plus the term type and term period
-        $invoice_date  = $params->get('invoice_date');
+        
+        $oldProDate = new Date(strtotime($params->get('invoice_date') ?? ''));
+        $oldProDate = date_format($oldProDate,'Y-m-d');
 
         $membership_dues  = $u->mship->subscrib_amt;
-        //Factory::getApplication()->setUserState('com_gausers.test.data', $u);
 
         // check for a discount switch
         if ($discAllow && (isset($u->$discSwitch) && $u->$discSwitch) ) {
@@ -255,19 +300,19 @@ class GainvoiceHelper
             // if existing user, then this is a renewal
             if ($id) {
                 // check for second term for renewal to calc prorata
-                if ($yearProrata == 2 && $u->registerDate > $invoice_date) {
-                    $proRata = self::calcProRata($u, $invoice_date, $membership_dues);
+                if ($yearProrata == 2 && $u->regoDate > $oldProDate) {
+                    $proRata = self::calcProRata($u, $oldProDate, $membership_dues);
                     if ($proRata->prorata_amount >= $minProrata) {
                         $membership_dues = $proRata->prorata_amount;
                     } else {
                         $membership_dues = $minProrata;
                     }
                 }
-            // elseif new user
+            // else new user so full unless prorata set on first year
             } else {
                 // check for first term
                 if ($yearProrata == 1) {
-                    $proRata = self::calcProRata($u, $invoice_date, $membership_dues);
+                    $proRata = self::calcProRata($u, $lastExpDate, $membership_dues);
                     if ($proRata->prorata_amount >= $minProrata) {
                         $membership_dues = $proRata->prorata_amount;
                     } else {
@@ -293,7 +338,7 @@ class GainvoiceHelper
 	 *  	prorata_days,
 	 *  	prorata_amount
 	*/
-	public static function calcProRata($u, $invoice_date, $membership_dues = 0)
+	public static function calcProRata($u, $lastExpDate, $membership_dues = 0)
 	{
         if ($u->mship->term_type == 'YEAR') {
            $multDays = 365 * $u->mship->mship_term;
@@ -308,9 +353,9 @@ class GainvoiceHelper
         $db		= Factory::getContainer()->get('DatabaseDriver');
         $query	= $db->getQuery(true);
         $query->clear();
-        $query->select(' DATE_SUB(DATE_ADD( '.$db->Quote($invoice_date).', INTERVAL '.$u->mship->mship_term.' '.$u->mship->term_type.' ), INTERVAL 1 DAY) as end_this_year  ');
-        $query->select(' DATEDIFF(DATE_SUB(DATE_ADD( '.$db->Quote($invoice_date).', INTERVAL '.$u->mship->mship_term.' '.$u->mship->term_type.' ), INTERVAL 1 DAY), '.$db->Quote($u->registerDate).') as prorata_days  ');
-        $query->select(' ROUND((( '.$db->Quote($membership_dues).' / '.$multDays.') * DATEDIFF(DATE_SUB(DATE_ADD( '.$db->Quote($invoice_date).', INTERVAL '.$u->mship->mship_term.' '.$u->mship->term_type.' ), INTERVAL 1 DAY), '.$db->Quote($u->registerDate).')),1) as prorata_amount  ');
+        $query->select(' DATE_ADD( '.$db->Quote($lastExpDate).', INTERVAL '.$u->mship->mship_term.' '.$u->mship->term_type.' ) as end_this_year  ');
+        $query->select(' DATEDIFF(DATE_ADD( '.$db->Quote($lastExpDate).', INTERVAL '.$u->mship->mship_term.' '.$u->mship->term_type.' ), '.$db->Quote($u->registerDate).') as prorata_days  ');
+        $query->select(' ROUND((( '.$db->Quote($membership_dues).' / '.$multDays.') * DATEDIFF(DATE_ADD( '.$db->Quote($lastExpDate).', INTERVAL '.$u->mship->mship_term.' '.$u->mship->term_type.' ), '.$db->Quote($u->registerDate).')),1) as prorata_amount  ');
         $db->setQuery((string)$query);
 
 		try {
@@ -329,15 +374,17 @@ class GainvoiceHelper
      * @params $amt = calculated amount of the invoice
      * @return object invoice record just created
      */
-    public static function createNewInvoiceRec($id = 0, $amt = 0, $mship = null, $exp_date = null)
+    public static function createNewInvoiceRec($id = 0, $amt = 0.00, $mship = null, $exp_date = null)
 	{
-		$user = GausersHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 		$today = Factory::getDate()->toSql();
 
     	// load new invoice record
     	$new_inv = new \stdClass();
     	$new_inv->id = 0;
     	$new_inv->user_id = $id;
+    	$new_inv->checked_out = null;
+    	$new_inv->checked_out_time = null;
     	$new_inv->created_by = $user->id;
     	$new_inv->created_date = $today;
     	$new_inv->invoice_amt = $amt;
@@ -410,13 +457,17 @@ class GainvoiceHelper
 	*/
 	public static function createAdHocPDF($data, $oldMbr, $params)
 	{
-		$today = $data['invRec']->created_date;
-		Factory::getLanguage()->load('com_gausers', JPATH_ADMINISTRATOR);
+        if ($data['invRec']->invoice_amt == 0) { return false; }
+
+        $today = $data['invRec']->created_date;
+		$app = Factory::getApplication();
+		$app->getLanguage()->load('com_gausers', JPATH_ADMINISTRATOR);
 
 		$membership_desc  = $params->get('membership_desc');
 		$bank_desc  = $params->get('bank_desc');
 		$bank_bsb  = $params->get('bank_bsb');
 		$bank_accnt  = $params->get('bank_accnt');
+		$finance_accnt  = $params->get('finance_accnt');
 		$pp_accnt  = $params->get('pp_accnt');
 		$pp_img  = $params->get('pp_img');
 		$pp_logo = HTMLHelper::cleanImageURL($pp_img);
@@ -436,6 +487,10 @@ class GainvoiceHelper
                 $membership_desc = $membership_desc.' - discount applied';
             }
         } else {
+            if ($tot_cost == ($membership_dues + $joining_fee)) {
+                // reset oldmember as this is a re-generate of the pdf
+                $oldMbr = 0;
+            }
             if ($convert) {
                 if ($tot_cost < ($membership_dues + $joining_fee)) {
                     $membership_desc = $membership_desc.' - discount applied (conversion of membership)';
@@ -443,15 +498,16 @@ class GainvoiceHelper
                 }
             } else {
                 if ($tot_cost < $membership_dues) {
+                    $membership_dues = $tot_cost;
                     $membership_desc = $membership_desc.' - discount applied';
                 }
             }
         }
 
-		Factory::getApplication()->setUserState('com_gausers.invoice_amt.data',$tot_cost);
+		$app->setUserState('com_gausers.invoice_amt.data',$tot_cost);
 
         // set up family member names associated with this invoice
-        $u =  Factory::getApplication()->getUserState('com_gausers.user.data');
+        $u =  $app->getUserState('com_gausers.user.data');
         if (isset($u->family_mbrs) && $u->family_mbrs) {
             $family = '(includes: ';
             foreach ($u->family_mbrs AS $fmbr) {
@@ -550,8 +606,20 @@ class GainvoiceHelper
 		$pdf->MultiCell(0, $lh, $inv_foot_text, 0, "L");
 		$lh = 5;
 		$pdf->SetFont('Arial','B',8);
-		$pdf->Cell(0, $lh, "EFT to: ".$bank_desc, 0, 1, "C");
-		$pdf->Cell(0, $lh, "BSB: ".$bank_bsb.' Accnt: '.$bank_accnt, 0, 1, "C");
+		if (!$params->get('incl_finance', 0)) {
+            $pdf->Cell(0, $lh, "EFT to: ".$bank_desc, 0, 1, "C");
+    		$pdf->Cell(0, $lh, "BSB: ".$bank_bsb.' Accnt: '.$bank_accnt, 0, 1, "C");
+		} else {
+            //check if account is set
+            if ($finance_accnt) {
+                $finAccnt = GausersHelper::getRecord("#__gafinance_accounts", "id", $finance_accnt);
+                $pdf->Cell(0, $lh, "EFT to: ".$finAccnt->accnt_name, 0, 1, "C");
+        		$pdf->Cell(0, $lh, "BSB: ".$finAccnt->accnt_bsb.' Accnt: '.$finAccnt->accnt_number, 0, 1, "C");
+            } else {
+                $pdf->Cell(0, $lh, "EFT to: ".$bank_desc, 0, 1, "C");
+        		$pdf->Cell(0, $lh, "BSB: ".$bank_bsb.' Accnt: '.$bank_accnt, 0, 1, "C");
+            }
+        }
 		if ($params->get('pp_pay')) {
             $pdf->Cell(0, $lh, "PayPal payments can be made via this link.", 0, 1, "C");
     		$x = $pdf->GetX();

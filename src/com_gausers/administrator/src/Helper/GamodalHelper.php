@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.6
+ * @version    6.0.0
  * @package    com_gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2023 Glenn Arkell
@@ -12,9 +12,9 @@ namespace GlennArkell\Component\Gausers\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 /**
  * Modal helper.
@@ -40,13 +40,18 @@ class GamodalHelper
 	 */
     public static function setupModalButton($type, $controller, $field, $value, $layout, $modname, $button, $label, $title, $icon, $name)
 	{
+        $modTitle = null;
+        if ($title > '') {
+            $modTitle = Text::_($title).' - '.$name;
+        }
+
         // modal form
         $link = self::getHTTPQuery(null, $type, $controller, $field, $value);
         $link = self::getHTTPQuery($link, null, null, 'tmpl', 'component');
         $link = self::getHTTPQuery($link, null, null, 'layout', $layout);
         $modalparams = array( 
                         'url' => 'index.php?'.http_build_query($link, '', '&amp;'),
-        		        'title'      => Text::_($title).' - '.$name, 
+        		        'title'      => $modTitle, 
                         'closeButton'=> true,
 				        'modalWidth' => 40,
 				        'bodyHeight' => 35,

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.0
+ * @version     5.3.0
  * @package     com_gatripsys
  * @copyright   Copyright (C) 2011-2014. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,9 +12,9 @@ namespace GlennArkell\Component\Gatripsys\Administrator\Field;
 defined('JPATH_PLATFORM') or die;
 
 // import the list field type
-use \Joomla\CMS\Form\FormField;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Form\Field\PredefinedlistField;
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Form\Field\PredefinedlistField;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 
 /**
@@ -33,7 +33,7 @@ class ExtrastatusField extends PredefinedlistField
 	/**
 	 * Name of the layout being used to render the field
 	 * @var    string
-	 * @since  5.1.0
+	 * @since  5.3.0
 	 */
 	protected $layout = 'joomla.form.field.list';
 

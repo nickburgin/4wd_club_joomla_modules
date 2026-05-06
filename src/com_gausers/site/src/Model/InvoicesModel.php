@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
@@ -13,20 +13,20 @@ namespace GlennArkell\Component\Gausers\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
-use \Joomla\CMS\Helper\TagsHelper;
-use \Joomla\CMS\Layout\FileLayout;
-use \Joomla\Database\ParameterType;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\User\User;
-use \Joomla\Filesystem\Path;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\CMS\User\UserHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
+use Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Layout\FileLayout;
+use Joomla\Database\ParameterType;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\User\User;
+use Joomla\Filesystem\Path;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\CMS\User\UserHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GaemailHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GainvoiceHelper;
@@ -144,7 +144,7 @@ class InvoicesModel extends ListModel
 		$query->join('LEFT', '#__users AS c ON c.id = a.created_by');
 
 		// Join over the user field 'user_id'
-		$query->select('u.name AS user_id_name, u.block , u.email');
+		$query->select('u.name AS user_id_name, u.block, u.email, u.registerDate');
 		$query->select('IF(SUBSTRING(u.email,1,'.(int) $noemailLen.') = '. $db->Quote($noEmail) . ',1,0) AS snailMail ' );
 		$query->join('LEFT', '#__users AS u ON u.id = a.user_id');
 

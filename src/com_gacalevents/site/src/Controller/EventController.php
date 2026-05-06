@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -11,14 +11,14 @@ namespace GlennArkell\Component\Gacalevents\Site\Controller;
 
 \defined('_JEXEC') or die;
 
-use \Joomla\CMS\Application\SiteApplication;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Multilanguage;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Controller\BaseController;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Multilanguage;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Utilities\ArrayHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 
 /**
@@ -73,7 +73,7 @@ class EventController extends BaseController
 		$app = Factory::getApplication();
 
 		// Checking if the user can remove object
-		$user = GacaleventsHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		if ($user->authorise('core.edit', 'com_gacalevents') || $user->authorise('core.edit.state', 'com_gacalevents')) {
 			$model = $this->getModel('Event', 'Site');
@@ -123,7 +123,7 @@ class EventController extends BaseController
 		$app = Factory::getApplication();
 
 		// Checking if the user can remove object
-		$user = GacaleventsHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		if ($user->authorise('core.delete', 'com_gacalevents')) {
 			$model = $this->getModel('Event', 'Site');
@@ -228,6 +228,28 @@ class EventController extends BaseController
 		$event_id = $app->input->getInt('event_id');
 		
 		$return	= $model->extractAttendees($event_id);
+
+		// Redirect to the list screen.
+		$item = $app->getMenu()->getActive();
+		if (!$item) {
+			$this->setRedirect(Route::_('index.php?option=com_gacalevents&view=events', false));
+		} else {
+			$this->setRedirect(Route::_($item->link, false));
+		}
+
+		return true;
+	}
+
+	public function repeatEvent()
+	{
+		// Initialise variables.
+		$app	= Factory::getApplication();
+		$model	= $this->getModel('Event', 'Site');
+
+		// Get the passed recordId
+		$event_id = $app->input->getInt('id');
+
+		$return	= $model->repeatEvent($event_id);
 
 		// Redirect to the list screen.
 		$item = $app->getMenu()->getActive();

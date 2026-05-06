@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.2.3
  * @package    Com_Gafinance
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,16 +12,16 @@ namespace GlennArkell\Component\Gafinance\Administrator\Table;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\Registry\Registry;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Table\Table as Table;
-use \Joomla\CMS\Versioning\VersionableTableInterface;
-use \Joomla\Database\DatabaseDriver;
-use \Joomla\CMS\Filter\OutputFilter;
-use \Joomla\Filesystem\File;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Factory;
+use Joomla\Registry\Registry;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table as Table;
+use Joomla\CMS\Versioning\VersionableTableInterface;
+use Joomla\Database\DatabaseDriver;
+use Joomla\CMS\Filter\OutputFilter;
+use Joomla\Filesystem\File;
 use \GlennArkell\Component\Gafinance\Administrator\Helper\GafinanceHelper;
 
 /**
@@ -44,7 +44,7 @@ class InvoiceTable extends Table implements VersionableTableInterface
     /**
 	 * Get the type alias for the history table
 	 * @return  string  The alias as described above
-	 * @since   5.1.0
+	 * @since   5.2.3
 	 */
 	public function getTypeAlias()
 	{

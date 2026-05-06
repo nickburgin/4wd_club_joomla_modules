@@ -1,24 +1,24 @@
 <?php
 
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace GlennArkell\Component\Gacalattendees\Site\View\Attendee;
+namespace GlennArkell\Component\Gacalevents\Site\View\Attendee;
 
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\MVC\View\GenericDataException;
+use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\MVC\View\GenericDataException;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 
 /**
@@ -44,7 +44,7 @@ class HtmlView extends BaseHtmlView
 	public function display($tpl = null)
 	{
 		$app  = Factory::getApplication();
-		$user = GacaleventsHelper::getSpecificUser();
+		$user = $app->getIdentity();
 
 		$this->state  = $this->get('State');
 		$this->item   = $this->get('Item');

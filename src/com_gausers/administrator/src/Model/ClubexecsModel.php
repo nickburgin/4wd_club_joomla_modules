@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2014. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,14 +12,14 @@ namespace GlennArkell\Component\Gausers\Administrator\Model;
 
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Helper\TagsHelper;
-use \Joomla\Database\ParameterType;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Helper\TagsHelper;
+use Joomla\Database\ParameterType;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Component\ComponentHelper;
 
 /**
  * Methods supporting a list of Gausers records.

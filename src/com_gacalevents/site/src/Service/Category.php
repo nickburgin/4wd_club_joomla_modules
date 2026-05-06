@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -13,7 +13,7 @@ namespace GlennArkell\Component\Gacalevents\Site\Service;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Categories\Categories;
+use Joomla\CMS\Categories\Categories;
 
 /**
  * Content Component Category Tree

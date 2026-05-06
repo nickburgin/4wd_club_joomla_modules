@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -9,15 +9,15 @@
 
 defined('JPATH_BASE') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Session\Session;
-use \Joomla\CMS\Plugin\PluginHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 
 //Load admin language file
-$lang = Factory::getLanguage();
+$lang = Factory::getApplication()->getLanguage();
 $lang->load('com_gausers', JPATH_ADMINISTRATOR);
 
 $data = $displayData;
@@ -40,7 +40,12 @@ $fld_clubnumber = $params->get('fld_clubnumber',0);
 ?>
 	            <?php /* test for administrator or owner of record for updating purposes */ ?>
 			    <?php if ($canAdmin || $item->id == $user_id) : ?>
-                    <?php // don't tweek any fields  ?>
+                    <?php
+                        if ($localProfile == 'raf' ) {
+                            $form->setFieldAttribute('region', 'type', 'text');
+                            $form->setFieldAttribute('region', 'default', '');
+                        }
+                    ?>
 	            <?php /* NOT an administrator or owner of record */ ?>
 				<?php else : ?>
 					<?php $form->setFieldAttribute('address1', 'type', 'hidden'); ?>

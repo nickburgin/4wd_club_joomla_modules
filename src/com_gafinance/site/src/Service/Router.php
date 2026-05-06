@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    5.1.0
+ * @version    5.2.3
  * @package    Com_Gafinance
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -13,18 +13,18 @@ namespace GlennArkell\Component\Gafinance\Site\Service;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Component\Router\RouterViewConfiguration;
-use \Joomla\CMS\Component\Router\RouterView;
-use \Joomla\CMS\Component\Router\Rules\StandardRules;
-use \Joomla\CMS\Component\Router\Rules\NomenuRules;
-use \Joomla\CMS\Component\Router\Rules\MenuRules;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Categories\Categories;
-use \Joomla\CMS\Application\SiteApplication;
-use \Joomla\CMS\Categories\CategoryFactoryInterface;
-use \Joomla\CMS\Categories\CategoryInterface;
-use \Joomla\Database\DatabaseInterface;
-use \Joomla\CMS\Menu\AbstractMenu;
+use Joomla\CMS\Component\Router\RouterViewConfiguration;
+use Joomla\CMS\Component\Router\RouterView;
+use Joomla\CMS\Component\Router\Rules\StandardRules;
+use Joomla\CMS\Component\Router\Rules\NomenuRules;
+use Joomla\CMS\Component\Router\Rules\MenuRules;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Categories\Categories;
+use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Categories\CategoryFactoryInterface;
+use Joomla\CMS\Categories\CategoryInterface;
+use Joomla\Database\DatabaseInterface;
+use Joomla\CMS\Menu\AbstractMenu;
 use \GlennArkell\Component\Gafinance\Administrator\Helper\GafinanceHelper;
 
 /**
@@ -37,14 +37,14 @@ class Router extends RouterView
 	/**
 	 * The category factory
 	 * @var CategoryFactoryInterface
-	 * @since  5.1.0
+	 * @since  5.2.3
 	 */
 	private $categoryFactory;
 
 	/**
 	 * The category cache
 	 * @var  array
-	 * @since  5.1.0
+	 * @since  5.2.3
 	 */
 	private $categoryCache = [];
 
@@ -103,6 +103,18 @@ class Router extends RouterView
 		$invoiceform->setKey('id');
 		$this->registerView($invoiceform);
 
+		/* -------------   Business Assets  -------------------- */
+		$busassets = new RouterViewConfiguration('busassets');
+		$this->registerView($busassets);
+
+		$busasset = new RouterViewConfiguration('busasset');
+		$busasset->setKey('id')->setParent($busassets);
+		$this->registerView($busasset);
+
+		$busassetform = new RouterViewConfiguration('busassetform');
+		$busassetform->setKey('id');
+		$this->registerView($busassetform);
+
 		/* -------------   General stuff  -------------------- */
 		parent::__construct($app, $menu);
 
@@ -147,6 +159,14 @@ class Router extends RouterView
 		return array((int) $id => $id);
 	}
 
+	/**
+	 * Method to get the segment(s) for an Busasset
+	 */
+	public function getBusassetSegment($id, $query)
+	{
+		return array((int) $id => $id);
+	}
+
 	/* -------------   Form Segments  -------------------- */
 	/**
 	 * Method to get the segment(s) for an transactionform
@@ -181,6 +201,14 @@ class Router extends RouterView
 	public function getPatronformSegment($id, $query)
 	{
 		return $this->getPatronSegment($id, $query);
+	}
+
+	/**
+	 * Method to get the segment(s) for an Busassetform
+	 */
+	public function getBusassetformSegment($id, $query)
+	{
+		return $this->getBusassetSegment($id, $query);
 	}
 
 	/* -------------   List Segments  -------------------- */
@@ -246,6 +274,14 @@ class Router extends RouterView
 		return (int) $segment;
 	}
 
+	/**
+	 * Method to get the segment(s) for a busasset
+	 */
+	public function getBusassetId($segment, $query)
+	{
+		return (int) $segment;
+	}
+
 	/* -------------   Form ID  -------------------- */
 	/**
 	 * Method to get the segment(s) for a transactionform
@@ -280,6 +316,14 @@ class Router extends RouterView
 	public function getPatronformId($segment, $query)
 	{
 		return $this->getPatronId($segment, $query);
+	}
+
+	/**
+	 * Method to get the segment(s) for a Busassetform
+	 */
+	public function getBusassetformId($segment, $query)
+	{
+		return $this->getBusassetId($segment, $query);
 	}
 
 	/* -------------   List ID  -------------------- */
@@ -317,7 +361,7 @@ class Router extends RouterView
 	 * Method to get categories from cache
 	 * @param   array  $options   The options for retrieving categories
 	 * @return  CategoryInterface  The object containing categories
-	 * @since   5.1.0
+	 * @since   5.2.3
 	 */
 	private function getCategories(array $options = []): CategoryInterface
 	{

@@ -21,7 +21,9 @@
         <field name="pay_type" type="category" extension="com_gausers.payment"
 			onchange="this.form.submit();"
             label="COM_GAUSERS_FORM_LBL_INVOICE_PAY_TYPE"
-            description="COM_GAUSERS_FORM_DESC_INVOICE_PAY_TYPE" />
+            description="COM_GAUSERS_FORM_DESC_INVOICE_PAY_TYPE" >
+            <option value="">JOPTION_SELECT_PAYTYPE</option>
+        </field>
 
     </fields>
 

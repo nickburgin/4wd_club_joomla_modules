@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.0.2
+ * @version    4.2.2
  * @package    com_gaforsale
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -71,6 +71,7 @@ class HtmlView extends BaseHtmlView
 	 */
 	protected function addToolbar()
 	{
+		$compName = 'gaforsale';
 		$progNameL = 'fsitem';
 		$progNameC = 'Fsitem';
 		$state = $this->get('State');
@@ -86,6 +87,7 @@ class HtmlView extends BaseHtmlView
 		ToolbarHelper::title(Text::_('COM_GAFORSALE_TITLE_'.STRTOUPPER($progNameL).'S'), $customIcon);
 
 		$toolbar = Toolbar::getInstance('toolbar');
+        $toolbar->link('JTOOLBAR_DASHBOARD', 'index.php?option=com_cpanel&view=cpanel&dashboard='.$compName);
 
 		// Check if the form exists before showing the add/edit buttons
 		$formPath = JPATH_ADMINISTRATOR . '/components/com_gaforsale/src/View/'.$progNameC.'s';

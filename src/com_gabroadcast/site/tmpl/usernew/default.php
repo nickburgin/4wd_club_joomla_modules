@@ -1,7 +1,7 @@
 <?php
 /**
- * @version    4.2.1
- * @package    Com_Gabroadcast
+ * @version     4.3.3
+ * @package     com_gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -19,10 +19,9 @@ $this->document->getWebAssetManager()
     ->usePreset('com_gabroadcast.gabroadcastpreset');
 
 //Load admin language file
-$lang = Factory::getLanguage();
-$lang->load('com_gabroadcast', JPATH_ADMINISTRATOR);
+Factory::getApplication()->getLanguage()->load('com_gabroadcast', JPATH_ADMINISTRATOR);
 
-$user = GabroadcastHelper::getSpecificUser();
+$user = Factory::getApplication()->getIdentity();
 $canEdit = $user->authorise('core.edit', 'com_gabroadcast');
 
 if (!$canEdit && $user->authorise('core.edit.own', 'com_gabroadcast')) {

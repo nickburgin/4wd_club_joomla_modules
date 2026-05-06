@@ -1,26 +1,28 @@
 <?php
 /**
- * @version    4.1.0
- * @package    com_gatracklog
+ * @version     4.2.0
+ * @package     pkg_mypackage
+ * @subpackage  com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 namespace GlennArkell\Component\Gatracklog\Administrator\Table;
+
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\Registry\Registry;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Table\Table as Table;
-use \Joomla\CMS\Versioning\VersionableTableInterface;
-use \Joomla\Database\DatabaseDriver;
-use \Joomla\CMS\Filter\OutputFilter;
-use \Joomla\Filesystem\File;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Factory;
+use Joomla\Registry\Registry;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table as Table;
+use Joomla\CMS\Versioning\VersionableTableInterface;
+use Joomla\Database\DatabaseDriver;
+use Joomla\CMS\Filter\OutputFilter;
+use Joomla\Filesystem\File;
 use \GlennArkell\Component\Gatracklog\Administrator\Helper\GatracklogHelper;
 
 /**
@@ -43,7 +45,7 @@ class TracklogTable extends Table implements VersionableTableInterface
     /**
 	 * Get the type alias for the history table
 	 * @return  string  The alias as described above
-	 * @since   4.1.0
+	 * @since   4.0.0
 	 */
 	public function getTypeAlias()
 	{
@@ -55,13 +57,13 @@ class TracklogTable extends Table implements VersionableTableInterface
 	 * @param   array  $array   Named array
 	 * @param   mixed  $ignore  Optional array or list of parameters to ignore
 	 * @return  null|string  null is operation was satisfactory, otherwise returns an error
-	 * @see     JTable:bind
+	 * @see     Table:bind
 	 * @since   1.5
      * @throws Exception
 	 */
 	public function bind($array, $ignore = '')
 	{
-	    $user = GatracklogHelper::getSpecificUser();
+	    $user = Factory::getApplication()->getIdentity();
 	    $date = Factory::getDate();
 		$task = Factory::getApplication()->input->get('task');
 	    
@@ -153,7 +155,7 @@ class TracklogTable extends Table implements VersionableTableInterface
 		{
 			$this->ordering = self::getNextOrder();
 		}
-		
+
 		return parent::check();
 	}
 
@@ -171,7 +173,7 @@ class TracklogTable extends Table implements VersionableTableInterface
 
 	/**
 	 * Returns the parent asset's id. If you have a tree structure, retrieve the parent's id using the external key field
-	 * @param   JTable   $table  Table name
+	 * @param   Table   $table  Table name
 	 * @param   integer  $id     Id
 	 * @see Table::_getAssetParentId
 	 * @return mixed The id on success, false on failure.
@@ -195,6 +197,7 @@ class TracklogTable extends Table implements VersionableTableInterface
 		return $assetParentId;
 	}
 
+	
     /**
      * Delete a record by id
      * @param   mixed  $pk  Primary key value to delete. Optional

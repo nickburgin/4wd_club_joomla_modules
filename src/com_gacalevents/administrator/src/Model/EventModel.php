@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,13 +12,13 @@ namespace GlennArkell\Component\Gacalevents\Administrator\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\Factory;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Date\Date;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Plugin\PluginHelper;
-use \Joomla\CMS\MVC\Model\AdminModel;
-use \Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\Component\ComponentHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 
@@ -138,9 +138,18 @@ class EventModel extends AdminModel
 	 */
 	public function duplicate(&$pks)
 	{
-		$user = GacaleventsHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 		$params = ComponentHelper::getParams('com_gacalevents');
 		$duplic_days = $params->get('duplic_days', '7');
+		$repeatEvent = $params->get('repeat_event', 0);
+		if ($repeatEvent) {
+            // setup duplication information
+            $repeatTimes = $params->get('repeat_qty', 1);
+            $repeatGap = $params->get('repeat_setting', 7);
+            $repeatType = $params->get('repeat_type', 'day');
+        }
+        $duplicDays = $repeatEvent ? $repeatGap : $duplic_days;
+        $duplicPeriod = $repeatEvent ? $repeatType : 'day';
 
 		// Access checks.
 		if (!$user->authorise('core.create', 'com_gacalevents')) {
@@ -153,21 +162,51 @@ class EventModel extends AdminModel
 
 			if ($table->load($pk, true))
 			{
-				// Reset the id to create a new record.
-				$table->id = 0;
-				$table->state = 0;
-				$table->created_by = $user->id;
-				$ddate = new Date($table->depart_date . ' +'.$duplic_days.' day');
-				$rdate = new Date($table->return_date . ' +'.$duplic_days.' day');
-				$table->depart_date = $ddate->toSql();
-				$table->return_date = $rdate->toSql();
+				// Test for multiple repeats
+                if ($repeatEvent && $repeatTimes > 1) {
+                    // cycle through
+                    //$origDdate = new Date($table->depart_date);
+                    //$origRdate = new Date($table->return_date);
+                    $record_id = $pk;
+                    for ($x = 1; $x <= $repeatTimes; $x++) {
+        				$subtable = $this->getTable();
+        				$subtable->load($record_id);
+                        //reset and load new record
+                        $subtable->id = 0;
+        				$subtable->state = 1;
+        				$subtable->created_by = $user->id;
+        				$ddate = new Date($subtable->depart_date . ' +'.$duplicDays.' '.$duplicPeriod);
+        				$rdate = new Date($subtable->return_date . ' +'.$duplicDays.' '.$duplicPeriod);
+        				$subtable->depart_date = $ddate->toSql();
+        				$subtable->return_date = $rdate->toSql();
 
-				if (!$table->check()) {
-					throw new \Exception($table->getError());
-				}
-				
-				if (!$table->store()) {
-					throw new \Exception($table->getError());
+        				if (!$subtable->check()) {
+        					throw new \Exception($subtable->getError());
+        				}
+        				
+        				if (!$subtable->store()) {
+        					throw new \Exception($subtable->getError());
+        				} else {
+                            $record_id = $subtable->id;
+                        }
+    				}
+                } else {
+                    // Reset the id to create a new record.
+    				$table->id = 0;
+    				$table->state = 1;
+    				$table->created_by = $user->id;
+    				$ddate = new Date($table->depart_date . ' +'.$duplicDays.' '.$duplicPeriod);
+    				$rdate = new Date($table->return_date . ' +'.$duplicDays.' '.$duplicPeriod);
+    				$table->depart_date = $ddate->toSql();
+    				$table->return_date = $rdate->toSql();
+
+    				if (!$table->check()) {
+    					throw new \Exception($table->getError());
+    				}
+    				
+    				if (!$table->store()) {
+    					throw new \Exception($table->getError());
+    				}
 				}
 
 			} else {

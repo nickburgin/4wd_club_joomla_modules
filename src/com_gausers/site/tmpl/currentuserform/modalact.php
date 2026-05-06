@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -10,17 +10,17 @@
 // no direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\Session\SessionInterface;
-use \Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\Session\SessionInterface;
+use Joomla\CMS\Application\SiteApplication;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 //Load admin language file
-$lang = Factory::getLanguage();
+$lang = Factory::getApplication()->getLanguage();
 $lang->load('com_gausers', JPATH_ADMINISTRATOR);
 
 $wa = $this->document->getWebAssetManager()
@@ -35,7 +35,7 @@ if (!isset($this->item->id)) {
 $user = GausersHelper::getSpecificUser($id);
 
 // get the current date-time based on timezone
-$date = GausersHelper::getTodaysDate();
+$date = Factory::getDate();
 $today = date_format($date,'Y-m-d H:i:s');
 $this->form->setFieldAttribute('user_id', 'default', $id);
 $this->form->setFieldAttribute('user_id', 'type', 'hidden');

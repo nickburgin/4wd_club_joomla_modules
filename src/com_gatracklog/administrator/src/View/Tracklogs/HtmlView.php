@@ -1,7 +1,8 @@
 <?php
 /**
- * @version    4.1.0
- * @package    com_gatracklog
+ * @version     4.2.0
+ * @package     pkg_mypackage
+ * @subpackage  com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,14 +13,15 @@ namespace GlennArkell\Component\Gatracklog\Administrator\View\Tracklogs;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use \Joomla\CMS\Toolbar\Toolbar;
-use \Joomla\CMS\Toolbar\ToolbarHelper;
-use \Joomla\CMS\Helper\ContentHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use \GlennArkell\Component\Gatracklog\Administrator\Helper\GatracklogHelper;
 
 /**
  * View class for a list of records.
@@ -37,6 +39,8 @@ class HtmlView extends BaseHtmlView
 
 	public $activeFilters;
 
+    private $isEmptyState = false;
+
 	/**
 	 * Display the view
 	 * @param   string  $tpl  Template name
@@ -51,15 +55,16 @@ class HtmlView extends BaseHtmlView
         $this->filterForm = $this->get('FilterForm');
         $this->activeFilters = $this->get('ActiveFilters');
 
+        if (!\count($this->items) && $this->isEmptyState = $this->get('IsEmptyState')) {
+            $this->setLayout('emptystate');
+        }
+
 		// Check for errors.
-		if (count($errors = $this->get('Errors'))) {
+		if (\count($errors = $this->get('Errors'))) {
 			throw new \Exception(implode("\n", $errors), 500);
 		}
 
 		$this->addToolbar();
-
-        HTMLHelper::stylesheet(Uri::base().'media/com_gatracklog/css/gatracklog.css');
-        HTMLHelper::stylesheet(Uri::base().'media/com_gatracklog/css/list.css');
 
 		parent::display($tpl);
 	}
@@ -71,25 +76,22 @@ class HtmlView extends BaseHtmlView
 	 */
 	protected function addToolbar()
 	{
+		$compName = 'gatracklog';
 		$progNameL = 'tracklog';
 		$progNameC = 'Tracklog';
 		$state = $this->get('State');
 
-		$canDo = ContentHelper::getActions('com_gatracklog','component',0);
+		$canDo = ContentHelper::getActions('com_'.$compName,'component',0);
 
-		$customIcon = '';
+		$customIcon = 'fa-shuffle';
 
-		if (file_exists(JPATH_SITE . '/media/com_gatracklog/images/l_'.$progNameL.'s.png')) {
-			$customIcon = $progNameL.'s';
-		}
-
-		ToolbarHelper::title(Text::_('COM_GATRACKLOG_TITLE_'.STRTOUPPER($progNameL).'S'), $customIcon);
+		ToolbarHelper::title(Text::_('COM_'.STRTOUPPER($compName ?? '').'_TITLE_'.STRTOUPPER($progNameL ?? '').'S'), $customIcon);
 
 		$toolbar = Toolbar::getInstance('toolbar');
-        $toolbar->link('JTOOLBAR_DASHBOARD', 'index.php?option=com_cpanel&view=cpanel&dashboard=gatracklog');
+        $toolbar->link('JTOOLBAR_DASHBOARD', 'index.php?option=com_cpanel&view=cpanel&dashboard='.$compName);
 
 		// Check if the form exists before showing the add/edit buttons
-		$formPath = JPATH_ADMINISTRATOR . '/components/com_gatracklog/src/View/'.$progNameC.'s';
+		$formPath = JPATH_ADMINISTRATOR . '/components/com_'.$compName.'/src/View/'.$progNameC.'s';
 
 		if (file_exists($formPath)) {
 			if ($canDo->get('core.create')) {
@@ -125,6 +127,12 @@ class HtmlView extends BaseHtmlView
 				$childBar->checkin($progNameL.'s.checkin')->listCheck(true);
 			}
 
+			$childBar->standardButton('nullDate')
+    			->icon('fas fa-crosshairs')
+    			->text('Null Date')
+    			->task($progNameL.'s.nullDate')
+                ->listCheck(true);
+
 			if (isset($this->items[0]->state) && $this->state->get('filter.state') != -2) {
 				$childBar->trash($progNameL.'s.trash')->listCheck(true);
 			}
@@ -144,15 +152,23 @@ class HtmlView extends BaseHtmlView
 		// Show the button with number of entries from the query
 		$nRecords = $this->pagination->total;
 		$toolbar->standardButton('nrecords')
-			->icon('fa fa-info-circle')
+			->icon('fas fa-info-circle')
 			->text($nRecords . ' Records')
+			->task('')
+			->onclick('return false')
+			->listCheck(false);
+
+        $compVersion = GatracklogHelper::getComponentVersion();
+		$toolbar->standardButton('compVers')
+			->icon('fas fa-code-branch')
+			->text($compVersion . ' Version')
 			->task('')
 			->onclick('return false')
 			->listCheck(false);
 
 		// Show the Options button to set parameters
 		if ($canDo->get('core.admin')) {
-			$toolbar->preferences('com_gatracklog');
+			$toolbar->preferences('com_'.$compName);
 		}
 
 	}
@@ -164,11 +180,11 @@ class HtmlView extends BaseHtmlView
 	protected function getSortFields()
 	{
 		return array(
-			'a.id' => Text::_('JGRID_HEADING_ID'),
-			'a.ordering' => Text::_('JGRID_HEADING_ORDERING'),
-			'a.state' => Text::_('JSTATUS'),
-			'a.created_date' => Text::_('COM_GATRACKLOG_CREATED_DATE'),
-			'a.modified_date' => Text::_('COM_GATRACKLOG_MODIFIED_DATE'),
+			'a.`id`' => Text::_('JGRID_HEADING_ID'),
+			'a.`ordering`' => Text::_('JGRID_HEADING_ORDERING'),
+			'a.`state`' => Text::_('JSTATUS'),
+			'a.`created_date`' => Text::_('COM_GATRACKLOG_CREATED_DATE'),
+			'a.`modified_date`' => Text::_('COM_GATRACKLOG_MODIFIED_DATE'),
 		);
 	}
 

@@ -44,7 +44,7 @@
                  <option value="0">JNO</option>
          </field>
 
-        <field name="profile_suffix" type="text" default=""
+        <field name="profile_suffix" type="text" default="" showon="mship_single:1"
              label="COM_GAFINANCE_PROFILE_SUFFIX_LABEL"
              description="COM_GAFINANCE_PROFILE_SUFFIX_DESC" />
 
@@ -73,12 +73,19 @@
              label="COM_GAFINANCE_EXCHANGE_RATES_LABEL"
              description="COM_GAFINANCE_EXCHANGE_RATES_DESC" />
 
-        <field name="paypalau" class="inputbox"
+        <field name="usepaypal" type="radio" default="1" class="btn-group btn-group-yesno"
+             label="COM_GAFINANCE_USEPAYPAL_LABEL"
+             description="COM_GAFINANCE_USEPAYPAL_DESC" >
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+        </field>
+
+        <field name="paypalau" class="inputbox" showon="usepaypal:1"
              type="text" filter="safehtml" default="0.00"
              label="COM_GAFINANCE_PAYPALAU_LABEL"
              description="COM_GAFINANCE_PAYPALAU_DESC" />
 
-        <field name="paypalus" class="inputbox"
+        <field name="paypalus" class="inputbox" showon="usepaypal:1"
              type="text" filter="safehtml" default="0.00"
              label="COM_GAFINANCE_PAYPALUS_LABEL"
              description="COM_GAFINANCE_PAYPALUS_DESC" />
@@ -107,13 +114,9 @@
              label="COM_GAFINANCE_SAFE_FILES_LABEL"
              description="COM_GAFINANCE_SAFE_FILES_DESC">
                  <option value="pdf">pdf</option>
-                 <option value="PDF">PDF</option>
                  <option value="jpg">jpg</option>
-                 <option value="JPG">JPG</option>
                  <option value="png">png</option>
-                 <option value="PNG">PNG</option>
                  <option value="gif">gif</option>
-                 <option value="GIF">GIF</option>
          </field>
 
         <field name="max_size" type="text" default="300000" filter="safehtml"
@@ -244,10 +247,6 @@
 
 	</fieldset>
 
-    <fieldset name="permissions" description="JCONFIG_PERMISSIONS_DESC" label="JCONFIG_PERMISSIONS_LABEL">
-        <field name="rules" type="rules" component="com_gafinance" class="inputbox" filter="rules" validate="rules" label="JCONFIG_PERMISSIONS_LABEL" section="component" />
-	</fieldset>
-
     <fieldset name="component">
 
         <field name="test_mode" type="radio" class="btn-group btn-group-yesno" default="0" 
@@ -277,4 +276,9 @@
           <option value="0">JNO</option>
         </field>
     </fieldset>
+
+    <fieldset name="permissions" description="JCONFIG_PERMISSIONS_DESC" label="JCONFIG_PERMISSIONS_LABEL">
+        <field name="rules" type="rules" component="com_gafinance" class="inputbox" filter="rules" validate="rules" label="JCONFIG_PERMISSIONS_LABEL" section="component" />
+	</fieldset>
+
 </config>

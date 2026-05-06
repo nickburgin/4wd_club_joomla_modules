@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.6
+ * @version    6.0.0
  * @package    Com_Gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2017 Glenn Arkell
@@ -12,14 +12,14 @@ namespace GlennArkell\Component\Gausers\Administrator\Controller;
 // No direct access.
 \defined('_JEXEC') or die;
 
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\MVC\Controller\AdminController;
-use \Joomla\CMS\Session\Session;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Plugin\CMSPlugin;
-use \Joomla\CMS\Plugin\PluginHelper;
-use \Joomla\Event\Dispatcher;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\AdminController;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Event\Dispatcher;
 
 /**
  * Audits list controller class.

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    com_gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,15 +12,15 @@ namespace GlennArkell\Component\Gatripsys\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
-use \Joomla\CMS\Helper\TagsHelper;
-use \Joomla\CMS\Layout\FileLayout;
-use \Joomla\Database\ParameterType;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
+use Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Layout\FileLayout;
+use Joomla\Database\ParameterType;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Component\ComponentHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 
 /**
@@ -115,6 +115,12 @@ class AttendeesModel extends ListModel
 	 */
 	protected function getListQuery()
 	{
+        $params  = ComponentHelper::getParams('com_gatripsys');
+        $coOrdGp = $params->get('trip_coord', 8);
+        $admin_id = $params->get('admin_id');
+        $user       = GatripsysHelper::getSpecificUser();
+        $showAll = in_array($coOrdGp, $user->groups) || $user->id == $admin_id ? true : false;
+
         // Create a new query object.
         $db    = $this->getDbo();
         $query = $db->getQuery(true);
@@ -141,18 +147,25 @@ class AttendeesModel extends ListModel
 		$query->join("LEFT", "#__users AS apprv ON apprv.id=a.approved_by");
 
 		// Join over the users for the user_id
-		$query->select("u.name AS user_id");
+		$query->select("u.name AS user_name");
 		$query->join("LEFT", "#__users AS u ON u.id=a.user_id");
 
 		// Join over the trip
 		$query->select("c.title AS rating_name, date_format(t.dept_date,'%D %M, %Y') AS dept_date_disp");
 		$query->select("date_format(t.ret_date,'%D %M, %Y') AS ret_date_disp, t.title AS trip_name, t.leader ");
-		$query->select("tl.name AS leader_name");
+		$query->select("tl.name AS leader_name, t.trip_cost");
 		$query->join('LEFT', '#__gatripsys_trips AS t ON t.id = a.trip_id');
 		$query->join('LEFT', '#__categories AS c ON c.id = t.rating');
 		$query->join("LEFT", "#__users AS tl ON tl.id=t.leader");
 
+		$query->select("i.state AS invoiceState, i.invoice_amt, i.paid_date, date_format(i.paid_date,'%D %M, %Y') AS paid_date_disp");
+		$query->join('LEFT', '#__gatripsys_invoices AS i ON i.att_id = a.id');
+
 		$query->where(' a.state IN (0, 1) ');
+
+        if (!$showAll) {
+            $query->where(' a.user_id = '.(int) $user->id);
+        }
 
         // Filter by search in title
         $search = $this->getState('filter.search');
@@ -161,12 +174,12 @@ class AttendeesModel extends ListModel
                 $query->where('a.id = ' . (int) substr($search, 3));
             } else {
                 $search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('( u.name LIKE '.$search.'  OR  t.title LIKE '.$search.'  OR  tl.name LIKE '.$search.' )');
+				$query->where('( u.name LIKE '.$search.'  OR  t.title LIKE '.$search.' )');
             }
         }
             
 		// Add the list ordering clause.
-		$query->order($db->escape(' a.created_date DESC '));
+		$query->order($db->escape(' t.dept_date DESC, t.title ASC, u.name ASC '));
 
         return $query;
 	}

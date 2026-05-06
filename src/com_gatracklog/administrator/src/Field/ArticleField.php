@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.1.0
+ * @version    4.2.0
  * @package    com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -13,9 +13,9 @@ namespace GlennArkell\Component\Gatracklog\Administrator\Field;
 defined('_JEXEC') or die;
 
 // import the list field type
-use \Joomla\CMS\Form\FormField;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Form\Field\ListField;
 use \GlennArkell\Component\Gatracklog\Administrator\Helper\GatracklogHelper;
 
 class ArticleField extends ListField
@@ -29,7 +29,7 @@ class ArticleField extends ListField
 	/**
 	 * Name of the layout being used to render the field
 	 * @var    string
-	 * @since  4.1.0
+	 * @since  4.2.0
 	 */
 	protected $layout = 'joomla.form.field.list';
 

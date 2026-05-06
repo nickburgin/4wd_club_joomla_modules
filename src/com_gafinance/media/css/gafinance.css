@@ -1,5 +1,5 @@
 /**
- * @version     5.1.0
+ * @version     5.2.3
  * @package     com_gafinance
  * @copyright   2021 Glenn Arkell
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -7,64 +7,6 @@
  */
 
 /*
-.icon-transactions {
-      background-image: url(../images/l_transactions.png);
-      padding-left:60px!important;
-}
-
-.icon-transaction {
-      background-image: url(../images/f_transactions.png);
-      padding-left:60px!important;
-}
-
-.color-box-transactions { 
-      float: left;      width: 15px;      height: 15px;      margin-right: 5px;      border: 1px solid rgba(0, 0, 0, .2);}
-
-.icon-accounts {
-      background-image: url(../images/l_accounts.png);
-      padding-left:60px!important;
-}
-
-.icon-account {
-      background-image: url(../images/f_accounts.png);
-      padding-left:60px!important;
-}
-
-.color-box-accounts { 
-      float: left;      width: 15px;      height: 15px;      margin-right: 5px;      border: 1px solid rgba(0, 0, 0, .2);}
-
-.icon-invoices {
-      background-image: url(../images/l_invoices.png);
-      padding-left:60px!important;
-}
-
-.icon-invoice {
-      background-image: url(../images/f_invoices.png);
-      padding-left:60px!important;
-}
-
-.color-box-invoices { 
-      float: left;      width: 15px;      height: 15px;      margin-right: 5px;      border: 1px solid rgba(0, 0, 0, .2);}
-
-.icon-audits {
-      background-image: url(../images/l_audits.png);
-      padding-left:60px!important;
-}
-
-.icon-audit {
-      background-image: url(../images/f_audits.png);
-      padding-left:60px!important;
-}
-
-.color-box-audits { 
-      float: left;      width: 15px;      height: 15px;      margin-right: 5px;      border: 1px solid rgba(0, 0, 0, .2);}
-
-
-
-.other-filters{
-    padding: 0 14px;
-}
-
 .btn-secondary.btn-credit {
 	background-color: var(--teal);
 	border-color: #3b88d5;

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @version    4.2.1
- * @package    Com_Gabroadcast
+ * @version     4.3.3
+ * @package     com_gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -150,9 +150,11 @@ class UsernewformController extends FormController
 		$Itemid = $app->getUserState('com_gabroadcast.menu.Itemid');
 		$app->enqueueMessage(Text::_('COM_GABROADCAST_MESSAGESENT_SUCCESSFULLY'), 'message');
 
-		if ($limit_set) {
-			$this->setRedirect(Route::_('index.php?option=com_gabroadcast&view=usernews&Itemid='.(int)$Itemid, false));
-		}
+ 		if ($limit_set) {
+ 			//$this->setRedirect(Route::_('index.php?option=com_gabroadcast&view=usernews&view_type=5', false));
+ 			echo 'ExecTime: '. \ini_get('max_execution_time');
+ 		}
+ 		//GabroadcastHelper::print_r2($app->getUserState('com_gabroadcast.test.data'));
 
 		// Flush the data from the session.
 		$app->setUserState('com_gabroadcast.edit.usernew.data', null);

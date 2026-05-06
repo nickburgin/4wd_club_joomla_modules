@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" version="4.0" method="upgrade" client="site">
+<extension type="module" method="upgrade" client="site">
     <name>MOD_GAFINANCE</name>
     <creationDate>2021-01-29</creationDate>
     <copyright>2021 Glenn Arkell</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <author>Glenn Arkell</author>
     <authorEmail>glenn@glennarkell.com.au</authorEmail>
-    <authorUrl>http://www.glennarkell.com.au</authorUrl>
-    <version>5.0.2</version>
+    <authorUrl>https://www.glennarkell.com.au</authorUrl>
+    <version>5.3</version>
     <description>MOD_GAFINANCE_XML_DESCRIPTION</description>
 
 	<namespace path="src">GlennArkell\Module\Gafinance</namespace>
 
+	<scriptfile>script.php</scriptfile>
+
     <files>
-        <filename module="mod_gafinance">mod_gafinance.php</filename>
+        <folder module="mod_gafinance">services</folder>
         <folder>src</folder>
         <folder>tmpl</folder>
     </files>
 
 	<media destination="mod_gafinance" folder="media">
 		<folder>css</folder>
-		<folder>js</folder>
 	</media>
 
     <languages folder="language">
 			<language tag="en-GB">en-GB/mod_gafinance.ini</language>
 			<language tag="en-GB">en-GB/mod_gafinance.sys.ini</language>
     </languages>
+
+	<changelogurl>https://www.glennarkell.com.au/joomlaorg/packages/j6/changes/mod_gafinance-changelog.xml</changelogurl>
+
     <config>
         <fields name="params">
             <fieldset  addfieldprefix="GlennArkell\Component\Gafinance\Administrator\Field"
@@ -37,6 +41,10 @@
 		        <field name="accnt_id" type="Account" default="1"
 		            label="MOD_GAFINANCE_ACCOUNT_LABEL"
 		            description="MOD_GAFINANCE_ACCOUNT_DESC" />
+
+		        <field name="mship" type="category" extension="com_gafinance"
+		            label="MOD_GAFINANCE_MSHIP_LABEL"
+		            description="MOD_GAFINANCE_MSHIP_DESC" />
 
             </fieldset>
 

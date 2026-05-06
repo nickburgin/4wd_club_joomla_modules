@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -13,16 +13,16 @@ namespace GlennArkell\Component\Gausers\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
-use \Joomla\CMS\Helper\TagsHelper;
-use \Joomla\CMS\Layout\FileLayout;
-use \Joomla\Database\ParameterType;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
+use Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Layout\FileLayout;
+use Joomla\Database\ParameterType;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\Component\ComponentHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 /**
@@ -103,7 +103,7 @@ class CurrentusersModel extends ListModel
         // View type param in menu item - 0 = General list & 1 = Training list & 2 = Profile Group
         $viewType = $menu->getParams()->get('view_type', 0);
 
-		$user       = GausersHelper::getSpecificUser();
+		$user       = Factory::getApplication()->getIdentity();
 		$canMembers = $user->authorise('core.members','com_gausers');
 
 		$params = ComponentHelper::getParams('com_gausers');
@@ -119,7 +119,7 @@ class CurrentusersModel extends ListModel
         $privacy_type  = $params->get( 'privacy_type', 'Profile' );
         $privacy_switchc  = $params->get( 'privacy_switchc', 0 );
         $privacy_switchp  = $params->get( 'privacy_switchp', 0 );
-        $profile_group  = $params->get( 'profile_group', '' );
+        $profile_group  = $params->get( 'profile_group', 0 );
 		$profile_suffix  = $params->get( 'profile_suffix', 'b4wdc' );
 		$localProf = 'profile'.$profile_suffix;
 		$profGroup = $localProf.'.'.$profile_group;
@@ -284,10 +284,9 @@ class CurrentusersModel extends ListModel
     		$query->join('LEFT', ' #__user_profiles AS fb ON a.id = fb.user_id AND fb.profile_key = "profile.favoritebook" ');
     		//$query->join('LEFT', ' #__user_usergroup_map AS ugm ON a.id = ugm.user_id AND ugm.group_id = 2 ');
     		//$query->where( ' ugm.group_id IS NOT NULL ' );
-            if (!$canMembers && $privacy_type == 'Profile' && $privacy_switchp) {
+            if (!$canMembers && $privacy_type == 'Profile') {
     			$query->select(' if(priv.profile_value IS NULL, 0, priv.profile_value) AS privacy ');
         		$query->join('LEFT', ' #__user_profiles AS priv ON a.id = priv.user_id AND priv.profile_key = "profile'.$profsuf.'.'.$privacy_switchp.'" ' );
-        		$query->where( ' if(priv.profile_value IS NULL, 0, priv.profile_value) = 0 ' );
         	} elseif (!$canMembers && $privacy_type == 'Custom' && $privacy_switchc) {
     			$query->select(' if(priv.value IS NULL, 0, priv.value) AS privacy ');
         		$query->join('LEFT', ' #__fields_values AS priv ON a.id = priv.item_id AND priv.field_id = '.(int) $privacy_switchc );

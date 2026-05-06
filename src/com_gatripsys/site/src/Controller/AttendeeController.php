@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    com_gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -11,14 +11,14 @@ namespace GlennArkell\Component\Gatripsys\Site\Controller;
 
 \defined('_JEXEC') or die;
 
-use \Joomla\CMS\Application\SiteApplication;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Multilanguage;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Controller\BaseController;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Multilanguage;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Utilities\ArrayHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GainvoiceHelper;
 
@@ -218,7 +218,7 @@ class AttendeeController extends BaseController
 	 * Method to mark all attendees as approved
 	 * @return void
 	 * @throws Exception
-	 * @since  5.1.0
+	 * @since  5.3.0
 	 */
 	public function approveAll()
 	{
@@ -257,7 +257,7 @@ class AttendeeController extends BaseController
 	 * Method to mark all attendees as approved
 	 * @return void
 	 * @throws Exception
-	 * @since  5.1.0
+	 * @since  5.3.0
 	 */
 	public function unapproveAll()
 	{

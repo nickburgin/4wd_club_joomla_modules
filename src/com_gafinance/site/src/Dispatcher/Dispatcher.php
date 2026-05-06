@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.2.3
  * @package    Com_Gafinance
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -9,21 +9,21 @@
 
 namespace GlennArkell\Component\Gafinance\Site\Dispatcher;
 
-defined('JPATH_PLATFORM') or die;
+\defined('_JEXEC') or die;
 
-use \Joomla\CMS\Dispatcher\ComponentDispatcher;
-use \Joomla\CMS\Language\Text;
+use Joomla\CMS\Dispatcher\ComponentDispatcher;
+use Joomla\CMS\Language\Text;
 
 /**
  * ComponentDispatcher class
- * @since  5.1.0
+ * @since  5.2.3
  */
 class Dispatcher extends ComponentDispatcher
 {
 	/**
 	 * Dispatch a controller task. Redirecting the user if appropriate.
 	 * @return  void
-	 * @since   5.1.0
+	 * @since   5.2.3
 	 */
 	public function dispatch()
 	{

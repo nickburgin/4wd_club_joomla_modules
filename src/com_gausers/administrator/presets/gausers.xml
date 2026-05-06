@@ -47,6 +47,24 @@
 		/>
 
 		<menuitem
+			title="COM_GAUSERS_TITLE_ACTIONS"
+			type="component"
+			element="com_gausers"
+			link="index.php?option=com_gausers&amp;view=actions"
+			quicktask="index.php?option=com_gausers&amp;task=action.edit"
+			quicktask-title="COM_GAUSERS_CREATE_NEW_ACTION"
+		/>
+
+		<menuitem
+			title="COM_GAUSERS_ACTIONS_CAT_ID"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gausers.actions"
+			quicktask="index.php?option=com_categories&amp;extension=com_gausers&amp;task=category.add"
+			quicktask-title="COM_GAUSERS_ACTION_NEW_CATEGORY"
+		/>
+
+		<menuitem
 			title="COM_GAUSERS_TITLE_AUDITS"
 			type="component"
 			element="com_gausers"

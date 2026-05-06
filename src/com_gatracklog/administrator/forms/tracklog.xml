@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form>
-	<fieldset name="sysinfo" addfieldprefix="GlennArkell\Component\Gatracklog\Administrator\Field">
+<form addfieldprefix="GlennArkell\Component\Gatracklog\Administrator\Field">
+	<fieldset name="sysinfo">
 		<field name="id" type="text" readonly="true" class="readonly" default="0" label="COM_GATRACKLOG_FORM_LBL_ID" description="COM_GATRACKLOG_FORM_DESC_ID"/>
 		<field name="ordering" label="COM_GATRACKLOG_FORM_LBL_ORDERING" description="COM_GATRACKLOG_FORM_DESC_ORDERING"/>
 		<field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
@@ -17,7 +17,7 @@
 	    <field name="modified_date" type="Timecreated" label="COM_GATRACKLOG_FORM_LBL_MODIFIED_DATE" description="COM_GATRACKLOG_FORM_DESC_MODIFIED_DATE" hint="COM_GATRACKLOG_FORM_LBL_MODIFIED_DATE"/>
 	</fieldset>
 
-	<fieldset name="general" addfieldprefix="GlennArkell\Component\Gatracklog\Administrator\Field">
+	<fieldset name="general">
 
 		<field name="name" type="text" filter="safehtml" required="true"
 			label="COM_GATRACKLOG_FORM_LBL_TRACKLOG_NAME"
@@ -48,6 +48,9 @@
 
 	<fieldset name="extrainfo">
 		<field name="comment" filter="safehtml" type="textarea" label="COM_GATRACKLOG_FORM_LBL_COMMENT" description="COM_GATRACKLOG_FORM_DESC_COMMENT" hint="COM_GATRACKLOG_FORM_LBL_COMMENT"/>
+	</fieldset>
+
+	<fieldset name="others">
 		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
 	</fieldset>
 </form>

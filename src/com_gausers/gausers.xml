@@ -7,7 +7,7 @@
     <author>Glenn Arkell</author>
     <authorEmail>glenn@glennarkell.com.au</authorEmail>
     <authorUrl>https://www.glennarkell.com.au</authorUrl>
-    <version>5.1.6</version>
+    <version>6.0.0</version>
     <description>COM_GAUSERS_XML_DESCRIPTION</description>
     
     <namespace path="src">GlennArkell\Component\Gausers</namespace>
@@ -43,12 +43,12 @@
 
     <languages folder="site">
 			<language tag="en-GB">language/en-GB/com_gausers.ini</language>
+			<language tag="it-IT">language/it-IT/com_gausers.ini</language>
     </languages>
 
 	<media destination="com_gausers" folder="media">
 		<folder>css</folder>
 		<folder>images</folder>
-		<folder>js</folder>
         <file>joomla.asset.json</file>
 	</media>
 
@@ -69,24 +69,10 @@
         <languages folder="administrator">
 			<language tag="en-GB">language/en-GB/com_gausers.ini</language>
 			<language tag="en-GB">language/en-GB/com_gausers.sys.ini</language>
+			<language tag="it-IT">language/it-IT/com_gausers.ini</language>
+			<language tag="it-IT">language/it-IT/com_gausers.sys.ini</language>
         </languages>
 
     </administration>
-
-    <modules>
-		<module module="mod_gausers" />
-		<module module="mod_gausersexecs" />
-	</modules>
-
-    <plugins>
-        <plugin group="user" plugin="gausers"/>
-    </plugins>
-
-	<changelogurl>https://www.glennarkell.com.au/joomlaorg/components/j5/gausers-changelog.xml</changelogurl>
-
-	<updateservers>
-		<!-- Note: No spaces or linebreaks allowed between the server tags -->
-		<server type="extension" priority="1" name="User Management">https://www.glennarkell.com.au/joomlaorg/components/j5/gausers-update.xml</server>
-	</updateservers>
 
 </extension>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -9,15 +9,15 @@
 
 defined('JPATH_BASE') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Session\Session;
-use \Joomla\CMS\Plugin\PluginHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 
 //Load admin language file
-$lang = Factory::getLanguage();
+$lang = Factory::getApplication()->getLanguage();
 $lang->load('com_gausers', JPATH_ADMINISTRATOR);
 
 $data = $displayData;
@@ -37,25 +37,30 @@ if ($localProfile == 'bdgs') {
     $form->setFieldAttribute('mdod', 'type', 'hidden');
     $form->setFieldAttribute('m_img', 'type', 'hidden');
     $form->setFieldAttribute('p_img', 'type', 'hidden');
-    $form->setFieldAttribute('partner', 'type', 'hidden');
+    if ($incl_partner) {
+        $form->setFieldAttribute('partner', 'type', 'hidden');
+    }
     $form->setFieldAttribute('altemail', 'type', 'hidden');
     $form->setFieldAttribute('altphone', 'type', 'hidden');
     $form->setFieldAttribute('inc_altemail', 'type', 'hidden');
     $form->setFieldAttribute('emailnews', 'type', 'hidden');
-    $form->setFieldAttribute('phone', 'type', 'hidden');
+    //$form->setFieldAttribute('phone', 'type', 'hidden');
 }
 
 
 ?>
 				<input type="hidden" name="jform[id]" value="<?php echo $item->id; ?>" />
-
                 <?php if (!$canAdmin) : ?>
 					<?php $form->setFieldAttribute('mship_no', 'readonly', 'true'); ?>
 					<?php $form->setFieldAttribute('prime_mbr', 'readonly', 'true'); ?>
+					<?php $form->setFieldAttribute('mship_id', 'readonly', 'true'); ?>
 					<?php $form->setFieldAttribute('memtype', 'readonly', 'true'); ?>
 					<?php $form->setFieldAttribute('mdod', 'readonly', 'true'); ?>
 					<?php $form->setFieldAttribute('mdod', 'type', 'hidden'); ?>
-				<?php endif; ?>
+				<?php endif ; ?>
+
+                <?php echo $form->renderField('mship_id'); ?>
+
                 <?php if (!$incl_partner) : ?>
 					<?php $form->setFieldAttribute('partner', 'type', 'hidden'); ?>
 					<?php $form->setFieldAttribute('p_img', 'type', 'hidden'); ?>
@@ -102,6 +107,9 @@ if ($localProfile == 'bdgs') {
                         <?php if (!in_array('email_contact',$ignorArray)) { echo $form->renderField('email_contact'); } ?>
                         <?php if (!in_array('allow_website',$ignorArray)) { echo $form->renderField('allow_website'); } ?>
                         <?php if (!in_array('website',$ignorArray)) { echo $form->renderField('website'); } ?>
+					<?php endif; ?>
+					<?php if ($localProfile == 'bdgs') : ?>
+                        <?php if (!in_array('mship_no',$ignorArray)) { echo $form->renderField('mship_no'); } ?>
 					<?php endif; ?>
 
 	            <?php /* NOT an administrator or owner of record */ ?>

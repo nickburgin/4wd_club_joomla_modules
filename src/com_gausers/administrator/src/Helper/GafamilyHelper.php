@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.6
+ * @version    6.0.0
  * @package    Com_Gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,20 +12,20 @@ namespace GlennArkell\Component\Gausers\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\Data\DataObject;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\Filesystem\Path;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\User\UserFactoryInterface;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\Data\DataObject;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Installer\Installer;
+use Joomla\Filesystem\Path;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\User\UserFactoryInterface;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    Com_Gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -9,11 +9,11 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Layout\LayoutHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 
 // load any assets required
@@ -25,7 +25,6 @@ $lang = Factory::getApplication()->getLanguage();
 $lang->load('com_gatripsys', JPATH_ADMINISTRATOR);
 
 $user       = GatripsysHelper::getSpecificUser();
-$userId     = $user->get('id');
 $listOrder  = $this->state->get('list.ordering', 'a.user_id');
 $listDirn   = $this->state->get('list.direction', 'asc');
 $canCreate  = $user->authorise('core.create', 'com_gatripsys');
@@ -36,17 +35,9 @@ $canDelete  = $user->authorise('core.delete', 'com_gatripsys');
 $canAdmin  = $user->authorise('core.admin', 'com_gatripsys');
 $canTrip  = $user->authorise('core.trip', 'com_gatripsys');
 
-$tripId = $this->getState('list.trip', 0);
-if ($tripId) {
-	$leader = GatripsysHelper::getTripLeader($tripId);
-	$pagehead = $this->params->get('page_heading'). ' - Attendees';
-} else {
-	$pagehead = $this->params->get('page_heading');
-	$leader = 0;
-}
+$coOrdGp = $this->params->get('trip_coord', 8);
 $admin_id = $this->params->get('admin_id');
-$canLead = ($user->id == $leader ) ? 1 : 0;
-$canTrip = (!$canTrip && $user->id == $admin_id ) ? 1 : 0;
+$showAll = in_array($coOrdGp, $user->groups) || $user->id == $admin_id ? true : false;
 
 /*
 echo '<pre>Test<br />';
@@ -56,7 +47,7 @@ Factory::getApplication()->setUserState('com_gatripsys.test.data',null);
 */
 ?>
 
-<h2><?php echo $pagehead; ?></h2>
+<h2><?php echo $this->params->get('page_heading'); ?></h2>
 
 <form action="<?php echo Route::_('index.php?option=com_gatripsys&view=attendees'); ?>" method="post"
       name="adminForm" id="adminForm">
@@ -67,19 +58,19 @@ Factory::getApplication()->setUserState('com_gatripsys.test.data',null);
 		<thead>
 		<tr>
 			<th class=''>
-				<?php echo HTMLHelper::_('grid.sort',  'COM_GATRIPSYS_ATTENDEES_USER_ID', 'a.user_id', $listDirn, $listOrder); ?>
+				<?php echo HTMLHelper::_('grid.sort',  'COM_GATRIPSYS_ATTENDEES_USER_ID', 'u.name', $listDirn, $listOrder); ?>
 			</th>
 			<th class=''>
-				<?php echo HTMLHelper::_('grid.sort',  'COM_GATRIPSYS_ATTENDEES_TRIP_ID', 'a.trip_id', $listDirn, $listOrder); ?>
+				<?php echo HTMLHelper::_('grid.sort',  'COM_GATRIPSYS_ATTENDEES_TRIP_ID', 't.title', $listDirn, $listOrder); ?>
 			</th>
 			<th class=''>
-				<?php echo HTMLHelper::_('grid.sort',  'COM_GATRIPSYS_ATTENDEES_STATE', 'a.state', $listDirn, $listOrder); ?>
+				<?php echo HTMLHelper::_('grid.sort',  'COM_GATRIPSYS_STATE', 'a.state', $listDirn, $listOrder); ?>
 			</th>
 			<th class=''>
-				<?php echo HTMLHelper::_('grid.sort',  'COM_GATRIPSYS_ATTENDEES_IN_PARTY', 'a.in_party', $listDirn, $listOrder); ?>
+				<?php echo HTMLHelper::_('grid.sort',  'COM_GATRIPSYS_TRIPS_TRIP_COST', 't.trip_cost', $listDirn, $listOrder); ?>
 			</th>
 			<th class=''>
-				<?php echo HTMLHelper::_('grid.sort',  'COM_GATRIPSYS_ATTENDEES_APPROVED_BY', 'a.approved_by', $listDirn, $listOrder); ?>
+				<?php echo HTMLHelper::_('grid.sort',  'COM_GATRIPSYS_INVOICES_PAID_DATE', 'i.paid_date', $listDirn, $listOrder); ?>
 			</th>
 
 			<?php if ($canEdit || $canDelete): ?>
@@ -99,38 +90,37 @@ Factory::getApplication()->setUserState('com_gatripsys.test.data',null);
 		</tfoot>
 		<tbody>
 		<?php foreach ($this->items as $i => $item) : ?>
-			<?php $canEdit = $user->authorise('core.edit', 'com_gatripsys'); ?>
+			<?php 
+                $canEdit = $user->authorise('core.edit', 'com_gatripsys');
+                if (!$canEdit && $user->authorise('core.edit.own', 'com_gatripsys')) {
+                    $canEdit = GatripsysHelper::getSpecificUser()->id == $item->created_by;
+                }
+            ?>
 
-			<?php if (!$canEdit && $user->authorise('core.edit.own', 'com_gatripsys')): ?>
-				<?php $canEdit = GatripsysHelper::getSpecificUser()->id == $item->created_by; ?>
-			<?php endif; ?>
-
-			<tr class="row<?php echo $i % 2; ?>">
-
+            <tr class="row<?php echo $i % 2; ?>">
 
 				<td>
 					<?php if (isset($item->checked_out) && $item->checked_out) : ?>
-						<?php echo HTMLHelper::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'attendees.', $canCheckin); ?>
+						<?php echo HTMLHelper::_('jgrid.checkedout', $i, $item->uEditor, $item->checked_out_time, 'attendees.', $canCheckin); ?>
 					<?php endif; ?>
 					<!-- <a href="<?php //echo Route::_('index.php?option=com_gatripsys&view=attendee&id='.(int) $item->id); ?>">  -->
-					<?php echo $this->escape($item->user_id); ?>
+					<?php echo $this->escape($item->user_name); ?>
 					<!-- </a> -->
 				</td>
 				<td>
-					<?php echo $item->trip_name; ?>
+					<?php echo $item->trip_name.' ('.$item->dept_date_disp.')'; ?>
 				</td>
 				<td>
 					<?php if ($item->state == 1) { echo 'Accepted'; } elseif ($item->state == 0) { echo 'Pending'; } else { echo 'Rejected'; } ?>
 				</td>
-				<td class="center">
-					<?php echo $item->in_party; ?>
+				<td class="right" style="padding-right:30px;">
+					<?php echo $item->trip_cost; ?>
 				</td>
-				<td>
-					<?php echo $item->approved_by; ?>
-				</td>
-
 				<td class="center">
-					<?php if ($canLead || $canTrip): ?>
+					<?php echo $item->paid_date_disp; ?>
+				</td>
+				<td class="center">
+					<?php if ($showAll): ?>
 						<a href="<?php echo Route::_('index.php?option=com_gatripsys&task=attendeeform.edit&id=' . $item->id, false); ?>" class="btn btn-mini" type="button" title="Edit Attendee">
 							<i class="icon-edit" ></i>
 						</a>
@@ -138,24 +128,15 @@ Factory::getApplication()->setUserState('com_gatripsys.test.data',null);
 							<i class="icon-trash" ></i>
 						</button>
 					<?php endif; ?>
-					<?php if (($canLead || $canTrip) && $item->state == 0): ?>
-						<a href="<?php echo Route::_('index.php?option=com_gatripsys&task=attendeeform.attaccept&id=' . $item->id . '&trip_id=' . $item->trip_id, false); ?>" class="btn btn-mini" type="button" title="Approve Attendee">
-							<i class="icon-publish" ></i>
-						</a>
-					<?php endif; ?>
 				</td>
 
 			</tr>
+
 		<?php endforeach; ?>
 		</tbody>
 	</table>
 
-	<?php if ($canCreate && $this->trip_in_prog != 2) : ?>
-		<a href="<?php echo Route::_('index.php?option=com_gatripsys&task=attendeeform.edit&id=0', false); ?>" class="btn btn-success btn-small">
-		   <i class="icon-plus"></i> <?php echo Text::_('COM_GATRIPSYS_ADD_ITEM'); ?>
-		</a>
-	<?php endif; ?>
-	<a href="<?php echo Route::_('index.php?option=com_gatripsys&view=trips', false); ?>" class="btn btn-warning btn-small">
+	<a href="<?php echo Route::_('index.php?option=com_gatripsys&view=trips', false); ?>" class="btn btn-secondary btn-small">
 	   <i class="icon-undo-2"></i> <?php echo Text::_('COM_GATRIPSYS_RETURN'); ?>
 	</a>
 
@@ -176,7 +157,7 @@ Factory::getApplication()->setUserState('com_gatripsys.test.data',null);
 		var item_id = jQuery(this).attr('data-item-id');
 		<?php if($canDelete) : ?>
 		if (confirm("<?php echo Text::_('COM_GATRIPSYS_DELETE_MESSAGE'); ?>")) {
-			window.location.href = '<?php echo Route::_('index.php?option=com_gatripsys&task=attendeeform.remove&id=', false) ?>' + item_id;
+			window.location.href = '<?php echo Route::_('index.php?option=com_gatripsys&task=attendee.remove&id=', false) ?>' + item_id;
 		}
 		<?php endif; ?>
 	}

@@ -1,7 +1,8 @@
 <?php
 /**
- * @version    4.1.0
- * @package    com_gatracklog
+ * @version    4.2.0
+ * @package    pkg_mypackage
+ * @subpackage com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,15 +13,12 @@ namespace GlennArkell\Component\Gatracklog\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\Filesystem\Path;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\CMS\Helper\TagsHelper;
 use \GlennArkell\Component\Gatracklog\Administrator\Helper\GatracklogHelper;
 
 /**
@@ -41,7 +39,7 @@ class TracklogModel extends ItemModel
 	protected function populateState()
 	{
 		$app  = Factory::getApplication('com_gatracklog');
-		$user = GatracklogHelper::getSpecificUser();
+		$user = $app->getIdentity();
 
 		// Check published state
 		if ((!$user->authorise('core.edit.state', 'com_gatracklog')) && (!$user->authorise('core.edit', 'com_gatracklog')))
@@ -53,12 +51,12 @@ class TracklogModel extends ItemModel
 		// Load state from the request userState on edit or from the passed variable on default
 		if (Factory::getApplication()->input->get('layout') == 'edit')
 		{
-			$id = Factory::getApplication()->getUserState('com_gatracklog.edit.tracklog.id');
+			$id = $app->getUserState('com_gatracklog.edit.tracklog.id');
 		}
 		else
 		{
 			$id = Factory::getApplication()->input->get('id');
-			Factory::getApplication()->setUserState('com_gatracklog.edit.tracklog.id', $id);
+			$app->setUserState('com_gatracklog.edit.tracklog.id', $id);
 		}
 
 		$this->setState('tracklog.id', $id);
@@ -98,18 +96,17 @@ class TracklogModel extends ItemModel
                 // Check published state.
                 if ($published = $this->getState('filter.published')) {
                     if (isset($table->state) && $table->state != $published) {
-                        throw new \Exception(Text::_('COM_GATRACKLOG_ITEM_NOT_LOADED'), 403);
+                        throw new \Exception(Text::_('COM_GAGATRACKLOG_ITEM_NOT_LOADED'), 403);
                     }
                 }
 
-                // Convert the JTable to a clean JObject.
                 $properties  = $table->getProperties(1);
-                $this->_item = ArrayHelper::toObject($properties, 'JObject');
+                $this->_item = ArrayHelper::toObject($properties, 'stdClass');
 
             }
 
             if (empty($this->_item)) {
-				throw new \Exception(Text::_('COM_GATRACKLOG_ITEM_NOT_LOADED'), 404);
+				throw new \Exception(Text::_('COM_GAGATRACKLOG_ITEM_NOT_LOADED'), 404);
 			}
         }
 
@@ -141,8 +138,8 @@ class TracklogModel extends ItemModel
 	 * Get an instance of Table class
 	 * @param   string $type   Name of the Table class to get an instance of.
 	 * @param   string $prefix Prefix for the table class name. Optional.
-	 * @param   array  $config Array of configuration values for the JTable object. Optional.
-	 * @return  JTable|bool JTable if success, false on failure.
+	 * @param   array  $config Array of configuration values for the Table object. Optional.
+	 * @return  Table|bool Table if success, false on failure.
 	 */
 	public function getTable($type = 'Tracklog', $prefix = 'Administrator', $config = array())
 	{
@@ -220,7 +217,7 @@ class TracklogModel extends ItemModel
 			$table = $this->getTable();
 
 			// Get the current user object.
-			$user = GatracklogHelper::getSpecificUser();
+			$user = Factory::getApplication()->getIdentity();
 
 			// Attempt to check the row out.
 			if (method_exists($table, 'checkout')) {
@@ -247,7 +244,7 @@ class TracklogModel extends ItemModel
 		$table->load($id);
 		$table->state = $state;
 
-		return $table->store();
+		return $table->store(true);
                 
 	}
 
@@ -258,13 +255,14 @@ class TracklogModel extends ItemModel
 	 */
 	public function delete($id)
 	{
+		$updateNulls = true;
 		$table = $this->getTable();
 		$table->load($id);
 		$table->state = -2;
 
-		return $table->store();
+		return $table->store($updateNulls);
 	}
-
+	
 	/**
 	 * Method to delete an item
 	 * @param   int  $id  Element id
@@ -280,7 +278,7 @@ class TracklogModel extends ItemModel
 	public function sendtrklog($data)
 	{
 		$id = (!empty($data['id'])) ? $data['id'] : (int) $this->getState('tracklog.id');
-		$user = GatracklogHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
         $mailfrom	= Factory::getApplication()->get('mailfrom');       // system email address
         $fromname	= Factory::getApplication()->get('fromname');       // Site name or system name
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.0.7
+ * @version    4.1.2
  * @package    com_gamerchandise
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -9,7 +9,7 @@
 
 namespace GlennArkell\Component\Gamerchandise\Administrator\Extension;
 
-defined('JPATH_PLATFORM') or die;
+\defined('_JEXEC') or die;
 
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Association\AssociationServiceInterface;
@@ -25,7 +25,7 @@ use Psr\Container\ContainerInterface;
 
 /**
  * Component class for com_gamerchandise
- * @since  4.0.7
+ * @since  4.1.2
  */
 class GamerchandiseComponent extends MVCComponent implements RouterServiceInterface
 {

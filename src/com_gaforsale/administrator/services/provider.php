@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.0.2
+ * @version    4.2.2
  * @package    Com_Gaforsale
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -26,7 +26,7 @@ use Joomla\DI\ServiceProviderInterface;
 
 /**
  * Service provider.
- * @since  4.0.2
+ * @since  4.2.2
  */
 return new class implements ServiceProviderInterface
 {
@@ -34,7 +34,7 @@ return new class implements ServiceProviderInterface
 	 * Registers the service provider with a DI container.
 	 * @param   Container  $container  The DI container.
 	 * @return  void
-	 * @since   4.0.2
+	 * @since   4.2.2
 	 */
 	public function register(Container $container)
 	{

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.6
+ * @version    6.0.0
  * @package    com_gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,13 +12,13 @@ namespace GlennArkell\Component\Gausers\Administrator\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Plugin\PluginHelper;
-use \Joomla\CMS\MVC\Model\AdminModel;
-use \Joomla\Event\Dispatcher;
-use \Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\Event\Dispatcher;
+use Joomla\CMS\Helper\TagsHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 /**
@@ -136,7 +136,7 @@ class MshiptypeModel extends AdminModel
 	 */
 	public function duplicate(&$pks)
 	{
-		$user = GausersHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		// Access checks.
 		if (!$user->authorise('core.create', 'com_gausers')) {

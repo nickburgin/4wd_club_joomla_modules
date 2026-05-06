@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,15 +12,15 @@ namespace GlennArkell\Component\Gausers\Administrator\Helper;
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\Access\Access;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\Filesystem\Path;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\Access\Access;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\Path;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 class GaimgmgmntHelper
@@ -48,7 +48,7 @@ class GaimgmgmntHelper
 	        $up = UserHelper::getProfile($id);
 	
 			// Checking if the user can remove object
-			$user = GausersHelper::getSpecificUser();
+			$user = Factory::getApplication()->getIdentity();
 			$canEdit = $user->authorise('core.edit', 'com_gausers');
 			$canEditOwn = $user->authorise('core.edit.own', 'com_gausers');
 			if (!$canEdit) {

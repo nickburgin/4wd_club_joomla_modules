@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.2.1
+ * @version    4.3.3
  * @package    Com_Gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -51,7 +51,7 @@ class CreatedbyField extends FormField
 		}
 		else
 		{
-			$user   = GabroadcastHelper::getSpecificUser();
+			$user   = Factory::getApplication()->getIdentity();
 			$html[] = '<input type="hidden" name="' . $this->name . '" value="' . $user->id . '" />';
 		}
 

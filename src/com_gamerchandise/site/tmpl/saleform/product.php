@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.00
+ * @version    4.1.0
  * @package    Com_Gamerchandise
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -14,16 +14,17 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Component\ComponentHelper;
 
-JHtml::_('behavior.keepalive');
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
-JHtml::_('formbehavior.chosen', 'select');
+// load any assets required
+$wa = $this->document->getWebAssetManager();
+$wa->usePreset('com_gamerchandise.gamerchandisepreset');
+$wa->useScript('keepalive')
+	->useScript('form.validate');
 
 // Load admin language file
 $lang = Factory::getLanguage();
 $lang->load('com_gamerchandise', JPATH_SITE);
 
-$user = Factory::getUser();
+$user   = GamerchandiseHelper::getSpecificUser();
 $canManage = $user->authorise('core.manage', 'com_gamerchandise');
 
 ?>
@@ -53,6 +54,6 @@ $canManage = $user->authorise('core.manage', 'com_gamerchandise');
 
 		<input type="hidden" name="option" value="com_gamerchandise"/>
 		<input type="hidden" name="task" value="saleform.setproduct"/>
-		<?php echo JHtml::_('form.token'); ?>
+		<?php echo HTMLHelper::_('form.token'); ?>
 	</form>
 </div>

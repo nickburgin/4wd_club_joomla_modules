@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS `#__gatripsys_incidents` (
 `map_ref` text NULL ,
 `gps_ref` text NULL ,
 `witnesses` text NULL ,
+`inc_img` varchar(1024)  NULL,
 `comment` text NULL ,
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;

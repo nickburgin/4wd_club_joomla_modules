@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -11,10 +11,10 @@ namespace GlennArkell\Component\Gacalevents\Site\Controller;
 
 \defined('_JEXEC') or die;
 
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Factory\MVCFactoryInterface;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 
 /**
  * Display Component Controller
@@ -33,9 +33,9 @@ class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
 	 * @param   CMSApplication       $app      The JApplication for the dispatcher
 	 * @param   \JInput              $input    Input
 	 *
-	 * @since   3.0.1
+	 * @since   3.3.1
 	 */
-	public function __construct($config = array(), MVCFactoryInterface $factory = null, $app = null, $input = null)
+	public function __construct($config = [], ?MVCFactoryInterface $factory = null, $app = null, $input = null)
 	{
 		parent::__construct($config, $factory, $app, $input);
 	}

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -13,16 +13,16 @@ namespace GlennArkell\Component\Gausers\Administrator\Table;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\Registry\Registry;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Table\Table as Table;
-use \Joomla\CMS\Versioning\VersionableTableInterface;
-use \Joomla\Database\DatabaseDriver;
-use \Joomla\CMS\Filter\OutputFilter;
-use \Joomla\Filesystem\File;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Factory;
+use Joomla\Registry\Registry;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table as Table;
+use Joomla\CMS\Versioning\VersionableTableInterface;
+use Joomla\Database\DatabaseDriver;
+use Joomla\CMS\Filter\OutputFilter;
+use Joomla\Filesystem\File;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 /**
@@ -62,7 +62,7 @@ class InvoiceTable extends Table implements VersionableTableInterface
      */
     public function bind($array, $ignore = '') 
 	{
-	    $user = GausersHelper::getSpecificUser();
+	    $user = Factory::getApplication()->getIdentity();
 	    $date = Factory::getDate();
 		$task = Factory::getApplication()->input->get('task');
 	    
@@ -85,6 +85,14 @@ class InvoiceTable extends Table implements VersionableTableInterface
 		// Support for empty date field: tran_date
 		if (!isset($array['paid_date']) || empty($array['paid_date'])) {
 			$array['paid_date'] = null;
+		}
+
+		// Support for empty checked_out fields:
+		if (!isset($array['checked_out']) || empty($array['checked_out']) || $array['checked_out'] == 0) {
+			$array['checked_out'] = null;
+		}
+		if (!isset($array['checked_out_time']) || empty($array['checked_out_time']) || $array['checked_out_time'] == '0000-00-00 00:00:00') {
+			$array['checked_out_time'] = null;
 		}
 
         if (isset($array['params']) && is_array($array['params'])) {

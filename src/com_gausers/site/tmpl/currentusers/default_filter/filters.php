@@ -37,7 +37,7 @@ if ($viewType == 2) {
 /*
 echo '<pre>Test<br />';
 var_dump($filters['filter_pgroup']->default);
-echo '</pre>';
+echo '</pre><br />';
 */
 ?>
 <?php if ($filters) : ?>
@@ -56,7 +56,7 @@ echo '</pre>';
                 <?php $dataShowOn = " data-showon='" . json_encode(FormHelper::parseShowOnConditions($field->showon, $field->formControl, $field->group)) . "'"; ?>
             <?php endif; ?>
 
-            <?php if ($fieldName === 'filter_pgroup' && $viewType == 2) { $field->value = $profile->$localProf[$profGroup]; $field->readonly = true; } ?>
+            <?php if ($fieldName === 'filter_pgroup' && $viewType == 2) { $field->value = $profile->$localProf[$profGroup]; /* $field->readonly = true; */ } ?>
 
             <div class="js-stools-field-filter"<?php echo $dataShowOn; ?>>
                 <span class="visually-hidden"><?php echo $field->label; ?></span>

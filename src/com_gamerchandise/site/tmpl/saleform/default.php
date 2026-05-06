@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.0.7
+ * @version    4.1.2
  * @package    Com_Gamerchandise
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -19,6 +19,9 @@ use \GlennArkell\Component\Gamerchandise\Administrator\Helper\GamerchandiseHelpe
 // load any assets required
 $wa = $this->document->getWebAssetManager();
 $wa->usePreset('com_gamerchandise.gamerchandisepreset');
+$wa->useScript('keepalive')
+	->useScript('form.validate');
+
 
 // Load admin language file
 $lang = Factory::getLanguage();
@@ -34,6 +37,14 @@ $ignore_cat = $this->params->get('ignore_cat', 0);
 if (is_array($ignore_cat)) {
 	$hide_colour = in_array($this->item->product->cat_id, $ignore_cat);
 	$hide_size = in_array($this->item->product->cat_id, $ignore_cat);
+}
+if($hide_size) {
+    $this->form->setFieldAttribute('cat_size_id', 'type', 'hidden');
+    $this->form->setFieldAttribute('cat_size_id', 'default', 0);
+}
+if($hide_colour) {
+    $this->form->setFieldAttribute('cat_colour_id', 'type', 'hidden');
+    $this->form->setFieldAttribute('cat_colour_id', 'default', 0);
 }
 
 $this->form->setFieldAttribute('user_id', 'default', $user->id);

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,9 +12,9 @@ namespace GlennArkell\Component\Gausers\Administrator\Field;
 defined('JPATH_BASE') or die;
 
 // import the list field type
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Form\Field\ListField;
-use \Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\Language\Text;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 /**

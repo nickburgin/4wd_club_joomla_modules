@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.0
+ * @version     5.3.0
  * @package     com_gatripsys
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -11,13 +11,13 @@ namespace GlennArkell\Component\Gatripsys\Administrator\Model;
 
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
-use \Joomla\CMS\Helper\TagsHelper;
-use \Joomla\Database\ParameterType;
-use \Joomla\CMS\Date\Date;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
+use Joomla\CMS\Helper\TagsHelper;
+use Joomla\Database\ParameterType;
+use Joomla\CMS\Date\Date;
 
 /**
  * Methods supporting a list of records.

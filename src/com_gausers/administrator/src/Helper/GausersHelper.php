@@ -1,7 +1,7 @@
 <?php
 /**
 
- * @version     5.1.6                                                     
+ * @version     6.0.0                                                     
  * @package     com_gausers
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -13,32 +13,33 @@ namespace GlennArkell\Component\Gausers\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\Data\DataObject;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\Filesystem\Path;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\CMS\User\User;
-use \Joomla\CMS\Helper\UserGroupsHelper;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\User\UserFactoryInterface;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Plugin\PluginHelper;
-use \Joomla\CMS\Access\Access;
-use \GlennArkell\Component\Gausers\Administrator\Helper\GaregistrationHelper;
-use \GlennArkell\Component\Gausers\Administrator\Helper\GainvoiceHelper;
-use \GlennArkell\Component\Gausers\Administrator\Helper\MdpdfHelper;
-use \GlennArkell\Component\Gausers\Administrator\Helper\GanamesHelper;
-use \GlennArkell\Component\Gausers\Administrator\Helper\GaemailHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\Data\DataObject;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\Filesystem\Path;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\User\User;
+use Joomla\CMS\Helper\UserGroupsHelper;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\User\UserFactoryInterface;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Access\Access;
+use Joomla\Database\ParameterType;   //INTEGER, STRING, BOOLEAN, NULL, LARGE_OBJECT
+use GlennArkell\Component\Gausers\Administrator\Helper\GaregistrationHelper;
+use GlennArkell\Component\Gausers\Administrator\Helper\GainvoiceHelper;
+use GlennArkell\Component\Gausers\Administrator\Helper\MdpdfHelper;
+use GlennArkell\Component\Gausers\Administrator\Helper\GanamesHelper;
+use GlennArkell\Component\Gausers\Administrator\Helper\GaemailHelper;
 
 /**
  * Gausers helper.
@@ -72,6 +73,20 @@ class GausersHelper
 		return $query_string;
 	}
 
+	/**
+	 * Build the HTTP query array for the Scheduled Task
+	 */
+	public static function getHTTPQueryAjax($plg = null, $format = 'json', $group = 'system', $taskID = 0)
+	{
+		$query_string = array();
+		$query_string['option'] = 'com_ajax';
+		$query_string['format'] = $format;
+		$query_string['plugin'] = $plg;
+		$query_string['group'] = $group;
+		$query_string['id'] = $taskID;
+		return $query_string;
+	}
+
     /**
      * Gets todays date object based on global timezone settings
      */
@@ -86,6 +101,15 @@ class GausersHelper
 
 		return $date;
 	}
+
+    /**
+     * Prints out a variable value in human readable format
+     */
+    public static function gaPrint($val){
+        echo '<pre>Test<br />';
+        \print_r($val);
+        echo  '</pre>';
+    }
 
     /**
      * Load template over-rides when using modal view
@@ -106,17 +130,21 @@ class GausersHelper
 
     /**
      * Gets the user record for the specific id reference
+     *  $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($id);
      */
-    public static function getSpecificUser($id = 0)
+    public static function getSpecificUser($id)
 	{
-		if ($id) {
-			$container = Factory::getContainer();
-			$userFactory = $container->get(UserFactoryInterface::class);
-			$user = $userFactory->loadUserById($id);
-		} else {
-			$user = Factory::getApplication()->getIdentity();
-		}
+// 		if ($id) {
+// 			//$container = Factory::getContainer();
+// 			//$userFactory = $container->get(UserFactoryInterface::class);
+// 			//$user = $userFactory->loadUserById($id);
+// 			$user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($id);
+// 		} else {
+// 			$user = Factory::getApplication()->getIdentity();
+// 		}
+		$user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($id);
 		unset($user->password);
+		unset($user->password_clear);
 		unset($user->activation);
 		unset($user->params);
 		unset($user->lastResetTime);
@@ -158,7 +186,7 @@ class GausersHelper
     public static function canUserEdit($item)
     {
         $permission = false;
-        $user       = self::getSpecificUser();
+        $user       = Factory::getApplication()->getIdentity();
 
         if ($user->authorise('core.edit', 'com_gausers')) {
             $permission = true;
@@ -310,12 +338,19 @@ class GausersHelper
     *   Method to get a list of records
     *   @return array of object record data
     */
-	public static function getAllMshiptypes()
+	public static function getAllMshiptypes($availOpts = 0)
 	{
         $db		= Factory::getContainer()->get('DatabaseDriver');
 		$query	= $db->getQuery(true);
         $query->clear();
-		$query->select(' *, id as mship_id ');
+        if ($availOpts) {
+    		$params = ComponentHelper::getParams('com_gausers');
+    		$ignoreMship  = implode(",", $params->get( 'ignoreMship', array()));
+            $query->select(' "0" as "value", " - Select Membership Type - " as "text" UNION SELECT id as value, title as text ');
+            $query->where(' id NOT IN ('.$ignoreMship.')' );
+        } else {
+            $query->select(' *, id as mship_id ');
+        }
 		$query->from(' #__gausers_mshiptypes ');
 		$query->where(' state = '.(int) 1 );
 		$db->setQuery((string)$query);
@@ -388,24 +423,26 @@ class GausersHelper
 	{
 		$params = ComponentHelper::getParams('com_gausers');
 		$profile_suffix  = $params->get( 'profile_suffix', 'b4wdc' );
-		$locProf = 'profile'.$profile_suffix.'.';
+		$locProf = 'profile'.$profile_suffix;
 		$profLen = strlen($locProf);
-
-        $db		= Factory::getContainer()->get('DatabaseDriver');
-		$query	= $db->getQuery(true);
-        $query->clear();
-		$query->select(' "" as "value", " - Select Profile Fields - " as "text" UNION SELECT DISTINCT(substr(a.profile_key,'.(int)($profLen+1).')) as "value", substr(a.profile_key,'.(int)($profLen+1).') as "text"  ');
-		$query->from(' #__user_profiles AS a ');
-		$query->where(' substr(a.profile_key,1,'.(int)$profLen.') = '.$db->quote($locProf));
-		$query->order(' text ASC ');
-		$db->setQuery((string)$query);
-
-	    try {
-	        return $db->loadObjectList();
-	    } catch (RuntimeException $e) {
-	        Factory::getApplication()->enqueueMessage($e->getMessage().' Local Profile Values');
-	        return false;
-	    }
+        $flds = GaauditHelper::getProfileFields($locProf);
+        \asort($flds);
+        return $flds;
+//         $db		= Factory::getContainer()->get('DatabaseDriver');
+// 		$query	= $db->getQuery(true);
+//         $query->clear();
+// 		$query->select(' "" as "value", " - Select Profile Fields - " as "text" UNION SELECT DISTINCT(substr(a.profile_key,'.(int)($profLen+1).')) as "value", substr(a.profile_key,'.(int)($profLen+1).') as "text"  ');
+// 		$query->from(' #__user_profiles AS a ');
+// 		$query->where(' substr(a.profile_key,1,'.(int)$profLen.') = '.$db->quote($locProf));
+// 		$query->order(' text ASC ');
+// 		$db->setQuery((string)$query);
+// 
+// 	    try {
+// 	        return $db->loadObjectList();
+// 	    } catch (RuntimeException $e) {
+// 	        Factory::getApplication()->enqueueMessage($e->getMessage().' Local Profile Values');
+// 	        return false;
+// 	    }
 
 	}
 
@@ -437,7 +474,9 @@ class GausersHelper
         $query->clear();
 		$query->select(' "" as "value", " - Select Profile Group - " as "text" UNION SELECT DISTINCT(a.profile_value) as "value", a.profile_value as "text"  ');
 		$query->from(' #__user_profiles AS a ');
+		$query->join('LEFT', ' #__users AS b ON b.id = a.user_id AND b.block = 0');
 		$query->where(' a.profile_key = '.$db->quote($locProf));
+		$query->where(' b.name IS NOT NULL ');
 		$query->group(' value ');
 		$query->order(' text ASC ');
 		$db->setQuery((string)$query);
@@ -462,7 +501,7 @@ class GausersHelper
         $db		= Factory::getContainer()->get('DatabaseDriver');
 		$query	= $db->getQuery(true);
         $query->clear();
-		$query->select(' b.title As fieldName, a.value AS fieldValue ');
+		$query->select(' a.field_id AS id, b.title AS fieldName, a.value AS fieldValue ');
 		$query->from(' #__fields_values AS a ');
 		$query->join('LEFT', ' #__fields AS b ON b.id = a.field_id');
 		$query->where(' a.field_id = '.(int) $id );
@@ -525,13 +564,17 @@ class GausersHelper
 
         $configparams = json_decode($configdata->params);
         $new_invDate = new Date($configparams->invoice_date);
-        $new_invDate = $new_invDate->modify('+1 years');
+        $new_invDate = $new_invDate->modify('+1 YEAR');
         $new_invDate = $new_invDate->format('Y-m-d');
-        $new_offDate = new Date($configparams->cutoff_date);
-        $new_offDate = $new_offDate->modify('+1 years');
-        $new_offDate = $new_offDate->format('Y-m-d');
         $configparams->invoice_date = $new_invDate;
-        $configparams->cutoff_date = $new_offDate;
+
+        if ($configparams->use_cutoff) {
+            $new_offDate = new Date($configparams->cutoff_date);
+            $new_offDate = $new_offDate->modify('+1 YEAR');
+            $new_offDate = $new_offDate->format('Y-m-d');
+            $configparams->cutoff_date = $new_offDate;
+        }
+        // load back into object
         $configparams = json_encode($configparams);
         $configdata->params = $configparams;
 
@@ -551,7 +594,7 @@ class GausersHelper
 			$db		= Factory::getContainer()->get('DatabaseDriver');
 			$query	= $db->getQuery(true);
 	        $query->clear();
-			$query->select(' a.* ');
+			$query->select(' a.*, c.title AS pay_type_name ');
 			$query->select(' date_format(a.created_date,"%Y") AS created_year ');
 			$query->select(' date_format(a.created_date,"%m") AS created_month ');
 			$query->select(' date_format(a.end_date,"%Y") AS end_date_year ');
@@ -573,6 +616,7 @@ class GausersHelper
 			$query->select(' CONCAT("Invoice", LPAD(a.id, 6, 0)) AS inv_no, m.mship_term, m.term_type, m.title ');
 			$query->from(' #__gausers_invoices AS a ');
 			$query->join('LEFT', '#__gausers_mshiptypes AS m ON m.id = a.mship_id');
+			$query->join('LEFT', '#__categories AS c ON c.id = a.pay_type');
 			$query->where(' a.user_id = '.(int) $id );
 			$query->order(' a.created_date DESC ');
 			$db->setQuery((string)$query);
@@ -610,10 +654,18 @@ class GausersHelper
 
 	}
 
+    /**
+    *   Method to create a finance record
+    *   @param $data array includes $data['pay_type'] being category (extension=com_gausers.payment)
+    */
     public static function createFinanceTrans($data)
 	{
+        $fin_accnt = GausersHelper::getRecord("#__categories", "id", $data['pay_type'])->note;
         $params = ComponentHelper::getParams('com_gausers');
         $finance_cat  = $params->get('finance_cat');
+        $finance_accnt  = !empty($fin_accnt) ? $fin_accnt : $params->get('finance_accnt', 1);
+        //$pp_cat  = $params->get('pp_cat');
+        //$cc_cat  = $params->get('cc_cat');
         $membership_desc  = $params->get('membership_desc');
         $temp_mship  = $params->get('temp_mship', 0);
         $membership_desc  = $data['mship_id'] == $temp_mship ? 'Temporary Membership' : $membership_desc;
@@ -629,6 +681,7 @@ class GausersHelper
 		$query->set(' tran_ref = '.$db->Quote('Invoice '.$data['id']) );
 		$query->set(' tran_type = "I" ' );
 		$query->set(' cat_id = '. (int) $finance_cat );
+		$query->set(' accnt_id = '. (int) $finance_accnt );
 		$query->set(' tran_desc = '.$db->Quote($membership_desc) );
 		$query->set(' comment = "Auto Loaded from Members Invoicing" ' );
 		$db->setQuery((string)$query);
@@ -642,16 +695,16 @@ class GausersHelper
 	}
 
     /**
-    *   Method to get all member data for broadcast emails
+    *   Method to get all member data
     */
     public static function getMembersDetails($params, $onlyfinancial = 1)
 	{
-        $settotest  = $params->get( 'set_test' );
-        $testid  = $params->get( 'user_id' );     /* user ID */
-        $sendto_group  = $params->get( 'sendto_group' );
-        $xclude = $params->get( 'exclude_member' );     /* user ID */
-        $adminuser  = $params->get( 'admin_id' );
-        $finmembers   = $params->get( 'include_userfilter' );    /* filter on user status */
+        $settotest  = $params->get('set_test');
+        $testid  = $params->get('user_id');     /* user ID */
+        $sendto_group  = $params->get('sendto_group');
+        $xclude = $params->get('exclude_member');     /* user ID */
+        $adminuser  = $params->get('admin_id');
+        $finmembers   = $params->get('include_userfilter');    /* filter on user status */
         $discount_allowed  = $params->get('discount_allowed');
         $discount_switch  = $params->get('discount_switch');
         $profile_suffix  = $params->get('profile_suffix');
@@ -665,30 +718,40 @@ class GausersHelper
 		$db		= Factory::getContainer()->get('DatabaseDriver');
 		$query	= $db->getQuery(true);
         $query->clear();
-		$query->select(' a.id as user_id, a.name, a.email, b.profile_value as altemail, c.profile_value as inc_altemail, a.id ');
+		$query->select(
+                [
+                    $db->quoteName('a.id'),
+                    $db->quoteName('a.id', 'user_id'),
+                    $db->quoteName('a.name'),
+                    $db->quoteName('a.email'),
+                    $db->quoteName('b.profile_value', 'altemail'),
+                    $db->quoteName('c.profile_value', 'inc_altemail'),
+                    "SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 1), ' ', -1) AS firstname",
+                    "SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 1), ' ', -1) AS first_name",
+                    "If( length(a.name) - length(replace(a.name, ' ', ''))>1, SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 2), ' ', -1) ,NULL) as middle1_name",
+                    "If( If( length(a.name) - length(replace(a.name, ' ', ''))>1, SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 3), ' ', -1), NULL) = SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 4), ' ', -1), NULL, If( length(a.name) - length(replace(a.name, ' ', ''))>1, SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 3), ' ', -1), NULL)) as middle2_name",
+                    "If( If( length(a.name) - length(replace(a.name, ' ', ''))>1, SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 4), ' ', -1), NULL) = SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 5), ' ', -1), NULL, If( length(a.name) - length(replace(a.name, ' ', ''))>1, SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 4), ' ', -1), NULL)) as middle3_name",
+                    "SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 5), ' ', -1) AS surname",
+                    "SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 5), ' ', -1) AS last_name",
+                ]
+            );
 		$query->select(' d.profile_value as address1, e.profile_value as address2, f.profile_value as suburb, fr.profile_value as region ');
 		$query->select(' g.profile_value as pcode, h.profile_value as memtype, j.profile_value as partner, k.profile_value as altphone ');
-		$query->select(' l.profile_value as fwdvic_no, p.profile_value as phone, a.registerDate ');
-        $query->select(" SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 1), ' ', -1) AS firstname " );
-        $query->select(" SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 1), ' ', -1) AS first_name " );
-        $query->select(" If( length(a.name) - length(replace(a.name, ' ', ''))>1, SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 2), ' ', -1) ,NULL) as middle1_name " );
-        $query->select(" If( If( length(a.name) - length(replace(a.name, ' ', ''))>1, SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 3), ' ', -1) ,NULL) = SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 4), ' ', -1), null, If( length(a.name) - length(replace(a.name, ' ', ''))>1, SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 3), ' ', -1) ,NULL)) as middle2_name " );
-        $query->select(" SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 4), ' ', -1) AS surname " );
-        $query->select(" SUBSTRING_INDEX(SUBSTRING_INDEX(a.name, ' ', 4), ' ', -1) AS last_name " );
+		$query->select(' l.profile_value as fwdvic_no, p.profile_value as phone, a.registerDate, DATE_FORMAT(a.registerDate, "%Y-%m-%d") as regoDate ');
         $query->select(" SUBSTRING_INDEX(SUBSTRING_INDEX(j.profile_value, ' ', 1), ' ', -1) AS firstnamep " );
         $query->select(" SUBSTRING_INDEX(SUBSTRING_INDEX(j.profile_value, ' ', 1), ' ', -1) AS first_namep " );
         $query->select(" If( length(j.profile_value) - length(replace(j.profile_value, ' ', ''))>1, SUBSTRING_INDEX(SUBSTRING_INDEX(j.profile_value, ' ', 2), ' ', -1) ,NULL) as middle1_namep " );
         $query->select(" If( If( length(j.profile_value) - length(replace(j.profile_value, ' ', ''))>1, SUBSTRING_INDEX(SUBSTRING_INDEX(j.profile_value, ' ', 3), ' ', -1) ,NULL) = SUBSTRING_INDEX(SUBSTRING_INDEX(j.profile_value, ' ', 4), ' ', -1), null, If( length(j.profile_value) - length(replace(j.profile_value, ' ', ''))>1, SUBSTRING_INDEX(SUBSTRING_INDEX(j.profile_value, ' ', 3), ' ', -1) ,NULL)) as middle2_namep " );
-        $query->select(" SUBSTRING_INDEX(SUBSTRING_INDEX(j.profile_value, ' ', 4), ' ', -1) AS surnamep " );
-        $query->select(" SUBSTRING_INDEX(SUBSTRING_INDEX(j.profile_value, ' ', 4), ' ', -1) AS last_namep " );
+        $query->select(" SUBSTRING_INDEX(SUBSTRING_INDEX(j.profile_value, ' ', 5), ' ', -1) AS surnamep " );
+        $query->select(" SUBSTRING_INDEX(SUBSTRING_INDEX(j.profile_value, ' ', 5), ' ', -1) AS last_namep " );
 		$query->select(' s.profile_value as use_post, n.profile_value as postal_address1, o.profile_value as postal_address2 ');
 		$query->select(' q.profile_value as postal_suburb, qr.profile_value as postal_region, r.profile_value as postal_pcode ');
 		$query->select(' cty.profile_value as country, pcty.profile_value as postal_country ');
 		if ($discount_allowed) {
 			$query->select(' i.profile_value as "'.$discount_switch.'"');
 		}
-		$query->from(' #__users as a');
-		$query->join('RIGHT','#__user_usergroup_map AS m ON m.group_id = '. (int) $sendto_group.' AND m.user_id = a.id ');
+		$query->from(' #__users as a')
+    		->join('RIGHT',$db->quoteName('#__user_usergroup_map', 'm') . ' ON m.group_id = :gpid AND m.user_id = a.id');
 		$query->join('LEFT','#__user_profiles AS b ON b.user_id = a.id AND b.profile_key = "'.$local_profile.'.altemail" ');
 		$query->join('LEFT','#__user_profiles AS c ON c.user_id = a.id AND c.profile_key = "'.$local_profile.'.inc_altemail" ');
 		$query->join('LEFT','#__user_profiles AS d ON d.user_id = a.id AND d.profile_key = "profile.address1" ');
@@ -713,18 +776,22 @@ class GausersHelper
 			$query->join('LEFT','#__user_profiles AS i ON i.user_id = a.id AND i.profile_key = "'.$local_profile.'.'.$discount_switch.'" ');
 		}
 		if ($onlyfinancial) {
-    		$query->where(' a.block = 0 ');
+    		$query->where('a.block = 0');
         }
 		if ($settotest) {
-            $query->where(' a.id = '. (int) $testid);
+            $query->where('a.id = :testid')
+                ->bind(':testid', $testid, ParameterType::INTEGER);
         } else {
     		if ($xclude) {
-				$query->where(' a.id NOT IN ('.$xclude.')' );
+				$query->where('a.id NOT IN (:xclude)')
+				->bind(':xclude', $xclude, ParameterType::STRING);
    			}
-    		$query->where(' a.id != '. (int) $adminuser);
+    		$query->where('a.id != :adminid')
+                ->bind(':adminid', $adminuser, ParameterType::INTEGER);
         }
-		$query->order(' last_name ASC ' );
-        $db->setQuery((string)$query);
+		$query->order('surname ASC')
+    		->bind(':gpid', $sendto_group, ParameterType::INTEGER);
+        $db->setQuery($query);
 
 	    try {
 	        $itemList = $db->loadObjectList();
@@ -896,12 +963,12 @@ class GausersHelper
 					$mship_data .= $m->address1.','.$m->address2.','.$m->suburb.','.$m->region.','.$m->pcode.',';
 				}
 
-				if (in_array('phone',$profile_extract)) { $mship_data .= ' ,'; } else { $mship_data .= $m->phone.','; }
+				if (!empty($profile_extract) && in_array('phone',$profile_extract)) { $mship_data .= ' ,'; } else { $mship_data .= $m->phone.','; }
 
                 // setup partner fields
 				$mship_data .= $m->partner.',';
-				if (in_array('altphone',$profile_extract)) { $mship_data .= ' ,'; } else { $mship_data .= $m->altphone.','; }
-				if (in_array('altemail',$profile_extract)) { $mship_data .= ' ,'; } else { $mship_data .= $m->altemail.','; }
+				if (!empty($profile_extract) && in_array('altphone',$profile_extract)) { $mship_data .= ' ,'; } else { $mship_data .= $m->altphone.','; }
+				if (!empty($profile_extract) && in_array('altemail',$profile_extract)) { $mship_data .= ' ,'; } else { $mship_data .= $m->altemail.','; }
 				$mship_data .= $m->user_id.',';
 
 				foreach ($profile_extract AS $proffield) {
@@ -1165,7 +1232,7 @@ class GausersHelper
 
 	public static function createMembersDirectory()
 	{
-		$lang = Factory::getLanguage();
+		$lang = Factory::getApplication()->getLanguage();
 		$lang->load('com_gausers', JPATH_ADMINISTRATOR);
 		$params = ComponentHelper::getParams('com_gausers');
         $incl_partner  = $params->get( 'incl_partner' );
@@ -1202,50 +1269,7 @@ class GausersHelper
 					if (in_array($mbr->id, $xclude)) {
 						// do nothing
 					} else {
-                        $profile = UserHelper::getProfile($mbr->id);
-
-                        $mbr->address1 = str_replace('"', '', $profile->profile['address1']);
-                        $mbr->address2 = str_replace('"', '', $profile->profile['address2']);
-                        $mbr->city = str_replace('"', '', $profile->profile['city']);
-                        $mbr->region = str_replace('"', '', $profile->profile['region']);
-                        $mbr->postcode = str_replace('"', '', $profile->profile['postal_code']);
-                        $mbr->phone = str_replace('"', '', $profile->profile['phone']);
-                        $mbr->partner = $profile->$profsuf['partner'];
-                        $mbr->altphone = $profile->$profsuf['altphone'];
-                        $mbr->snd_phone = $profile->$profsuf['2nd_phone'];
-                        $mbr->sat_phone = $profile->$profsuf['hf2_selcall'];
-
-                        $mbr->camp_caravan = $profile->$profsuf['camp_caravan'];
-                        $mbr->camp_other = $profile->$profsuf['camp_other'];
-                        $mbr->vehicle_make = $profile->$profsuf['vehicle_make'];
-                        $mbr->vehicle_model = $profile->$profsuf['vehicle_model'];
-                        $mbr->vehicle_rego = $profile->$profsuf['vehicle_rego'];
-                        $mbr->vehicle_fuel = $profile->$profsuf['vehicle_fuel'];
-                        $mbr->use_post = $profile->$profsuf['use_post'];
-                        $mbr->postal_address1 = $profile->$profsuf['postal_address1'];
-                        $mbr->postal_city = $profile->$profsuf['postal_city'];
-                        $mbr->postal_region = $profile->$profsuf['postal_region'];
-                        $mbr->postal_post_code = $profile->$profsuf['postal_post_code'];
-
-						$mbr->phone = ($mbr->phone == '0') ? '' : $mbr->phone;
-						$mbr->altphone = ($mbr->altphone == '0') ? '' : $mbr->altphone;
-						$mbr->snd_phone = ($mbr->snd_phone == '0') ? '' : $mbr->snd_phone;
-						$mbr->sat_phone = ($mbr->sat_phone == '0') ? '' : $mbr->sat_phone;
-						$mbr->camp_caravan = ($mbr->camp_caravan == '0') ? '' : $mbr->camp_caravan;
-						$mbr->camp_other = ($mbr->camp_other == '0') ? '' : $mbr->camp_other;
-						$mbr->vehicle_make = ($mbr->vehicle_make == '0') ? '' : $mbr->vehicle_make;
-						$mbr->vehicle_model = ($mbr->vehicle_model == '0') ? '' : $mbr->vehicle_model;
-						$mbr->vehicle_rego = ($mbr->vehicle_rego == '0') ? '' : $mbr->vehicle_rego;
-						$mbr->vehicle_fuel = ($mbr->vehicle_fuel == '0') ? '' : $mbr->vehicle_fuel;
-
-						$mbr->address = $mbr->use_post ? $mbr->postal_address1 : $mbr->address1.' '.$mbr->address2;
-						$mbr->city = $mbr->use_post ? $mbr->postal_city : $mbr->city;
-						$mbr->region = $mbr->use_post ? $mbr->postal_region : $mbr->region;
-						$mbr->postcode = $mbr->use_post ? $mbr->postal_post_code : $mbr->postcode;
-
-						$mbr->email = substr($mbr->email,0,7) == 'noemail' ? 'No Email' : $mbr->email;
-
-                        $mbr->region = ($mbr->region == 'OTHER') ? '' : $mbr->region;
+                        $mbr = GamemberprofileHelper::getMemberProfile($mbr, $params);
 						$cntr++;
 
 						if ($cntr == 3) {
@@ -1253,17 +1277,17 @@ class GausersHelper
 
 							$member3 = $mbr->fullname. " \n";
 							$member3 .= $mbr->address." \n";
-							$member3 .= $mbr->city.' '.$mbr->region.' '.$mbr->postcode." \n";
+							$member3 .= $mbr->suburb.' '.$mbr->region.' '.$mbr->postcode." \n";
 							$member3 .= Text::_('COM_GAUSERS_FORM_LBL_GAUSER_PHONE').': '.$mbr->phone." \n";
 							$member3 .= Text::_('COM_GAUSERS_FORM_LBL_GAUSER_ALTPHONE').': '.$mbr->altphone." \n";
 							$member3 .= 'Sat Phone: '.$mbr->sat_phone." \n";
 							$member3 .= $mbr->email." \n";
-							$member3 .= 'Veh: '.$mbr->vehicle_make;
-							$member3 .= ' - '.$mbr->vehicle_model." \n";
-							$member3 .= 'Rego: '.$mbr->vehicle_rego." \n";
-							$member3 .= 'Fuel: '.$mbr->vehicle_fuel." \n";
-							$member3 .= 'Van: '.$mbr->camp_caravan." \n";
-							$member3 .= 'Camper: '.$mbr->camp_other." \n";
+// 							$member3 .= 'Veh: '.$mbr->vehicle_make;
+// 							$member3 .= ' - '.$mbr->vehicle_model." \n";
+// 							$member3 .= 'Rego: '.$mbr->vehicle_rego." \n";
+// 							$member3 .= 'Fuel: '.$mbr->vehicle_fuel." \n";
+// 							$member3 .= 'Van: '.$mbr->camp_caravan." \n";
+// 							$member3 .= 'Camper: '.$mbr->camp_other." \n";
 
 							$x = $pdf->GetX();
 							$y = $pdf->GetY();
@@ -1284,34 +1308,34 @@ class GausersHelper
 					    } elseif ($cntr == 1) {
 							$member1 = $mbr->fullname. " \n";
 							$member1 .= $mbr->address." \n";
-							$member1 .= $mbr->city.' '.$mbr->region.' '.$mbr->postcode." \n";
+							$member1 .= $mbr->suburb.' '.$mbr->region.' '.$mbr->postcode." \n";
 							$member1 .= Text::_('COM_GAUSERS_FORM_LBL_GAUSER_PHONE').': '.$mbr->phone." \n";
 							$member1 .= Text::_('COM_GAUSERS_FORM_LBL_GAUSER_ALTPHONE').': '.$mbr->altphone." \n";
 							$member1 .= 'Sat Phone: '.$mbr->sat_phone." \n";
 							$member1 .= $mbr->email." \n";
-							$member1 .= 'Veh: '.$mbr->vehicle_make;
-							$member1 .= ' - '.$mbr->vehicle_model." \n";
-							$member1 .= 'Rego: '.$mbr->vehicle_rego." \n";
-							$member1 .= 'Fuel: '.$mbr->vehicle_fuel." \n";
-							$member1 .= 'Van: '.$mbr->camp_caravan." \n";
-							$member1 .= 'Camper: '.$mbr->camp_other." \n";
+// 							$member1 .= 'Veh: '.$mbr->vehicle_make;
+// 							$member1 .= ' - '.$mbr->vehicle_model." \n";
+// 							$member1 .= 'Rego: '.$mbr->vehicle_rego." \n";
+// 							$member1 .= 'Fuel: '.$mbr->vehicle_fuel." \n";
+// 							$member1 .= 'Van: '.$mbr->camp_caravan." \n";
+// 							$member1 .= 'Camper: '.$mbr->camp_other." \n";
 					    } elseif ($cntr == 2) {
 							$member2 = $mbr->fullname. " \n";
                             $member2 .= $mbr->address." \n";
-							$member2 .= $mbr->city.' '.$mbr->region.' '.$mbr->postcode." \n";
+							$member2 .= $mbr->suburb.' '.$mbr->region.' '.$mbr->postcode." \n";
 							$member2 .= Text::_('COM_GAUSERS_FORM_LBL_GAUSER_PHONE').': '.$mbr->phone." \n";
 							$member2 .= Text::_('COM_GAUSERS_FORM_LBL_GAUSER_ALTPHONE').': '.$mbr->altphone." \n";
 							$member2 .= 'Sat Phone: '.$mbr->sat_phone." \n";
 							$member2 .= $mbr->email." \n";
-							$member2 .= 'Veh: '.$mbr->vehicle_make;
-							$member2 .= ' - '.$mbr->vehicle_model." \n";
-							$member2 .= 'Rego: '.$mbr->vehicle_rego." \n";
-							$member2 .= 'Fuel: '.$mbr->vehicle_fuel." \n";
-							$member2 .= 'Van: '.$mbr->camp_caravan." \n";
-							$member2 .= 'Camper: '.$mbr->camp_other." \n";
+// 							$member2 .= 'Veh: '.$mbr->vehicle_make;
+// 							$member2 .= ' - '.$mbr->vehicle_model." \n";
+// 							$member2 .= 'Rego: '.$mbr->vehicle_rego." \n";
+// 							$member2 .= 'Fuel: '.$mbr->vehicle_fuel." \n";
+// 							$member2 .= 'Van: '.$mbr->camp_caravan." \n";
+// 							$member2 .= 'Camper: '.$mbr->camp_other." \n";
 						}
-						if ($perpage == 3 && $pagecntr == 1) { $pdf->AddPage(); $pdf->SetXY(10,45); $perpage = 0; $pagecntr++; }
-						if ($perpage == 4) { $pdf->AddPage(); $pdf->SetXY(10,45); $perpage = 0; $pagecntr++; }
+						if ($perpage == 5 && $pagecntr == 1) { $pdf->AddPage(); $pdf->SetXY(10,45); $perpage = 0; $pagecntr++; }
+						if ($perpage == 6) { $pdf->AddPage(); $pdf->SetXY(10,45); $perpage = 0; $pagecntr++; }
 					}
 				}
 
@@ -1333,9 +1357,8 @@ class GausersHelper
                 $attachfile = $path.'/MembersDirectory.pdf';
 
 				if ($send_mbrdir) {
-					$user = self::getSpecificUser();
-			        $recipients = array($user->email);
-			        $sentOK = GaemailHelper::sendEmail($recipients, 'Find attached membership directory you requested.', 'Club Membership Directory - '.$fromname, $attachfile);
+					$user = Factory::getApplication()->getIdentity();
+			        $sentOK = GaemailHelper::sendEmail(array($user->email), 'Find attached membership directory you requested.', 'Club Membership Directory - '.$fromname, $attachfile);
 				}
 			}
 
@@ -1781,4 +1804,38 @@ class GausersHelper
 		return $newdata;
 	}
 
+	/**
+	* Get current ip address on new member form
+	* @return string IP Address
+	*/
+	public static function get_user_ip()
+	{
+        $ip = '';
+        // Check for Cloudflare-specific header if applicable
+        if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+            $ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
+        } elseif (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            // Handle multiple IPs in the header (e.g., from multiple proxies)
+            $ip_list = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            foreach ($ip_list as $single_ip) {
+                $single_ip = trim($single_ip);
+                // Optional: validate the IP address to filter out private ranges or invalid IPs
+                if (filter_var($single_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false) {
+                    $ip = $single_ip;
+                    break;
+                }
+            }
+            // Fallback if no valid public IP found in the list, or if the header only had private IPs
+            if (empty($ip)) {
+                $ip = $_SERVER['REMOTE_ADDR'];
+            }
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+
+        return $ip;
+
+	}
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    com_gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -10,15 +10,16 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Layout\LayoutHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GainvoiceHelper;
+use \GlennArkell\Component\Gatripsys\Administrator\Helper\GamodalHelper;
 
 // load any assets required
 $this->document->getWebAssetManager()
@@ -69,8 +70,9 @@ $this->item->exclude_email = $this->params->get('exclude_email', 'noemail');
 
 // get attendees of each trip and calc if full
 $this->item->attends = GatripsysHelper::getAttendeeCount($this->item->id);
-$this->item->maxedVeh = $this->item->max_no && $this->item->attends->vehicles >= $this->item->max_no ? 1 : 0;
-$this->item->maxedPer = $this->item->max_people && $this->item->attends->persons >= $this->item->max_people ? 1 : 0;
+$attends = isset($this->item->attends) ? $this->item->attends : 0;
+$this->item->maxedVeh = $this->item->max_no && $attends && $attends->vehicles >= $this->item->max_no ? 1 : 0;
+$this->item->maxedPer = $this->item->max_people && $attends && $attends->persons >= $this->item->max_people ? 1 : 0;
 $this->item->trip_full = $this->item->maxedVeh || $this->item->maxedPer ? 1 : 0;
 $this->item->tripClass = ($this->item->hlite_book_full && $this->item->trip_full) ? ' red' : '';
 
@@ -110,36 +112,11 @@ if ($this->item->mship_single) {
 }
 // --------- Set up all the links and buttons  -------------
 // setup the booking modal parameters
-$bookLink = GatripsysHelper::getHTTPQuery(null, 'view', 'attendeeform', 'trip_id', $this->item->id);
-$bookLink = GatripsysHelper::getHTTPQuery($bookLink, null, null, 'tmpl', 'component');
-$bookLink = GatripsysHelper::getHTTPQuery($bookLink, null, null, 'layout', 'modal');
-$bookparams = array( 'url' => 'index.php?'.http_build_query($bookLink, '', '&amp;'),
-        'title' => Text::_("COM_GATRIPSYS_BOOK_ON_TRIP"), 'closeButton'=> true,
-        'modalWidth' => 60, 'bodyHeight' => 50, 'backdrop'   => 'static' );
-$bmodname = 'modal-myModal'.$this->item->id;
-$bhtml = '<a class="btn btn-success" href="#'.$bmodname.'" data-bs-toggle="modal">';
-$bhtml .= '<i class="fas fa-user"></i> '.Text::_('COM_GATRIPSYS_BOOK_ON_TRIP').'</a>';
-
+$bhtml = GamodalHelper::setupModalButton('view', 'attendeeform', 'trip_id', $this->item->id, 'modal', 'myModal', 'success', 'COM_GATRIPSYS_BOOK_ON_TRIP', 'COM_GATRIPSYS_BOOK_ON_TRIP', 'fas fa-user', '');
 // setup the incident modal parameters
-$incidLink = GatripsysHelper::getHTTPQuery(null, 'view', 'incidentform', 'trip_id', $this->item->id);
-$incidLink = GatripsysHelper::getHTTPQuery($incidLink, null, null, 'tmpl', 'component');
-$incidparams = array( 'url' => 'index.php?'.http_build_query($incidLink, '', '&amp;'),
-        'title' => Text::_("COM_GATRIPSYS_TITLE_INCIDENT"), 'closeButton'=> true,
-        'modalWidth' => 60, 'bodyHeight' => 50, 'backdrop'   => 'static' );
-$imodname = 'modal-myIncidModal'.$this->item->id;
-$ihtml = '<a class="btn btn-incident" href="#'.$imodname.'" data-bs-toggle="modal">';
-$ihtml .= '<i class="icon-lightning"></i> '.Text::_('COM_GATRIPSYS_TITLE_INCIDENT').'</a>';
-
+$ihtml = GamodalHelper::setupModalButton('view', 'incidentform', 'trip_id', $this->item->id, '', 'myIncidModal', 'incident', 'COM_GATRIPSYS_TITLE_INCIDENT', 'COM_GATRIPSYS_TITLE_INCIDENT', 'icon-lightning', '');
 // setup the comment modal parameters
-$comLink = GatripsysHelper::getHTTPQuery(null, 'view', 'tripform', 'id', $this->item->id);
-$comLink = GatripsysHelper::getHTTPQuery($comLink, null, null, 'tmpl', 'component');
-$comLink = GatripsysHelper::getHTTPQuery($comLink, null, null, 'layout', 'default_comment');
-$comparams = array( 'url' => 'index.php?'.http_build_query($comLink, '', '&amp;'),
-        'title' => Text::_("COM_GATRIPSYS_ADD_COMMENT"), 'closeButton'=> true,
-        'modalWidth' => 60, 'bodyHeight' => 35, 'backdrop'   => 'static' );
-$cmodname = 'modal-myCommModal'.$this->item->id;
-$chtml = '<a class="btn btn-success" href="#'.$cmodname.'" data-bs-toggle="modal">';
-$chtml .= '<i class="icon-file-2"></i> '.Text::_('COM_GATRIPSYS_ADD_COMMENT').'</a>';
+$chtml = GamodalHelper::setupModalButton('view', 'tripform', 'id', $this->item->id, 'default_comment', 'myCommModal', 'success', 'COM_GATRIPSYS_ADD_COMMENT', 'COM_GATRIPSYS_ADD_COMMENT', 'icon-file-2', '');
 
 // set up Trip Buttons
 $stateLink = GatripsysHelper::getHTTPQuery(null, 'task', 'trip.publish', 'id', $this->item->id);
@@ -147,9 +124,11 @@ $apprvLink = GatripsysHelper::getHTTPQuery($stateLink, null, null, 'state', '2')
 $closeLink = GatripsysHelper::getHTTPQuery($stateLink, null, null, 'state', '4');
 $canLink = GatripsysHelper::getHTTPQuery($stateLink, null, null, 'state', '5');
 $editLink = GatripsysHelper::getHTTPQuery(null, 'task', 'tripform.edit', 'id', $this->item->id);
+
 $rptLink = GatripsysHelper::getHTTPQuery(null, 'task', 'trip.genRpt', 'id', $this->item->id);
 $rpt1Link = GatripsysHelper::getHTTPQuery($rptLink, null, null, 'rpt', '1');
 $rpt0Link = GatripsysHelper::getHTTPQuery($rptLink, null, null, 'rpt', '0');
+
 $delRptLink = GatripsysHelper::getHTTPQuery(null, 'task', 'trip.deletePDF', 'id', $this->item->id);
 $del1Link = GatripsysHelper::getHTTPQuery($delRptLink, null, null, 'rpt', '1');
 $del0Link = GatripsysHelper::getHTTPQuery($delRptLink, null, null, 'rpt', '0');
@@ -343,7 +322,8 @@ $del0Link = GatripsysHelper::getHTTPQuery($delRptLink, null, null, 'rpt', '0');
 		?>
 		<?php /* -----------------------------  Status of Published = ready to book  ---------------------------------- */ ?>
 		<?php if ($showBookBtn): ?>
-			<?php echo $bhtml .= HTMLHelper::_('bootstrap.renderModal', $bmodname, $bookparams); ?>
+			<?php echo $bhtml; ?>
+			<?php /* echo $bhtml .= HTMLHelper::_('bootstrap.renderModal', $bmodname, $bookparams); */ ?>
 		<?php endif; ?>
 
 		<?php /* -----------------------------  Leader or Co-ord ONLY  ---------------------------------- */ ?>
@@ -360,7 +340,8 @@ $del0Link = GatripsysHelper::getHTTPQuery($delRptLink, null, null, 'rpt', '0');
 			<?php endif; ?>
 			<?php /* -----------------------------  Status of Bookings for Leader to Comment, Agenda, Incident or Close ------------------- */ ?>
 			<?php if ($this->item->state == 2): ?>
-				<?php echo $chtml .= HTMLHelper::_('bootstrap.renderModal', $cmodname, $comparams); ?>
+    			<?php echo $chtml; ?>
+
 				<?php if(!$this->item->agendaExists ): ?>
 					<a class="btn btn-info" href="<?php echo Route::_('index.php?option=com_gatripsys&task=trip.genRpt&id='.$this->item->id.'&rpt=0'); ?>">
 						<i class="icon-print"></i> <?php echo Text::_("COM_GATRIPSYS_GEN_AGENDA"); ?>
@@ -371,7 +352,7 @@ $del0Link = GatripsysHelper::getHTTPQuery($delRptLink, null, null, 'rpt', '0');
 					</a>
 				<?php endif; ?>
 				<?php if($this->item->dept_date < $this->item->today ): ?>
-					<?php echo $ihtml .= HTMLHelper::_('bootstrap.renderModal', $imodname, $incidparams); ?>
+					<?php echo $ihtml; ?>
 					<a href="<?php echo Route::_('index.php?'.http_build_query($closeLink, '', '&amp;')); ?>" class="btn btn-info" type="button" >
 						<i class="icon-unpublish"></i> <?php echo Text::_('COM_GATRIPSYS_CLOSE_TRIP'); ?>
 					</a>
@@ -390,8 +371,8 @@ $del0Link = GatripsysHelper::getHTTPQuery($delRptLink, null, null, 'rpt', '0');
 			<?php /* -----------------------------  Menu Parameter - Past Trips and Closed ---------------------------------- */ ?>
 			<?php elseif ($this->item->state == 4 && $trip_past && $this->item->canTrip): ?>
 				<?php if(!$this->item->finalExists): ?>
-					<?php echo $chtml .= HTMLHelper::_('bootstrap.renderModal', $cmodname, $comparams); ?>
-					<?php echo $ihtml .= HTMLHelper::_('bootstrap.renderModal', $imodname, $incidparams); ?>
+        			<?php echo $chtml; ?>
+        			<?php echo $ihtml; ?>
 					<a class="btn btn-inverse" href="<?php echo Route::_('index.php?'.http_build_query($rpt1Link, '', '&amp;')); ?>">
 						<i class="icon-archive"></i> <?php echo Text::_("COM_GATRIPSYS_GEN_FINAL"); ?>
 					</a>

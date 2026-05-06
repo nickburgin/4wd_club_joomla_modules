@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    Com_Gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -9,10 +9,10 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 
 // load any assets required
@@ -36,21 +36,39 @@ if (!$canAdmin) {
 } else {
     $this->form->setFieldAttribute('user_name', 'type', 'hidden');
 }
+$this->form->setFieldAttribute('trip_id', 'type', 'hidden');
 
 $trip = GatripsysHelper::getTripInformation($this->item->trip_id);
 
+// decide if incident file should be shown
+$tripCoord = ($user->id == $trip->leader || $canTrip) ? 1 : 0;
+if (!$tripCoord) {
+    $this->form->setFieldAttribute('inc_img', 'type', 'hidden');
+    //$this->form->setFieldAttribute('inc_img_disp', 'type', 'hidden');
+} else {
+    //$this->form->setFieldAttribute('inc_img', 'type', 'hidden');
+    $this->form->setFieldAttribute('inc_img_disp', 'type', 'hidden');
+}
+
 /*
-echo '<pre>Test<br />';
-print_r($user->authorise);
-echo '</pre>';
+echo  GatripsysHelper::gaPrint($trip->leader);
 */
 ?>
+<style>
+    .front-end-edit label{
+        width: 130px !important;
+        text-align: left !important;
+    }
+    .front-end-edit .controls {
+        margin-left: 15px !important;
+    }
+</style>
 
 <div class="trip-edit front-end-edit">
 	<?php if (!empty($this->item->id)): ?>
 		<h2>Edit Incident provided by <?php echo GatripsysHelper::getSpecificUser($this->item->user_id)->name; ?></h2>
 	<?php else: ?>
-		<h2>Add Incident Entry</h2>
+		<h2>Add Incident Entry - <?php echo $this->item->trip_details->title; ?></h2>
 	<?php endif; ?>
 
 	<form id="form-incident"
@@ -114,12 +132,6 @@ echo '</pre>';
 							<?php echo Text::_('JSUBMIT'); ?>
 						</button>
 					<?php endif; ?>
-					<a class="btn btn-danger"
-					   href="<?php echo Route::_('index.php?option=com_gatripsys&task=incidentform.cancel'); ?>"
-					   title="<?php echo Text::_('JCANCEL'); ?>">
-					   <span class="fas fa-times" aria-hidden="true"></span>
-						<?php echo Text::_('JCANCEL'); ?>
-					</a>
 				</div>
 			</div>
 

@@ -5,7 +5,7 @@
 	xsi:schemaLocation="urn:joomla.org menu.xsd"
 	>
 	<menuitem
-		title="COM_GAFINANCE_MENUS"
+		title="COM_GAFINANCE_DASHBOARD_TITLE"
 		type="heading"
 		icon="fas fa-donate"
 		class="class:fas fa-donate"
@@ -107,4 +107,23 @@
 
 	</menuitem>
 
+	<menuitem
+		title="COM_CONTENT_MENUS_MISC"
+		type="heading"
+		icon="cubes"
+		class="class:file-alt"
+		dashboard="gafinance"
+		>
+
+		<menuitem
+			title="MOD_MENU_EXTENSIONS_MODULE_MANAGER_SITE"
+			type="component"
+			element="com_modules"
+			link="index.php?option=com_modules&amp;view=modules&amp;client_id=0"
+			quicktask="index.php?option=com_modules&amp;view=select&amp;client_id=0"
+			quicktask-title="COM_CONTENT_MENUS_NEW_SITE_MODULE"
+		/>
+
+
+	</menuitem>
 </menu>

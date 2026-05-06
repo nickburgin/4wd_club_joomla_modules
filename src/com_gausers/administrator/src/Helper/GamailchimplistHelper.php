@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -11,14 +11,14 @@ namespace GlennArkell\Component\Gausers\Administrator\Helper;
 
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Access\Access;
-use \Joomla\Filesystem\Path;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Access\Access;
+use Joomla\Filesystem\Path;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GaemailHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GanamesHelper;
@@ -31,7 +31,7 @@ class GamailchimplistHelper
 		$params  = ComponentHelper::getParams('com_gausers');
 		$exclemail  = $params->get('exclude_email_pref', 'noemail');
 		$mcextra  = $params->get('mchimp_extra', '');
-		$user = GausersHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		$members = GausersHelper::getMembersDetails($params, 1);
 

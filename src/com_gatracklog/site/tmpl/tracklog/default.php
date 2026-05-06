@@ -1,7 +1,7 @@
 <?php
 /**
- * @version    4.1.0
- * @package    com_gatracklog
+ * @version    4.2.0
+ * @subpackage com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -10,49 +10,53 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
 use \GlennArkell\Component\Gatracklog\Administrator\Helper\GatracklogHelper;
+use \GlennArkell\Component\Gatracklog\Administrator\Helper\GamodalHelper;
 
 // load any assets required
-$this->document->getWebAssetManager()
+$this->getDocument()->getWebAssetManager()
     ->usePreset('com_gatracklog.gatracklogpreset');
 
-// Load admin language file
-$lang = Factory::getApplication()->getLanguage();
-$lang->load('com_gatracklog', JPATH_ADMINISTRATOR);
 
-$user = GatracklogHelper::getSpecificUser();
+// Load admin language file
+Factory::getApplication()->getLanguage()->load('com_gatracklog', JPATH_ADMINISTRATOR);
+
+$user = Factory::getApplication()->getIdentity();
 $canEdit = GatracklogHelper::canUserEdit($user, $this->item);
 
 $canDelete = $user->authorise('core.delete','com_gatracklog.tracklog.'.$this->item->id);
+
+$removeTran = GamodalHelper::getHTTPQuery(null, 'task', 'tracklog.remove', 'id', $this->item->id);
+$removeURL = 'index.php?'.\http_build_query($removeTran, '', '&amp;');
+$editTran = GamodalHelper::getHTTPQuery(null, 'task', 'tracklog.edit', 'id', $this->item->id);
+$editURL = 'index.php?'.\http_build_query($editTran, '', '&amp;');
+$canTran = GamodalHelper::getHTTPQuery(null, 'task', 'tracklog.cancel', 'id', $this->item->id);
+$canURL = 'index.php?'.\http_build_query($canTran, '', '&amp;');
+
+// setup the modal links for a member leaving the club
+$lhtml = GamodalHelper::setupModalButton('view', 'tracklogform', 'id', $this->item->id, 'modal', 'modal-myModal', 'success', '', 'COM_GATRACKLOG_ADD_COMMENT', 'fas fa-plus', '')
+
+// $lveLink = GatracklogHelper::getHTTPQuery(null, 'view', 'tracklogform', 'id', $this->item->id);
+// $lveLink = GatracklogHelper::getHTTPQuery($lveLink, null, null, 'tmpl', 'component');
+// $lveLink = GatracklogHelper::getHTTPQuery($lveLink, null, null, 'layout', 'modal');
+// $lmodparams = array( 'url'        => 'index.php?'.http_build_query($lveLink, '', '&amp;'),
+//         'title'      => Text::_("COM_GATRACKLOG_ADD_COMMENT"), 'closeButton'=> true,
+//         'modalWidth' => 60, 'bodyHeight' => 35, 'backdrop'   => 'static' );
+// $lmodname = 'modal-myLeftModal'.$this->item->id;
+// $lhtml = '<a class="btn btn-success" href="#'.$lmodname.'" data-bs-toggle="modal">';
+// $lhtml .= '<i class="fas fa-plus" title="'.Text::_('COM_GATRACKLOG_ADD_COMMENT').'"></i> '.Text::_('COM_GATRACKLOG_ADD_COMMENT').'</a>';
 
 // Display a heading for the page
 if ($this->params->get('page_title', '') > '') {
 	echo '<h1>'.$this->params->get('page_title').'</h1>';
 } else { 
-	echo '<h1>'.Text::_('COM_GATRACKLOG_TITLE_TRACKLOG').'</h1>';
+	echo '<h1>'.Text::_('COM_GAGATRACKLOG_TITLE_TRACKLOG').'</h1>';
 }
-
-// setup the modal links for a member leaving the club
-$lveLink = GatracklogHelper::getHTTPQuery(null, 'view', 'tracklogform', 'id', $this->item->id);
-$lveLink = GatracklogHelper::getHTTPQuery($lveLink, null, null, 'tmpl', 'component');
-$lveLink = GatracklogHelper::getHTTPQuery($lveLink, null, null, 'layout', 'modal');
-$lmodparams = array( 'url'        => 'index.php?'.http_build_query($lveLink, '', '&amp;'),
-        'title'      => Text::_("COM_GATRACKLOG_ADD_COMMENT"), 'closeButton'=> true,
-        'modalWidth' => 60, 'bodyHeight' => 35, 'backdrop'   => 'static' );
-$lmodname = 'modal-myLeftModal'.$this->item->id;
-$lhtml = '<a class="btn btn-success" href="#'.$lmodname.'" data-bs-toggle="modal">';
-$lhtml .= '<i class="fas fa-plus" title="'.Text::_('COM_GATRACKLOG_ADD_COMMENT').'"></i> '.Text::_('COM_GATRACKLOG_ADD_COMMENT').'</a>';
-
-/*
-echo '<pre>Test<br />';
-print_r($this->item->cat->params);
-echo '</pre>';
-*/
 ?>
 
 <div class="item_fields">
@@ -151,8 +155,8 @@ echo '</pre>';
 </div>
 
 <?php /* ----------------------   Return button   ------------------------------ */ ?>
-<a class="btn btn-secondary" href="<?php echo Route::_('index.php?option=com_gatracklog&view=tracklogs'); ?>">
-	<i class="icon-undo"></i> <?php echo Text::_("COM_GATRACKLOG_RETURN"); ?>
+<a class="btn btn-secondary" href="<?php echo Route::_($canURL); ?>">
+	<i class="icon-undo"></i> <?php echo Text::_("COM_GAGATRACKLOG_RETURN"); ?>
 </a>
 
 <?php echo $lhtml .= HTMLHelper::_('bootstrap.renderModal', $lmodname, $lmodparams); ?>
@@ -161,37 +165,27 @@ echo '</pre>';
 	href="<?php echo Route::_('index.php?option=com_gatracklog&task=tracklog.sendtrklog&id='.$this->item->id); ?>">
 	<i class="icon-mail"></i> <?php echo Text::_('COM_GATRACKLOG_SEND_LOG'); ?>
 </a>
+
 <?php /* ----------------------   Edit button   ------------------------------ */ ?>
 <?php if($canEdit && $this->item->checked_out == 0): ?>
-	<a class="btn btn-primary"
-		href="<?php echo Route::_('index.php?option=com_gatracklog&task=tracklog.edit&id='.$this->item->id); ?>">
-		<i class="icon-edit"></i> <?php echo Text::_("COM_GATRACKLOG_EDIT_ITEM"); ?>
+	<a class="btn btn-warning" href="<?php echo Route::_($editURL); ?>">
+		<i class="icon-edit"></i> <?php echo Text::_("COM_GAGATRACKLOG_EDIT_ITEM"); ?>
 	</a>
 <?php endif; ?>
 
 <?php /* ----------------------   Delete button and modal  ------------------------------ */ ?>
 <?php if ($canDelete) : ?>
-	<button class="btn btn-danger" data-bs-target="#deleteModal" data-bs-toggle="modal">
-		<i class="icon-trash"></i> <?php echo Text::_("COM_GATRACKLOG_DELETE_ITEM"); ?>
-	</button>
-
-	<?php HTMLHelper::_('bootstrap.renderModal', 'deleteModal'); ?>
-
-	<div id="deleteModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="deleteModal" aria-hidden="true">
-		<div class="modal-header">
-			<button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
-			<h3><?php echo Text::_('COM_GATRACKLOG_DELETE_ITEM'); ?></h3>
-		</div>
-		<div class="modal-body">
-			<p><?php echo Text::sprintf('COM_GATRACKLOG_DELETE_CONFIRM', $this->item->id); ?></p>
-		</div>
-		<div class="modal-footer">
-			<button class="btn" data-bs-dismiss="modal">Close</button>
-			<a class="btn btn-danger"
-				href="<?php echo Route::_('index.php?option=com_gatracklog&task=tracklog.remove&id=' . $this->item->id, false, 2); ?>">
-				<?php echo Text::_('COM_GATRACKLOG_DELETE_ITEM'); ?>
-			</a>
-		</div>
-	</div>
-
+	<a href="<?php echo Route::_($removeURL, false, 2); ?>" class="btn btn-danger delete-button" type="button">
+        <i class="icon-trash" ></i>
+    </a>
+    <script type="text/javascript">
+    	jQuery(document).ready(function () {
+    		jQuery('.delete-button').click(deleteItem);
+    	});
+    	function deleteItem() {
+    		if (!confirm("<?php echo Text::_('COM_GAGATRACKLOG_DELETE_MESSAGE'); ?>")) {
+    			return false;
+    		}
+    	}
+    </script>
 <?php endif; ?>

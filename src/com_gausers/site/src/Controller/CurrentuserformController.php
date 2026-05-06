@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,14 +12,14 @@ namespace GlennArkell\Component\Gausers\Site\Controller;
 // No direct access
 \defined('_JEXEC') or die;
 
-use \Joomla\CMS\Application\SiteApplication;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Multilanguage;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Controller\FormController;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Multilanguage;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Utilities\ArrayHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GaimgmgmntHelper;
 
@@ -86,7 +86,7 @@ class CurrentuserformController extends FormController
         $app->setUserState('com_gausers.edit.currentuser.data', $data);
 
 		// set ref data not shown on form and clear out other elements
-		$user = GausersHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		// Validate the posted data.
 		$form = $model->getForm();
@@ -501,6 +501,100 @@ class CurrentuserformController extends FormController
 			$this->setRedirect(Route::_('index.php?option=com_gausers&view=currentuser&id='.$data['user_id'], false));
 			return false;
 		}
+
+        // Clear the id from the session.
+        $app->setUserState('com_gausers.edit.currentuser.id', null);
+        $app->enqueueMessage(Text::_('COM_GAUSERS_ITEM_SAVED_SUCCESSFULLY'), 'success');
+
+        // Redirect to the list screen.
+        $this->setRedirect(Route::_('index.php?option=com_gausers&view=currentuser&id='.$data['user_id'], false));
+
+		// Flush the data from the session.
+		$app->setUserState('com_gausers.edit.currentuser.data', null);
+	}
+
+	public function updAction()
+	{
+		// Check for request forgeries.
+		$this->checkToken();
+
+		// Initialise variables.
+		$app	= Factory::getApplication();
+		$model = $this->getModel('Currentuserform', 'Site');
+
+		// Get the user data.
+		$data = Factory::getApplication()->input->get('jform', array(), 'array');
+
+		// Validate the posted data.
+		$form = $model->getForm();
+		if (!$form) {
+			throw new \Exception(500, $model->getError());
+			return false;
+		}
+
+		// Attempt to delete the data.
+		$return	= $model->updAction($data);
+
+		// Check for errors.
+		if ($return === false) {
+			// Save the data in the session.
+			$app->setUserState('com_gausers.edit.currentuser.data', $data);
+
+			// Redirect back to the edit screen.
+            $app->enqueueMessage(Text::sprintf('COM_GAUSERS_NEW_ACTION_FAILED', $model->getError()), 'danger');
+			$this->setRedirect(Route::_('index.php?option=com_gausers&view=currentuser&id='.$data['user_id'], false));
+			return false;
+		}
+
+        // Clear the id from the session.
+        $app->setUserState('com_gausers.edit.currentuser.id', null);
+        $app->enqueueMessage(Text::_('COM_GAUSERS_ITEM_SAVED_SUCCESSFULLY'), 'success');
+
+        // Redirect to the list screen.
+        $this->setRedirect(Route::_('index.php?option=com_gausers&view=currentuser&id='.$return, false));
+
+		// Flush the data from the session.
+		$app->setUserState('com_gausers.edit.currentuser.data', null);
+	}
+
+	public function advPayment()
+	{
+		// Check for request forgeries.
+		$this->checkToken();
+
+		// Initialise variables.
+		$app	= Factory::getApplication();
+		$model = $this->getModel('Currentuserform', 'Site');
+		$invModel = $this->getModel('Invoiceform', 'Site');
+
+		// Get the user data.
+		$data = Factory::getApplication()->input->get('jform', array(), 'array');
+
+		// Validate the posted data.
+		$form = $model->getForm();
+		if (!$form) {
+			throw new \Exception(500, $model->getError());
+			return false;
+		}
+
+		// Attempt process invoice data.
+		$invRec	= $model->advPayment($data);
+
+		// Check for errors.
+		if ($invRec === false) {
+			// Save the data in the session.
+			$app->setUserState('com_gausers.edit.currentuser.data', $data);
+
+			// Redirect back to the edit screen.
+            $app->enqueueMessage(Text::sprintf('COM_GAUSERS_ADV_PAY_FAILED', $model->getError()), 'danger');
+			$this->setRedirect(Route::_('index.php?option=com_gausers&view=currentuser&id='.$data['user_id'], false));
+			return false;
+		}
+
+        $data['invoice_amt'] = $invRec->invoice_amt;
+        $data['id'] = $invRec->id;
+		$return	= $invModel->markAsPaid($data);
+
 
         // Clear the id from the session.
         $app->setUserState('com_gausers.edit.currentuser.id', null);

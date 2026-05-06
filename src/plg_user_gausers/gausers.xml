@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="4.0" type="plugin" group="user" method="upgrade">
-	<name>User Loader</name>
+<extension type="plugin" group="user" method="upgrade">
+	<name>User - Loader</name>
 	<author>Glenn Arkell</author>
 	<creationDate>17 March 2020</creationDate>
 	<copyright>(C) 2020 - 2020 Glenn Arkell. All rights reserved.</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail>glenn@glennarkell.com.au</authorEmail>
 	<authorUrl>https://www.glennarkell.com.au</authorUrl>
-	<version>5.1.6</version>
+	<version>5.3</version>
 	<description>User plug-in, to enable easy uploading of bulk new users from csv file.</description>
 
     <namespace path="src">GlennArkell\Plugin\User\Gausers</namespace>
 
 	<files>
-		<filename plugin="gausers">gausers.php</filename>
+		<folder plugin="gausers">services</folder>
 		<folder>language</folder>
 		<folder>src</folder>
 	</files>
+
 	<languages>
 		<language tag="en-GB">language/en-GB/plg_user_gausers.ini</language>
 		<language tag="en-GB">language/en-GB/plg_user_gausers.sys.ini</language>
+		<language tag="it-IT">language/it-IT/plg_user_gausers.ini</language>
+		<language tag="it-IT">language/it-IT/plg_user_gausers.sys.ini</language>
 	</languages>
+
+	<changelogurl>https://www.glennarkell.com.au/joomlaorg/packages/j6/changes/plg_user_gausers-changelog.xml</changelogurl>
 
 	<config>
 		<fields name="params">

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.6
+ * @version    6.0.0
  * @package    Com_Gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
@@ -9,28 +9,29 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Layout\LayoutHelper;
-use \Joomla\CMS\Session\Session;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
-use \GlennArkell\Component\Gausers\Administrator\Helper\GainvoiceHelper;
-use \GlennArkell\Component\Gausers\Administrator\Helper\GanamesHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
+use GlennArkell\Component\Gausers\Administrator\Helper\GainvoiceHelper;
+use GlennArkell\Component\Gausers\Administrator\Helper\GanamesHelper;
+use GlennArkell\Component\Gausers\Administrator\Helper\GamodalHelper;
 
 // load any assets required
 $this->document->getWebAssetManager()
     ->usePreset('com_gausers.gauserspreset');
 
 // Load admin language file
-$lang = Factory::getLanguage();
+$lang = Factory::getApplication()->getLanguage();
 $lang->load('com_gausers', JPATH_ADMINISTRATOR);
 
-$user       = GausersHelper::getSpecificUser();
+$user       = Factory::getApplication()->getIdentity();
 $listOrder  = $this->state->get('list.ordering', 'user_id_name');
 $listDirn   = $this->state->get('list.direction', 'asc');
 $canCreate  = $user->authorise('core.create', 'com_gausers');
@@ -44,14 +45,20 @@ $profPartner = 'profile'.$profSuf.'.partner';
 $default_mship = $this->params->get('default_mship', 1);
 $mship = GausersHelper::getMshiptypeID($default_mship);
 
-$jdate       = GausersHelper::getTodaysDate();
+$jdate       = Factory::getDate();
 $jdate = $jdate->format('Y-m-d');
+$mshipPeriod = $this->params->get('mship_period', 1);
 $lastInvDate = $this->params->get('invoice_date');
 $newInvDate = \date('Y-m-d', strtotime($lastInvDate." +".($mship->mship_term-1)." ".$mship->term_type));
 $new_invDate = \date('Y-m-d', strtotime($newInvDate." +9 months"));
 //$new_invDate = $new_invDate->modify('+'.($mship->mship_term-1).' '.$mship->term_type);
 //$new_invDate = $new_invDate->modify('+10 months');
-$inv_ready = ($jdate > $new_invDate) ? true : false;
+$inv_ready = ($jdate > $new_invDate) && $mshipPeriod != 3 ? true : false;
+
+$paramInvDate = new Date(strtotime($this->params->get('invoice_date') ?? ''));
+$oldStartDate = date_format($paramInvDate->modify('-'.$mship->mship_term.' '.$mship->term_type),'Y-m-d');
+$eDate = $paramInvDate->modify('+'.$mship->mship_term.' '.$mship->term_type);
+$newEndDate = $eDate->modify('-1 DAY');
 
 //$invNeeded = GausersHelper::checkNewInvoicesDue($mship, $new_invDate);
 
@@ -73,17 +80,8 @@ $remURL = 'index.php?'.http_build_query($remLink, '', '&amp;');
 
 $filterState = $this->getState('filter.state');
 
-//$family = $this->params->get('mship_family', array());
-/*
-$mbrCntr = count(GausersHelper::getMembersDetails($this->params, 1));
-echo '<pre>Test<br />';
-print_r($mbrCntr);
-echo '</pre>';
-$groups = GausersHelper::getSpecificUser(2030)->get('groups');
-$mship = GainvoiceHelper::getLastInvoiceMship(172);
-print_r($new_invDate);
-Factory::getApplication()->setUserState('com_gausers.test.data', null);
-*/
+//GausersHelper::gaPrint(Factory::getApplication()->getUserState('com_gausers.test.data'));
+//Factory::getApplication()->setUserState('com_gausers.test.data', null);
 
 ?>
 <h2><?php echo $this->params->get('page_heading'); ?></h2>
@@ -100,13 +98,13 @@ Factory::getApplication()->setUserState('com_gausers.test.data', null);
 			<th class='mbr-name'>
 				<?php echo Text::_('COM_GAUSERS_INVOICES_MEMBER_NAME'); ?>
 			</th>
-			<th class='inv-amt'>
+			<th class='inv-amt hidden-phone'>
 				<?php echo Text::_('COM_GAUSERS_INVOICES_AMT'); ?>
 			</th>
 			<th class='inv-date'>
 				<?php echo Text::_('COM_GAUSERS_INVOICES_END_DATE'); ?>
 			</th>
-			<th class='inv-date'>
+			<th class='inv-date hidden-phone'>
 				<?php echo Text::_('COM_GAUSERS_INVOICES_PAID_DATE'); ?>
 			</th>
 
@@ -127,25 +125,13 @@ Factory::getApplication()->setUserState('com_gausers.test.data', null);
 		</tfoot>
 		<tbody>
 		<?php foreach ($this->items as $i => $item) : ?>
-			<?php $canEdit = $user->authorise('core.edit', 'com_gausers'); ?>
             <?php
+                $canEdit = $user->authorise('core.edit', 'com_gausers');
+
                 $mship = GausersHelper::getMshiptypeID($item->mship_id);
 
                 // setup the modal links etc
-                $payLink = GausersHelper::getHTTPQuery(null, 'view', 'invoiceform', 'id', $item->id);
-				$payLink = GausersHelper::getHTTPQuery($payLink, null, null, 'tmpl', 'component');
-				$payLink = GausersHelper::getHTTPQuery($payLink, null, null, 'layout', 'modalpaid');
-				$modalParams = array(
-				        'url'        => 'index.php?'.http_build_query($payLink, '', '&amp;'),
-				        'title'      => Text::_("COM_GAUSERS_MARKPAID"),
-				        'closeButton'=> true,
-				        'modalWidth' => 60,
-				        'bodyHeight' => 75,
-				        'backdrop'   => 'static'
-				        );
-				$modalname = 'modal-myModal'.$item->id;
-				$html = '<a class="btn btn-secondary" href="#'.$modalname.'" data-bs-toggle="modal">';
-				$html .= '<i class="icon-credit" title="'.Text::_('COM_GAUSERS_MARKPAID').'"></i></a>';
+                $payBtn = GamodalHelper::setupModalButton('view', 'invoiceform', 'id', $item->id, 'modalpaid', 'myModal', 'secondary', '', '', 'fa-regular fa-credit-card', $user->name);
 
         		// set up the delete link of a invoice record
         		$removeLink = GausersHelper::getHTTPQuery(null, 'task', 'invoice.remove', 'id', $item->id);
@@ -155,15 +141,19 @@ Factory::getApplication()->setUserState('com_gausers.test.data', null);
         		$resendLink = GausersHelper::getHTTPQuery(null, 'task', 'invoice.resendInv', 'id', $item->id);
         		$resendLink = GausersHelper::getHTTPQuery($resendLink, null, null, Session::getFormToken(), '1');
                 $resendURL = 'index.php?'.http_build_query($resendLink, '', '&amp;');
-        		$resetLink = GausersHelper::getHTTPQuery(null, 'task', 'invoice.publish', 'id', $item->id);
+
+                $resetLink = GausersHelper::getHTTPQuery(null, 'task', 'invoice.publish', 'id', $item->id);
         		$resetLink = GausersHelper::getHTTPQuery($resetLink, null, null, 'state', 1);
                 $resetURL = 'index.php?'.http_build_query($resetLink, '', '&amp;');
-           ?>
 
-			<?php if (!$canEdit && $user->authorise('core.edit.own', 'com_gausers')): ?>
-					<?php $canEdit = $user->id == $item->created_by; ?>
-			<?php endif; ?>
-            <?php 
+                $regenLink = GausersHelper::getHTTPQuery(null, 'task', 'invoice.regenInvoice', 'id', $item->id);
+        		$regenLink = GausersHelper::getHTTPQuery($regenLink, null, null, Session::getFormToken(), '1');
+                $regenURL = 'index.php?'.http_build_query($regenLink, '', '&amp;');
+
+    			if (!$canEdit && $user->authorise('core.edit.own', 'com_gausers')) {
+					$canEdit = $user->id == $item->created_by;
+    			}
+
 				if($item->block == 1) {
 					$txt_style = '';
 				} else {
@@ -186,6 +176,23 @@ Factory::getApplication()->setUserState('com_gausers.test.data', null);
                         $item->fullname = $item->user_id_name;
                     }
 				}
+				
+				if ($item->registerDate > $oldStartDate) {
+    				$joinDate = '<span class="smallTxt"> (Reg: '. HtmlHelper::date($item->registerDate, Text::_('COM_GAUSERS_STD_DATE')).')</span>';
+				} else {
+                    $joinDate = '';
+                }
+                $filename = 'images/members/invoices/Invoice'.$this->escape(str_pad($item->id, 6, '0', STR_PAD_LEFT)).'.pdf';
+                if (\is_file($filename)) {
+                    $pdfLink = '<a href="'.$filename.'" target="_blank" title="'.Text::_("COM_GAUSERS_INVOICE_PREVIEW").'">';
+                    $pdfLink .= str_pad($item->id, 6, "0", STR_PAD_LEFT).' - '.$this->escape($item->fullname);
+                    $pdfLink .= '</a> &nbsp;'.$joinDate;
+                    $noInvoice = false;
+                } else {
+                    $pdfLink = 'No Invoice on File for '.$this->escape($item->fullname).' - '.$joinDate;
+                    $noInvoice = true;
+                }
+
 			?>
 			<tr class="row<?php echo $i % 2; ?>">
 
@@ -193,23 +200,23 @@ Factory::getApplication()->setUserState('com_gausers.test.data', null);
 					<?php if (isset($item->checked_out) && $item->checked_out) : ?>
 						<?php echo HTMLHelper::_('jgrid.checkedout', $i, $item->uEditor, $item->checked_out_time, 'invoices.', $canCheckin); ?>
 					<?php endif; ?>
-                    <a href="images/members/invoices/<?php echo 'Invoice'.$this->escape(str_pad($item->id, 6, '0', STR_PAD_LEFT)).'.pdf'; ?>"
-						target="_blank" title="<?php echo Text::_('COM_GAUSERS_INVOICE_PREVIEW'); ?>">
-						<?php echo str_pad($item->id, 6, '0', STR_PAD_LEFT).' - '.$this->escape($item->fullname); ?>
-					</a>
+
+                    <?php echo $pdfLink; ?>
 				</td>
-                <td class='inv-amt' <?php echo $txt_style; ?>><?php echo $item->invoice_amt; ?></td>
+                <td class='inv-amt hidden-phone' <?php echo $txt_style; ?>><?php echo $item->invoice_amt; ?></td>
                 <td class='inv-date' <?php echo $txt_style; ?>><?php echo $edate = !empty($item->end_date) ? HtmlHelper::date($item->end_date, Text::_('COM_GAUSERS_DISPLAY_DATE')) : ''; ?></td>
-                <td class='inv-date' <?php echo $txt_style; ?>><?php echo $pdate = !empty($item->paid_date) ? HtmlHelper::date($item->paid_date, Text::_('COM_GAUSERS_DISPLAY_DATE')) : ''; ?></td>
+                <td class='inv-date hidden-phone' <?php echo $txt_style; ?>><?php echo $pdate = !empty($item->paid_date) ? HtmlHelper::date($item->paid_date, Text::_('COM_GAUSERS_DISPLAY_DATE')) : ''; ?></td>
                 <td class='inv-acts'>
                     <?php if($user->authorise('core.members', 'com_gausers')): ?>
 
-						<a href="<?php echo Route::_($resendURL); ?>" class="btn btn-secondary"
-							title="<?php echo Text::_('COM_GAUSERS_INVOICE_RESEND'); ?>" ><i class="icon-mail"></i>
-						</a>
+                        <?php if ($filterState != 2) : ?>
+    						<a href="<?php echo Route::_($resendURL); ?>" class="btn btn-secondary"
+    							title="<?php echo Text::_('COM_GAUSERS_INVOICE_RESEND'); ?>" ><i class="icon-mail"></i>
+    						</a>
+                        <?php endif; ?>
 
                         <?php if ($filterState == 1 || $filterState == '') : ?>
-                            <?php echo $html .= HTMLHelper::_('bootstrap.renderModal', $modalname, $modalParams); ?>
+                            <?php echo $payBtn; ?>
     						<?php if ($canDelete): ?>
     							<a href="<?php echo Route::_($removeURL); ?>" class="btn btn-secondary delete-button" type="button" >
                                     <i class="icon-trash"></i>
@@ -219,6 +226,11 @@ Factory::getApplication()->setUserState('com_gausers.test.data', null);
                         <?php if ($filterState == -2) : ?>
     							<a href="<?php echo Route::_($resetURL); ?>" class="btn btn-secondary"
                                     title="<?php echo Text::_('COM_GAUSERS_INVOICE_RESET'); ?>" ><i class="icon-redo"></i>
+    							</a>
+                        <?php endif; ?>
+                        <?php if ($noInvoice) : ?>
+    							<a href="<?php echo Route::_($regenURL); ?>" class="btn btn-success"
+                                    title="<?php echo Text::_('COM_GAUSERS_INVOICE_REGEN'); ?>" ><i class="icon-redo"></i>
     							</a>
                         <?php endif; ?>
 

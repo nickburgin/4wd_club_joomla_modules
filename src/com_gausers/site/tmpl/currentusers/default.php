@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -9,30 +9,30 @@
 // no direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Session\Session;
-use \Joomla\CMS\Layout\LayoutHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\User\User;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\User\UserFactoryInterface;
-use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
-use \GlennArkell\Component\Gausers\Administrator\Helper\GaauditHelper;
-use \GlennArkell\Component\Gausers\Administrator\Helper\GanamesHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\User\User;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\User\UserFactoryInterface;
+use Joomla\CMS\Plugin\PluginHelper;
+use GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
+use GlennArkell\Component\Gausers\Administrator\Helper\GaauditHelper;
+use GlennArkell\Component\Gausers\Administrator\Helper\GanamesHelper;
 
 // load any assets required
 $wa = $this->document->getWebAssetManager()
     ->usePreset('com_gausers.gauserspreset');
 
 //Load admin language file
-$lang = Factory::getLanguage();
-$lang->load('com_gausers', JPATH_ADMINISTRATOR);
+Factory::getApplication()->getLanguage()->load('com_gausers', JPATH_ADMINISTRATOR);
 
-$user       = GausersHelper::getSpecificUser();
+$user       = Factory::getApplication()->getIdentity();
 $this->canMembers = $user->authorise('core.members','com_gausers');
 $this->canCreate  = $user->authorise('core.create', 'com_gausers');
 $this->canUpload = $user->authorise('core.attupload','com_gausers');
@@ -41,6 +41,7 @@ $this->user = $user;
 $listOrder  = $this->state->get('list.ordering', 'a.name');
 $listDirn   = $this->state->get('list.direction', 'asc');
 
+$this->mship_period = $this->params->get('mship_period', 1);
 $this->viewType = $this->params->get('view_type', 0);
 $extract_members = $this->params->get('extract_members',false);
 $trg_group = $this->params->get('trg_group',0);
@@ -70,33 +71,52 @@ $exempt_field1  = $this->params->get( 'exempt_field1', 0 );
 $vax_field2  = $this->params->get( 'vax_field2', 0 );
 $exempt_field2  = $this->params->get( 'exempt_field2', 0 );
 $mchimplist  = $this->params->get( 'mchimplist', 0 );
+$this->xtraCusts  = $this->params->get( 'cust_params', array() );
 
 $this->ignorArray = GaauditHelper::getProfileFieldsToIgnore('profile'.$localProfile);
 $this->ignorStdArray = GaauditHelper::getProfileFieldsToIgnore('profile');
 
+// get filter setting
+$finstatus = 0;
+$mship = 0;
+$filters = $this->filterForm->getGroup('filter');
+foreach ($filters as $fieldName => $field) {
+    if ($fieldName == 'filter_state') {
+        $finstatus = $field->value;
+    }
+    if ($fieldName == 'filter_mship') {
+        $mship = $field->value;
+    }
+}
+
 // setup new record button
 $nuLink = GausersHelper::getHTTPQuery(null, 'task', 'currentuserform.edit', 'id', 0);
 $nuURL = 'index.php?'.http_build_query($nuLink, '', '&amp;');
+// setup extract button
 $exLink = GausersHelper::getHTTPQuery(null, 'task', 'currentuser.genextract', Session::getFormToken(), 1);
 $exURL = 'index.php?'.http_build_query($exLink, '', '&amp;');
+// setup attendance list button
 $listLink = GausersHelper::getHTTPQuery(null, 'task', 'currentuser.genMembersList', Session::getFormToken(), 1);
+$listLink = GausersHelper::getHTTPQuery($listLink, null, null, 'finstatus', $finstatus);
+$listLink = GausersHelper::getHTTPQuery($listLink, null, null, 'mship', $mship);
 $listURL = 'index.php?'.http_build_query($listLink, '', '&amp;');
+// setup address list button
 $adlistLink = GausersHelper::getHTTPQuery(null, 'task', 'currentuser.genAddressList', Session::getFormToken(), 1);
 $adlistURL = 'index.php?'.http_build_query($adlistLink, '', '&amp;');
+// setup mailchimp button
 $mchimpLink = GausersHelper::getHTTPQuery(null, 'task', 'currentuser.genMailChimpList', Session::getFormToken(), 1);
 $mchimpURL = 'index.php?'.http_build_query($mchimpLink, '', '&amp;');
+// setup directory listing button
 $mDirLink = GausersHelper::getHTTPQuery(null, 'task', 'currentuser.genMembersDirectory', Session::getFormToken(), 1);
 $mDirURL = 'index.php?'.http_build_query($mDirLink, '', '&amp;');
 
-//$exLink = GausersHelper::getHTTPQuery($exLink, null, null, 'id', 0);
+$task = GausersHelper::getRecord('#__scheduler_tasks', 'type', 'renewal_task_id');
+$taskID = isset($task) && !empty($task) ? $task->id : 0;
+$taskLink = GausersHelper::getHTTPQueryAjax('RunSchedulerTest', 'json', 'system', $taskID);
+$taskURL = Uri::root(true).'/administrator/index.php?'.http_build_query($taskLink, '', '&amp;');
 
-/*
-echo '<pre>Test<br />';
-print_r($this->viewType);
-echo '</pre>';
-print_r(Factory::getApplication()->getUserState('com_gausers.test.data'));
-Factory::getApplication()->setUserState('com_gausers.test.data', $u);
-*/
+//GausersHelper::gaPrint(Factory::getApplication()->getUserState('com_gausers.test.data'));
+//GausersHelper::gaPrint($options);
 ?>
 
 <h2><?php echo Text::_('COM_GAUSERS_CURRENTUSERS_LIST_TITLE'); ?></h2>
@@ -106,7 +126,7 @@ Factory::getApplication()->setUserState('com_gausers.test.data', $u);
     <div class="span12">
 
         <?php echo LayoutHelper::render('default_filter', array('view' => $this), dirname(__FILE__)); ?>
-    
+
     	<div class="clearfix"> </div>
     
         <?php if ($this->viewType == 1) : ?>
@@ -132,6 +152,13 @@ Factory::getApplication()->setUserState('com_gausers.test.data', $u);
     		<a href="<?php echo Route::_($nuURL); ?>" class="btn btn-success">
     		   <i class="icon-plus"></i> <?php echo Text::_('COM_GAUSERS_ADD_NEW_USER'); ?>
     		</a>
+    		<?php if ($this->mship_period === 3 && $taskID) : ?>
+                <button class="btn btn-sm btn-warning" type="button" data-scheduler-run="" date-id="<?php echo $taskID; ?>"
+            		data-title="" data-url="<?php echo $taskURL; ?>">
+        		   <span class="fa fa-play fa-sm"></span>
+                   <?php echo Text::_('COM_GAUSERS_RUN_RENEWALS'); ?>
+        		</button>
+            <?php endif; ?>
     	<?php endif; ?>
     	<?php if ($this->canUpload && $mbr_compare) : ?>
     		<a href="<?php echo Route::_('index.php?option=com_gausers&task=currentuserform&layout=memload&id=0', false, 0); ?>"
@@ -140,6 +167,7 @@ Factory::getApplication()->setUserState('com_gausers.test.data', $u);
     		</a>
     	<?php endif; ?>
     
+        <?php // --------------------------------------- report and extract buttons ---------------  ?>
     	<?php if ($this->canMembers) : ?>
     	    <?php if ($extract_members): ?>
     	        <a href="<?php echo Route::_($exURL); ?>" class="btn btn-warning">

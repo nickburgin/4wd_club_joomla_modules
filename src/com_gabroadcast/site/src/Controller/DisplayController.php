@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.2.1
+ * @version    4.3.3
  * @package    com_gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -32,7 +32,7 @@ class DisplayController extends \Joomla\CMS\MVC\Controller\BaseController
 	 * @param   \JInput              $input    Input
 	 * @since   3.0.1
 	 */
-	public function __construct($config = array(), MVCFactoryInterface $factory = null, $app = null, $input = null)
+	public function __construct($config = [], ?MVCFactoryInterface $factory = null, $app = null, $input = null)
 	{
 		parent::__construct($config, $factory, $app, $input);
 	}

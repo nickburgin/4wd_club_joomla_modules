@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     4.2.1
+ * @version     4.3.3
  * @package     com_gabroadcast
  * @copyright   Copyright (C) 2011-2014. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -29,7 +29,7 @@ class MembersField extends ListField
 	/**
 	 * Name of the layout being used to render the field
 	 * @var    string
-	 * @since  4.2.1
+	 * @since  4.3.3
 	 */
 	protected $layout = 'joomla.form.field.list';
 

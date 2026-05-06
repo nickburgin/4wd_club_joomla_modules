@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    Com_Gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -9,13 +9,13 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Layout\LayoutHelper;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Access\Access;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Access\Access;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GainvoiceHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GamodalHelper;
@@ -78,10 +78,7 @@ Factory::getApplication()->setUserState('com_gatripsys.view.trip.id',null);
 $menu = Factory::getApplication()->getUserState('com_gatripsys.menuitem.id');
 
 /*
-echo '<pre>Test<br />';
-print_r($this->items);
-echo '</pre>';
-print_r(Factory::getApplication()->getUserState('com_gatripsys.test.data'));
+GatripsysHelper::gaPrint(Factory::getApplication()->getUserState('com_gatripsys.test.data'));
 */
 ?>
 
@@ -111,7 +108,7 @@ print_r(Factory::getApplication()->getUserState('com_gatripsys.test.data'));
     			<th class='small hidden-phone'>
     				<?php echo Text::_('COM_GATRIPSYS_STATE'); ?>
     			</th>
-    			<th class='small'>
+    			<th class='small hidden-phone'>
     				<?php echo Text::_('COM_GATRIPSYS_TRIPS_LEADER'); ?>
     			</th>
     			<th class='small hidden-phone'>
@@ -123,7 +120,7 @@ print_r(Factory::getApplication()->getUserState('com_gatripsys.test.data'));
     			<th class='center small'>
     				<?php echo HTMLHelper::_('grid.sort',  'COM_GATRIPSYS_TRIPS_DEPT_DATE', 'a.dept_date', $listDirn, $listOrder); ?>
     			</th>
-    			<th class='center small'>
+    			<th class='center small hidden-phone'>
     				<?php echo Text::_('COM_GATRIPSYS_TRIPS_RET_DATE'); ?>
     			</th>
     			<th class="center small hidden-phone">
@@ -260,7 +257,7 @@ print_r(Factory::getApplication()->getUserState('com_gatripsys.test.data'));
     				<td class="trips small hidden-phone<?php echo $tripClass; ?>">
     					<?php echo $state; ?>
     				</td>
-    				<td class="trips small<?php echo $tripClass; ?>">
+    				<td class="trips small hidden-phone<?php echo $tripClass; ?>">
     					<?php echo $item->leader_name; ?><br /><a href="tel:<?php echo $link_phone; ?>" alt=""><?php echo $leader_phone; ?></a>
     				</td>
     				<td class="trips small hidden-phone<?php echo $tripClass; ?>">
@@ -278,7 +275,7 @@ print_r(Factory::getApplication()->getUserState('com_gatripsys.test.data'));
     				<td class="trips small<?php echo $tripClass; ?>">
     					<?php echo !empty($item->dept_date) ? HTMLHelper::date($item->dept_date, Text::_('COM_GATRIPSYS_DISPLAY_DATETXT')) : ''; ?>
     				</td>
-    				<td class="trips small<?php echo $tripClass; ?>">
+    				<td class="trips small hidden-phone<?php echo $tripClass; ?>">
     					<?php echo !empty($item->ret_date) ? HTMLHelper::date($item->ret_date, Text::_('COM_GATRIPSYS_DISPLAY_DATETXT')) : ''; ?>
     				</td>
     

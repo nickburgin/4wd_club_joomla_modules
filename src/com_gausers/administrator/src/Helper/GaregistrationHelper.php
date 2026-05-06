@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6                                                     
+ * @version     6.0.0                                                     
  * @package     com_gausers
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,28 +12,28 @@ namespace GlennArkell\Component\Gausers\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\Data\DataObject;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\Filesystem\Path;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Log\Log;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\User\User;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\Application\ApplicationHelper;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Plugin\PluginHelper;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\String\PunycodeHelper;
-use \Joomla\Database\ParameterType;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\Mail\MailTemplate;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\Data\DataObject;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\Filesystem\Path;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Log\Log;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\User\User;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\Application\ApplicationHelper;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\String\PunycodeHelper;
+use Joomla\Database\ParameterType;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Mail\MailTemplate;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GaemailHelper;
 
@@ -222,9 +222,7 @@ class GaregistrationHelper
 					$bodytext = str_replace('<a href="index.php', '<a href="'.Uri::base().'index.php', $article->introtext);
 
                     $user = GausersHelper::getSpecificUser($user_id);
-		            $recipients = array();
-		            $recipients[] = $user->email;
-					$sentOK = GaemailHelper::sendEmail($recipients, $bodytext, $article->title, 0);
+					$sentOK = GaemailHelper::sendEmail(array($user->email), $bodytext, $article->title, 0);
 
 					Factory::getApplication()->enqueueMessage(Text::_('COM_GAUSERS_WELCOME_SENT'), 'notice');
 				}
@@ -289,7 +287,7 @@ class GaregistrationHelper
 	 */
 	public static function register($temp)
 	{
-        $lang = Factory::getLanguage();
+        $lang = Factory::getApplication()->getLanguage();
         $lang->load('com_users', JPATH_ADMINISTRATOR);
         $lang->load('com_users', JPATH_SITE);
 

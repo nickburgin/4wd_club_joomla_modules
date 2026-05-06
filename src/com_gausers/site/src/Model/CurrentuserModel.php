@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,14 +12,14 @@ namespace GlennArkell\Component\Gausers\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\User\User;
-use \Joomla\CMS\User\UserHelper;
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\User\User;
+use Joomla\CMS\User\UserHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GanamesHelper;
 
@@ -84,7 +84,7 @@ class CurrentuserModel extends ItemModel
 			
 			// Check if still null/0 id reference - then its the member wanting their own record
 			if (!$id) {
-				$id = GausersHelper::getSpecificUser()->id;
+				$id = Factory::getApplication()->getIdentity()->id;
 			}
 
 			$member = GanamesHelper::breakdownNamesFromUserID($id);
@@ -92,7 +92,7 @@ class CurrentuserModel extends ItemModel
 
 			if ($member) {
 
-                $user = GausersHelper::getSpecificUser();
+                $user = Factory::getApplication()->getIdentity();
                 $canMembers = $user->authorise('core.members', 'com_gausers');
                 $canTrg = $user->authorise('core.trgcerts', 'com_gausers');
                 $canEdit = $user->authorise('core.edit', 'com_gausers');

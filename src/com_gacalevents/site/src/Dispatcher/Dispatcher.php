@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -9,10 +9,10 @@
 
 namespace GlennArkell\Component\Gacalevents\Site\Dispatcher;
 
-defined('JPATH_PLATFORM') or die;
+use Joomla\CMS\Dispatcher\ComponentDispatcher;
+use Joomla\CMS\Language\Text;
 
-use \Joomla\CMS\Dispatcher\ComponentDispatcher;
-use \Joomla\CMS\Language\Text;
+\defined('_JEXEC') or die;
 
 /**
  * ComponentDispatcher class

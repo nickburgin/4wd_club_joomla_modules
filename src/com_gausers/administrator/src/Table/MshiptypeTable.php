@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.6
+ * @version    6.0.0
  * @package    com_gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,16 +12,16 @@ namespace GlennArkell\Component\Gausers\Administrator\Table;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\Registry\Registry;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Table\Table as Table;
-use \Joomla\CMS\Versioning\VersionableTableInterface;
-use \Joomla\Database\DatabaseDriver;
-use \Joomla\CMS\Filter\OutputFilter;
-use \Joomla\Filesystem\File;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Factory;
+use Joomla\Registry\Registry;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table as Table;
+use Joomla\CMS\Versioning\VersionableTableInterface;
+use Joomla\Database\DatabaseDriver;
+use Joomla\CMS\Filter\OutputFilter;
+use Joomla\Filesystem\File;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 /**
@@ -62,7 +62,7 @@ class MshiptypeTable extends Table implements VersionableTableInterface
 	 */
 	public function bind($array, $ignore = '')
 	{
-	    $user = GausersHelper::getSpecificUser();
+	    $user = Factory::getApplication()->getIdentity();
 	    $date = Factory::getDate();
 		$task = Factory::getApplication()->input->get('task');
 	    
@@ -80,6 +80,14 @@ class MshiptypeTable extends Table implements VersionableTableInterface
 				$array['modified_date'] = $date->toSql();
 				$array['modified_by'] = $user->id;
 			}
+		}
+
+		// Support for empty checked_out fields:
+		if (!isset($array['checked_out']) || empty($array['checked_out']) || $array['checked_out'] == 0) {
+			$array['checked_out'] = null;
+		}
+		if (!isset($array['checked_out_time']) || empty($array['checked_out_time']) || $array['checked_out_time'] == '0000-00-00 00:00:00') {
+			$array['checked_out_time'] = null;
 		}
 
 		if (isset($array['params']) && is_array($array['params'])) {

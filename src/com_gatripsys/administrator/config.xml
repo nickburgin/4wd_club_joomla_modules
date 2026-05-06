@@ -293,6 +293,11 @@
 			<option value="1">JYES</option>
 		</field>
 
+        <field name="ignore_mbrs" type="Members" showon="notif_users:1"
+            class="multiple" multiple="true"
+            label="COM_GATRIPSYS_IGNORE_MBRS_LABEL"
+            description="COM_GATRIPSYS_IGNORE_MBRS_DESC" />
+    
         <field name="email_admin" type="radio" default="0"
 			layout="joomla.form.field.radio.switcher"
              label="COM_GATRIPSYS_EMAIL_ADMIN_LABEL"
@@ -415,6 +420,10 @@
         <field name="tripimg_dir" type="text" default="images/trips/trip_images"
              label="COM_GATRIPSYS_TRIPIMG_DIR_LABEL"
              description="COM_GATRIPSYS_TRIPIMG_DIR_DESC" />
+
+        <field name="incimg_dir" type="text" default="images/trips/trip_incidents"
+             label="COM_GATRIPSYS_INCIMG_DIR_LABEL"
+             description="COM_GATRIPSYS_INCIMG_DIR_DESC" />
 
 		<field name="delete_file" type="radio" default="0"
 			layout="joomla.form.field.radio.switcher"

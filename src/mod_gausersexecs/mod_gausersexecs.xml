@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" client="site" method="upgrade">
-	<name>MOD_GAUSERS_EXECS</name>
+	<name>MOD_GAUSERSEXECS</name>
 	<author>Glenn Arkell</author>
 	<authorEmail>glenn@glennarkell.com.au</authorEmail>
 	<authorUrl>https://www.glennarkell.com.au</authorUrl>
 	<copyright>Open Source</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<creationDate>22 November 2019</creationDate>
-	<version>5.1.6</version>
+	<version>5.3</version>
 	<description>Display Club Executives</description>
 
 	<namespace path="src">GlennArkell\Module\Gausersexecs</namespace>
 
+	<scriptfile>script.php</scriptfile>
+
 	<files>
-		<filename module="mod_gausersexecs">mod_gausersexecs.php</filename>
+		<folder module="mod_gausersexecs">services</folder>
 		<folder>src</folder>
 		<folder>tmpl</folder>
     </files>
@@ -25,7 +27,11 @@
 	<languages>
 		<language tag="en-GB">language/en-GB/mod_gausersexecs.ini</language>
 		<language tag="en-GB">language/en-GB/mod_gausersexecs.sys.ini</language>
+		<language tag="it-IT">language/it-IT/mod_gausersexecs.ini</language>
+		<language tag="it-IT">language/it-IT/mod_gausersexecs.sys.ini</language>
 	</languages>
+
+	<changelogurl>https://www.glennarkell.com.au/joomlaorg/packages/j6/changes/mod_gausersexecs-changelog.xml</changelogurl>
 
 	<config>
 		<fields name="params">

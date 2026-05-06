@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.2.3
  * @package    Com_Gafinance
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2023 Glenn Arkell
@@ -12,22 +12,22 @@ defined('_JEXEC') or die();
 define('MODIFIED', 1);
 define('NOT_MODIFIED', 2);
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\Filesystem\Path;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\Mail\MailTemplate;
-use \Joomla\CMS\MVC\Model\AdminModel;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\Installer\InstallerScript;
-use \Joomla\CMS\Installer\Adapter\InstallerAdapter;
-use \Joomla\CMS\Installer\Adapter\ComponentAdapter;
-use \Joomla\CMS\Installer\Adapter\ModuleAdapter;
-use \Joomla\CMS\Installer\Adapter\PluginAdapter;
-use \Joomla\CMS\Filter\OutputFilter;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Installer\Installer;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\Path;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Mail\MailTemplate;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Installer\InstallerScript;
+use Joomla\CMS\Installer\Adapter\InstallerAdapter;
+use Joomla\CMS\Installer\Adapter\ComponentAdapter;
+use Joomla\CMS\Installer\Adapter\ModuleAdapter;
+use Joomla\CMS\Installer\Adapter\PluginAdapter;
+use Joomla\CMS\Filter\OutputFilter;
 
 /**
  * Updates the structure of the component
@@ -40,19 +40,38 @@ class com_gafinanceInstallerScript extends InstallerScript
 	 */
 	protected $extension = 'Finance System';
 
+	private $app;
+
 	public $compName = 'gafinance';
 
 	public $mailTmplSuffixs = array("trans");
 
 	public $mailTags = array("sitename","link_text","tran_ref","tran_date");
 
-	public $version = '5.1.0';
+	public $version = '5.2.3';
+
+	public $mainView = 'transactions';
 
 	/**
 	 * The minimum Joomla! version required to install this extension
 	 * @var   string
 	 */
-	protected $minimumJoomla = '4.0';
+	protected $minimumJoomla = '4.4';
+
+	/**
+	 *  Constructor
+	 */
+	public function __construct()
+	{
+		$this->app = Factory::getApplication();
+
+        $this->gTours = array(
+           'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_LBL'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_DESC',
+           'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_ACCOUNT_LBL'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_ACCOUNT_DESC',
+           'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_TRANSACTION_LBL'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_TRANSACTION_DESC',
+           'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_CONFIG_LBL'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_CONFIG_DESC'
+           );
+	}
 
 	/**
 	 * Method called before install/update the component. Note: This method won't be called during uninstall process.
@@ -65,11 +84,6 @@ class com_gafinanceInstallerScript extends InstallerScript
 	{
 		// $parent is the class calling this method
 		echo '<p>' . Text::_('COM_'.STRTOUPPER($this->compName).'_PREFLIGHT_'.STRTOUPPER($type).'_TEXT') . '</p>';
-
-        //$this->checkColumns();
-
-        $version = $this->getComponentVersion($this->compName);
-        if ($version) { $this->version = $version; }
 
         Factory::getApplication()->enqueueMessage(Text::sprintf('GA_VERSION_CHECK',$this->version), 'message');
 
@@ -131,6 +145,18 @@ class com_gafinanceInstallerScript extends InstallerScript
             }
         }
 
+		/* --------------------------------  Guided Tours  ------------------------------ */
+        // if guided tours exist, remove them
+        if (isset($this->gTours) && is_array($this->gTours) && !empty($this->gTours)) {
+            foreach ($this->gTours as $gtUid => $title) {
+                $tourUID =  STRTOLOWER($this->compName.'-'.$gtUid);
+                $tourExists = $this->checkTourExists($tourUID);
+                if ($tourExists) {
+                    $this->removeTour($tourExists->id);
+                }
+            }
+        }
+
 	}
  
 	/**
@@ -182,6 +208,16 @@ class com_gafinanceInstallerScript extends InstallerScript
     			'Miscellaneous'=>''
 			);
  			$this->createCategories('com_'.$this->compName, $cats);
+
+            // check if Guided Tours is ok for install
+            if (JVERSION <= $this->minimumJoomla) {
+                // don't install guided tours
+                Factory::getApplication()->enqueueMessage(Text::sprintf('GA_INSTALL_NOGT',JVERSION), 'message');
+            } else {
+                // reinstall parameter to be passed
+                $this->checkGuidedTours(false);
+            }
+
 		}
 
 		if (STRTOUPPER($type) == 'UPDATE') {
@@ -203,6 +239,16 @@ class com_gafinanceInstallerScript extends InstallerScript
 			$this->deleteFiles($pathModTmpl, 'tmpl/item','.php');
 			$this->deleteFiles($pathModTmpl, 'tmpl/form','.php');
 			$this->deleteFiles($pathModTmpl, 'helper','.php');
+
+            // check if Guided Tours is ok for install
+            if (JVERSION <= $this->minimumJoomla) {
+                // don't install guided tours
+                Factory::getApplication()->enqueueMessage(Text::sprintf('GA_INSTALL_NOGT',JVERSION), 'message');
+            } else {
+                // reinstall parameter to be passed
+                $this->checkGuidedTours(false);
+            }
+
 		}
 
 		return true;
@@ -259,6 +305,499 @@ class com_gafinanceInstallerScript extends InstallerScript
         echo '<p>' . Text::_('New categories created') . '</p>';
 
 		return true;
+	}
+
+	/**
+	 * *********************  Guided Tours Setup  *******************************
+	 */
+
+	/**
+	 * Check for Guided Tours
+	 * @param   boolean  true if reinstall is to be performed
+	 */
+	public function checkGuidedTours($reinstall)
+	{
+        // check for guided tours and create if required
+        if (isset($this->gTours) && is_array($this->gTours) && !empty($this->gTours)) {
+            foreach ($this->gTours as $gtUid => $desc) {
+                $tourUID =  STRTOLOWER($this->compName.'-'.Text::_($gtUid));
+                $tourExists = $this->checkTourExists($tourUID);
+
+                if ($tourExists && $reinstall) {
+                    // remove old GTs because changes made and we need to remove old steps
+                    $this->removeTour($tourExists->id);
+                    $tourExists = false;
+                }
+
+                if (!$tourExists) {
+                    // set the start url and create tour
+                    if ($gtUid == 'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_LBL') {
+                        $url = 'administrator/index.php';
+                    } elseif ($gtUid == 'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_ACCOUNT_LBL') {
+                        $url = 'administrator/index.php?option=com_'.$this->compName.'&view=accounts';
+                    } elseif ($gtUid == 'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_CONFIG_LBL') {
+                        $url = 'administrator/index.php?option=com_'.$this->compName.'&view='.$this->mainView;
+                    } elseif ($gtUid == 'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_TRANSACTION_LBL') {
+                        $url = 'administrator/index.php?option=com_'.$this->compName.'&view='.$this->mainView;
+                    } else {
+                        continue;
+                    }
+                    $gtID = $this->createGuidedTour($gtUid, $desc, $url);
+                    $this->app->enqueueMessage(Text::sprintf('COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_LOADED', Text::_($gtUid), $gtID), 'notice');
+                    // create steps array
+                    $recs = $this->setupGuidedTourSteps($gtUid);
+                    // create tour steps
+                    $this->createGuidedTourSteps($gtID, $recs);
+                }
+            }
+        }
+
+	}
+
+	/**
+	 * Check if a Guided Tour entry exists
+	 * @param   string  $tourUid for the uid reference
+	 * @return boolean or object
+	 */
+	public function checkTourExists($tourUid)
+	{
+        $result = false;
+		$db = Factory::getContainer()->get('DatabaseDriver');
+	    $db->setQuery(' SELECT * FROM #__guidedtours WHERE extensions = '.$db->Quote('["com_'.$this->compName.'"]') . ' AND uid = '.$db->Quote($tourUid) );
+		try {
+		    $result = $db->loadObject();
+		} catch (RuntimeException $e) {
+		    $this->app->enqueueMessage($e->getMessage(), 'danger');
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Create a Guided Tour record
+	 * @param   string  $tourName for the uid reference and title
+	 * @param   string  $url to set where the tour starts from
+	 * @return boolean or record id
+	 */
+	public function createGuidedTour($tourName, $desc, $url)
+	{
+        $today = Factory::getDate()->toSql();
+        $userId = Factory::getApplication()->getIdentity()->id;
+        $db = Factory::getContainer()->get('DatabaseDriver');
+        $gtour = new \stdClass();
+        $gtour->title = $tourName;
+        $gtour->uid = $this->compName.'-'.STRTOLOWER(Text::_($tourName));
+        $gtour->description = $desc;
+        $gtour->extensions = '["com_'.$this->compName.'"]';
+        $gtour->url = $url;
+        $gtour->created = $today;
+        $gtour->created_by = $userId;
+        $gtour->modified = $today;
+        $gtour->modified_by = $userId;
+        $gtour->language = '*';
+        $gtour->published = 1;
+        $gtour->note = '';
+        $gtour->access = 1;
+        if ($url == 'administrator/index.php') {
+            $gtour->autostart = 1;
+        }
+		try {
+		    $result = $db->insertObject('#__guidedtours', $gtour);
+            return $db->insertid();
+		} catch (RuntimeException $e) {
+		    $this->app->enqueueMessage($e->getMessage(), 'warning');
+		    return false;
+		}
+
+	}
+
+	/**
+	 * Create a Guided Tour record
+	 */
+	public function createGuidedTourSteps($id, $recs)
+	{
+        $today = Factory::getDate()->toSQL();
+        $userId = Factory::getApplication()->getIdentity()->id;
+        foreach ($recs as $data) {
+            $db = Factory::getContainer()->get('DatabaseDriver');
+            $gtstep = new \stdClass();
+            $gtstep->tour_id = $id;
+            $gtstep->title = $data['title'];
+            $gtstep->published = 1;
+            $gtstep->description = $data['desc'];
+            $gtstep->position = $data['position'];
+            $gtstep->target = $data['target'];
+            $gtstep->type = $data['type'];
+            $gtstep->interactive_type = $data['intertype'];
+            $gtstep->url = $data['url'];
+            $gtstep->language = '*';
+            $gtstep->created = $today;
+            $gtstep->created_by = $userId;
+            $gtstep->modified = $today;
+            $gtstep->modified_by = $userId;
+    		try {
+    		    $result = $db->insertObject('#__guidedtour_steps', $gtstep);
+    		} catch (RuntimeException $e) {
+    		    $this->app->enqueueMessage($e->getMessage(), 'warning');
+    		}
+		}
+        return true;
+
+	}
+
+	/**
+	 * Removes the guided tour entries
+	 * @param int $id The guided tour ID reference
+	 * @return  void
+	 */
+	public function removeTour($id)
+	{
+		$db = Factory::getContainer()->get('DatabaseDriver');
+	    $db->setQuery(' DELETE FROM #__guidedtours WHERE id = '. (int) $id );
+		try {
+		    $db->execute();
+			$this->app->enqueueMessage(Text::_('COM_'.STRTOUPPER($this->compName).'_REMOVE_GUIDEDTOUR_SUCCESS'), 'notice');
+		} catch (RuntimeException $e) {
+		    $this->app->enqueueMessage($e->getMessage(), 'danger');
+		}
+
+		$db1 = Factory::getContainer()->get('DatabaseDriver');
+	    $db1->setQuery(' DELETE FROM #__guidedtour_steps WHERE tour_id = '. (int) $id );
+		try {
+		    $db1->execute();
+			$this->app->enqueueMessage(Text::_('COM_'.STRTOUPPER($this->compName).'_REMOVE_GUIDEDTOURSTEPS_SUCCESS'), 'notice');
+		} catch (RuntimeException $e1) {
+		    $this->app->enqueueMessage($e1->getMessage(), 'danger');
+		}
+	}
+
+	/**
+	 * Set up the step entries
+	 * @param   integer  $ref to identify which tour the steps belong to
+	 * types - 0 = Next, 1 = Redirect, 2 = Interactive
+	 * interactive types - 1 = Form Submit, 2 = Text Field, 4 = Button, 3 = Other
+	 * @return boolean or array
+	 */
+	public function setupGuidedTourSteps($ref)
+	{
+        $returnURL = 'administrator/index.php?option=com_cpanel&view=cpanel&dashboard='.$this->compName;
+        $recs = array();
+
+        if ($ref == 'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_LBL') {
+            $recs = $this->setupStdWelcomeSteps();
+        }
+
+        if ($ref == 'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_ACCOUNT_LBL') {
+            // from the list screen, redirect to the dasboard
+            $recs[] = $this->setupStdRedirectStep('', $returnURL);
+            // link to the dasboard entry to see the list screen
+            $recs[] = $this->setupStdListlinkStep('account');
+            // standard new record button
+            $recs[] = $this->setupStdNewStep('account');
+            // standard fields
+            $recs[] = $this->setupStdFieldStep('bottom', 'accnt_name', 'account');
+            $recs[] = $this->setupStdFieldStep('bottom', 'accnt_bsb', 'account');
+            $recs[] = $this->setupStdFieldStep('top', 'accnt_number', 'account');
+
+            // standard new record button
+            $recs[] = $this->setupStdTabStep('extrainfo');
+            $recs[] = $this->setupStdFieldStep('bottom', 'comment', 'account');
+
+            $recs[] = $this->setupStdSaveCloseStep($returnURL);
+            $recs[] = $this->setupStdCongratsStep($returnURL);
+
+        }
+
+        if ($ref == 'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_TRANSACTION_LBL') {
+
+            // from the list screen, redirect to the dasboard
+            $recs[] = $this->setupStdRedirectStep('', $returnURL);
+            // link to the dasboard entry to see the list screen
+            $recs[] = $this->setupStdListlinkStep('transaction');
+            // standard new record button
+            $recs[] = $this->setupStdNewStep('transaction');
+            // standard fields
+            $recs[] = $this->setupStdFieldStep('bottom', 'user_id', 'transaction');
+            $recs[] = $this->setupStdFieldStep('bottom', 'tran_type', 'transaction');
+            $recs[] = $this->setupStdFieldStep('bottom', 'tran_desc', 'transaction');
+            $recs[] = $this->setupStdFieldStep('top', 'tran_date', 'transaction');
+            $recs[] = $this->setupStdFieldStep('top', 'tran_amount', 'transaction');
+            $recs[] = $this->setupStdFieldStep('top', 'cat_id', 'transaction');
+            $recs[] = $this->setupStdFieldStep('top', 'accnt_id', 'transaction');
+            $recs[] = $this->setupStdFieldStep('top', 'gst_flag', 'transaction');
+            $recs[] = $this->setupStdFieldStep('top', 'gst_amt', 'transaction');
+
+            // standard new record button
+            $recs[] = $this->setupStdTabStep('extrainfo');
+            $recs[] = $this->setupStdFieldStep('bottom', 'comment', 'transaction');
+
+            $recs[] = $this->setupStdSaveCloseStep($returnURL);
+            $recs[] = $this->setupStdCongratsStep($returnURL);
+
+        }
+
+        if ($ref == 'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_CONFIG_LBL') {
+            // from the list screen, redirect to the dasboard
+            $recs[] = $this->setupStdRedirectStep('', $returnURL);
+            // link to the dasboard entry to see the list screen
+            $recs[] = $this->setupStdListlinkStep('config');
+
+            $recs[] = $this->setupStdFieldStep('bottom', 'site_abn', 'config');
+            $recs[] = $this->setupStdFieldStep('bottom', 'site_addr', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'site_sub', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'site_phone', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'site_fax', 'config');
+
+            $recs[] = $this->setupStdTabStep('finmships');
+            $recs[] = $this->setupStdFieldStep('bottom', 'mship_single', 'config');
+            $recs[] = $this->setupStdFieldStep('bottom', 'profile_suffix', 'config');
+
+            $recs[] = $this->setupStdTabStep('fintrans');
+            $recs[] = $this->setupStdFieldStep('bottom', 'auto_neg', 'config');
+            $recs[] = $this->setupStdFieldStep('bottom', 'act_log', 'config');
+            $recs[] = $this->setupStdFieldStep('bottom', 'exchange_rates', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'paypalau', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'paypalus', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'acctpay', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'ownerCat', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'claim_gst', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'gst_rate', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'safe_files', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'max_size', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'email_audit', 'config');
+
+            $recs[] = $this->setupStdTabStep('finreporting');
+            $recs[] = $this->setupStdFieldStep('bottom', 'combine_accnts', 'config');
+            $recs[] = $this->setupStdFieldStep('bottom', 'select_accnts', 'config');
+            $recs[] = $this->setupStdFieldStep('bottom', 'combine_rpt', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'budget', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'budget_reg', 'config');
+
+            $recs[] = $this->setupStdTabStep('invoicing');
+            $recs[] = $this->setupStdFieldStep('bottom', 'inc_invoices', 'config');
+            $recs[] = $this->setupStdFieldStep('bottom', 'inv_no_offset', 'config');
+            $recs[] = $this->setupStdFieldStep('bottom', 'inv_prefix', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'inv_dummyemail', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'site_bank', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'site_aname', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'site_bsb', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'site_accnt', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'inv_himage', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'img_type', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'inv_cat', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'age_tohide', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'email_text', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'email_salute', 'config');
+            $recs[] = $this->setupStdFieldStep('top', 'payment_txt', 'config');
+
+            $recs[] = $this->setupStdTabStep('component');
+            $recs[] = $this->setupStdFieldStep('bottom', 'test_mode', 'config');
+
+            $recs[] = $this->setupStdTabStep('permissions');
+            $recs[] = $this->setupStdFieldStep('bottom', 'create', 'config');
+
+            $recs[] = $this->setupStdSaveCloseStep($returnURL);
+            $recs[] = $this->setupStdCongratsStep($returnURL);
+
+        }
+
+		return $recs;
+	}
+
+	/**
+	 * Setup standard guided tour steps
+	 * @param   string $return URL
+	 * @param   string $target
+	 * @return  array $rec
+	 */
+	public function setupStdWelcomeSteps($target = '', $return = '')
+	{
+        $recs[] = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_MENU_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_MENU_DESC',
+              'position'=>'right',
+              'target'=>'#sidebarmenu',
+              'type'=>0,
+              'intertype'=>2,
+              'url'=>''
+              );
+        $recs[] = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_DASHBOARD_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_DASHBOARD_DESC',
+              'position'=>'right',
+              'target'=>'.menu-dashboard a[href*="dashboard='.$this->compName.'"]',
+              'type'=>2,
+              'intertype'=>4,
+              'url'=>''
+              );
+        $recs[] = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_CONGRATS_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_CONGRATS_DESC',
+              'position'=>'bottom',
+              'target'=>'',
+              'type'=>0,
+              'intertype'=>1,
+              'url'=>'#cpanel-modules a[href*="view='.$this->compName.'"]'
+              );
+
+		return $recs;
+	}
+
+	/**
+	 * Setup standard guided tour steps
+	 * @param   string $return URL
+	 * @param   string $target
+	 * @return  array $rec
+	 */
+	public function setupStdRedirectStep($target = '', $return = '')
+	{
+        $rec = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_REDIRECT_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_REDIRECT_DESC',
+              'position'=>'top',
+              'target'=>$target,
+              'type'=>1,
+              'intertype'=>2,
+              'url'=>$return
+              );
+
+		return $rec;
+	}
+
+	/**
+	 * Setup standard guided tour steps
+	 * @param   string $return URL
+	 * @param   string $list (singular of the list plurals)
+	 * @return  array $rec
+	 */
+	public function setupStdListlinkStep($list = '')
+	{
+        if ($list == 'config') {
+            $target = 'div.cpanel-modules.cpanel-'.$this->compName.' ul.list-group li.list-group-item a[href*="option=com_config&view=component&component=com_'.$this->compName.'"]';
+            $url = 'administrator/index.php?option=com_config&view=component&component=com_'.$this->compName.'&path=&return=';
+        } else {
+            $target = 'div.cpanel-modules.cpanel-'.$this->compName.' ul.list-group li.list-group-item a[href*="option=com_'.$this->compName.'&view='.$list.'s"]';
+            $url = 'administrator/index.php?option=com_'.$this->compName.'&view='.$list.'s';
+        }
+        // link to the dasboard entry to see the list screen
+        $rec = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_'.STRTOUPPER($list).'_LIST_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_'.STRTOUPPER($list).'_LIST_DESC',
+              'position'=>'bottom',
+              'target'=>$target,
+              'type'=>2,
+              'intertype'=>1,
+              'url'=>$url
+              );
+
+		return $rec;
+	}
+
+	/**
+	 * Setup standard guided tour steps
+	 * @param   string $return URL
+	 * @param   string $list (singular of the list plurals)
+	 * @return  array $rec
+	 */
+	public function setupStdNewStep($list = '')
+	{
+        $rec = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_'.STRTOUPPER($list).'_NEW_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_'.STRTOUPPER($list).'_NEW_DESC',
+              'position'=>'bottom',
+              'target'=>'.button-new',
+              'type'=>2,
+              'intertype'=>1,
+              'url'=>''
+              );
+
+		return $rec;
+	}
+
+	/**
+	 * Setup standard guided tour steps
+	 * @param   string $return URL
+	 * @param   string $list (singular of the list plurals)
+	 * @return  array $rec
+	 */
+	public function setupStdFieldStep($position = 'bottom', $field = '', $list = '')
+	{
+        if ($field == 'create') {
+            $target = '';
+        } else {
+            $target = '#jform_'.$field;
+        }
+        $rec = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_'.STRTOUPPER($list).'_'.STRTOUPPER($field).'_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_'.STRTOUPPER($list).'_'.STRTOUPPER($field).'_DESC',
+              'position'=>$position,
+              'target'=>$target,
+              'type'=>2,
+              'intertype'=>2,
+              'url'=>''
+              );
+
+		return $rec;
+	}
+
+	/**
+	 * Setup standard guided tour steps
+	 * @param   string $return URL
+	 * @param   string $list
+	 * @return  array $rec
+	 */
+	public function setupStdTabStep($tab = '')
+	{
+        $rec = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_TAB_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_TAB_DESC',
+              'position'=>'bottom',
+              'target'=>'button[aria-controls='.$tab.']',
+              'type'=>2,
+              'intertype'=>4,
+              'url'=>''
+              );
+
+		return $rec;
+	}
+
+	/**
+	 * Setup standard guided tour steps
+	 * @param   string $return URL
+	 * @return  array $rec
+	 */
+	public function setupStdSaveCloseStep($return = '')
+	{
+        $rec = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_SAVECLOSE_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_SAVECLOSE_DESC',
+              'position'=>'bottom',
+              'target'=>'#toolbar #toolbar-save button.button-save',
+              'type'=>2,
+              'intertype'=>1,
+              'url'=>$return
+              );
+
+		return $rec;
+	}
+
+	/**
+	 * Setup standard guided tour steps
+	 * @param   string $return URL
+	 * @return  array $rec
+	 */
+	public function setupStdCongratsStep($return = '')
+	{
+        $rec = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_CONGRATS_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_CONGRATS_DESC',
+              'position'=>'bottom',
+              'target'=>'',
+              'type'=>1,
+              'intertype'=>2,
+              'url'=>$return
+              );
+		return $rec;
 	}
 
 	/**

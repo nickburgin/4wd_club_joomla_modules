@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    Com_Gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -9,10 +9,10 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 
 $wa = $this->document->getWebAssetManager();
@@ -30,6 +30,7 @@ $canTrip  = $user->authorise('core.trip', 'com_gatripsys');
 $admin_id = $this->params->get('admin_id');
 $canAdmin  = ($user->id == $admin_id) ? 1 : $canAdmin;
 $canLead = (($user->id == $this->item->leader) || $canTrip || $canAdmin) ? 1 : 0;
+
 /*
 echo '<pre>Test<br />';
 print_r($user->authorise);

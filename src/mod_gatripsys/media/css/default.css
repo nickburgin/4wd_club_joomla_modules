@@ -1,0 +1,18 @@
+/**
+ * @package     pkg_gatripsys
+ * @subpackage  mod_gatripsys
+ * @version     5.2
+ * @author      Glenn Arkell <glenn@glennarkell.com.au>
+ * @copyright   2021 Glenn Arkell
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+.trips {
+	/* font-size: 80%; */
+}
+p.trips {
+	margin-top: 0;
+}
+h2.trips, h3.trips, h4.trips {
+	margin-bottom: 3px;
+}	

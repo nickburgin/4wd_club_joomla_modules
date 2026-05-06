@@ -29,11 +29,7 @@
              label="COM_GABROADCAST_MAIL_LIMIT_LABEL"
              description="COM_GABROADCAST_MAIL_LIMIT_DESC" />
 
-        <field name="cycle_time" type="text" default="10" showon="limit_set:1"
-             label="COM_GABROADCAST_CYCLE_TIME_LABEL"
-             description="COM_GABROADCAST_CYCLE_TIME_DESC" />
-
-        <field name="max_time" type="text" default="120" showon="limit_set:1"
+        <field name="max_time" type="text" default="60" showon="limit_set:1"
              label="COM_GABROADCAST_MAX_TIME_LABEL"
              description="COM_GABROADCAST_MAX_TIME_DESC" />
 
@@ -74,18 +70,6 @@
              <option value="0">JNO</option>
              <option value="1">JYES</option>
          </field>
-
-        <field name="incl_unsub" type="radio" default="1" class="btn-group btn-group-yesno"
-             label="COM_GABROADCAST_INCL_UNSUB_LABEL"
-             description="COM_GABROADCAST_INCL_UNSUB_DESC" >
-             <option value="0">JNO</option>
-             <option value="1">JYES</option>
-         </field>
-
-        <field name="unsub_article" type="Articlelist" showon="incl_unsub:1"
-             label="COM_GABROADCAST_UNSUB_ARTICLE_LABEL"
-             description="COM_GABROADCAST_UNSUB_ARTICLE_DESC" />
-
 
 	</fieldset>
 
@@ -147,30 +131,6 @@
 
 	</fieldset>
 
-    <fieldset name="bcastparams"
-		addfieldprefix="GlennArkell\Component\Gabroadcast\Administrator\Field"
-		label="COM_GABROADCAST_BCASTPARAMS_LABEL"
-		description="COM_GABROADCAST_BCASTPARAMS_DESC" >
-
-        <field name="html_headfoot" type="radio" default="0" class="btn-group btn-group-yesno"
-             label="COM_GABROADCAST_HTML_HEADFOOT_LABEL"
-             description="COM_GABROADCAST_HTML_HEADFOOT_DESC">
-             <option value="0">JNO</option>
-             <option value="1">JYES</option>
-         </field>
-
-        <field name="html_header" type="editor" showon="html_headfoot:1" filter="raw"
-             buttons="true" hide="article,image,readmore,pagebreak"
-			 label="COM_GABROADCAST_HTML_HEADER_LABEL"
-             description="COM_GABROADCAST_HTML_HEADER_DESC" />
-
-        <field name="html_footer" type="editor" showon="html_headfoot:1" filter="raw"
-             buttons="true" hide="article,image,readmore,pagebreak"
-			 label="COM_GABROADCAST_HTML_FOOTER_LABEL"
-             description="COM_GABROADCAST_HTML_FOOTER_DESC" />
-
-	</fieldset>
-
     <fieldset name="contentparams"
 		addfieldprefix="GlennArkell\Component\Gabroadcast\Administrator\Field"
 		label="COM_GABROADCAST_CONTENTPARAMS_LABEL"
@@ -186,21 +146,19 @@
         <field name="safe_files" type="list" class="multiple" multiple="true"
              label="COM_GABROADCAST_SAFE_FILES_LABEL"
              description="COM_GABROADCAST_SAFE_FILES_DESC">
+                 <option value="docx">docx</option>
+                 <option value="doc">doc</option>
                  <option value="pdf">pdf</option>
-                 <option value="PDF">PDF</option>
                  <option value="jpg">jpg</option>
-                 <option value="JPG">JPG</option>
                  <option value="png">png</option>
-                 <option value="PNG">PNG</option>
                  <option value="gif">gif</option>
-                 <option value="GIF">GIF</option>
          </field>
 
         <field name="attach_link" type="radio" class="btn-group btn-group-yesno" default="0"
              label="COM_GABROADCAST_ATTACH_LINK_LABEL"
              description="COM_GABROADCAST_ATTACH_LINK_DESC">
-                 <option value="0">Attach File</option>
-                 <option value="1">Link to File</option>
+                 <option value="0">Link to File</option>
+                 <option value="1">Attach File</option>
          </field>
 
         <field name="attach_sort" type="radio" class="btn-group btn-group-yesno" default="0"
@@ -209,6 +167,25 @@
                  <option value="0">Descending</option>
                  <option value="1">Ascending</option>
          </field>
+
+        <field name="article_cat" type="category" default="0"
+             extension="com_content"
+             label="COM_GABROADCAST_ARTICLE_CAT_LABEL"
+             description="COM_GABROADCAST_ARTICLE_CAT_DESC" >
+             <option value="0">JGLOBAL_SELECT_AN_OPTION</option>
+         </field>
+
+        <field name="incl_unsub" type="radio" default="1" class="btn-group btn-group-yesno"
+             label="COM_GABROADCAST_INCL_UNSUB_LABEL"
+             description="COM_GABROADCAST_INCL_UNSUB_DESC" >
+             <option value="0">JNO</option>
+             <option value="1">JYES</option>
+         </field>
+
+        <field name="unsub_article" type="Articlelist" showon="incl_unsub:1"
+             label="COM_GABROADCAST_UNSUB_ARTICLE_LABEL"
+             description="COM_GABROADCAST_UNSUB_ARTICLE_DESC" />
+
 
         <field name="sig_block" type="radio" default="0" class="btn-group btn-group-yesno"
              label="COM_GABROADCAST_SIG_BLOCK_LABEL"

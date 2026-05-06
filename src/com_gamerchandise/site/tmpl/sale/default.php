@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.0.7
+ * @version    4.1.2
  * @package    Com_Gamerchandise
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -17,6 +17,10 @@ use \GlennArkell\Component\Gamerchandise\Administrator\Helper\GamerchandiseHelpe
 // Load admin language file
 $lang = Factory::getLanguage();
 $lang->load('com_gamerchandise', JPATH_ADMINISTRATOR);
+
+// load any assets required
+$wa = $this->document->getWebAssetManager()
+    ->usePreset('com_gamerchandise.gamerchandisepreset');
 
 $user       = GamerchandiseHelper::getSpecificUser();
 $canEdit = $user->authorise('core.edit', 'com_gamerchandise');

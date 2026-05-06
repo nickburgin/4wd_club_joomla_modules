@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<menu
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="urn:joomla.org"
+	xsi:schemaLocation="urn:joomla.org menu.xsd"
+	>
+	<menuitem
+		title="COM_GAFORSALE_MENUS"
+		type="heading"
+		icon="file-alt"
+		class="class:file-alt"
+		>
+		<menuitem
+			title="COM_GAFORSALE_FSITEM_MANAGER"
+			type="component"
+			element="com_gaforsale"
+			link="index.php?option=com_gaforsale&amp;view=fsitems"
+			quicktask="index.php?option=com_gaforsale&amp;task=fsitem.add"
+			quicktask-title="COM_GAFORSALE_NEW_FSITEM"
+		/>
+
+		<menuitem
+			title="COM_GAFORSALE_CATEGORY_MANAGER"
+			type="component"
+			element="com_categories"
+			link="index.php?option=com_categories&amp;view=categories&amp;extension=com_gaforsale"
+			quicktask="index.php?option=com_categories&amp;extension=com_gaforsale&amp;task=category.add"
+			quicktask-title="COM_GAFORSALE_NEW_CATEGORY"
+		/>
+
+		<menuitem
+			title="COM_GAFORSALE_CONFIGURATION"
+			type="component"
+			element="com_config"
+			link="index.php?option=com_config&amp;view=component&amp;component=com_gaforsale&amp;path=&amp;return=&amp;dashboard=gaforsale"
+		/>
+
+	</menuitem>
+
+</menu>

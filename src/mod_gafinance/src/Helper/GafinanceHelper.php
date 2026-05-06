@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @version     5.0.2
- * @package     com_gafinance
+ * @version     5.3
+ * @package     pkg_gafinance
  * @subpackage  mod_gafinance
  * @author      Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright   2021 Glenn Arkell
@@ -14,23 +14,31 @@ namespace GlennArkell\Module\Gafinance\Site\Helper;
 defined('_JEXEC') or die;
 
 use \Joomla\CMS\Factory;
+use \Joomla\Filesystem\Path;
+use \Joomla\Filesystem\File;
+use \Joomla\Filesystem\Folder;
+use \Joomla\CMS\HTML\HTMLHelper;
 use \Joomla\CMS\Language\Text;
+use \Joomla\CMS\Application\SiteApplication;
+use \Joomla\Database\DatabaseAwareInterface;
+use \Joomla\Database\DatabaseAwareTrait;
+use \Joomla\Registry\Registry;
 
 /**
  * Helper for mod_gafinance
  * @package     com_gafinance
  * @subpackage  mod_gafinance
  */
-class GafinanceHelper
+class GafinanceHelper implements DatabaseAwareInterface
 {
-	var $items;
+    use DatabaseAwareTrait;
 
     /**
      * Retrieves records to display
      * @param array $params An object containing the module parameters
      * @access public
      */
-    public static function getFinance( $params )
+    public static function getFinance( Registry $params, SiteApplication $app )
     {
         $accnt_id = $params->get('accnt_id', 0);
         
@@ -68,7 +76,7 @@ class GafinanceHelper
 	        $items = $db->loadObjectList();
 	    } catch (RuntimeException $e) {
 	        Factory::getApplication()->enqueueMessage($e->getMessage());
-	        return false;
+	        $items = false;
 	    }
 
 	    return $items;

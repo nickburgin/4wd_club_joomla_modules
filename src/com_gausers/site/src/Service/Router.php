@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,18 +12,18 @@ namespace GlennArkell\Component\Gausers\Site\Service;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Component\Router\RouterViewConfiguration;
-use \Joomla\CMS\Component\Router\RouterView;
-use \Joomla\CMS\Component\Router\Rules\StandardRules;
-use \Joomla\CMS\Component\Router\Rules\NomenuRules;
-use \Joomla\CMS\Component\Router\Rules\MenuRules;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Categories\Categories;
-use \Joomla\CMS\Application\SiteApplication;
-use \Joomla\CMS\Categories\CategoryFactoryInterface;
-use \Joomla\CMS\Categories\CategoryInterface;
-use \Joomla\Database\DatabaseInterface;
-use \Joomla\CMS\Menu\AbstractMenu;
+use Joomla\CMS\Component\Router\RouterViewConfiguration;
+use Joomla\CMS\Component\Router\RouterView;
+use Joomla\CMS\Component\Router\Rules\StandardRules;
+use Joomla\CMS\Component\Router\Rules\NomenuRules;
+use Joomla\CMS\Component\Router\Rules\MenuRules;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Categories\Categories;
+use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Categories\CategoryFactoryInterface;
+use Joomla\CMS\Categories\CategoryInterface;
+use Joomla\Database\DatabaseInterface;
+use Joomla\CMS\Menu\AbstractMenu;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 /**

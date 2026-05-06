@@ -1,8 +1,9 @@
 <?php
 
 /**
- * @version    4.1.0
- * @package    com_gatracklog
+ * @version    4.2.0
+ * @package    pkg_mypackage
+ * @subpackage com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -13,11 +14,9 @@ namespace GlennArkell\Component\Gatracklog\Site\View\Tracklog;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use \GlennArkell\Component\Gatracklog\Administrator\Helper\GatracklogHelper;
 
 /**
@@ -40,7 +39,7 @@ class HtmlView extends BaseHtmlView
 	public function display($tpl = null)
 	{
 		$app  = Factory::getApplication();
-		$user = GatracklogHelper::getSpecificUser();
+		$user = $app->getIdentity();
 
 		$this->state  = $this->get('State');
 		$this->item   = $this->get('Item');
@@ -64,9 +63,6 @@ class HtmlView extends BaseHtmlView
 		}
 
 		$this->_prepareDocument();
-
-        HTMLHelper::stylesheet(Uri::base().'media/com_gatracklog/css/gatracklog.css');
-        HTMLHelper::stylesheet(Uri::base().'media/com_gatracklog/css/item.css');
 
 		parent::display($tpl);
 	}

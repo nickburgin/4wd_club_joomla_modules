@@ -5,4 +5,16 @@
                         <![CDATA[COM_GABROADCAST_TITLE_FORM_VIEW_UPLOAD_DESC]]>
         </message>
     </layout>
+    <fields name="params">
+        <fieldset name="useCompFilter" addfieldprefix="GlennArkell\Component\Gabroadcast\Administrator\Field">
+
+	        <field name="use_filter" type="radio" class="btn-group btn-group-yesno" default="1"
+	            label="COM_GABROADCAST_USE_FILTER_LABEL"
+	            description="COM_GABROADCAST_USE_FILTER_DESC">
+	            <option value="0">JNO</option>
+	            <option value="1">JYES</option>
+	        </field>
+
+        </fieldset>
+    </fields>
 </metadata>

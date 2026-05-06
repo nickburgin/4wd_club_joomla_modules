@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -9,12 +9,12 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\LayoutHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 
 // load any assets required
@@ -22,29 +22,30 @@ $wa = $this->document->getWebAssetManager()
     ->usePreset('com_gacalevents.gacaleventspreset');
 
 // Load admin language file
-$lang = Factory::getApplication()->getLanguage();
-$lang->load('com_gacalevents', JPATH_ADMINISTRATOR);
+Factory::getApplication()->getLanguage()->load('com_gacalevents', JPATH_ADMINISTRATOR);
 
-$user       = GacaleventsHelper::getSpecificUser();
-$userId     = $user->id;
-$listOrder  = $this->state->get('list.ordering');
-$listDirn   = $this->state->get('list.direction');
+$user       = Factory::getApplication()->getIdentity();
+$listOrder  = $this->state->get('list.ordering', 'a.pub_name');
+$listDirn   = $this->state->get('list.direction', 'ASC');
 $canCreate  = $user->authorise('core.create', 'com_gacalevents');
 $canEdit    = $user->authorise('core.edit', 'com_gacalevents');
 $canCheckin = $user->authorise('core.manage', 'com_gacalevents');
 $canChange  = $user->authorise('core.edit.state', 'com_gacalevents');
 $canDelete  = $user->authorise('core.delete', 'com_gacalevents');
 
+//GacaleventsHelper::gaPrint(Factory::getApplication()->getUserState('com_gacalevents.test.data'));
+
 ?>
 
 <h2><?php echo Text::_('COM_GACALEVENTS_TITLE_ATTENDEES'); ?></h2>
 
 <form action="<?php echo htmlspecialchars(Uri::getInstance()->toString()); ?>" method="post"
-      name="adminForm" id="adminForm">
+      name="adminForm" id="adminForm" class="com-content-category__articles">
 
 	<?php echo LayoutHelper::render('default_filter', array('view' => $this), dirname(__FILE__)); ?>
-        <div class="table-responsive">
-	<table class="table table-striped" id="eventList">
+
+    <div class="table-responsive">
+	<table class="table table-striped" id="attendeeList">
 		<thead>
 		<tr>
 			<?php if (isset($this->items[0]->state)): ?>
@@ -54,27 +55,17 @@ $canDelete  = $user->authorise('core.delete', 'com_gacalevents');
 			<?php endif; ?>
 
 			<th class=''>
-				<?php echo HTMLHelper::_('grid.sort',  'COM_GACALEVENTS_EVENTS_USER_ID', 'user_id_name', $listDirn, $listOrder); ?>
+				<?php echo HTMLHelper::_('grid.sort',  'COM_GACALEVENTS_ATTENDEES_ATTENDEE', 'a.pub_name', $listDirn, $listOrder); ?>
 			</th>
 			<th class=''>
-				<?php echo HTMLHelper::_('grid.sort',  'COM_GACALEVENTS_EVENTS_TRAN_TYPE', 'a.tran_type', $listDirn, $listOrder); ?>
+				<?php echo HTMLHelper::_('grid.sort',  'COM_GACALEVENTS_ATTENDEES_EVENT', 'event_title', $listDirn, $listOrder); ?>
 			</th>
 			<th class=''>
-				<?php echo HTMLHelper::_('grid.sort',  'COM_GACALEVENTS_EVENTS_TRAN_DATE', 'a.tran_date', $listDirn, $listOrder); ?>
+				<?php echo HTMLHelper::_('grid.sort',  'COM_GACALEVENTS_ATTENDEES_QTY_ATT', 'a.qty_att', $listDirn, $listOrder); ?>
 			</th>
 			<th class=''>
-				<?php echo HTMLHelper::_('grid.sort',  'COM_GACALEVENTS_EVENTS_TRAN_AMOUNT', 'a.tran_amount', $listDirn, $listOrder); ?>
+				<?php echo HTMLHelper::_('grid.sort',  'COM_GACALEVENTS_ID', 'a.id', $listDirn, $listOrder); ?>
 			</th>
-			<th class=''>
-				<?php echo HTMLHelper::_('grid.sort',  'COM_GACALEVENTS_EVENTS_TRAN_DESC', 'a.tran_desc', $listDirn, $listOrder); ?>
-			</th>
-			<th class=''>
-				<?php echo HTMLHelper::_('grid.sort',  'COM_GACALEVENTS_EVENTS_TRAN_FILE', 'a.tran_file', $listDirn, $listOrder); ?>
-			</th>
-			<th class=''>
-				<?php echo HTMLHelper::_('grid.sort',  'COM_GACALEVENTS_EVENTS_ACCNT_ID', 'a.accnt_id', $listDirn, $listOrder); ?>
-			</th>
-
 
 			<?php if ($canEdit || $canDelete): ?>
 				<th class="center">
@@ -93,10 +84,19 @@ $canDelete  = $user->authorise('core.delete', 'com_gacalevents');
 		</tfoot>
 		<tbody>
 		<?php foreach ($this->items as $i => $item) : ?>
-			<?php $canEdit = $user->authorise('core.edit', 'com_gacalevents'); ?>
-			<?php if (!$canEdit && $user->authorise('core.edit.own', 'com_gacalevents')): ?>
-					<?php $canEdit = $user->id == $item->created_by; ?>
-			<?php endif; ?>
+			<?php 
+                $canEdit = $user->authorise('core.edit', 'com_gacalevents');
+    			if (!$canEdit && $user->authorise('core.edit.own', 'com_gacalevents')) {
+    				$canEdit = $user->id == $item->created_by;
+    			}
+                $attLink = GacaleventsHelper::getHTTPQuery(null, 'task', 'attendeeform.edit', 'id', $item->id);
+                $attLink = GacaleventsHelper::getHTTPQuery($attLink, null, null, 'event_id', $item->event);
+                $attLink = GacaleventsHelper::getHTTPQuery($attLink, null, null, 'attendee', $item->attendee);
+                $attURL = 'index.php?'.http_build_query($attLink, '', '&amp;');
+                $remLink = GacaleventsHelper::getHTTPQuery(null, 'task', 'attendeeform.remove', 'id', $item->id);
+                $remURL = 'index.php?'.http_build_query($remLink, '', '&amp;');
+
+            ?>
 
 			<tr class="row<?php echo $i % 2; ?>">
 
@@ -117,39 +117,27 @@ $canDelete  = $user->authorise('core.delete', 'com_gacalevents');
 					<?php if (isset($item->checked_out) && $item->checked_out) : ?>
 						<?php echo HTMLHelper::_('jgrid.checkedout', $i, $item->uEditor, $item->checked_out_time, 'events.', $canCheckin); ?>
 					<?php endif; ?>
-					<a href="<?php echo Route::_('index.php?option=com_gacalevents&view=event&id='.(int) $item->id); ?>">
-						<?php echo $this->escape($item->user_id_name); ?>
+					<a href="<?php echo Route::_('index.php?option=com_gacalevents&view=attendee&id='.(int) $item->id); ?>">
+						<?php echo $this->escape($item->pub_name); ?>
 					</a>
 				</td>
 				<td>
-					<?php echo $item->tran_type; ?>
+					<?php echo $item->event_title; ?>
 				</td>
 				<td>
-					<?php echo $item->tran_date > 0 ? HTMLHelper::_('date', $item->tran_date, Text::_('DATE_FORMAT_LC4')) : '-'; ?>
+					<?php echo $item->qty_att; ?>
 				</td>
 				<td>
-					<?php echo $item->tran_amount; ?>
+					<?php echo $item->id; ?>
 				</td>
-				<td>
-					<?php echo $item->tran_desc; ?>
-				</td>
-				<td>
-					<?php if (!empty($item->tran_file) && file_exists($item->tran_file)) : ?>
-					<a href="<?php echo Route::_(Uri::root() . $item->tran_file, false); ?>" target="_blank" title="Review the file"><i class="icon-search"></i></a>
-					<?php endif; ?>
-				</td>
-				<td>
-					<?php echo $item->accnt_id_name; ?>
-				</td>
-
 
 				<?php if ($canEdit || $canDelete): ?>
 					<td class="center">
 						<?php if ($canEdit): ?>
-							<a href="<?php echo Route::_('index.php?option=com_gacalevents&task=event.edit&id=' . $item->id, false, 2); ?>" class="btn btn-mini" type="button"><i class="icon-edit" ></i></a>
+							<a href="<?php echo Route::_($attURL); ?>" class="btn btn-mini" type="button"><i class="icon-edit" ></i></a>
 						<?php endif; ?>
 						<?php if ($canDelete): ?>
-							<a href="<?php echo Route::_('index.php?option=com_gacalevents&task=eventform.remove&id=' . $item->id, false, 2); ?>" class="btn btn-mini delete-button" type="button"><i class="icon-trash" ></i></a>
+							<a href="<?php echo Route::_($remURL); ?>" class="btn btn-mini delete-button" type="button"><i class="icon-trash" ></i></a>
 						<?php endif; ?>
 					</td>
 				<?php endif; ?>
@@ -158,7 +146,7 @@ $canDelete  = $user->authorise('core.delete', 'com_gacalevents');
 		<?php endforeach; ?>
 		</tbody>
 	</table>
-        </div>
+    </div>
 	<?php if ($canCreate) : ?>
 		<a href="<?php echo Route::_('index.php?option=com_gacalevents&task=eventform.edit&id=0', false, 0); ?>"
 		   class="btn btn-success btn-small"><i

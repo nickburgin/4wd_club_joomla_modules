@@ -1,7 +1,8 @@
 <?php
 /**
- * @version    4.1.0
- * @package    com_gatracklog
+ * @version    4.2.0
+ * @package    pkg_mypackage
+ * @subpackage com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -11,16 +12,28 @@ namespace GlennArkell\Component\Gatracklog\Administrator\Controller;
 
 \defined('_JEXEC') or die;
 
-use \Joomla\CMS\Application\SiteApplication;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Multilanguage;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Controller\AdminController;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Log\Log;
-//use \Joomla\Application\AbstractWebApplication as GaWebApp;
+use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Multilanguage;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\AdminController;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Log\Log;
+//use Joomla\Application\AbstractWebApplication as GaWebApp;
+
+// Log::addLogger(
+//     array(
+//          'logger' => 'galogger',
+//          'text_file' => 'com_gatracklog.tranerrors.php'
+//     ),
+//     Log::ALL,
+//     array('com_gatracklog')
+// );
+
+//Log::addLogger( array( 'logger' => 'gatracklog','text_file' => 'gatracklog.trans.php'), Log::ALL, array('gatracklog'));
+//Log::addLogger( array( 'logger' => 'messagequeue'), Log::ALL, array('com_gatracklog'));
 
 /**
  * Multiples controller class.
@@ -52,6 +65,39 @@ class TracklogsController extends AdminController
 			ArrayHelper::toInteger($pks);
 			$model = $this->getModel();
 			$model->duplicate($pks);
+			$this->setMessage(Text::_('COM_GATRACKLOG_ITEMS_SUCCESS_DUPLICATED'));
+		}
+		catch (Exception $e)
+		{
+			Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+		}
+
+		$this->setRedirect('index.php?option=com_gatracklog&view=tracklogs');
+	}
+
+	/**
+	 * Method to null expiry dates Pictures
+	 * @return void
+     * @throws Exception
+	 */
+	public function nullDate()
+	{
+		// Check for request forgeries
+		$this->checkToken();
+
+		// Get id(s)
+		$pks = $this->input->post->get('cid', array(), 'array');
+
+		try
+		{
+			if (empty($pks))
+			{
+				throw new \Exception(Text::_('COM_GATRACKLOG_NO_ELEMENT_SELECTED'));
+			}
+
+			ArrayHelper::toInteger($pks);
+			$model = $this->getModel();
+			$model->nullExpDate($pks);
 			$this->setMessage(Text::_('COM_GATRACKLOG_ITEMS_SUCCESS_DUPLICATED'));
 		}
 		catch (Exception $e)

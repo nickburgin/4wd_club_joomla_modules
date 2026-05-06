@@ -1,7 +1,8 @@
 <?php
 /**
- * @version    4.1.0
- * @package    com_gatracklog
+ * @version     4.2.0
+ * @package     pkg_mypackage
+ * @subpackage  com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,13 +13,13 @@ namespace GlennArkell\Component\Gatracklog\Administrator\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Plugin\PluginHelper;
-use \Joomla\CMS\MVC\Model\AdminModel;
-use \Joomla\Event\Dispatcher;
-use \Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\Event\Dispatcher;
+use Joomla\CMS\Helper\TagsHelper;
 use \GlennArkell\Component\Gatracklog\Administrator\Helper\GatracklogHelper;
 
 /**
@@ -45,12 +46,27 @@ class TracklogModel extends AdminModel
 	 */
 	protected $item = null;
 
+    /**
+     * Batch copy/move command. If set to false, the batch copy/move command is not supported
+     * @var  string
+     */
+    protected $batch_copymove = 'category_id';
+
+    /**
+     * Allowed batch commands
+     * @var array
+     */
+    protected $batch_commands = [
+        'language_id'   => 'batchLanguage',
+        'tag'           => 'batchTag',
+    ];
+
 	/**
 	 * Returns a reference to the a Table object, always creating it.
 	 * @param   string  $type    The table type to instantiate
 	 * @param   string  $prefix  A prefix for the table class name. Optional.
 	 * @param   array   $config  Configuration array for model. Optional.
-	 * @return    JTable    A database object
+	 * @return    Table    A database object
 	 * @since    1.6
 	 */
 	public function getTable($type = 'Tracklog', $prefix = 'Administrator', $config = array())
@@ -137,7 +153,7 @@ class TracklogModel extends AdminModel
 	 */
 	public function duplicate(&$pks)
 	{
-		$user = GatracklogHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		// Access checks.
 		if (!$user->authorise('core.create', 'com_gatracklog')) {
@@ -157,8 +173,8 @@ class TracklogModel extends AdminModel
 				if (!$table->check()) {
 					throw new \Exception($table->getError());
 				}
-				
-				if (in_array(false, $result, true) || !$table->store()) {
+
+				if (in_array(false, $result, true) || !$table->store(true)) {
 					throw new \Exception($table->getError());
 				}
 
@@ -166,6 +182,67 @@ class TracklogModel extends AdminModel
 				throw new \Exception($table->getError());
 			}
                     
+		}
+
+		// Clean cache
+		$this->cleanCache();
+
+		return true;
+	}
+
+	/**
+	 * Method to batch records
+	 * @return  boolean  True if successful.
+	 * @throws  Exception
+	 */
+	public function batch($commands, $pks, $contexts)
+	{
+		if ($commands['move_copy'] == 'm' && isset($commands['category_id'])) {
+            //
+            $table = $this->getTable();
+            foreach ($pks as $pk) {
+                if ($table->load($pk, true)) {
+                    $table->track_zone = $commands['category_id'];
+    				if (!$table->check()) {
+    					throw new \Exception($table->getError());
+    				}
+
+    				if (!$table->store()) {
+    					throw new \Exception($table->getError());
+    				}
+    			}
+    		}
+        }
+		return parent::batch($commands, $pks, $contexts);
+
+	}
+
+	/**
+	 * Method to null a date in Record
+	 * @param   array  &$pks  An array of primary key IDs.
+	 * @return  boolean  True if successful.
+	 * @throws  Exception
+	 */
+	public function nullExpDate(&$pks)
+	{
+		$user = Factory::getApplication()->getIdentity();
+        $dateFldName = 'created_date';
+
+		// Access checks.
+		if (!$user->authorise('core.manage', 'com_gatracklog')) {
+			throw new \Exception(Text::_('COM_GATRACKLOG_ERROR_MESSAGE_NOT_AUTHORISED'));
+		}
+
+		foreach ($pks as $pk)
+        {
+            $db = Factory::getContainer()->get('DatabaseDriver');
+            $db->setQuery('UPDATE #__gatracklog_tracklogs SET '.$dateFldName.' = NULL WHERE id = '.(int) $pk);
+            try {
+        		$db->execute();
+        	} catch (RuntimeException $e) {
+        	    throw new \Exception($e);
+        	}
+
 		}
 
 		// Clean cache

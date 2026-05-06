@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    Com_Gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -9,12 +9,13 @@
 // no direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
+use \GlennArkell\Component\Gatripsys\Administrator\Helper\GamodalHelper;
 
 $app = Factory::getApplication();
 // load any assets required
@@ -22,6 +23,8 @@ $wa = $this->document->getWebAssetManager()
     ->usePreset('com_gatripsys.gatripsyspreset');
 //This is important for Cloud White template scheme
 GatripsysHelper::loadTmplStyleModal($wa);
+
+$wa->useStyle('com_gatripsys.form');
 
 //Load admin language file
 $lang = Factory::getLanguage();
@@ -47,13 +50,35 @@ if ($trip_id) {
 	$trip_cost = 0;
 }
 
-$submitLink = GatripsysHelper::getHTTPQuery(null, 'task', 'attendeeform.save', null, null);
+$submitLink = GamodalHelper::getHTTPQuery(null, 'task', 'attendeeform.save', null, null);
 
 $id = isset($this->item->id) && $this->item->id ? $this->item->id : 0;
+
+
+if (!$canLead) {
+    $this->form->setFieldAttribute('user_id', 'default', $user->id);
+    $this->form->setFieldAttribute('user_id', 'type', 'hidden');
+    $this->form->setFieldAttribute('user_name', 'default', $user->name);
+} else {
+    $this->form->setFieldAttribute('user_name', 'type', 'hidden');
+}    
+$this->form->setFieldAttribute('state', 'type', 'hidden');
+$this->form->setFieldAttribute('ordering', 'type', 'hidden');
+$this->form->setFieldAttribute('from_modal', 'default', 1);
+$this->form->setFieldAttribute('trip_id', 'default', $trip_id);
+$this->form->setFieldAttribute('trip_id', 'type', 'hidden');
+$this->form->setFieldAttribute('id', 'default', $id);
+$this->form->setFieldAttribute('id', 'type', 'hidden');
+$this->form->setFieldAttribute('modified_by', 'default', $user->id);
+$this->form->setFieldAttribute('created_by', 'default', $user->id);
+$this->form->setFieldAttribute('modified_date', 'default', $today);
+$this->form->setFieldAttribute('modified_date', 'type', 'hidden');
+$this->form->setFieldAttribute('created_date', 'default', $today);
+$this->form->setFieldAttribute('created_date', 'type', 'hidden');
+$this->form->setFieldAttribute('approved_by', 'default', 0);
+$this->form->setFieldAttribute('approved_by', 'type', 'hidden');
 /*
-echo '<pre>Test<br />';
-print_r($this->item);
-echo '</pre>';
+GatripsysHelper::gaPrint($this->item);
 */
 ?>
 
@@ -63,40 +88,18 @@ echo '</pre>';
 	<form id="form-attendee" action="<?php echo Route::_('index.php?'.http_build_query($submitLink, '', '&amp;')); ?>"
 		method="post" class="form-validate form-horizontal" enctype="multipart/form-data" target="_parent">
 
-    <div class="form-horizontal">
+    <div class="form-horizontal" style="padding: 0 10px !important;">
         <div class="row-fluid">
-        	<input type="hidden" name="jform[from_modal]" value="1" />
-        	<input type="hidden" name="jform[id]" value="<?php echo $id; ?>" />
-        	<input type="hidden" name="jform[modified_by]" value="<?php echo $user->id; ?>" />
-        	<input type="hidden" name="jform[created_by]" value="<?php echo $user->id; ?>" />
-        	<input type="hidden" name="jform[modified_date]" value="<?php echo $today; ?>" />
-        	<input type="hidden" name="jform[created_date]" value="<?php echo $today; ?>" />
-			<input type="hidden" name="jform[trip_id]" value="<?php echo $trip_id; ?>" />
-        	<?php if ($canLead): ?>
-				<div class="control-group">
-					<div class="control-label"><?php echo $this->form->getLabel('user_id'); ?></div>
-					<div class="controls"><?php echo $this->form->getInput('user_id'); ?></div>
-				</div>
-        	<?php else : ?>
-				<input type="hidden" name="jform[user_id]" value="<?php echo $user->id; ?>" />
-				<div class="control-group">
-					<div class="control-label"><?php echo $this->form->getLabel('user_id'); ?></div>
-					<div class="controls">
-						<input type="text" name="jform[user_name]" value="<?php echo $user->name; ?>" readonly="true" class="readonly"/>
-					</div>
-				</div>
-			<?php endif; ?>
-			<div class="control-group">
-				<div class="control-label"><?php echo $this->form->getLabel('in_party'); ?></div>
-				<div class="controls"><?php echo $this->form->getInput('in_party'); ?></div>
-			</div>
+
+			<?php echo $this->form->renderFieldset('sysinfo'); ?>
+
 			<?php if ($trip_cost > '0.00' && $charge_trip) : ?>
 				<p class="small"><?php echo Text::sprintf('COM_GATRIPSYS_CHARGE_TRIP_NOTICE', '$'.$trip_cost); ?></p>
 			<?php endif; ?>
-			<div class="control-group">
-				<div class="control-label"><?php echo $this->form->getLabel('comment'); ?></div>
-				<div class="controls"><?php echo $this->form->getInput('comment'); ?></div>
-			</div>
+
+			<?php echo $this->form->renderFieldset('general'); ?>
+			<?php echo $this->form->renderField('comment'); ?>
+
         </div>
 
 		<div class="btn-group">

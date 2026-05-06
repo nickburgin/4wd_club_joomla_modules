@@ -7,7 +7,7 @@
     <author>Glenn Arkell</author>
     <authorEmail>glenn@glennarkell.com.au</authorEmail>
     <authorUrl>https://www.glennarkell.com.au</authorUrl>
-    <version>5.1.0</version>
+    <version>5.2.3</version>
     <description>COM_GAFINANCE_XML_DESCRIPTION</description>
 
     <namespace path="src">GlennArkell\Component\Gafinance</namespace>
@@ -63,13 +63,11 @@
         <languages folder="administrator">
 			<language tag="en-GB">language/en-GB/com_gafinance.ini</language>
 			<language tag="en-GB">language/en-GB/com_gafinance.sys.ini</language>
+			<language tag="en-GB">language/en-GB/guidedtours.gafinance_welcome.ini</language>
+			<language tag="en-GB">language/en-GB/guidedtours.gafinance_accounts.ini</language>
+			<language tag="en-GB">language/en-GB/guidedtours.gafinance_transactions.ini</language>
+			<language tag="en-GB">language/en-GB/guidedtours.gafinance_configuration.ini</language>
         </languages>
     </administration>
-
-	<changelogurl>https://www.glennarkell.com.au/joomlaorg/components/j6/gafinance-changelog.xml</changelogurl>
-
-	<updateservers>
-		<server type="extension" priority="1" name="Finance Management">https://www.glennarkell.com.au/joomlaorg/components/j6/gafinance-update.xml</server>
-	</updateservers>
 
 </extension>

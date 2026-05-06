@@ -1,28 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" group="user" method="upgrade">,
-	<name>User Profile B4WDC</name>
+	<name>User - Profile 4WD Club</name>
 	<author>Glenn Arkell</author>
 	<creationDate>24 September 2021</creationDate>
 	<copyright>(C) 2021 - 2031 Glenn Arkell. All rights reserved.</copyright>
 	<license>GNU General Public License version 2 or later</license>
 	<authorEmail>glenn@glennarkell.com.au</authorEmail>
-	<authorUrl>www.glennarkell.com.au</authorUrl>
-	<version>4.5.9</version>
+	<authorUrl>https://www.glennarkell.com.au</authorUrl>
+	<version>5.3</version>
 	<description>Profile plug-in, to enhance the available options for the User record.</description>
 
 	<namespace path="src">GlennArkell\Plugin\User\Profileb4wdc</namespace>
 
 	<files>
-		<filename plugin="profileb4wdc">profileb4wdc.php</filename>
 		<folder>forms</folder>
+		<folder plugin="profileb4wdc">services</folder>
+		<folder>src</folder>
 	</files>
 	<languages>
 		<language tag="en-GB">language/en-GB/plg_user_profileb4wdc.ini</language>
 		<language tag="en-GB">language/en-GB/plg_user_profileb4wdc.sys.ini</language>
 	</languages>
 
+	<changelogurl>https://www.glennarkell.com.au/joomlaorg/plugins/j6/changes/plg_user_profileb4wdc-changelog.xml</changelogurl>
+
 	<updateservers>
-		<server type="extension" priority="1" name="User Profile B4WDC">https://www.glennarkell.com.au/joomlaorg/plugins/j4/profileb4wdc_update.xml</server>
+		<server type="extension" priority="1" name="User Profile B4WDC">https://www.glennarkell.com.au/joomlaorg/plugins/j6/updates/plg_user_profileb4wdc-update.xml</server>
 	</updateservers>
 
 	<config>
@@ -45,6 +48,14 @@
 				<field name="register-require_fwdvic_no" type="list" default="0"
 				       label="PLG_USER_PROFILEB4WDC_FIELD_FWDVIC_NO_LABEL"
 					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_FWDVIC_NO_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
+				<field name="register-require_privacy" type="list" default="0"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_PRIVACY_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_PRIVACY_DESC" >
 					   <option value="2">JOPTION_REQUIRED</option>
 					   <option value="1">JOPTION_OPTIONAL</option>
 					   <option value="0">JDISABLED</option>
@@ -677,6 +688,14 @@
 				<field name="profile-require-user" type="spacer" class="text"
 					   label="PLG_USER_PROFILEB4WDC_FIELD_NAME_PROFILE_REQUIRE_USER" />
 
+				<field name="profile-require_privacy" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_PRIVACY_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_PRIVACY_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+
 				<field name="profile-require_fwdvic_no" type="list" default="1"
 				       label="PLG_USER_PROFILEB4WDC_FIELD_FWDVIC_NO_LABEL"
 					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_FWDVIC_NO_DESC" >
@@ -941,6 +960,13 @@
 				<field name="profile-require_trg_faid" type="list" default="1"
 				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAID_LABEL"
 					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_FAID_DESC" >
+					   <option value="2">JOPTION_REQUIRED</option>
+					   <option value="1">JOPTION_OPTIONAL</option>
+					   <option value="0">JDISABLED</option>
+				</field>
+				<field name="profile-require_trg_faidc" type="list" default="1"
+				       label="PLG_USER_PROFILEB4WDC_FIELD_TRG_FAIDC_LABEL"
+					   description="PLG_USER_PROFILEB4WDC_FIELD_PARAM_TRG_FAIDC_DESC" >
 					   <option value="2">JOPTION_REQUIRED</option>
 					   <option value="1">JOPTION_OPTIONAL</option>
 					   <option value="0">JDISABLED</option>

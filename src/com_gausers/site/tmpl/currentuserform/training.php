@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -10,12 +10,12 @@
 // no direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Plugin\PluginHelper;
-use \Joomla\CMS\Layout\LayoutHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GaauditHelper;
 
@@ -23,7 +23,7 @@ HTMLHelper::_('behavior.keepalive');
 HTMLHelper::_('behavior.formvalidator');
 
 //Load admin language file
-$lang = Factory::getLanguage();
+$lang = Factory::getApplication()->getLanguage();
 $lang->load('com_gausers', JPATH_ADMINISTRATOR);
 
 $incl_partner = $this->params->get( 'incl_partner' );
@@ -33,7 +33,7 @@ $fld_clubnumber = $this->params->get('fld_clubnumber',0);
 $profileSuff = $this->params->get('profile_suffix', 'b4wdc');
 $this->localProfile = $this->params->get('profile_suffix','b4wdc');
 
-$user       = GausersHelper::getSpecificUser();
+$user       = Factory::getApplication()->getIdentity();
 $this->user_id  = $user->id;
 $this->canMembers  = $user->authorise('core.members', 'com_gausers');
 $this->canTrg  = $user->authorise('core.trgcerts', 'com_gausers');

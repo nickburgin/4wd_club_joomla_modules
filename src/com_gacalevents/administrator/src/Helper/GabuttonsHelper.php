@@ -1,7 +1,8 @@
 <?php
 /**
- * @version    3.0.0
- * @package    Com_Gacalevents
+ * @version    3.3.1
+ * @package    pkg_gacalevents
+ * @subpackage com_gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,22 +13,23 @@ namespace GlennArkell\Component\Gacalevents\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\Data\DataObject;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\Filesystem\Path;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\User\UserFactoryInterface;
-use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
-use \GlennArkell\Component\Gacalevents\Administrator\Helper\GanamesHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\Data\DataObject;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Installer\Installer;
+use Joomla\Filesystem\Path;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\User\UserFactoryInterface;
+use GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
+use GlennArkell\Component\Gacalevents\Administrator\Helper\GanamesHelper;
+use GlennArkell\Component\Gacalevents\Administrator\Helper\GamodalHelper;
 
 /**
  * Main helper.
@@ -51,15 +53,48 @@ class GabuttonsHelper
 			$query_string = array();
 			$query_string['option'] = 'com_gacalevents';
 			$query_string[$viewTask] = $contModel;
-			if ($ref) {
+			if (!is_array($ref)) {
 				$query_string[$ref] = $linkId;
-			}
+			} else {
+                // cycle through the array of fields as references
+                foreach ($ref as $key => $value) {
+                    $query_string[$key] = $value;
+                }
+
+            }
 		} else {
 			$query_string = $existQ;
 			$query_string[$ref] = $linkId;
 		}
 
 		return $query_string;
+	}
+
+	/**
+	 * Builds the html to display buttons
+	 * @param   string  $type type of link task or view
+	 * @param   string  $controller to call
+	 * @param   array   $fields (associative array with fieldname=>value)
+	 * @param   string  $layout special layout other than default
+	 * @return  string  url of all relevant link for the Router
+	 */
+	public static function setupLink($type, $controller, $fields, $layout = null)
+	{
+        $cntr = 0;
+        foreach ($fields as $fld => $val) {
+            $cntr++;
+            if ($cntr == 1) {
+                $link = self::getHTTPQuery(null, $type, $controller, $fld, $val);
+            } else {
+                $link = self::getHTTPQuery($link, null, null, $fld, $val);
+            }
+        }
+        if ($layout) {
+            $link = self::getHTTPQuery($link, null, null, 'layout', $layout);
+        }
+        $urlLink = 'index.php?'.http_build_query($link, '', '&amp;');
+        
+        return $urlLink;
 	}
 
 	/**
@@ -89,6 +124,10 @@ class GabuttonsHelper
 		$charge_event = $params->get('charge_event', 0);
 		$allow_pub = $params->get('allow_pub', 0);
 		$jointMship = $params->get('partner_mship', 0);
+        $repeatEvent = $params->get('repeat_event', 0);
+        $repeatNumber = $params->get('repeat_setting', 0);
+        $repeatQty = $params->get('repeat_qty', 1);
+        $repeatType = $params->get('repeat_type', 'DAYS');
 		// check vaccination highlight
 		$highlight_attendee = $params->get('highlight_attendee', 0);
 		$vaxed_fld = $params->get('vaxed_fld', 0);
@@ -97,16 +136,38 @@ class GabuttonsHelper
 		$profpart = $params->get('profile_partner', 'partner');
 		$profpartner = 'profile'.$profsuf.'.'.$profpart;
 
+        // set all the fields used on the modal link of attending the event
+        $attFields = array('id'=>0,'eventaction'=>1, 'event_id'=>$event->id, 'attendee'=>$user->id, 'formal'=>$event->formal_event, 'tmpl'=>'component');
+        Factory::getApplication()->setUserState('com_gacalevents.testhb.data', $event->id);
+
 		$attRecord = GacaleventsHelper::checkAttendee($event->id, $user->id);
         if (isset($attRecord) && $attRecord->id > 0) { $attRecordExists = true; $AttRecID = $attRecord->id; }
 
 		// Build all the possible buttons
-        //$attURL = Route::_('index.php?option=com_gacalevents&task=event.eventrego&eventaction=1&event_id='.$event->id.'&attendee='.$user->id, false, 0);
-        $attURL = Route::_('index.php?option=com_gacalevents&task=attendeeform.edit&id=0&event_id='.$event->id.'&attendee='.$user->id.'&formal='.$event->formal_event, false, 0);
-        $attBtn = '<a class="btn btn-secondary" title="'.Text::_('COM_GACALEVENTS_ATTEND_EVENT').'" ';
-        $attBtn .= 'href="'.$attURL.'" ';
-        $attBtn .= ' "="" data-original-title="'.Text::_('COM_GACALEVENTS_ATTEND_EVENT').'"><i class="icon-publish" style="color: var(--success);"></i></a> ';
+		if ($jointMship) {
+            // setup modal button for user attending the event
+            //$attBtn = GamodalHelper::setupModalButton('view', 'attendeeform', $attFields, null, 'modalattend', 'modalattend', 'btn btn-secondary', '', '', 'icon-publish', $user->name);
+            $attFields['layout'] = 'modalattend';
+            $attURL = GamodalHelper::setupLink('view', 'attendeeform', $attFields, 'modalattend');
+            $attBtn = '<a class="btn btn-secondary" data-joomla-dialog joomla-dialog';
+            $attBtn .= ' href="'.Route::_($attURL, false, 0).'" title="'.Text::_('COM_GACALEVENTS_ATTEND_EVENT').'">';
+            $attBtn .= '<i class="icon-publish" style="color: var(--success);"></i></a>';
+        } else {
+            // setup admin button to set user attending the event
+            $attURL = GamodalHelper::setupLink('task', 'event.eventrego', $attFields, null);
+            $attBtn = '<a class="btn btn-btn btn-secondary" title="'.Text::_('COM_GACALEVENTS_ATTEND_EVENT').'" ';
+            $attBtn .= 'href="'.Route::_($attURL, false, 0).'" ';
+            $attBtn .= 'data-original-title="'.Text::_('COM_GACALEVENTS_ATTEND_EVENT').'"><i class="icon-publish" style="color: var(--success);"></i></a> ';
+        }
 
+        /*  -----------   set up the modal button  -  Notification --------------- */
+        //$htmlModalnotif = GamodalHelper::setupModalButton('view', 'eventform', 'event_id', $event->id, 'modalemail', 'modalemail', 'info', '', '', 'fas fa-mail-bulk', $event->title);
+        $htmlModalURL = GamodalHelper::setupLink('view', 'eventform', 'event_id', $event->id, 'modalemail');
+        $htmlModalnotif = '<a class="btn btn-secondary" data-joomla-dialog joomla-dialog';
+        $htmlModalnotif .= ' href="'.Route::_($htmlModalURL, false, 0).'" title="'.Text::_($event->title).'">';
+        $htmlModalnotif .= '<i class="icon-info" style="color: var(--info);"></i></a>';
+
+        // -------  simple buttons to do actions  ---------
         $aplURL = Route::_('index.php?option=com_gacalevents&task=event.eventrego&eventaction=0&event_id='.$event->id.'&attendee='.$user->id, false, 0);
         $aplBtn = '<a class="btn btn-secondary" title="'.Text::_('COM_GACALEVENTS_SUBMIT_APOLOGY').'" ';
         $aplBtn .= 'href="'.$aplURL.'" ';
@@ -121,6 +182,11 @@ class GabuttonsHelper
         $delBtn = '<a class="btn btn-danger" title="'.Text::_('COM_GACALEVENTS_DELETE_EVENT').'" ';
         $delBtn .= 'href="'.$delURL.'" ';
         $delBtn .= ' "="" data-original-title="'.Text::_('COM_GACALEVENTS_DELETE_EVENT').'"><i class="icon-trash"></i></a> ';
+
+        $dupURL = Route::_('index.php?option=com_gacalevents&task=event.repeatEvent&id='.$event->id, false, 0);
+        $dupBtn = '<a class="btn btn-incident" title="'.Text::sprintf('COM_GACALEVENTS_REPEAT_EVENT', $repeatQty, $repeatNumber, $repeatType).'" ';
+        $dupBtn .= 'href="'.$dupURL.'" ';
+        $dupBtn .= ' "="" data-original-title="'.Text::_('COM_GACALEVENTS_REPEAT_EVENT_LABEL').'"><i class="icon-redo"></i></a> ';
 
         $bokURL = Route::_('index.php?option=com_gacalevents&task=attendeeform.edit&id=0&event_id='.$event->id.'&formal='.$event->formal_event, false, 0);
         $bokBtn = '<a class="btn btn-success" title="'.Text::_('COM_GACALEVENTS_BOOKON_EVENT').'" ';
@@ -143,40 +209,17 @@ class GabuttonsHelper
 		$revBtn .= ' "="" data-original-title="'.Text::_('COM_GACALEVENTS_DELETE_ATTEND').'"><i class="icon-trash"></i></a> ';
 
         $resURL = Route::_('index.php?option=com_gacalevents&task=attendee.publish&id='.$AttRecID.'&state=1', false, 0);
-        $resBtn = '<a class="btn btn-secondary" title="'.Text::_('COM_GACALEVENTS_ATTEND_EVENT').'" ';
+        $resBtn = '<a class="btn btn-btn btn-secondary" title="'.Text::_('COM_GACALEVENTS_ATTEND_EVENT').'" ';
         $resBtn .= 'href="'.$resURL.'" ';
 		$resBtn .= ' "="" data-original-title="'.Text::_('COM_GACALEVENTS_ATTEND_EVENT').'"><i class="icon-publish"></i></a> ';
 
-        $attLink = self::getHTTPQuery(null, 'view', 'attendeeform', 'id', 0);
-        $attLink = self::getHTTPQuery($attLink, null, null, 'event_id', $event->id);
-        $attLink = self::getHTTPQuery($attLink, null, null, 'attendee', $user->id);
-        $attLink = self::getHTTPQuery($attLink, null, null, 'tmpl', 'component');
-        $modparams = array( 'url'        => 'index.php?'.http_build_query($attLink, '', '&amp;'),
-        	        'title'      => Text::_("COM_GACALEVENTS_ATTEND_EVENT"), 'closeButton'=> true,
-        	        'modalWidth' => 60, 'bodyHeight' => 35, 'backdrop'   => 'static' );
-        $modname = 'modal-myLeftModal'.$event->id;
-        $htmlModal = '<a class="btn btn-secondary" href="#'.$modname.'" data-bs-toggle="modal">';
-        $htmlModal .= '<i class="fas fa-sign-out-alt" title="'.Text::_('COM_GACALEVENTS_ATTEND_EVENT').'"></i></a>';
-        $htmlModal .= HTMLHelper::_('bootstrap.renderModal', $modname, $modparams);
-
-        $notifLink = self::getHTTPQuery(null, 'view', 'eventform', 'event_id', $event->id);
-        $notifLink = self::getHTTPQuery($notifLink, null, null, 'layout', 'modalemail');
-        $notifLink = self::getHTTPQuery($notifLink, null, null, 'tmpl', 'component');
-        $notifmodparams = array( 'url'        => 'index.php?'.http_build_query($notifLink, '', '&amp;'),
-        	        'title'      => Text::_("COM_GACALEVENTS_NOTIF_EVENT"), 'closeButton'=> true,
-        	        'modalWidth' => 60, 'bodyHeight' => 35, 'backdrop'   => 'static' );
-        $notifmodname = 'modal-myNotifModal'.$event->id;
-        $htmlModalnotif = '<a class="btn btn-info" href="#'.$notifmodname.'" data-bs-toggle="modal">';
-        $htmlModalnotif .= '<i class="fas fa-mail-bulk" title="'.Text::_('COM_GACALEVENTS_NOTIF_EVENT').'"></i></a>';
-        $htmlModalnotif .= HTMLHelper::_('bootstrap.renderModal', $notifmodname, $notifmodparams);
+		$unpubURL = Route::_('index.php?option=com_gacalevents&task=event.publish&id=' . $event->id . '&state=' . (($event->state + 1) % 2), false, 2);
+		$unpubBtn = '<a class="btn btn-micro" href="'.$unpubURL.'"><i class="icon-info"></i></a>';
 
         $notifURL = Route::_('index.php?option=com_gacalevents&task=event.notify&event_id='.$event->id, false, 0);
         $notifBtn = '<a class="btn btn-secondary" title="'.Text::_('COM_GACALEVENTS_NOTIF_EVENT').'" ';
         $notifBtn .= 'href="'.$notifURL.'" ';
         $notifBtn .= ' "="" data-original-title="'.Text::_('COM_GACALEVENTS_NOTIF_EVENT').'"><i class="fas fa-mail-bulk" style="padding:5px;"></i></a> ';
-
-		$unpubURL = Route::_('index.php?option=com_gacalevents&task=event.publish&id=' . $event->id . '&state=' . (($event->state + 1) % 2), false, 2);
-		$unpubBtn = '<a class="btn btn-micro" href="'.$unpubURL.'"><i class="icon-info"></i></a>';
 
 		// Logic to work out what buttons to display
 		if ($event)
@@ -187,12 +230,15 @@ class GabuttonsHelper
 
             // setup the date to display
 			if ($event->depart_date == $event->return_date || $event->return_date == '0000-00-00 00:00:00' || \is_null($event->return_date) ) {
+                $depart_day = HTMLHelper::_('date', $event->depart_date, Text::_('COM_GACALEVENTS_DISPLAY_DATEDAY'));
                 $depart_date = HTMLHelper::_('date', $event->depart_date, Text::_('COM_GACALEVENTS_DISPLAY_DATE'));
-                $htmlBtn[] = '<div class="center">' . $depart_date . '</div>';
+                $htmlBtn[] = '<div class="center">' . $depart_day . '<br />' . $depart_date . '</div>';
 			} else {
+                $depart_day = HTMLHelper::_('date', $event->depart_date, Text::_('COM_GACALEVENTS_DISPLAY_DATEDAY'));
                 $depart_date = HTMLHelper::_('date', $event->depart_date, Text::_('COM_GACALEVENTS_DISPLAY_DATE'));
+                $return_day = HTMLHelper::_('date', $event->return_date, Text::_('COM_GACALEVENTS_DISPLAY_DATEDAY'));
                 $return_date = HTMLHelper::_('date', $event->return_date, Text::_('COM_GACALEVENTS_DISPLAY_DATE'));
-				$htmlBtn[] = '<div class="center">'.$depart_date.'<br /><br />'.$return_date.'</div>';
+				$htmlBtn[] = '<div class="center">' . $depart_day . '<br />' . $depart_date.'<br /><br />' . $return_day . '<br />' . $return_date.'</div>';
 			}
 		}
 
@@ -220,13 +266,8 @@ class GabuttonsHelper
 					} else {
 					 	$hl_style = '';
 					}
-					// identify if a partner included
-					if ($jointMship) {
-                        $mbr = GanamesHelper::breakdownNamesFromUserID($att->attendee, $profpartner);
-						$fullname = GanamesHelper::combineNames($mbr);
-					} else {
-                        $fullname = $att->pub_name;
-                    }
+
+                    $fullname = $att->pub_name;
                     // trim last & if it exists
                     $fullname = (substr($fullname,-1) != '&') ? $fullname : substr($fullname,0,-1);
 
@@ -269,32 +310,33 @@ class GabuttonsHelper
 					$htmlBtn[] = '<div class="center" style="width:98%;padding:10px;">'.$aplBtn.' &nbsp; &nbsp; &nbsp; '.$revBtn.'</div>';
 				} elseif ($attRecord->state == 0) {
 					if ($event->max_attend && $numberAtts >= $event->max_attend) {
-						// don't show attend button
+						// show delete attendance button
 						$htmlBtn[] = '<div class="center" style="width:98%;padding:10px;">'.Text::_('COM_GACALEVENTS_EVENT_FULL').'</div>';
 						$htmlBtn[] = '<div class="center" style="width:98%;padding:10px;">'.$revBtn.'</div>';
 					} else {
-						// apology so show attending button
+						// apology so show restore attendance & delete attendance buttons
 						$htmlBtn[] = '<div class="center" style="width:98%;padding:10px;">'.$resBtn.' &nbsp; &nbsp; &nbsp; '.$revBtn.'</div>';
 					}
 				} else {
 					if ($event->max_attend && $numberAtts >= $event->max_attend) {
-						// don't show attend button
+						// show apology button
 						$htmlBtn[] = '<div class="center" style="width:98%;padding:10px;">'.Text::_('COM_GACALEVENTS_EVENT_FULL').'</div>';
 						$htmlBtn[] = '<div class="center" style="width:98%;padding:10px;">'.$aplBtn.'</div>';
 					} else {
-						// TODO get modal working and use $htmlModal
-						// show both button
+						// show both attend and apology buttons
 						$htmlBtn[] = '<div class="center" style="width:98%;padding:10px;">'.$attBtn.' &nbsp; &nbsp; &nbsp; '.$aplBtn.'</div>';
+						//$htmlBtn[] = '<div class="center" style="width:98%;padding:10px;">' . $htmlModal . ' &nbsp; &nbsp; &nbsp; '.$aplBtn.'</div>';
 					}
 				}
 			} else {
 				if ($event->max_attend && $numberAtts >= $event->max_attend) {
-					// don't show attend button
+					// show apology button
 					$htmlBtn[] = '<div class="center" style="width:98%;padding:10px;">'.Text::_('COM_GACALEVENTS_EVENT_FULL').'</div>';
 					$htmlBtn[] = '<div class="center" style="width:98%;padding:10px;">'.$aplBtn.'</div>';
 				} else {
-					// show both button
+					// show both attend and apology buttons
 					$htmlBtn[] = '<div class="center" style="width:98%;padding:10px;">'.$attBtn.' &nbsp; &nbsp; &nbsp; '.$aplBtn.'</div>';
+					//$htmlBtn[] = '<div class="center" style="width:98%;padding:10px;">' . $htmlModal . ' &nbsp; &nbsp; &nbsp; '.$aplBtn.'</div>';
 				}
 			}
 
@@ -322,8 +364,11 @@ class GabuttonsHelper
 	            if ($dload_attend) {
 					$htmlBtn[] = '<div class="center" style="width:98%;padding:10px;">' . $dnlBtn . '</div>';
 				}
-	            if ($notif_attend) {
+	            if ($notif_attend && !$repeatEvent) {
 					$htmlBtn[] = '<div class="center" style="width:98%;padding:10px;">' . $htmlModalnotif . '</div>';
+				} elseif ($notif_attend && $repeatEvent) {
+					$htmlBtn[] = '<div class="center" style="width:98%;padding:10px;">';
+					$htmlBtn[] = $htmlModalnotif . ' &nbsp; &nbsp; ' . $dupBtn . '</div>';
 				}
 			}
 		}

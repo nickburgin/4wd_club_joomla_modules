@@ -51,7 +51,8 @@
 			hint="COM_GATRIPSYS_FORM_DESC_TRIP_NEWS_SUBJECT"/>
 
 	    <field name="news_detail" editor="|" buttons="true" filter="safehtml" type="editor"
-			label="COM_GATRIPSYS_FORM_LBL_TRIP_NEWS_DETAIL"
+			class="field-width98"
+            label="COM_GATRIPSYS_FORM_LBL_TRIP_NEWS_DETAIL"
 			description="COM_GATRIPSYS_FORM_DESC_TRIP_NEWS_DETAIL"
 			hint="COM_GATRIPSYS_FORM_LBL_TRIP_NEWS_DETAIL"/>
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,16 +12,16 @@ namespace GlennArkell\Component\Gacalevents\Administrator\Table;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\Registry\Registry;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Table\Table as Table;
-use \Joomla\CMS\Versioning\VersionableTableInterface;
-use \Joomla\Database\DatabaseDriver;
-use \Joomla\CMS\Filter\OutputFilter;
-use \Joomla\Filesystem\File;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Factory;
+use Joomla\Registry\Registry;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table as Table;
+use Joomla\CMS\Versioning\VersionableTableInterface;
+use Joomla\Database\DatabaseDriver;
+use Joomla\CMS\Filter\OutputFilter;
+use Joomla\Filesystem\File;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 
 /**
@@ -62,7 +62,7 @@ class EventTable extends Table implements VersionableTableInterface
 	 */
 	public function bind($array, $ignore = '')
 	{
-	    $user = GacaleventsHelper::getSpecificUser();
+	    $user = Factory::getApplication()->getIdentity();
 	    $date = Factory::getDate();
 		$task = Factory::getApplication()->input->get('task');
 	    

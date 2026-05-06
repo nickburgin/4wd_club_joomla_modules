@@ -1,8 +1,8 @@
 <?php
 /**
- * @package     com_gatripsys
+ * @package     pkg_gatripsys
  * @subpackage  mod_gatripsys
- * @version     4.0.1
+ * @version     5.2
  * @author      Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright   2021 Glenn Arkell
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -14,7 +14,10 @@ defined('_JEXEC') or die;
 use \Joomla\CMS\Factory;
 use \Joomla\CMS\Language\Text;
 use \Joomla\CMS\HTML\HTMLHelper;
-use \GlennArkell\Module\Gatripsys\Site\Helper\GatripsysHelper;
+
+$app = Factory::getApplication();
+$wa = $app->getDocument()->getWebAssetManager();
+$wa->registerAndUseStyle('mod_gatripsys', 'mod_gatripsys/default.css');
 
 $lang = Factory::getLanguage();
 $lang->load('com_gatripsys', JPATH_ADMINISTRATOR, 'en-GB', true);
@@ -71,7 +74,7 @@ $inclWhat = $params->get('incl_what', 0);
                     <?php endif ; ?>
 	            <?php endif ; ?>
 
-		        <?php foreach ($trips as $trip) : ?>
+		        <?php foreach ($items as $trip) : ?>
 			        <h5 class="trips"><?php echo $trip->title; ?></h5>
 			        <?php if ($disp_dates) : ?>
 						<?php $dept_date = HTMLHelper::date($trip->dept_date, Text::_($dateformat)); ?>

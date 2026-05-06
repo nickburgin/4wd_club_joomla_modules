@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.2.1
+ * @version    4.3.3
  * @package    com_gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -37,7 +37,7 @@ class ModifiedbyField extends \Joomla\CMS\Form\FormField
 	{
 		// Initialize variables.
 		$html   = array();
-		$user   = GabroadcastHelper::getSpecificUser();
+		$user   = Factory::getApplication()->getIdentity();
 		$html[] = '<input type="hidden" name="' . $this->name . '" value="' . $user->id . '" />';
 		if (!$this->hidden) {
 			$html[] = "<div>" . $user->name . " (" . $user->username . ")</div>";

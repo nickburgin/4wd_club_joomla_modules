@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+    <layout title="COM_GAFINANCE_TITLE_ITEM_VIEW_BUSASSET" option="View">
+        <message>
+            <![CDATA[COM_GAFINANCE_TITLE_ITEM_VIEW_BUSASSET_DESC]]>
+        </message>
+    </layout>
+</metadata>

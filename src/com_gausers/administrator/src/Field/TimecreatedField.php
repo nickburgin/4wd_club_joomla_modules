@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.6
+ * @version    6.0.0
  * @package    Com_Gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -11,10 +11,10 @@ namespace GlennArkell\Component\Gausers\Administrator\Field;
 
 defined('JPATH_BASE') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Form\FormField;
-use \Joomla\CMS\Date\Date;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Date\Date;
 
 /**
  * Supports an HTML select list of categories

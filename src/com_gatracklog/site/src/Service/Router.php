@@ -1,8 +1,9 @@
 <?php
 
 /**
- * @version    4.1.0
- * @package    com_gatracklog
+ * @version    4.2.0
+ * @package    pkg_mypackage
+ * @subpackage com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -13,18 +14,18 @@ namespace GlennArkell\Component\Gatracklog\Site\Service;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Component\Router\RouterViewConfiguration;
-use \Joomla\CMS\Component\Router\RouterView;
-use \Joomla\CMS\Component\Router\Rules\StandardRules;
-use \Joomla\CMS\Component\Router\Rules\NomenuRules;
-use \Joomla\CMS\Component\Router\Rules\MenuRules;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Categories\Categories;
-use \Joomla\CMS\Application\SiteApplication;
-use \Joomla\CMS\Categories\CategoryFactoryInterface;
-use \Joomla\CMS\Categories\CategoryInterface;
-use \Joomla\Database\DatabaseInterface;
-use \Joomla\CMS\Menu\AbstractMenu;
+use Joomla\CMS\Component\Router\RouterViewConfiguration;
+use Joomla\CMS\Component\Router\RouterView;
+use Joomla\CMS\Component\Router\Rules\StandardRules;
+use Joomla\CMS\Component\Router\Rules\NomenuRules;
+use Joomla\CMS\Component\Router\Rules\MenuRules;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Categories\Categories;
+use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Categories\CategoryFactoryInterface;
+use Joomla\CMS\Categories\CategoryInterface;
+use Joomla\Database\DatabaseInterface;
+use Joomla\CMS\Menu\AbstractMenu;
 use \GlennArkell\Component\Gatracklog\Administrator\Helper\GatracklogHelper;
 
 /**
@@ -37,14 +38,14 @@ class Router extends RouterView
 	/**
 	 * The category factory
 	 * @var CategoryFactoryInterface
-	 * @since  4.1.0
+	 * @since  4.0.0
 	 */
 	private $categoryFactory;
 
 	/**
 	 * The category cache
 	 * @var  array
-	 * @since  4.1.0
+	 * @since  4.0.0
 	 */
 	private $categoryCache = [];
 
@@ -60,8 +61,15 @@ class Router extends RouterView
 		$tracklogs = new RouterViewConfiguration('tracklogs');
 		$this->registerView($tracklogs);
 
+        $categories  = new RouterViewConfiguration('categories');
+        $categories->setKey('id');
+        $this->registerView($categories);
+        $category = new RouterViewConfiguration('category');
+        $category->setKey('id')->setParent($categories, 'rating');
+        $this->registerView($category);
+
 		$tracklog = new RouterViewConfiguration('tracklog');
-		$tracklog->setKey('id')->setParent($tracklogs, 'rating');
+		$tracklog->setKey('id')->setParent($category, 'rating');
 		$this->registerView($tracklog);
 
 		$tracklogform = new RouterViewConfiguration('tracklogform');
@@ -184,7 +192,7 @@ class Router extends RouterView
 	 * Method to get categories from cache
 	 * @param   array  $options   The options for retrieving categories
 	 * @return  CategoryInterface  The object containing categories
-	 * @since   4.1.0
+	 * @since   4.0.0
 	 */
 	private function getCategories(array $options = []): CategoryInterface
 	{

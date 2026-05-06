@@ -1,7 +1,8 @@
 <?php
 /**
- * @version    3.0.0
- * @package    Com_Gacalevents
+ * @version    3.3.1
+ * @package    pkg_gacalevents
+ * @subpackage com_gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,20 +13,21 @@ namespace GlennArkell\Component\Gacalevents\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\Data\DataObject;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\Filesystem\Path;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\User\UserFactoryInterface;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\Data\DataObject;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Installer\Installer;
+use Joomla\Filesystem\Path;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\User\UserFactoryInterface;
+use Joomla\Database\ParameterType;   //INTEGER, STRING, BOOLEAN, NULL, LARGE_OBJECT
 
 /**
  * Main helper.
@@ -61,6 +63,15 @@ class GacaleventsHelper
 	}
 
     /**
+     * Prints out a variable value in human readable format
+     */
+    public static function gaPrint($val, $key = 'Test'){
+        echo '<pre>'.$key.'<br />';
+        \print_r($val);
+        echo  '</pre>';
+    }
+
+    /**
      * Gets todays date based on global timezone settings
      */
     public static function getTodaysDate()
@@ -86,21 +97,38 @@ class GacaleventsHelper
 		return $user;
 	}
 
+    /**
+     * Load template over-rides when using modal view
+     * This is important for Cloud White template scheme
+     */
+    public static function loadTmplStyleModal($wa)
+	{
+        $tmpl = Factory::getApplication()->getTemplate(true);
+        if ($tmpl->params->get('colorName') == 'colors_white') {
+        	$wa->addInlineStyle('.btn-primary {background-color:'.$tmpl->params->get('btnPbgColor').' !important;}');
+        	$wa->addInlineStyle('.nav-link {color:var(--template-contrast) !important;}');
+        	$wa->addInlineStyle('.form-check-input:checked, .form-select[multiple] option:checked, [multiple].custom-select option:checked {background-color:'.$tmpl->params->get('btnPbgColor').' !important;}');
+        	$wa->addInlineStyle('.page-item.active .page-link {color: var(--rkic41site-color-link); background-color: #c1cee1 !important; border-color: #dfe3e7 !important;}');
+        	$wa->addInlineStyle('.form-select[multiple] option:checked, [multiple].custom-select option:checked {background-color: var(--rkic41site-color-primary-border) !important;}');
+        }
+		return true;
+	}
+
 	/**
 	 * Gets the record of an item
-	 * @param   int     $pk     The item's id
+	 * @param   int     $id     The item's id
 	 * @param   string  $table  The table's name
 	 * @param   string  $field  The field's name
 	 * @return  array  The files
 	 */
-	public static function getRecord($pk, $table, $field)
+	public static function getRecord($id, $table, $field)
 	{
 		$db = Factory::getContainer()->get('DatabaseDriver');
 		$query = $db->getQuery(true);
-		$query
-			->select($field)
-			->from($db->quotename($table))
-			->where('id = ' . (int) $pk);
+		$query->select($field)
+			->from($db->quoteName($table))
+			->where($db->quoteName('id') . ' = :id')
+            ->bind(':id', $id, ParameterType::INTEGER);
 		$db->setQuery($query);
 
 		return $db->loadObject();
@@ -125,7 +153,7 @@ class GacaleventsHelper
     public static function canUserEdit($item)
     {
         $permission = false;
-        $user       = self::getSpecificUser();
+        $user       = Factory::getApplication()->getIdentity();
 
         if ($user->authorise('core.edit', 'com_gacalevents')) {
             $permission = true;
@@ -151,10 +179,11 @@ class GacaleventsHelper
         $db		= Factory::getContainer()->get('DatabaseDriver');
 		$query	= $db->getQuery(true);
         $query->clear();
-		$query->select(' title ');
-		$query->from(' #__categories ');
-		$query->where(' id = '.(int) $id );
-		$db->setQuery((string)$query);
+		$query->select($db->quoteName('title'))
+    		->from($db->quoteName('#__categories'))
+    		->where($db->quoteName('id') . ' = :id')
+            ->bind(':id', $id, ParameterType::INTEGER);
+		$db->setQuery($query);
 
 	    try {
 	        return $db->loadResult();
@@ -178,15 +207,15 @@ class GacaleventsHelper
         $db		= Factory::getContainer()->get('DatabaseDriver');
 		$query	= $db->getQuery(true);
         $query->clear();
-		$query->select(' "0" as "value", " - Select '.$label.' - " as "text" UNION SELECT a.id as value, '.$field.' as text ');
-		$query->from( $table . ' AS a ' );
+		$query->select(' "0" as "value", " - Select '.$label.' - " as "text" UNION SELECT a.id as value, TRIM('.$field.') as text ')
+    		->from($db->quoteName($table, 'a'));
 		if ($table == '#__users') {
-			$query->where(' a.block = 0' );
+			$query->where($db->quoteName('a.block') . ' = 0' );
 		} else {
-			$query->where(' a.state = 1' );
+			$query->where($db->quoteName('a.state') . ' = 1' );
 		}
 		$query->order(' text ASC ' );
-		$db->setQuery((string)$query);
+		$db->setQuery($query);
 
 	    try {
 	        $options = $db->loadObjectList();
@@ -212,12 +241,13 @@ class GacaleventsHelper
         $db		= Factory::getContainer()->get('DatabaseDriver');
 		$query	= $db->getQuery(true);
         $query->clear();
-		$query->select(' "0" as "value", " - Select '.$label.' - " as "text" UNION SELECT a.id as value, a.'.$field.' as text ');
-		$query->from( ' #__categories AS a ' );
-		$query->where(' a.published = 1' );
-		$query->where(' a.extension = '.$db->quote($ext) );
-		$query->order(' text ASC ' );
-		$db->setQuery((string)$query);
+		$query->select(' "0" as "value", " - Select '.$label.' - " as "text" UNION SELECT a.id as value, a.'.$field.' as text ')
+    		->from($db->quoteName('#__categories', 'a'))
+    		->where($db->quoteName('a.published') . ' = 1')
+    		->where($db->quoteName('a.extension') . ' = :ext')
+    		->order(' text ASC ' )
+            ->bind(':ext', $ext, ParameterType::STRING);
+		$db->setQuery($query);
 
 	    try {
 	        $options = $db->loadObjectList();
@@ -241,12 +271,13 @@ class GacaleventsHelper
         $db		= Factory::getContainer()->get('DatabaseDriver');
 		$query	= $db->getQuery(true);
         $query->clear();
-		$query->select(" a.*, d.title as depart_point_name, c.title as cat_id_name, DATE_FORMAT(depart_date,'%D %M, %Y') AS ddate ");
-		$query->from( '#__gacalevents_events as a ' );
-		$query->join( 'LEFT', '#__categories as d ON d.id = a.depart_point' );
-		$query->join( 'LEFT', '#__categories as c ON c.id = a.cat_id' );
-		$query->where(' a.id = ' . (int) $id );
-		$db->setQuery((string)$query);
+		$query->select(" a.*, d.title as depart_point_name, c.title as cat_id_name, DATE_FORMAT(depart_date,'%D %M, %Y') AS ddate ")
+    		->from($db->quoteName('#__gacalevents_events', 'a'))
+    		->join( 'LEFT', $db->quoteName('#__categories', 'd') . ' ON ' . $db->quoteName('d.id') . ' = ' . $db->quoteName('a.depart_point'))
+    		->join( 'LEFT', $db->quoteName('#__categories', 'c') . ' ON ' . $db->quoteName('c.id') . ' = ' . $db->quoteName('a.cat_id'))
+    		->where($db->quoteName('a.id') . ' = :id')
+            ->bind(':id', $id, ParameterType::INTEGER);
+		$db->setQuery($query);
 
 	    try {
 	        return $db->loadObject();
@@ -275,18 +306,19 @@ class GacaleventsHelper
         $db		= Factory::getContainer()->get('DatabaseDriver');
 		$query	= $db->getQuery(true);
         $query->clear();
-		$query->select(' a.*, b.name AS attendee_name, b.email AS attendee_email ');
-		$query->select(' p.profile_value AS partner_name, e.profile_value AS partner_email ');
-		$query->select(' IF(i.profile_value IS NOT NULL, i.profile_value, 0) AS inc_altemail ');
-		$query->from( '#__gacalevents_attendees a ' );
-		$query->join( 'LEFT', '#__users as b ON b.id = a.attendee' );
-		$query->join( 'LEFT', '#__user_profiles as p ON p.user_id = a.attendee AND p.profile_key = '.$db->quote($key.'partner') );
-		$query->join( 'LEFT', '#__user_profiles as e ON e.user_id = a.attendee AND e.profile_key = '.$db->quote($key.'altemail') );
-		$query->join( 'LEFT', '#__user_profiles as i ON i.user_id = a.attendee AND i.profile_key = '.$db->quote($key.'inc_altemail') );
-		$query->where(' a.event = ' . (int) $id );
-		$query->where(' a.state IN (0, 1) ' );
-		$query->order(' a.pub_name ASC, b.name ASC, a.pub_sname ASC, a.pub_fname ASC ' );
-		$db->setQuery((string)$query);
+		$query->select(' a.*, b.name AS attendee_name, b.email AS attendee_email ')
+    		->select(' p.profile_value AS partner_name, e.profile_value AS partner_email ')
+    		->select(' IF(i.profile_value IS NOT NULL, i.profile_value, 0) AS inc_altemail ')
+    		->from($db->quoteName('#__gacalevents_attendees', 'a'))
+    		->join( 'LEFT', '#__users as b ON b.id = a.attendee' )
+    		->join( 'LEFT', '#__user_profiles as p ON p.user_id = a.attendee AND p.profile_key = '.$db->quote($key.'partner'))
+    		->join( 'LEFT', '#__user_profiles as e ON e.user_id = a.attendee AND e.profile_key = '.$db->quote($key.'altemail'))
+    		->join( 'LEFT', '#__user_profiles as i ON i.user_id = a.attendee AND i.profile_key = '.$db->quote($key.'inc_altemail'))
+    		->where($db->quoteName('a.event') . ' = :id' )
+    		->where($db->quoteName('a.state') . ' IN (0, 1)')
+    		->order('a.pub_name ASC, b.name ASC, a.pub_sname ASC, a.pub_fname ASC ' )
+            ->bind(':id', $id, ParameterType::INTEGER);
+		$db->setQuery($query);
 
 	    try {
 	        return $db->loadObjectList();
@@ -313,12 +345,14 @@ class GacaleventsHelper
         $db		= Factory::getContainer()->get('DatabaseDriver');
 		$query	= $db->getQuery(true);
         $query->clear();
-		$query->select(' a.* ');
-		$query->from( '#__gacalevents_attendees a ' );
-		$query->where(' a.event = ' . (int) $id );
-		$query->where(' a.attendee = ' . (int) $userid );
-		$query->where(' a.state IN (0, 1) ' );
-		$db->setQuery((string)$query);
+		$query->select(' a.* ')
+    		->from($db->quoteName('#__gacalevents_attendees', 'a'))
+    		->where($db->quoteName('a.event') . ' = :id' )
+    		->where($db->quoteName('a.attendee') . ' = :userid' )
+    		->where($db->quoteName('a.state') . ' IN (0, 1)' )
+            ->bind(':id', $id, ParameterType::INTEGER)
+            ->bind(':userid', $userid, ParameterType::INTEGER);
+		$db->setQuery($query);
 
 	    try {
 	        return $db->loadObject();
@@ -345,12 +379,12 @@ class GacaleventsHelper
         $db		= Factory::getContainer()->get('DatabaseDriver');
 		$query	= $db->getQuery(true);
         $query->clear();
-		$query->select(' DISTINCT(substr(a.profile_key,'.($keyLen + 1).')) ');
-		$query->from( '#__user_profiles AS a ' );
-		$query->where(' substr(a.profile_key,1,'.$keyLen.') = '.$db->quote($key) );
-		$query->group(' a.profile_key ' );
-		$query->order('  substr(a.profile_key,'.($keyLen + 1).') ASC ' );
-		$db->setQuery((string)$query);
+		$query->select(' DISTINCT(substr(a.profile_key,'.($keyLen + 1).')) ')
+    		->from($db->quoteName('#__user_profiles', 'a'))
+    		->where(' substr(a.profile_key,1,'.$keyLen.') = '.$db->quote($key))
+    		->group($db->quoteName('a.profile_key'))
+    		->order(' substr(a.profile_key,'.($keyLen + 1).') ASC ' );
+		$db->setQuery($query);
 
 	    try {
 	        $options = $db->loadColumn();

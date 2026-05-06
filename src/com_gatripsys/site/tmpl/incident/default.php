@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    Com_Gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -9,24 +9,39 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 
 //Load admin language file
-$lang = Factory::getApplication()->getLanguage();
-$lang->load('com_gatripsys', JPATH_ADMINISTRATOR);
+//$lang = Factory::getApplication()->getLanguage();
+//$lang->load('com_gatripsys', JPATH_ADMINISTRATOR);
+$lang = Factory::getLanguage();
+$lang->load('com_gatripsys', JPATH_ADMINISTRATOR, 'en-GB', true);
 
 $canEdit = GatripsysHelper::getSpecificUser()->authorise('core.edit', 'com_gatripsys');
 if (!$canEdit && GatripsysHelper::getSpecificUser()->authorise('core.edit.own', 'com_gatripsys')) {
 	$canEdit = GatripsysHelper::getSpecificUser()->id == $this->item->created_by;
 }
 
+// find the file type for displaying
+$dispFile = '';
+$imgs = array('jpg', 'jpeg', 'png', 'gif');
+if (isset($this->item->inc_img) && $this->item->inc_img > '') {
+    $file = \pathinfo($this->item->inc_img);
+    $src =  $file['dirname'] . '/' . $file['basename'];
+    if (in_array($file['extension'], $imgs)) {
+        // show image
+        $dispFile = '<img src="'.$src.'" title="'.$file['filename'].'" />';
+    } elseif ($file['extension'] == 'pdf') {
+        // show pdf
+        $dispFile = '<iframe width="100%" height="300" style="border: 1px solid black;" src="'.$src.'" allowfullscreen></iframe>';
+    }
+}
+
 /*
-echo '<pre>Test<br />';
-print_r($this->item);
-echo '</pre>';
+echo  GatripsysHelper::gaPrint($file);
 */
 ?>
 <?php if ($this->item) : ?>
@@ -92,6 +107,10 @@ echo '</pre>';
 			<tr>
 				<th><?php echo Text::_('COM_GATRIPSYS_FORM_LBL_COMMENT'); ?></th>
 				<td><?php echo $this->item->comment; ?></td>
+			</tr>
+			<tr>
+				<th style="vertical-align:top;"><?php echo Text::_('COM_GATRIPSYS_FORM_LBL_INCIDENT_INC_IMG'); ?></th>
+				<td><?php echo '<p class="center">'.$dispFile.'</p><p class="center small">'.$src.'</p>'; ?></td>
 			</tr>
 
 		</table>

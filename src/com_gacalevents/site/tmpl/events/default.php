@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -9,35 +9,43 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\LayoutHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GanamesHelper;
+use \GlennArkell\Component\Gacalevents\Administrator\Helper\GamodalHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GabuttonsHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacommunicationsHelper;
 
 // load any assets required
 $wa = $this->document->getWebAssetManager()
+    ->useScript('joomla.dialog')
+    ->useScript('joomla.dialog-autocreate')
     ->usePreset('com_gacalevents.gacaleventspreset');
-
-// Load admin language file
-$lang = Factory::getApplication()->getLanguage();
-$lang->load('com_gacalevents', JPATH_ADMINISTRATOR);
+//    ->useScript('bootstrap.modal')
 
 $app  = Factory::getApplication();
-$user       = GacaleventsHelper::getSpecificUser();
+// Load admin language file
+$app->getLanguage()->load('com_gacalevents', JPATH_ADMINISTRATOR);
+
+$user = $app->getIdentity();
 $listOrder  = $this->state->get('list.ordering', 'a.depart_date');
 $listDirn   = $this->state->get('list.direction', 'ASC');
+
+// Authorities
 $canCreate  = $user->authorise('core.create', 'com_gacalevents');
 $canEdit    = $user->authorise('core.edit', 'com_gacalevents');
 $canCheckin = $user->authorise('core.manage', 'com_gacalevents');
 $canChange  = $user->authorise('core.edit.state', 'com_gacalevents');
 $canDelete  = $user->authorise('core.delete', 'com_gacalevents');
 $canSocial  = $user->authorise('core.social', 'com_gacalevents');
+$authid = $this->params->get('authorised_id', 0);
+if (is_array($authid) && in_array($user->id, $authid)) {$apprvuser = true; } else { $apprvuser = false; }
+$apprvuser = !$apprvuser & $canSocial ? true : $apprvuser;
 
 $prevmonth = "";
 $bgcolour = "";
@@ -49,29 +57,24 @@ $htx_colour = $this->params->get('htx_colour', null);
 $contactlabel = $this->params->get('contact_label', null);
 $locationlabel = $this->params->get('location_label', null);
 $event_email = $this->params->get('event_email', null);
-$header_text = $this->params->get('header_text', null);
+$header_text = $this->params->get('header_text', '');
 $header_text = str_replace(["\r\n", "\r", "\n"], "</p><p>", $header_text);
-$header_text2 = $this->params->get('header_text2', null);
+$header_text2 = $this->params->get('header_text2', '');
 $header_text2 = str_replace(["\r\n", "\r", "\n"], "</p><p>", $header_text2);
 
 $show_editor = $this->params->get('show_editor', 0);
 $editor_gp = $this->params->get('editor_gp', 0);
 //$showEditorBtn = in_array($editor_gp, $user->groups);
-$authid = $this->params->get('authorised_id', 0);
-if (is_array($authid) && in_array($user->id, $authid)) {$apprvuser = true; } else { $apprvuser = false; }
 
-$nuLink = GacaleventsHelper::getHTTPQuery(null, 'task', 'eventform.edit', 'id', 0);
-$nuURL = 'index.php?'.http_build_query($nuLink, '', '&amp;');
-$edLink = GacaleventsHelper::getHTTPQuery(null, 'view', 'events', null, null);
-$edLink = GacaleventsHelper::getHTTPQuery($edLink, null, null, 'layout', 'showeditor');
+//$nuLink = GamodalHelper::getHTTPQuery(null, 'task', 'eventform.edit', 'id', 0);
+//$nuURL = 'index.php?'.http_build_query($nuLink, '', '&amp;');
+$nuURL = GamodalHelper::setupLink('task', 'eventform.edit', 'id', 0, null);
+$edLink = GamodalHelper::getHTTPQuery(null, 'view', 'events', null, null);
+$edLink = GamodalHelper::getHTTPQuery($edLink, null, null, 'layout', 'showeditor');
 $edURL = 'index.php?'.http_build_query($edLink, '', '&amp;');
 
-/*
-$profile_suffix = $this->params->get('profile_suffix', null);
-$mbr = GanamesHelper::breakdownNamesFromUserID(577, $profile_suffix);
-$fullname = GanamesHelper::combineNames($mbr);
-echo '<pre>'; print_r($mbr); echo '</pre>';
-*/
+//GacaleventsHelper::gaPrint(Factory::getApplication()->getUserState('com_gacalevents.test.data'), '');
+
 ?>
 
 <h2><?php echo Text::_('COM_GACALEVENTS_TITLE_EVENTS'); ?></h2>
@@ -104,14 +107,12 @@ echo '<pre>'; print_r($mbr); echo '</pre>';
                 $all_attending = GacaleventsHelper::getAttendees($eventitem->id);
  				$dispButtons = GabuttonsHelper::buildButtons($eventitem, $all_attending, $user, $apprvuser, $this->params);
 
-                //$attRec = GacaleventsHelper::checkAttendee($eventitem->id, $user->id);
-                //echo '<pre>'; print_r($testname); echo '</pre>';
 				$attendList  = $app->getUserState('com_gacalevents.attendancenames.data');
 				$app->setUserState('com_gacalevents.attendancenames.data', null);
 				$apologyList  = $app->getUserState('com_gacalevents.apologynames.data');
 				$app->setUserState('com_gacalevents.apologynames.data', null);
-                $app->setUserState('com_gacalevents.edit.attendee.event_id', null);
-                $app->setUserState('com_gacalevents.edit.attendee.attendee', null);
+                //$app->setUserState('com_gacalevents.edit.attendee.event_id', null);
+                //$app->setUserState('com_gacalevents.edit.attendee.attendee', null);
             ?>
 
 			<?php if ($eventitem->depart_month === $prevmonth): ?>
@@ -120,7 +121,8 @@ echo '<pre>'; print_r($mbr); echo '</pre>';
 						<?php echo $dispButtons; ?>
 					</td>
 					<td class="eventnone">
-						<p><strong><?php echo $eventitem->title; ?></strong></p>
+
+                        <p><strong><?php echo $eventitem->title; ?></strong></p>
 							<?php if ($eventitem->leader != ""): ?>
 						<?php endif; ?>
 						<?php if ($eventitem->depart_point): ?>

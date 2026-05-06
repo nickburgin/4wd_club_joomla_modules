@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -9,17 +9,17 @@
 // no direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\Session\SessionInterface;
-use \Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\Session\SessionInterface;
+use Joomla\CMS\Application\SiteApplication;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 
 //Load admin language file
-$lang = Factory::getLanguage();
+$lang = Factory::getApplication()->getLanguage();
 $lang->load('com_gausers', JPATH_ADMINISTRATOR);
 
 // load any assets required
@@ -33,12 +33,13 @@ $user = GausersHelper::getSpecificUser($this->item->user_id);
 $this->item->pay_type = $this->params->get('def_pay_type',0);
 
 // get the current date-time based on timezone
-$date  = GausersHelper::getTodaysDate();
-$today = date_format($date,'Y-m-d H:i:s');
+$date  = Factory::getDate();
+$today = date_format($date,'Y-m-d');
 $this->form->setFieldAttribute('id', 'type', 'hidden');
 $this->form->setFieldAttribute('user_id', 'type', 'hidden');
 $this->form->setFieldAttribute('user_name', 'default', $user->name);
 $this->form->setFieldAttribute('user_name', 'type', 'hidden');
+$this->form->setFieldAttribute('paid_date', 'default', $today);
 
 ?>
 <div class="edit item-page">
@@ -47,7 +48,7 @@ $this->form->setFieldAttribute('user_name', 'type', 'hidden');
 	method="post" class="form-validate form-horizontal" enctype="multipart/form-data" target="_parent">
 
 <h3>Mark Invoice as Paid for <?php echo $user->name; ?></h3>
-<p>&nbsp;</p>
+
     <div class="row-fluid">
         <div class="span12 form-horizontal">
         

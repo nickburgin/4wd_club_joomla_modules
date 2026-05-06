@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -13,12 +13,12 @@ namespace GlennArkell\Component\Gacalevents\Site\View\Attendeeform;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\MVC\View\GenericDataException;
+use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\MVC\View\GenericDataException;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 
 /**
@@ -46,7 +46,7 @@ class HtmlView extends BaseHtmlView
 	public function display($tpl = null)
 	{
 		$app  = Factory::getApplication();
-		$user = GacaleventsHelper::getSpecificUser();
+		$user = $app->getIdentity();
 
 		$this->state   = $this->get('State');
 		$this->item    = $this->get('Item');
@@ -60,7 +60,9 @@ class HtmlView extends BaseHtmlView
 			throw new GenericDataException(implode("\n", $errors), 500);
 		}
 
-		
+		if ($this->_layout == 'modalattend') {
+            //$this->item->passed_event_id = $app->input->get('event_id');
+        }        
 
 		$this->_prepareDocument();
 

@@ -1,10 +1,10 @@
 <?php
 /**
- * @version    4.0.7
- * @package    Com_Gamerchandise
- * @author     Glenn Arkell <glenn@glennarkell.com.au>
- * @copyright  2021 Glenn Arkell
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @version     4.1.2
+ * @package     com_gamerchandise
+ * @copyright   Copyright (C) 2013. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Glenn Arkell <glenn@glennarkell.com.au> - http://www.glennarkell.com.au
  */
 
 namespace GlennArkell\Component\Gamerchandise\Administrator\Field;
@@ -13,15 +13,18 @@ defined('JPATH_BASE') or die;
 
 use \Joomla\CMS\Factory;
 use \Joomla\CMS\Form\FormField;
+use \GlennArkell\Component\Gamerchandise\Administrator\Helper\GamerchandiseHelper;
 
 /**
  * Supports an HTML select list of categories
+ *
  * @since  1.6
  */
 class CreatedbyField extends FormField
 {
 	/**
 	 * The form field type.
+	 *
 	 * @var        string
 	 * @since    1.6
 	 */
@@ -29,6 +32,7 @@ class CreatedbyField extends FormField
 
 	/**
 	 * Method to get the field input markup.
+	 *
 	 * @return    string    The field input markup.
 	 *
 	 * @since    1.6
@@ -47,7 +51,7 @@ class CreatedbyField extends FormField
 		}
 		else
 		{
-			$user   = Factory::getUser();
+			$user   = GamerchandiseHelper::getSpecificUser();
 			$html[] = '<input type="hidden" name="' . $this->name . '" value="' . $user->id . '" />';
 		}
 

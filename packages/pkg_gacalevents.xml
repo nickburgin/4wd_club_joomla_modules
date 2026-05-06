@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" method="upgrade">
+    <name>Calendar Events Package</name>
+    <packagename>gacalevents</packagename>
+    <version>4.1</version>
+    <creationDate>2024</creationDate>
+    <copyright>Glenn Arkell</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Glenn Arkell</author>
+    <authorEmail>glenn@glennarkell.com.au</authorEmail>
+    <packager>Nick Burgin</packager>
+    <description>Calendar Events Package - includes component and module</description>
+
+    <files folder="packages">
+        <file type="component" id="com_gacalevents">com_gacalevents-3.3.1.zip</file>
+        <file type="module" id="gacalevents" client="site">mod_gacalevents-5.3.zip</file>
+    </files>
+
+    <blockChildUninstall>true</blockChildUninstall>
+</extension>

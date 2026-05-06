@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    5.1.6
+ * @version    6.0.0
  * @package    Com_Gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
@@ -11,19 +11,19 @@
 
 defined('JPATH_BASE') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Session\Session;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Plugin\PluginHelper;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GaauditHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GainvoiceHelper;
 
 //Load admin language file
-$lang = Factory::getLanguage();
+$lang = Factory::getApplication()->getLanguage();
 $lang->load('com_gausers', JPATH_ADMINISTRATOR);
 
 $data = $displayData;
@@ -39,7 +39,7 @@ $ignorStdArray = $data['view']->ignorStdArray;
 
 // data['view'] is the user id of member viewing the form
 $user = $data['view']->user;
-$today = GausersHelper::getTodaysDate();
+$today = Factory::getDate();
 
 $localProfile = $params->get( 'profile_suffix', 'b4wdc' );
 $incl_partner = $params->get( 'incl_partner', 0);

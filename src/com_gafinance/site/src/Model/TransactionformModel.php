@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.2.3
  * @package    Com_Gafinance
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -11,17 +11,17 @@ namespace GlennArkell\Component\Gafinance\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\MVC\Model\FormModel;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\Filesystem\Path;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\MVC\Model\FormModel;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\Path;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Component\ComponentHelper;
 use \GlennArkell\Component\Gafinance\Administrator\Helper\GafinanceHelper;
 use \GlennArkell\Component\Gafinance\Administrator\Helper\GareportsHelper;
 use \GlennArkell\Component\Gafinance\Administrator\Helper\GaauditHelper;
@@ -89,7 +89,7 @@ class TransactionformModel extends FormModel
                 $user = GafinanceHelper::getSpecificUser();
                 $id   = $table->id;
 
-                $canEdit = $user->authorise('core.edit', 'com_gafinance') || $user->authorise('core.create', 'com_gafinance');
+                $canEdit = $user->authorise('core.edit', 'com_gafinance') || $user->authorise('core.create', 'com_gafinance') || $user->authorise('core.treasury', 'com_gafinance');
 
                 if (!$canEdit && $user->authorise('core.edit.own', 'com_gafinance')) {
                         $canEdit = $user->id == $table->created_by;
@@ -294,10 +294,13 @@ class TransactionformModel extends FormModel
 
         if ($id) {
             // Check the user can edit this item
-            $authorised = $user->authorise('core.edit', 'com_gafinance') || $authorised = $user->authorise('core.edit.own', 'com_gafinance');
+            $authorised = $user->authorise('core.edit', 'com_gafinance') ||
+            $authorised = $user->authorise('core.edit.own', 'com_gafinance') ||
+            $authorised = $user->authorise('core.treasury', 'com_gafinance');
         } else {
             // Check the user can create new items in this section
-            $authorised = $user->authorise('core.create', 'com_gafinance');
+            $authorised = $user->authorise('core.create', 'com_gafinance') ||
+            $authorised = $user->authorise('core.treasury', 'com_gafinance');
         }
 
         if ($authorised !== true) {
@@ -374,7 +377,7 @@ class TransactionformModel extends FormModel
             throw new \Exception(Text::_('COM_GAFINANCE_ITEM_DOESNT_EXIST'), 404);
         }
 
-        if ($user->authorise('core.delete', 'com_gafinance') !== true) {
+        if ($user->authorise('core.treasury', 'com_gafinance') !== true) {
             throw new \Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
         }
 
@@ -399,6 +402,17 @@ class TransactionformModel extends FormModel
         return $table !== false;
     }
     
+	/**
+	 * Checks if a given date is valid and in a specified format (YYYY-MM-DD)
+	 * @param   string  $date  Date to be checked
+	 * @return bool
+	 */
+	public function isValidDate($date)
+	{
+		$date = \str_replace('/', '-', $date);
+		return (\date_create($date)) ? Factory::getDate($date)->format("Y-m-d") : null;
+	}
+
     /**
      * Method to upload an attachment
      */
@@ -449,25 +463,30 @@ class TransactionformModel extends FormModel
         $lang = Factory::getLanguage();
         $lang->load('com_gafinance', JPATH_ADMINISTRATOR);
 		// get the current date
-		$jdate = new Date();      // system date NOT user timezone adjusted date
-		$default_sdate = $jdate->format('Y-m-01 00:00:00');
-		$default_edate = $jdate->format('Y-m-t 23:59:59');
+		$date  = Factory::getDate();
+		//$jdate = new DateTime();      // system date NOT user timezone adjusted date
+		//$default_sdate = $jdate->format('Y-m-01 00:00:00');
+		//$default_edate = $jdate->format('Y-m-t 23:59:59');
+		//$default_sdate = $jdate->format('Y-m-01');
+		//$default_edate = $jdate->format('Y-m-t');
+		$default_sdate = date_format($date,'Y-m-1');
+		$default_edate = date_format($date,'Y-m-t');
         $data['rpt_accnt'] = $data['accnt_id'];
-        
-		if ($data['start_date'] == "") {
-	        $data['req_dtfr_disp'] = HTMLHelper::date($default_sdate, Text::_('COM_GAFINANCE_DISPLAY_DATE'));
+
+		if (!isset($data['start_date']) || empty($data['start_date']) || $data['start_date'] == "") {
+	        $data['req_dtfr_disp'] = HTMLHelper::date($default_sdate, Text::_('COM_GAFINANCE_DISPLAY_DATE'), 'UTC');
 			$data['start_date'] = $default_sdate;
 		} else {
-	        $data['req_dtfr_disp'] = HTMLHelper::date($data['start_date'], Text::_('COM_GAFINANCE_DISPLAY_DATE'));   // user timezone adjusted date
-			$data['start_date'] = $data['start_date']." 00:00:00";
+	        $data['req_dtfr_disp'] = HTMLHelper::date($data['start_date'], Text::_('COM_GAFINANCE_DISPLAY_DATE'), 'UTC');
+			//$data['start_date'] = $data['start_date']." 00:00:00";
 		}
 
-		if ($data['end_date'] == "") {
-			$data['req_dtto_disp'] = HTMLHelper::date($default_edate, Text::_('COM_GAFINANCE_DISPLAY_DATE'));   // user timezone adjusted date
+		if (!isset($data['end_date']) || empty($data['end_date']) || $data['end_date'] == "") {
+			$data['req_dtto_disp'] = HTMLHelper::date($default_edate, Text::_('COM_GAFINANCE_DISPLAY_DATE'), 'UTC');
 			$data['end_date'] = $default_edate;
 		} else {
-			$data['req_dtto_disp'] = HTMLHelper::date($data['end_date'], Text::_('COM_GAFINANCE_DISPLAY_DATE'));   // user timezone adjusted date
-			$data['end_date'] = $data['end_date']." 23:59:59";
+			$data['req_dtto_disp'] = HTMLHelper::date($data['end_date'], Text::_('COM_GAFINANCE_DISPLAY_DATE'), 'UTC');
+			//$data['end_date'] = $data['end_date']." 23:59:59";
 		}
 
 		return $data;

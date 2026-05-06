@@ -1,5 +1,5 @@
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   2021 Glenn Arkell
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -39,6 +39,23 @@
 
 .front-end-edit .controls {
     margin-left: 195px;
+}
+
+@media (max-width: 480px) {
+    .modal-dialog.jviewport-width40 {
+        width: 95vw !important;
+    }
+    .front-end-edit label {
+        margin-right: 5px;
+        display: block;
+        float: left;
+        text-align: left;
+        width: 120px !important;
+    }
+    
+    .front-end-edit .controls {
+        margin-left: 15px !important;
+    }
 }
 
 #access-rules a:hover{

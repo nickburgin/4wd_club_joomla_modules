@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    4.2.1
+ * @version    4.3.3
  * @package    Com_Gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
@@ -39,7 +39,7 @@ class UsernewModel extends ItemModel
 	protected function populateState()
 	{
 		$app  = Factory::getApplication('com_gabroadcast');
-		$user = GabroadcastHelper::getSpecificUser();
+		$user = $app->getIdentity();
 
 		// Check published state
 		if ((!$user->authorise('core.edit.state', 'com_gabroadcast')) && (!$user->authorise('core.edit', 'com_gabroadcast')))
@@ -49,12 +49,12 @@ class UsernewModel extends ItemModel
 		}
 
 		// Load state from the request userState on edit or from the passed variable on default
-		if (Factory::getApplication()->input->get('layout') == 'edit')
+		if ($app->input->get('layout') == 'edit')
 		{
-			$id = Factory::getApplication()->getUserState('com_gabroadcast.edit.usernew.id');
+			$id = $app->getUserState('com_gabroadcast.edit.usernew.id');
 		} else {
-			$id = Factory::getApplication()->input->get('id');
-			Factory::getApplication()->setUserState('com_gabroadcast.edit.usernew.id', $id);
+			$id = $app->input->get('id');
+			$app->setUserState('com_gabroadcast.edit.usernew.id', $id);
 		}
 
 		$this->setState('usernew.id', $id);
@@ -98,9 +98,9 @@ class UsernewModel extends ItemModel
                         }
                     }
 
-                    // Convert the JTable to a clean JObject.
+                    // Convert the Table to a clean Object.
                     $properties  = $table->getProperties(1);
-                    $this->_item = ArrayHelper::toObject($properties, 'JObject');
+                    $this->_item = ArrayHelper::toObject($properties, 'stdClass');
 
                 }
             }
@@ -121,11 +121,11 @@ class UsernewModel extends ItemModel
         }
 
 	/**
-	 * Get an instance of JTable class
-	 * @param   string $type   Name of the JTable class to get an instance of.
+	 * Get an instance of Table class
+	 * @param   string $type   Name of the Table class to get an instance of.
 	 * @param   string $prefix Prefix for the table class name. Optional.
-	 * @param   array  $config Array of configuration values for the JTable object. Optional.
-	 * @return  JTable|bool JTable if success, false on failure.
+	 * @param   array  $config Array of configuration values for the Table object. Optional.
+	 * @return  Table|bool Table if success, false on failure.
 	 */
 	public function getTable($type = 'Usernew', $prefix = 'Administrator', $config = array())
 	{
@@ -195,7 +195,7 @@ class UsernewModel extends ItemModel
 			$table = $this->getTable();
 
 			// Get the current user object.
-			$user = GabroadcastHelper::getSpecificUser();
+			$user = Factory::getApplication()->getIdentity();
 
 			// Attempt to check the row out.
 			if (method_exists($table, 'checkout')) {
@@ -253,7 +253,7 @@ class UsernewModel extends ItemModel
 		if ($sent !== true) {
 			return false;
 		} else {
-			$today = GabroadcastHelper::getTodaysDate();
+			$today = Factory::getDate()->toSql();
 			$table = $this->getTable();
 			$table->load($id);
 			//$table->state = 6;

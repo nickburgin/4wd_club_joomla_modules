@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.2.3
  * @package    Com_Gafinance
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -9,12 +9,12 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\LayoutHelper;
 use \GlennArkell\Component\Gafinance\Administrator\Helper\GafinanceHelper;
 
 // load any assets required
@@ -209,7 +209,7 @@ print_r($this->pagination->getRowOffset(10));
         <p class="small center"><span style="color:red;">Note:</span> Items in red indicate cheques unpresented and items in green are funds to be banked.</p>
 
     </div>
-	<?php if ($canCreate) : ?>
+	<?php if ($canCreate || $canTreasurer) : ?>
 		<a href="<?php echo Route::_($createURL); ?>" class="btn btn-success btn-small">
             <i class="icon-plus"></i> <?php echo Text::_('COM_GAFINANCE_ADD_ITEM'); ?>
         </a>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.6
+ * @version    6.0.0
  * @package    Com_Gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2017 Glenn Arkell
@@ -12,7 +12,7 @@ namespace GlennArkell\Component\Gausers\Administrator\Controller;
 // No direct access
 \defined('_JEXEC') or die;
 
-use \Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\MVC\Controller\FormController;
 
 /**
  * Audit controller class.

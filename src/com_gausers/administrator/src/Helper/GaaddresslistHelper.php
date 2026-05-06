@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -11,14 +11,14 @@ namespace GlennArkell\Component\Gausers\Administrator\Helper;
 
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Access\Access;
-use \Joomla\Filesystem\Path;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Access\Access;
+use Joomla\Filesystem\Path;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\CMS\HTML\HTMLHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GaemailHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GanamesHelper;
@@ -79,7 +79,7 @@ class GaaddresslistHelper
 
         if ($emaillist) {
             // get user and email
-            $user = GausersHelper::getSpecificUser();
+            $user = Factory::getApplication()->getIdentity();
             $sentOK = GaemailHelper::sendEmail(array($user->email), "Attached is the address list.", "Address List", $addressList, false, false);
         }
 
@@ -101,7 +101,7 @@ class GaaddresslistHelper
 
     public static function createPDF($members)
 	{
-		$date = GausersHelper::getTodaysDate();
+		$date = Factory::getDate();
 		$today = date_format($date,'Y-m-d H:i:s');
 
         $pdf = new GaaddlistpdfHelper("P","mm","A4");

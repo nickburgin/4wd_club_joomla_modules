@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.0
+ * @version     5.2.3
  * @package     com_gafinance
  * @copyright   Copyright (C) 2012. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -11,14 +11,14 @@
 // no direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Layout\LayoutHelper;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
 use \GlennArkell\Component\Gafinance\Administrator\Helper\GafinanceHelper;
 
 // load any assets required
@@ -35,6 +35,25 @@ $app = Factory::getApplication();
 $app->setUserState('com_gafinance.currentassetvalue.data', null);
 $app->setUserState('com_gafinance.rptprint.data', null);
 $combine_accnts = $this->params->get('combine_accnts', 0);
+$combine_rpt = $this->params->get('combine_rpt', 0);
+$accnts = $this->params->get('select_accnts');
+$cntr = \count($accnts);
+
+if ($combine_accnts) {
+    if ($cntr === 1) {
+        // if only one account selected, just report that
+        $this->form->setFieldAttribute('accnt_id', 'default', $accnts[0]);
+    } else {
+        $this->form->setFieldAttribute('accnt_id', 'default', 0);
+    }
+    $this->form->setFieldAttribute('accnt_id', 'type', 'hidden');
+}
+
+/*
+echo '<pre>Test<br />';
+print_r($cntr);
+echo '</pre>';
+*/
 
 ?>
 <div class="page-header">
@@ -53,9 +72,7 @@ $combine_accnts = $this->params->get('combine_accnts', 0);
 					<div class="span10 form-horizontal">
 						<fieldset name="rptreq" class="adminform">
 							<?php echo $this->form->renderFieldset('rptreq'); ?>
-							<?php if (!$combine_accnts) : ?>
-								<?php echo $this->form->renderField('accnt_id'); ?>
-							<?php endif; ?>
+							<?php echo $this->form->renderField('accnt_id'); ?>
 						</fieldset>
 					</div>
 				</div>

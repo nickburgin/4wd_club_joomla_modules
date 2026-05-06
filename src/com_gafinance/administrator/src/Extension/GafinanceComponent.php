@@ -9,8 +9,6 @@
 
 namespace GlennArkell\Component\Gafinance\Administrator\Extension;
 
-defined('JPATH_PLATFORM') or die;
-
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Association\AssociationServiceInterface;
 use Joomla\CMS\Association\AssociationServiceTrait;
@@ -22,6 +20,8 @@ use Joomla\CMS\Extension\MVCComponent;
 use Joomla\CMS\HTML\HTMLRegistryAwareTrait;
 use Joomla\CMS\Tag\TagServiceTrait;
 use Psr\Container\ContainerInterface;
+
+\defined('_JEXEC') or die;
 
 /**
  * Component class for Com_Gatreasury

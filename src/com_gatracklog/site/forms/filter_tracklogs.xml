@@ -16,18 +16,23 @@
 		<field name="rating" type="category" extension="com_gatracklog"
 			onchange="this.form.submit();"
 			label="COM_GATRACKLOG_FORM_LBL_TRACKLOG_RATING"
-			description="COM_GATRACKLOG_FORM_DESC_TRACKLOG_RATING" />
+			description="COM_GATRACKLOG_FORM_DESC_TRACKLOG_RATING" >
+			<option value="">COM_GATRACKLOG_SELECT_FILTER_RATE</option>
+		</field>
 
 		<field name="track_zone" type="category" extension="com_gatracklog.track_zone"
 			onchange="this.form.submit();"
 			label="COM_GATRACKLOG_FORM_LBL_TRACKLOG_TRACK_ZONE"
-			description="COM_GATRACKLOG_FORM_DESC_TRACKLOG_TRACK_ZONE" />
+			description="COM_GATRACKLOG_FORM_DESC_TRACKLOG_TRACK_ZONE" >
+			<option value="">COM_GATRACKLOG_SELECT_FILTER_ZONE</option>
+		</field>
 
 		<field name="season_close" type="category" extension="com_gatracklog.season_close"
 			onchange="this.form.submit();"
 			label="COM_GATRACKLOG_FORM_LBL_TRACKLOG_SEASON_CLOSE"
-			description="COM_GATRACKLOG_FORM_DESC_TRACKLOG_SEASON_CLOSE" />
-
+			description="COM_GATRACKLOG_FORM_DESC_TRACKLOG_SEASON_CLOSE" >
+			<option value="">COM_GATRACKLOG_SELECT_FILTER_CLOSE</option>
+		</field>
 
 	</fields>
 

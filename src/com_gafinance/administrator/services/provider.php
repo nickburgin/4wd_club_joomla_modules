@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.2.3
  * @package    Com_Gafinance
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -27,7 +27,7 @@ use Joomla\DI\ServiceProviderInterface;
 /**
  * The Gafinance service provider.
  *
- * @since  5.1.0
+ * @since  5.2.3
  */
 return new class implements ServiceProviderInterface
 {
@@ -38,7 +38,7 @@ return new class implements ServiceProviderInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   5.1.0
+	 * @since   5.2.3
 	 */
 	public function register(Container $container)
 	{

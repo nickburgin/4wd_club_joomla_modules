@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.2.1
+ * @version    4.3.3
  * @package    com_gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -9,21 +9,21 @@
 
 namespace GlennArkell\Component\Gabroadcast\Site\Dispatcher;
 
-defined('JPATH_PLATFORM') or die;
+\defined('_JEXEC') or die;
 
 use Joomla\CMS\Dispatcher\ComponentDispatcher;
 use Joomla\CMS\Language\Text;
 
 /**
  * ComponentDispatcher class
- * @since  4.2.1
+ * @since  4.3.3
  */
 class Dispatcher extends ComponentDispatcher
 {
 	/**
 	 * Dispatch a controller task. Redirecting the user if appropriate.
 	 * @return  void
-	 * @since   4.2.1
+	 * @since   4.3.3
 	 */
 	public function dispatch()
 	{

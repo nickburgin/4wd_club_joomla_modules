@@ -1,7 +1,7 @@
 <?php
 /**
- * @version    4.2.1
- * @package    Com_Gabroadcast
+ * @version     4.3.3
+ * @package     com_gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -84,7 +84,7 @@ class UsernewformModel extends FormModel
             $table = $this->getTable();
 
             if ($table !== false && $table->load($id)) {
-                $user = GabroadcastHelper::getSpecificUser();
+                $user = Factory::getApplication()->getIdentity();
                 $id   = $table->id;
 
                 $canEdit = $user->authorise('core.edit', 'com_gabroadcast') || $user->authorise('core.create', 'com_gabroadcast');
@@ -104,9 +104,9 @@ class UsernewformModel extends FormModel
                         }
                 }
 
-                // Convert the JTable to a clean JObject.
+                // Convert the Table to a clean Object.
                 $properties = $table->getProperties(1);
-                $this->item = ArrayHelper::toObject($properties, 'JObject');
+                $this->item = ArrayHelper::toObject($properties, 'stdClass');
                 
             }
         }
@@ -116,10 +116,10 @@ class UsernewformModel extends FormModel
 
     /**
      * Method to get the table
-     * @param   string $type   Name of the JTable class
+     * @param   string $type   Name of the Table class
      * @param   string $prefix Optional prefix for the table class name
-     * @param   array  $config Optional configuration array for JTable object
-     * @return  JTable|boolean JTable if found, boolean false on failure
+     * @param   array  $config Optional configuration array for Table object
+     * @return  Table|boolean Table if found, boolean false on failure
      */
     public function getTable($type = 'Usernew', $prefix = 'Administrator', $config = array())
     {
@@ -189,7 +189,7 @@ class UsernewformModel extends FormModel
             $table = $this->getTable();
 
             // Get the current user object.
-            $user = GabroadcastHelper::getSpecificUser();
+            $user = Factory::getApplication()->getIdentity();
 
             // Attempt to check the row out.
             if (method_exists($table, 'checkout')) {
@@ -251,57 +251,12 @@ class UsernewformModel extends FormModel
      * Method to save the form data.
      * @param   array $data The form data
      * @return bool
-     * @throws Exception
-     * @since 1.6
      */
     public function save($data)
     {
-        $newRec = array();
-        $params = ComponentHelper::getParams('com_gabroadcast');
-        $html_headfoot  = $params->get('html_headfoot', 0);
-        $html_header  = $params->get('html_header');
-        $html_footer  = $params->get('html_footer');
-        $incl_unsub  = $params->get('incl_unsub', 0);
-        $unsub_article  = $params->get('unsub_article', 0);
-        if ($incl_unsub) {
-			$unsubDet = '<p style="font-size:0.6em;text-align:center;"><a class="unsubscribe" href="';
-            $unsubDet .= Uri::base().'index.php?option=com_content&view=article&id='.$unsub_article.'" alt="" target="_blank" >unsubscribe</a></p>';
-		} else {
-            $unsubDet = '';
-		}
-    	$data['unsubDet'] = $unsubDet;
-		$data['html_header'] = $html_header;
-		$data['html_footer'] = $html_footer;
-
-        $bc_type = Factory::getApplication()->getUserState('com_gabroadcast.bcasttype.id', 1);
-        $bc = GabroadcastHelper::getBcastTypes($bc_type);
-        Factory::getApplication()->setUserState('com_gabroadcast.bcasttype.id', null);
-
-		$today = GabroadcastHelper::getTodaysDate();
-
+        $user  = Factory::getApplication()->getIdentity();
+		$today = Factory::getDate()->toSql();
         $id    = (!empty($data['id'])) ? $data['id'] : (int) $this->getState('usernew.id');
-        $newRec['id'] = $id;
-        $newRec['state'] = (!empty($data['state'])) ? $data['state'] : 1;
-        $user  = GabroadcastHelper::getSpecificUser();
-        $newRec['created_by'] = (!empty($data['created_by'])) ? $data['created_by'] : $user->id;
-        $newRec['created_date'] = (!empty($data['created_date'])) ? $data['created_date'] : $today;
-        $newRec['cat_id'] = $data['cat_id'];
-        $newRec['fin_users_only'] = $data['fin_users_only'];
-        $newRec['news_subject'] = $data['news_subject'];
-        $newRec['user_custfld'] = $data['user_custfld'];
-        $newRec['news_detail'] = $data['news_detail'];
-        $newRec['attach_file'] = '';
-
-        if (!empty($data['attach_file'])) {
-            $areaGroup = (isset($data['user_proffld']) && !empty($data['user_proffld'])) ? strtolower($data['user_proffld']) : false;
-            if ($areaGroup) {
-    			$newRec['attach_file'] = $bc->attach_dir.'/'.$areaGroup.'/'.$data['attach_file'];
-    			$data['attach_file'] = $bc->attach_dir.'/'.$areaGroup.'/'.$data['attach_file'];
-            } else {
-    			$newRec['attach_file'] = $bc->attach_dir.'/'.$data['attach_file'];
-    			$data['attach_file'] = $bc->attach_dir.'/'.$data['attach_file'];
-    		}
-		}
 
         if ($id) {
             // Check the user can edit this item
@@ -312,21 +267,63 @@ class UsernewformModel extends FormModel
         }
 
         if ($authorised !== true) {
-            throw new \Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
+            //throw new \Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
+            Factory::getApplication()->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'danger');
+            return false;
         }
 
-        if ($html_headfoot) {
-			$newRec['news_detail'] = $html_header.$newRec['news_detail'];
-			$newRec['news_detail'] = $newRec['news_detail'].$unsubDet.$html_footer;
+        $params = ComponentHelper::getParams('com_gabroadcast');
+        $incl_unsub  = $params->get('incl_unsub', 0);
+        $unsub_article  = $params->get('unsub_article', 0);
+        $limit_set = $params->get('limit_set',0);
+        $filter_users = $params->get('filter_users',0);
+
+        if (!empty($data['incl_article'])) {
+            $article = GabroadcastHelper::getArticle($data['incl_article']);
+            $article->introtext = str_replace('src="images', 'src="'.Uri::base().'images', $article->introtext);
+            $data['news_detail'] = $data['news_detail'].'<h4>'.$article->title.'</h4>'.$article->introtext;
 		}
 
+        if ($incl_unsub && $unsub_article) {
+			$data['news_detail'] .= '<p style="font-size:0.6em;text-align:center;"><a class="unsubscribe" href="';
+            $data['news_detail'] .= Uri::base().'index.php?option=com_content&view=article&id='.$unsub_article.'" alt="" target="_blank" >unsubscribe</a></p>';
+		}
+
+        $bc_type = Factory::getApplication()->getUserState('com_gabroadcast.bcasttype.id', 1);
+        $bc = GabroadcastHelper::getBcastTypes($bc_type);
+        Factory::getApplication()->setUserState('com_gabroadcast.bcasttype.id', null);
+
+        $newRec = array();
+        $newRec['id'] = $id;
+        $newRec['state'] = (!empty($data['state'])) ? $data['state'] : 1;
+        $newRec['created_by'] = (!empty($data['created_by'])) ? $data['created_by'] : $user->id;
+        $newRec['created_date'] = (!empty($data['created_date'])) ? $data['created_date'] : $today;
+        $newRec['cat_id'] = $data['cat_id'];
+        $newRec['fin_users_only'] = $data['fin_users_only'];
+        $newRec['news_subject'] = $data['news_subject'];
+        $newRec['user_custfld'] = $data['user_custfld'];
+        $newRec['news_detail'] = $data['news_detail'];
+        $newRec['attach_file'] = '';
+
+        if (!empty($data['attach_file'])) {
+            $data['filename'] = $data['attach_file'];
+            $areaGroup = (isset($data['user_proffld']) && !empty($data['user_proffld'])) ? strtolower($data['user_proffld']) : false;
+            if ($areaGroup) {
+    			$newRec['attach_file'] = $bc->attach_dir.'/'.$areaGroup.'/'.$data['attach_file'];
+    			$data['attach_file'] = $bc->attach_dir.'/'.$areaGroup.'/'.$data['attach_file'];
+            } else {
+    			$newRec['attach_file'] = $bc->attach_dir.'/'.$data['attach_file'];
+    			$data['attach_file'] = $bc->attach_dir.'/'.$data['attach_file'];
+    		}
+		}
 
         $table = $this->getTable();
 
-        if ($table->save($newRec) === true) 
+        if ($table->save($newRec) === true)
         {
 			$data['id'] = $table->id;
-            GabroadcastHelper::addNews($data, $params, $user);
+            //GabroadcastHelper::addNews($data, $params, $user);
+            GabroadcastHelper::createNewsEmail($data, $params, $user);
 
             return $table->id;
         } else {
@@ -344,7 +341,7 @@ class UsernewformModel extends FormModel
      */
     public function delete($pk)
     {
-        $user = GabroadcastHelper::getSpecificUser();
+        $user = Factory::getApplication()->getIdentity();
 
         
         if (empty($pk)) {
@@ -384,7 +381,7 @@ class UsernewformModel extends FormModel
     
     public function uplattachfile($data)
 	{
-        $user = GabroadcastHelper::getSpecificUser();
+        $user = Factory::getApplication()->getIdentity();
         if($user->authorise('core.attupload', 'com_gabroadcast') !== true){
             Factory::getApplication()->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'danger');
             return false;
@@ -394,29 +391,36 @@ class UsernewformModel extends FormModel
         $safeFileOptions  = $params->get( 'safe_files' );
         $safeFileOptions  = $params->get( 'safe_files' );
         $filterType = $params->get('filter_type','p');
-		$file_ext = substr($data['bcfile_name']['name'],-3);
+        $filterUsers = $params->get('filter_users',0);
+
+		//$file_ext = substr($data['bcfile_name']['name'],-3);
+		$file_ext = \pathinfo($data['bcfile_name']['name'], PATHINFO_EXTENSION);
 
         $profile_suffix = $params->get('profile_suffix','b4wdc');
         $locProf = 'profile'.$profile_suffix;
         $locGrps = $params->get('prof_field','locgrp');
-        $locGrp = explode('.',$locGrps);
+        $locGrp = \explode('.',$locGrps);
 
         $profile = UserHelper::getProfile($user->id);
 
-		if (!in_array($file_ext, $safeFileOptions)) {
+		if (!in_array(\strtolower($file_ext ?? ''), $safeFileOptions)) {
 			Factory::getApplication()->enqueueMessage(Text::_('File format ('.$file_ext.') not allowed'), 'danger');
 			return false;
 		}
 
         if (file_exists('file://'.$data['bcfile_name']['tmp_name'])) {
 			$fileName = File::makeSafe($data['bcfile_name']['name']);
-			$fileName = str_replace(' ', '_', $fileName);
+			$fileName = \str_replace(' ', '_', $fileName);
 			$src = $data['bcfile_name']['tmp_name'];
 
 			$attach_dir = GabroadcastHelper::getBcastTypes($data['bcasttype'])->attach_dir;
-			if ($filterType == 'p' && is_array($locGrp) && isset($profile->$locProf[$locGrp[1]])) {
-                $userArea = strtolower($profile->$locProf[$locGrp[1]] ?? '');
-                $attach_dir = $attach_dir.'/'.$userArea;
+			// test is menu item wants to use filter
+			$useFilter = Factory::getApplication()->getUserState('com_gabroadcast.use_filter.data');
+            if ($useFilter) {
+                if ($filterUsers && $filterType == 'p' && \is_array($locGrp) && isset($profile->$locProf[$locGrp[1]])) {
+                    $userArea = \strtolower($profile->$locProf[$locGrp[1]] ?? '');
+                    $attach_dir = $attach_dir.'/'.$userArea;
+                }
             }
             $path = Path::clean( JPATH_SITE . '/'.$attach_dir );
 			$destfile = $path.'/'.$fileName;

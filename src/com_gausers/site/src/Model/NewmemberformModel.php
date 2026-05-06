@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
@@ -12,16 +12,16 @@ namespace GlennArkell\Component\Gausers\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\MVC\Model\FormModel;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\Filesystem\Path;
-use \Joomla\CMS\User\User;
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\MVC\Model\FormModel;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\Path;
+use Joomla\CMS\User\User;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GaemailHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GambrapplicHelper;
 
@@ -126,19 +126,22 @@ class NewmemberformModel extends FormModel
 	{
 		$item = ArrayHelper::toObject($data);
         $app = Factory::getApplication();
-        $lang = Factory::getLanguage();
+        $lang = Factory::getApplication()->getLanguage();
         $lang->load('com_gausers', JPATH_ADMINISTRATOR);
         $lang->load('com_gausers', JPATH_SITE);
         $mailfrom	= $app->get('mailfrom');
         $fromname	= $app->get('fromname');
         $params = ComponentHelper::getParams('com_gausers');
 		$tmplMail  = $params->get('tmplMail', 1);
+		$copyToSec  = $params->get('copyToSec', 1);
 
 		if ($data['email']) {
     		// setup data
             $data['sitename'] = $fromname;
             $data['recips'][] = array('email'=>$data['email'], 'name'=>$data['name']);
-            $data['cc_recips'][] = array('email'=>$mailfrom, 'name'=>$fromname);
+            if ($copyToSec) {
+                $data['cc_recips'][] = array('email'=>$mailfrom, 'name'=>$fromname);
+            }
 
             $attachfile = GambrapplicHelper::newMemberForm($item, $params);
             $filename = Factory::getApplication()->getUserState('com_gausers.file.newmember.name');

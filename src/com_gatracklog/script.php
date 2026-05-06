@@ -1,7 +1,9 @@
 <?php
 
 /**
- * @package    Com_Gatracklog
+ * @version    4.2.0
+ * @package    pkg_mypackage
+ * @subpackage com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,26 +14,20 @@ defined('_JEXEC') or die();
 define('MODIFIED', 1);
 define('NOT_MODIFIED', 2);
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\Filesystem\Path;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\CMS\Installer\InstallerScript;
-// use \Joomla\CMS\Installer\Adapter\InstallerAdapter;
-// use \Joomla\CMS\Installer\Adapter\ComponentAdapter;
-// use \Joomla\CMS\Installer\Adapter\ModuleAdapter;
-// use \Joomla\CMS\Installer\Adapter\PluginAdapter;
-use \Joomla\CMS\Filter\OutputFilter;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\Path;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Mail\MailTemplate;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Installer\InstallerScript;
+use Joomla\CMS\Filter\OutputFilter;
 
 /**
- * Updates the database structure of the component
- *
- * @version  Release: 0.2b
- * @author   Component Creator <support@component-creator.com>
- * @since    0.1b
+ * Updates the structure of the component
  */
 class com_gatracklogInstallerScript extends InstallerScript
 {
@@ -39,15 +35,40 @@ class com_gatracklogInstallerScript extends InstallerScript
 	 * The title of the component (printed on installation and uninstallation messages)
 	 * @var string
 	 */
-	protected $extension = 'Tracklog System';
+	protected $extension = 'Gatracklog System';
 
 	public $compName = 'gatracklog';
+
+	public $mailTmplSuffixs = array("trans");
+
+	public $mailTags = array("sitename","link_text","tran_desc","tran_date");
+
+	public $version = '4.2.0';
+
+	public $dbName = 'joomla6_db';
+
+	public $mainView = 'tracklogs';
 
 	/**
 	 * The minimum Joomla! version required to install this extension
 	 * @var   string
 	 */
-	protected $minimumJoomla = '4.0';
+	protected $minimumJoomla = '5.0';
+
+	/**
+	 *  Constructor
+	 */
+	public function __construct()
+	{
+		$this->app = Factory::getApplication();
+
+        $this->gTours = array(
+           'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_LBL'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_DESC',
+           'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_TRACKLOG_LBL'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_TRACKLOG_DESC',
+           'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_MENU_LBL'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_MENU_DESC',
+           'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_CONFIG_LBL'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_CONFIG_DESC'
+           );
+	}
 
 	/**
 	 * Method called before install/update the component. Note: This method won't be called during uninstall process.
@@ -61,17 +82,27 @@ class com_gatracklogInstallerScript extends InstallerScript
 		// $parent is the class calling this method
 		echo '<p>' . Text::_('COM_'.STRTOUPPER($this->compName).'_PREFLIGHT_'.STRTOUPPER($type).'_TEXT') . '</p>';
 
-		$result = parent::preflight($type, $parent);
+        //$this->checkColumns();
 
-		// logic for preflight before install
-		return $result;
+        $version = $this->getComponentVersion($this->compName);
+        if (!$version) { $this->version = $version; }
+
+        Factory::getApplication()->enqueueMessage(Text::sprintf('GA_VERSION_CHECK',$this->version), 'message');
+
+		if (JVERSION < $this->minimumJoomla) {
+			Factory::getApplication()->enqueueMessage(Text::sprintf('GA_INSTALL_CHECK_FAIL',$this->minimumJoomla,JVERSION), 'danger');
+			return false;
+		} else {
+			Factory::getApplication()->enqueueMessage(Text::sprintf('GA_INSTALL_CHECK_OK',$this->minimumJoomla,JVERSION), 'message');
+			return parent::preflight($type, $parent);
+		}
+
 	}
 
 	/**
 	 * Method to install the component
 	 * @param   mixed $parent Object who called this method.
 	 * @return void
-	 * @since 0.2b
 	 */
 	public function install($parent)
 	{
@@ -80,9 +111,9 @@ class com_gatracklogInstallerScript extends InstallerScript
 
 		$this->addDashboardMenu($this->compName, $this->compName);
 
-		//$this->installDb($parent);
-		//$this->installPlugins($parent);
-		//$this->installModules($parent);
+		// install the Mail Templates
+		$this->installMailTemplates();
+
 	}
 
 	/**
@@ -95,14 +126,13 @@ class com_gatracklogInstallerScript extends InstallerScript
 		// $parent is the class calling this method
 		echo '<p>' . Text::_('COM_'.STRTOUPPER($this->compName).'_UPDATE_TEXT') . '</p>';
 
-		//$this->installDb($parent);
-		//$this->installPlugins($parent);
-		//$this->installModules($parent);
-
 		$dashB = $this->checkDashboard($this->compName);
 		if (!$dashB) {
 			$this->addDashboardMenu($this->compName, $this->compName);
 		}
+
+		// install the Mail Templates
+		$this->installMailTemplates();
 
 	}
 
@@ -116,15 +146,39 @@ class com_gatracklogInstallerScript extends InstallerScript
 		// $parent is the class calling this method
 		echo '<p>' . Text::_('COM_'.STRTOUPPER($this->compName).'_UNINSTALL_TEXT') . '</p>';
 
-		//$this->uninstallPlugins($parent);
-		//$this->uninstallModules($parent);
+		$dashB = $this->checkDashboard($this->compName);
+		if ($dashB) {
+			foreach ($dashB as $dash) {
+                $this->removeDashboardMenu($dash->id);
+            }
+		}
+
+        foreach ($this->mailTmplSuffixs as $tmpl) {
+            $template_id = 'com_'.$this->compName.'.'.$tmpl;
+            $tmplExists = $this->checkMailTemplates($template_id);
+            if ($tmplExists) {
+                $this->removeMailTemplate($template_id);
+            }
+        }
+
+		/* --------------------------------  Guided Tours  ------------------------------ */
+        // if guided tours exist, remove them
+        if (isset($this->gTours) && is_array($this->gTours) && !empty($this->gTours)) {
+            foreach ($this->gTours as $gtUid => $title) {
+                $tourUID =  STRTOLOWER($this->compName.'-'.$gtUid);
+                $tourExists = $this->checkTourExists($tourUID);
+                if ($tourExists) {
+                    $this->removeTour($tourExists->id);
+                }
+            }
+        }
+
 	}
 
 	/**
 	 * @param   string $type   type
 	 * @param   string $parent parent
 	 * @return boolean
-	 * @since Kunena
 	 */
 	public function postflight($type, $parent)
 	{
@@ -133,9 +187,50 @@ class com_gatracklogInstallerScript extends InstallerScript
 
 		if (STRTOUPPER($type) == 'INSTALL') {
 			// do something
+
+            // check if Guided Tours is ok for install
+            if (JVERSION <= '5.1.0') {
+                // don't install guided tours
+                Factory::getApplication()->enqueueMessage(Text::sprintf('GA_INSTALL_NOGT',JVERSION), 'message');
+            } else {
+                // reinstall parameter to be passed
+                $this->checkGuidedTours(false);
+            }
+
+		}
+
+		if (STRTOUPPER($type) == 'UPDATE') {
+			// do something
+
+    		// clean up old sql update file
+			$path = Path::clean( JPATH_ADMINISTRATOR . '/components/' . $this->compName . '/sql/updates/mysql/');
+			$this->deleteFiles($path, '4.2.0', 'sql');
+
+    		// clean up unused js file
+    		$path = Path::clean( JPATH_SITE . '/media/com_' . $this->compName . '/js/');
+    		$this->deleteFiles($path, 'form', '.js');
+
+            // check if Guided Tours is ok for install
+            if (JVERSION < '5.1.0') {
+                // don't install guided tours
+                Factory::getApplication()->enqueueMessage(Text::sprintf('GA_INSTALL_NOGT',JVERSION), 'message');
+            } else {
+                // reinstall parameter to be passed
+                $this->checkGuidedTours(false);
+            }
+
 		}
 
 		return true;
+	}
+
+	/**
+	 * @param   string  $parent  parent
+	 * @return void
+	 */
+	public function discover_install($parent)
+	{
+		return self::install($parent);
 	}
 
 	/**
@@ -147,7 +242,7 @@ class com_gatracklogInstallerScript extends InstallerScript
 	 * @param   none
 	 * @return boolean
 	 */
-	function createCategories($extension, $cattype)
+	public function createCategories($extension, $cattype)
 	{
         $app = Factory::getApplication();
 		
@@ -177,11 +272,517 @@ class com_gatracklogInstallerScript extends InstallerScript
 	 	}
         // Build the path for our category
         $category->rebuildPath($category->id);
-        echo '<p>' . Text::_('New categories created') . '</p>';
+        echo '<p>' . Text::_('COM_GATRACKLOG_NEW_CAT_CREATED') . '</p>';
 
 		return true;
 	}
 
+	/**
+	 * *********************  Guided Tours Setup  *******************************
+	 */
+
+	/**
+	 * Check for Guided Tours
+	 * @param   boolean  true if reinstall is to be performed
+	 */
+	public function checkGuidedTours($reinstall)
+	{
+        // check for guided tours and create if required
+        if (isset($this->gTours) && is_array($this->gTours) && !empty($this->gTours)) {
+            foreach ($this->gTours as $gtUid => $desc) {
+                $tourUID =  STRTOLOWER($this->compName.'-'.Text::_($gtUid));
+                $tourExists = $this->checkTourExists($tourUID);
+
+                if ($tourExists && $reinstall) {
+                    // remove old GTs because changes made and we need to remove old steps
+                    $this->removeTour($tourExists->id);
+                    $tourExists = false;
+                }
+
+                if (!$tourExists) {
+                    // set the start url and create tour
+                    if ($gtUid == 'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_LBL') {
+                        $url = 'administrator/index.php';
+                    } elseif ($gtUid == 'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_MENU_LBL') {
+                        $url = 'administrator/index.php?option=com_'.$this->compName.'&view='.$this->mainView;
+                    } elseif ($gtUid == 'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_TRACKLOG_LBL') {
+                        $url = 'administrator/index.php?option=com_'.$this->compName.'&view='.$this->mainView;
+                    } elseif ($gtUid == 'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_CONFIG_LBL') {
+                        $url = 'administrator/index.php?option=com_'.$this->compName.'&view='.$this->mainView;
+                    } else {
+                        continue;
+                    }
+                    $gtID = $this->createGuidedTour($gtUid, $desc, $url);
+                    $this->app->enqueueMessage(Text::sprintf('COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_LOADED', Text::_($gtUid), $gtID), 'notice');
+                    // create steps array
+                    $recs = $this->setupGuidedTourSteps($gtUid);
+                    // create tour steps
+                    $this->createGuidedTourSteps($gtID, $recs);
+                }
+            }
+        }
+
+	}
+
+	/**
+	 * Check if a Guided Tour entry exists
+	 * @param   string  $tourUid for the uid reference
+	 * @return boolean or object
+	 */
+	public function checkTourExists($tourUid)
+	{
+        $result = false;
+		$db = Factory::getContainer()->get('DatabaseDriver');
+	    $db->setQuery(' SELECT * FROM #__guidedtours WHERE extensions = '.$db->Quote('["com_'.$this->compName.'"]') . ' AND uid = '.$db->Quote($tourUid) );
+		try {
+		    $result = $db->loadObject();
+		} catch (RuntimeException $e) {
+		    $this->app->enqueueMessage($e->getMessage(), 'danger');
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Create a Guided Tour record
+	 * @param   string  $tourName for the uid reference and title
+	 * @param   string  $url to set where the tour starts from
+	 * @return boolean or record id
+	 */
+	public function createGuidedTour($tourName, $desc, $url)
+	{
+        $today = Factory::getDate()->toSql();
+        $userId = Factory::getApplication()->getIdentity()->id;
+        $db = Factory::getContainer()->get('DatabaseDriver');
+        $gtour = new \stdClass();
+        $gtour->title = $tourName;
+        $gtour->uid = $this->compName.'-'.STRTOLOWER(Text::_($tourName));
+        $gtour->description = $desc;
+        $gtour->extensions = '["com_'.$this->compName.'"]';
+        $gtour->url = $url;
+        $gtour->created = $today;
+        $gtour->created_by = $userId;
+        $gtour->modified = $today;
+        $gtour->modified_by = $userId;
+        $gtour->language = '*';
+        $gtour->published = 1;
+        $gtour->note = '';
+        $gtour->access = 1;
+        if ($url == 'administrator/index.php') {
+            $gtour->autostart = 1;
+        }
+		try {
+		    $result = $db->insertObject('#__guidedtours', $gtour);
+            return $db->insertid();
+		} catch (RuntimeException $e) {
+		    $this->app->enqueueMessage($e->getMessage(), 'warning');
+		    return false;
+		}
+
+	}
+
+	/**
+	 * Create a Guided Tour record
+	 */
+	public function createGuidedTourSteps($id, $recs)
+	{
+        $today = Factory::getDate()->toSQL();
+        $userId = Factory::getApplication()->getIdentity()->id;
+        foreach ($recs as $data) {
+            $db = Factory::getContainer()->get('DatabaseDriver');
+            $gtstep = new \stdClass();
+            $gtstep->tour_id = $id;
+            $gtstep->title = $data['title'];
+            $gtstep->published = 1;
+            $gtstep->description = $data['desc'];
+            $gtstep->position = $data['position'];
+            $gtstep->target = $data['target'];
+            $gtstep->type = $data['type'];
+            $gtstep->interactive_type = $data['intertype'];
+            $gtstep->url = $data['url'];
+            $gtstep->language = '*';
+            $gtstep->created = $today;
+            $gtstep->created_by = $userId;
+            $gtstep->modified = $today;
+            $gtstep->modified_by = $userId;
+    		try {
+    		    $result = $db->insertObject('#__guidedtour_steps', $gtstep);
+    		} catch (RuntimeException $e) {
+    		    $this->app->enqueueMessage($e->getMessage(), 'warning');
+    		}
+		}
+        return true;
+
+	}
+
+	/**
+	 * Removes the guided tour entries
+	 * @param int $id The guided tour ID reference
+	 * @return  void
+	 */
+	public function removeTour($id)
+	{
+		$db = Factory::getContainer()->get('DatabaseDriver');
+	    $db->setQuery(' DELETE FROM #__guidedtours WHERE id = '. (int) $id );
+		try {
+		    $db->execute();
+			$this->app->enqueueMessage(Text::sprintf('COM_'.STRTOUPPER($this->compName).'_REMOVE_GUIDEDTOUR_SUCCESS', $id), 'notice');
+		} catch (RuntimeException $e) {
+		    $this->app->enqueueMessage($e->getMessage(), 'danger');
+		}
+
+		$db1 = Factory::getContainer()->get('DatabaseDriver');
+	    $db1->setQuery(' DELETE FROM #__guidedtour_steps WHERE tour_id = '. (int) $id );
+		try {
+		    $db1->execute();
+			$this->app->enqueueMessage(Text::sprintf('COM_'.STRTOUPPER($this->compName).'_REMOVE_GUIDEDTOURSTEPS_SUCCESS', $id), 'notice');
+		} catch (RuntimeException $e1) {
+		    $this->app->enqueueMessage($e1->getMessage(), 'danger');
+		}
+	}
+
+	/**
+	 * Set up the step entries
+	 * @param   string  $ref to identify which tour the steps belong to
+	 *          types - 0 = Next, 1 = Redirect, 2 = Interactive
+	 *          interactive types - 1 = Form Submit, 2 = Text Field, 4 = Button, 3 = Other
+	 * @return boolean or array
+	 */
+	public function setupGuidedTourSteps($ref)
+	{
+        $returnURL = 'administrator/index.php?option=com_cpanel&view=cpanel&dashboard='.$this->compName;
+        $recs = array();
+
+        if ($ref == 'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_LBL') {
+            $recs = $this->setupStdWelcomeSteps();
+        }
+
+        if ($ref == 'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_MENU_LBL') {
+            $recs = $this->setupStdMenuSteps($returnURL);
+        }
+
+        if ($ref == 'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_TRACKLOG_LBL') {
+            // from the list screen, redirect to the dasboard
+            $recs[] = $this->setupStdRedirectStep('', $returnURL);
+            // link to the dasboard entry to see the list screen
+            $recs[] = $this->setupStdListlinkStep('tracklog');
+            // standard new record button
+            $recs[] = $this->setupStdNewStep('tracklog');
+            // standard fields
+            $recs[] = $this->setupStdFieldStep('bottom', 'name', 'tracklog');
+            $recs[] = $this->setupStdFieldStep('bottom', 'rating', 'tracklog');
+            $recs[] = $this->setupStdFieldStep('top', 'track_zone', 'tracklog');
+            $recs[] = $this->setupStdFieldStep('top', 'season_close', 'tracklog');
+            // extra tab link
+            $recs[] = $this->setupStdTabStep('extrainfo');
+            $recs[] = $this->setupStdFieldStep('bottom', 'comment', 'tracklog');
+            // end of process save & congrats
+            $recs[] = $this->setupStdSaveCloseStep($returnURL);
+            $recs[] = $this->setupStdCongratsStep($returnURL);
+
+        }
+
+        if ($ref == 'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_CONFIG_LBL') {
+            // from the list screen, redirect to the dasboard
+            $recs[] = $this->setupStdRedirectStep('', $returnURL);
+            // link to the dasboard entry to see the list screen
+            $recs[] = $this->setupStdListlinkStep('config');
+
+            $recs[] = $this->setupStdFieldStep('bottom', 'track_email', 'config');
+
+            $recs[] = $this->setupStdTabStep('integration');
+            $recs[] = $this->setupStdFieldStep('bottom', 'send_email', 'config');
+            $recs[] = $this->setupStdFieldStep('bottom', 'tmpl_email', 'config');
+
+            $recs[] = $this->setupStdTabStep('permissions');
+            $recs[] = $this->setupStdFieldStep('bottom', 'create', 'config');
+
+            $recs[] = $this->setupStdSaveCloseStep($returnURL);
+            $recs[] = $this->setupStdCongratsStep($returnURL);
+
+        }
+
+		return $recs;
+	}
+
+	/**
+	 * Setup standard guided tour steps
+	 * @param   string $return URL
+	 * @param   string $target
+	 * @return  array $rec
+	 */
+	public function setupStdWelcomeSteps($target = '', $return = '')
+	{
+        $recs[] = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_MENU_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_MENU_DESC',
+              'position'=>'right',
+              'target'=>'#sidebarmenu nav.main-nav-container ul.main-nav li a[aria-label=Components]',
+              'type'=>0,
+              'intertype'=>1,
+              'url'=>''
+              );
+        $recs[] = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_DASHBOARD_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_DASHBOARD_DESC',
+              'position'=>'right',
+              'target'=>'.menu-dashboard a[href*="dashboard='.$this->compName.'"]',
+              'type'=>2,
+              'intertype'=>4,
+              'url'=>''
+              );
+        $recs[] = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_CONGRATS_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_CONGRATS_DESC',
+              'position'=>'bottom',
+              'target'=>'',
+              'type'=>0,
+              'intertype'=>1,
+              'url'=>'#cpanel-modules a[href*="view='.$this->compName.'"]'
+              );
+
+		return $recs;
+	}
+
+	/**
+	 * Setup standard guided tour steps
+	 * @param   string $return URL
+	 * @param   string $target
+	 * @return  array $rec
+	 */
+	public function setupStdRedirectStep($target = '', $return = '')
+	{
+        $rec = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_REDIRECT_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_REDIRECT_DESC',
+              'position'=>'top',
+              'target'=>$target,
+              'type'=>1,
+              'intertype'=>2,
+              'url'=>$return
+              );
+
+		return $rec;
+	}
+
+	/**
+	 * Setup standard guided tour steps
+	 * @param   string $return URL
+	 * @param   string $list (singular of the list plurals)
+	 * @return  array $rec
+	 */
+	public function setupStdListlinkStep($list = '')
+	{
+        if ($list == 'config') {
+            $target = 'div.cpanel-modules.cpanel-'.$this->compName.' ul.list-group li.list-group-item a[href*="option=com_config&view=component&component=com_'.$this->compName.'"]';
+            $url = 'administrator/index.php?option=com_config&view=component&component=com_'.$this->compName.'&path=&return=';
+        } else {
+            $target = 'div.cpanel-modules.cpanel-'.$this->compName.' ul.list-group li.list-group-item a[href*="option=com_'.$this->compName.'&view='.$list.'s"]';
+            $url = 'administrator/index.php?option=com_'.$this->compName.'&view='.$list.'s';
+        }
+        // link to the dasboard entry to see the list screen
+        $rec = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_'.STRTOUPPER($list).'_LIST_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_'.STRTOUPPER($list).'_LIST_DESC',
+              'position'=>'bottom',
+              'target'=>$target,
+              'type'=>2,
+              'intertype'=>1,
+              'url'=>$url
+              );
+
+		return $rec;
+	}
+
+	/**
+	 * Setup standard guided tour steps
+	 * @param   string $return URL
+	 * @param   string $list (singular of the list plurals)
+	 * @return  array $rec
+	 */
+	public function setupStdNewStep($list = '')
+	{
+        $rec = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_'.STRTOUPPER($list).'_NEW_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_'.STRTOUPPER($list).'_NEW_DESC',
+              'position'=>'bottom',
+              'target'=>'.button-new',
+              'type'=>2,
+              'intertype'=>1,
+              'url'=>''
+              );
+
+		return $rec;
+	}
+
+	/**
+	 * Setup standard guided tour steps
+	 * @param   string $return URL
+	 * @param   string $list (singular of the list plurals)
+	 * @return  array $rec
+	 */
+	public function setupStdFieldStep($position = 'bottom', $field = '', $list = '')
+	{
+        if ($field == 'create') {
+            $target = '';
+        } else {
+            $target = '#jform_'.$field;
+        }
+        $rec = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_'.STRTOUPPER($list).'_'.STRTOUPPER($field).'_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_'.STRTOUPPER($list).'_'.STRTOUPPER($field).'_DESC',
+              'position'=>$position,
+              'target'=>$target,
+              'type'=>2,
+              'intertype'=>2,
+              'url'=>''
+              );
+
+		return $rec;
+	}
+
+	/**
+	 * Setup standard guided tour steps
+	 * @param   string $return URL
+	 * @param   string $list
+	 * @return  array $rec
+	 */
+	public function setupStdTabStep($tab = '')
+	{
+        $rec = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_TAB_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_TAB_DESC',
+              'position'=>'bottom',
+              'target'=>'button[aria-controls='.$tab.']',
+              'type'=>2,
+              'intertype'=>4,
+              'url'=>''
+              );
+
+		return $rec;
+	}
+
+	/**
+	 * Setup standard guided tour steps
+	 * @param   string $return URL
+	 * @return  array $rec
+	 */
+	public function setupStdSaveCloseStep($return = '')
+	{
+        $rec = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_SAVECLOSE_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_SAVECLOSE_DESC',
+              'position'=>'bottom',
+              'target'=>'#toolbar #toolbar-save button.button-save',
+              'type'=>2,
+              'intertype'=>1,
+              'url'=>$return
+              );
+
+		return $rec;
+	}
+
+	/**
+	 * Setup standard guided tour steps
+	 * @param   string $return URL
+	 * @return  array $rec
+	 */
+	public function setupStdCongratsStep($return = '')
+	{
+        $rec = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_CONGRATS_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_CONGRATS_DESC',
+              'position'=>'bottom',
+              'target'=>'',
+              'type'=>1,
+              'intertype'=>2,
+              'url'=>$return
+              );
+		return $rec;
+	}
+
+	/**
+	 * Setup standard guided tour steps
+	 * @param   string $return URL
+	 * @return  array $rec
+	 */
+	public function setupStdMenuSteps()
+	{
+        $returnURL = 'administrator/index.php?option=com_'.$this->compName.'&view='.$this->mainView;
+        $menuDash = 'administrator/index.php?option=com_cpanel&view=cpanel&dashboard=menus';
+        $recs = array();
+        //$recs[] = $this->setupStdRedirectStep('', $menuDash);
+
+        $recs[] = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_MENU_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_WELCOME_MENU_DESC',
+              'position'=>'right',
+              'target'=>'#sidebarmenu',
+              'type'=>0,
+              'intertype'=>2,
+              'url'=>''
+              );
+        $recs[] = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_MENU_DASHBOARD_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_MENU_DASHBOARD_DESC',
+              'position'=>'right',
+              'target'=>'.menu-dashboard a[href*="dashboard=menus"]',
+              'type'=>2,
+              'intertype'=>4,
+              'url'=>''
+              );
+        $recs[] = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_MENU_NEW_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_MENU_NEW_DESC',
+              'position'=>'left',
+              'target'=>'#cpanel-modules .cpanel-menus .menu-quicktask a[href*="task=item.add&menutype=mainmenu"]',
+              'type'=>2,
+              'intertype'=>4,
+              'url'=>''
+              );
+        $recs[] = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_MENU_TITLE_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_MENU_TITLE_DESC',
+              'position'=>'bottom',
+              'target'=>'#jform_title',
+              'type'=>2,
+              'intertype'=>2,
+              'url'=>''
+              );
+        $recs[] = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_MENU_OWNINGMENU_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_MENU_OWNINGMENU_DESC',
+              'position'=>'bottom',
+              'target'=>'#myTab #details #jform_menutype',
+              'type'=>2,
+              'intertype'=>2,
+              'url'=>''
+              );
+        $recs[] = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_MENU_TYPE_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_MENU_TYPE_DESC',
+              'position'=>'bottom',
+              'target'=>'#myTab #details #jform_type',
+              'type'=>0,
+              'intertype'=>2,
+              'url'=>''
+              );
+        $recs[] = array(
+              'title'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_SAVECLOSE_LBL',
+              'desc'=>'COM_'.STRTOUPPER($this->compName).'_GUIDEDTOUR_SAVECLOSE_DESC',
+              'position'=>'bottom',
+              'target'=>'#toolbar #toolbar-dropdown-save-group #save-group-children-save button.button-save',
+              'type'=>0,
+              'intertype'=>1,
+              'url'=>''
+              );
+
+		return $recs;
+	}
+
+	/**
+	 * *********************  Dashboard stuff  *******************************
+	 */
 	/**
 	 * Check if a Dashboard module entry exists
 	 * @param   string $component Component name
@@ -194,6 +795,84 @@ class com_gatracklogInstallerScript extends InstallerScript
 			$db = Factory::getContainer()->get('DatabaseDriver');
 	        $db->setQuery(' SELECT * FROM #__modules WHERE position = '.$db->Quote('cpanel-'.$component) );
 		    try {
+		        $result = $db->loadObjectList();
+		    } catch (RuntimeException $e) {
+		        Factory::getApplication()->enqueueMessage($e->getMessage(), 'danger');
+		    }
+	    }
+
+		return $result;
+	}
+
+	/**
+	 * Removes the dashboard menu module
+	 * @param int $id The dashboard module id reference
+	 * @return  void
+	 */
+	public function removeDashboardMenu($id)
+	{
+		$model  = Factory::getApplication()->bootComponent('com_modules')->getMVCFactory()->createModel('Module', 'Administrator', ['ignore_request' => true]);
+        $table = $model->getTable();
+        $table->load($id);
+
+		if (!$table->delete())
+		{
+			Factory::getApplication()->enqueueMessage(Text::sprintf('COM_'.STRTOUPPER($this->compName).'_REMOVE_DASHBOARD_FAIL', $model->getError()));
+		}
+	}
+
+	/**
+	 * *********************  MailTemplate stuff  *******************************
+	 */
+	/**
+	 * Install MailTemplate entrys
+	 * @return boolean or object
+	 */
+	public function installMailTemplates()
+	{
+        foreach ($this->mailTmplSuffixs as $tmpl) {
+            $template_id = 'com_'.$this->compName.'.'.$tmpl;
+            $tmplExists = $this->checkMailTemplates($template_id);
+            if (!$tmplExists) {
+                $this->addMailTemplate($tmpl, $this->mailTags);
+            } else {
+                $this->updateMailTemplates($tmplExists);
+            }
+        }
+
+		return true;
+	}
+
+	/**
+	 * Update template records if tags changed
+	 * @param   object $tmpl
+	 */
+	public function updateMailTemplates($tmpl)
+	{
+        // check tags
+        $params = json_decode($tmpl->params);
+
+        if (count($params->tags) != count($this->mailTags)) {
+            $params->tags = $this->mailTags;
+            $tmpl->params = json_encode($params);
+            $result = Factory::getContainer()->get('DatabaseDriver')->updateObject('#__mail_templates', $tmpl, 'template_id');
+            Factory::getApplication()->enqueueMessage(Text::sprintf('COM_'.STRTOUPPER($this->compName).'_MAILTMPL_UPDATED', $tmpl->template_id), 'success');
+        }
+
+	}
+
+	/**
+	 * Check if a MailTemplate entry exists
+	 * @param   string $template_id (component + ext)
+	 * @return boolean or object
+	 */
+	public function checkMailTemplates($template_id = 0)
+	{
+        $result = false;
+		if ($template_id) {
+			$db = Factory::getContainer()->get('DatabaseDriver');
+	        $db->setQuery(' SELECT * FROM #__mail_templates WHERE template_id = '.$db->Quote($template_id) );
+		    try {
 		        $result = $db->loadObject();
 		    } catch (RuntimeException $e) {
 		        Factory::getApplication()->enqueueMessage($e->getMessage(), 'danger');
@@ -201,6 +880,60 @@ class com_gatracklogInstallerScript extends InstallerScript
 	    }
 
 		return $result;
+	}
+
+	/**
+	 * Removes the mailTemplate records
+	 * @param   string $template_id (component + ext)
+	 * @return  void
+	 */
+	public function removeMailTemplate($template_id)
+	{
+		$this->deleteData('#__mail_templates', 'template_id', $template_id, '=');
+		Factory::getApplication()->enqueueMessage(Text::_('COM_'.STRTOUPPER($this->compName ?? '').'_EMAILTMPL_REMOVE_SUCCESS', 'notice'));
+	}
+
+	/**
+	 * Create a new Mail Template
+	 * @param   string $template_id (just the ext)
+	 * @param   array $tags
+	 * @return  void
+	 */
+	public function addMailTemplate($template_id, $tags)
+	{
+        $result = MailTemplate::createTemplate(
+        	'com_'.$this->compName.'.'.$template_id,
+        	'COM_'.STRTOUPPER($this->compName).'_EMAILTMPL_'.STRTOUPPER($template_id).'_SUBJECT',
+        	'COM_'.STRTOUPPER($this->compName).'_EMAILTMPL_'.STRTOUPPER($template_id).'_BODY',
+        	$tags,
+        	'COM_'.STRTOUPPER($this->compName).'_EMAILTMPL_'.STRTOUPPER($template_id).'_HTMLBODY'
+        );
+
+		Factory::getApplication()->enqueueMessage('Email Template Record Created . . . '.$template_id);
+
+	}
+
+	/**
+	 * *********************  Data and Files stuff  *******************************
+	 */
+	/**
+	 * Update data
+	 * @param string $table Table name to be updated
+	 * @param string $fieldname field name to be updated
+	 * @param string $newvalue value to set the above fieldname
+	 * @param string $wherefield field name of the where clause to test for
+	 * @param string $oldvalue value of the field name in the where clause
+	 * @param string $opatr operator for the test in the where clause
+	 * @return  void
+	 */
+	public function updateData($table = '#__user_profiles', $wherefield = 'profile_key', $fieldname = 'profile_value', $oldvalue = 'Life', $newvalue = 'Life Member', $opatr = '=')
+	{
+		$db    = Factory::getContainer()->get('DatabaseDriver');
+		$query = $db->getQuery(true);
+		$db->setQuery('UPDATE '.$table.' SET '.$fieldname.' = '.$newvalue.' WHERE '.$wherefield.' '.$opatr.' '.$db->quote($oldvalue));
+		$db->execute();
+		Factory::getApplication()->enqueueMessage('Records updated . . . '.$table);
+
 	}
 
 	/**
@@ -226,6 +959,31 @@ class com_gatracklogInstallerScript extends InstallerScript
 		$db->setQuery('DROP TABLE IF EXISTS '.$table);
 		$db->execute();
 		Factory::getApplication()->enqueueMessage('Table dropped . . . '.$table);
+
+	}
+
+	/**
+	 * Create data
+	 */
+	public function createData()
+	{
+		$days = array('2024-03-01');
+        $today = Factory::getDate()->toSql();
+        $rec = new \stdClass();
+		$rec->id = 0;
+		$rec->ordering = 0;
+		$rec->state = 1;
+		$rec->checked_out = 0;
+		$rec->checked_out_time = NULL;
+		$rec->created_by = 0;
+		$rec->created_date = $today;
+
+        foreach ($days AS $ddate) {
+            $rec->tran_date = $ddate;
+            $result = Factory::getContainer()->get('DatabaseDriver')->insertObject('#__gatracklog_tracklogs', $rec);
+        }
+
+		Factory::getApplication()->enqueueMessage('Records created . . . ');
 
 	}
 
@@ -268,941 +1026,103 @@ class com_gatracklogInstallerScript extends InstallerScript
 	}
 
 	/**
-	 * *********************  All the plugin installation stuff  *******************************
+	 * Get the version of the component
+	 * @return version element of manifest
 	 */
-
-	/**
-	 * Installs plugins for this component
-	 * @param   mixed $parent Object who called the install/update method
-	 * @return void
-	 */
-	private function installPlugins($parent)
+	public static function getComponentVersion($component)
 	{
-		$installation_folder = $parent->getParent()->getPath('source');
-		$app                 = Factory::getApplication();
-
-		/* @var $plugins SimpleXMLElement */
-		if (method_exists($parent, 'getManifest'))
-		{
-			$plugins = $parent->getManifest()->plugins;
-		}
-		else
-		{
-			$plugins = $parent->get('manifest')->plugins;
-		}
-
-		if (count($plugins->children()))
-		{
-			$db = Factory::getContainer()->get('DatabaseDriver');
-			$query = $db->getQuery(true);
-
-			foreach ($plugins->children() as $plugin)
-			{
-				$pluginName  = (string) $plugin['plugin'];
-				$pluginGroup = (string) $plugin['group'];
-				$path        = $installation_folder . '/plugins/' . $pluginGroup . '/' . $pluginName;
-				$installer   = new Installer;
-
-				if (!$this->isAlreadyInstalled('plugin', $pluginName, $pluginGroup))
-				{
-					$result = $installer->install($path);
-				}
-				else
-				{
-					$result = $installer->update($path);
-				}
-
-				if ($result)
-				{
-					$app->enqueueMessage('Plugin ' . $pluginName . ' was installed successfully');
-				}
-				else
-				{
-					$app->enqueueMessage('There was an issue installing the plugin ' . $pluginName,
-						'error');
-				}
-
-				$query
-					->clear()
-					->update('#__extensions')
-					->set('enabled = 1')
-					->where(
-						array(
-							'type LIKE ' . $db->quote('plugin'),
-							'element LIKE ' . $db->quote($pluginName),
-							'folder LIKE ' . $db->quote($pluginGroup)
-						)
-					);
-				$db->setQuery($query);
-				$db->execute();
-			}
-		}
+		$componentTest = ComponentHelper::getComponent($component, true);
+        if (empty($componentTest->enabled)) {
+            return false;
+        } else {
+            $componentXML = Installer::parseXMLInstallFile(Path::clean(JPATH_ADMINISTRATOR . '/components/com_'.$component.'/'.$component.'.xml'));
+            return $componentXML['version'];
+        }
 	}
 
 	/**
-	 * Uninstalls plugins
-	 * @param   mixed $parent Object who called the uninstall method
-	 * @return void
+	 * ***************  Check for old data structure where columns need to be added  ***************
 	 */
-	private function uninstallPlugins($parent)
+
+	/**
+	 * Check for a columns in table
+	 */
+	private function checkColumns()
 	{
-		$app     = Factory::getApplication();
+		$table = '#__gatracklog_tracklogs';
+		$column = 'tran_date';
+		$after = 'user_id';
+		$type = 'date';
 
-		if (method_exists($parent, 'getManifest'))
-		{
-			$plugins = $parent->getManifest()->plugins;
-		}
-		else
-		{
-			$plugins = $parent->get('manifest')->plugins;
-		}
+        $colExists = $this->checkColumnExists($table, $column);
+		if (empty($colExists)) {
+            Factory::getApplication()->enqueueMessage(Text::_('Column '.$column.' NOT Exists'), 'warning');
+            $this->createColumn($table, $column, $after, $type);
+        }
 
-		if (count($plugins->children()))
-		{
-			$db = Factory::getContainer()->get('DatabaseDriver');
-			$query = $db->getQuery(true);
+		$column = 'pre_update';
+        $colExists = $this->checkColumnExists($table, $column);
+		if (empty($colExists)) {
+            Factory::getApplication()->enqueueMessage(Text::_('Column '.$column.' NOT Exists'), 'warning');
+            $this->createColumn($table, $column, $after, $type);
+        }
 
-			foreach ($plugins->children() as $plugin)
-			{
-				$pluginName  = (string) $plugin['plugin'];
-				$pluginGroup = (string) $plugin['group'];
-				$query
-					->clear()
-					->select('extension_id')
-					->from('#__extensions')
-					->where(
-						array(
-							'type LIKE ' . $db->quote('plugin'),
-							'element LIKE ' . $db->quote($pluginName),
-							'folder LIKE ' . $db->quote($pluginGroup)
-						)
-					);
-				$db->setQuery($query);
-				$extension = $db->loadResult();
-
-				if (!empty($extension))
-				{
-					$installer = new Installer;
-					$result    = $installer->uninstall('plugin', $extension);
-
-					if ($result)
-					{
-						$app->enqueueMessage('Plugin ' . $pluginName . ' was uninstalled successfully');
-					}
-					else
-					{
-						$app->enqueueMessage('There was an issue uninstalling the plugin ' . $pluginName,
-							'error');
-					}
-				}
-			}
-		}
 	}
 
 	/**
-	 * *********************  All the module installation stuff  *******************************
-	 */
-
-	/**
-	 * Installs modules for this component
-	 * @param   mixed $parent Object who called the install/update method
-	 * @return void
-	 */
-	private function installModules($parent)
-	{
-		$installation_folder = $parent->getParent()->getPath('source');
-		$app                 = Factory::getApplication();
-
-		if (method_exists($parent, 'getManifest'))
-		{
-			$modules = $parent->getManifest()->modules;
-		}
-		else
-		{
-			$modules = $parent->get('manifest')->modules;
-		}
-
-		if (!empty($modules))
-		{
-
-			if (count($modules->children()))
-			{
-				foreach ($modules->children() as $module)
-				{
-					$moduleName = (string) $module['module'];
-					$path       = $installation_folder . '/modules/' . $moduleName;
-					$installer  = new Installer;
-
-					if (!$this->isAlreadyInstalled('module', $moduleName))
-					{
-						$result = $installer->install($path);
-					}
-					else
-					{
-						$result = $installer->update($path);
-					}
-
-					if ($result)
-					{
-						$app->enqueueMessage('Module ' . $moduleName . ' was installed successfully');
-					}
-					else
-					{
-						$app->enqueueMessage('There was an issue installing the module ' . $moduleName,
-							'error');
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Uninstalls modules
-	 * @param   mixed $parent Object who called the uninstall method
-	 * @return void
-	 */
-	private function uninstallModules($parent)
-	{
-		$app = Factory::getApplication();
-
-		if (method_exists($parent, 'getManifest'))
-		{
-			$modules = $parent->getManifest()->modules;
-		}
-		else
-		{
-			$modules = $parent->get('manifest')->modules;
-		}
-
-		if (!empty($modules))
-		{
-
-			if (count($modules->children()))
-			{
-				$db = Factory::getContainer()->get('DatabaseDriver');
-				$query = $db->getQuery(true);
-
-				foreach ($modules->children() as $plugin)
-				{
-					$moduleName = (string) $plugin['module'];
-					$query
-						->clear()
-						->select('extension_id')
-						->from('#__extensions')
-						->where(
-							array(
-								'type LIKE ' . $db->quote('module'),
-								'element LIKE ' . $db->quote($moduleName)
-							)
-						);
-					$db->setQuery($query);
-					$extension = $db->loadResult();
-
-					if (!empty($extension))
-					{
-						$installer = new Installer;
-						$result    = $installer->uninstall('module', $extension);
-
-						if ($result)
-						{
-							$app->enqueueMessage('Module ' . $moduleName . ' was uninstalled successfully');
-						}
-						else
-						{
-							$app->enqueueMessage('There was an issue uninstalling the module ' . $moduleName,
-								'error');
-						}
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Check if an extension is already installed in the system
-	 * @param   string $type   Extension type
-	 * @param   string $name   Extension name
-	 * @param   mixed  $folder Extension folder(for plugins)
+	 * Check if a Database field exists
+	 * @param   string $table
+	 * @param   string $field
+	 * @param   string $type
 	 * @return boolean
 	 */
-	private function isAlreadyInstalled($type, $name, $folder = null)
-	{
-		$result = false;
-
-		switch ($type)
-		{
-			case 'plugin':
-				$result = file_exists(JPATH_PLUGINS . '/' . $folder . '/' . $name);
-				break;
-			case 'module':
-				$result = file_exists(JPATH_SITE . '/modules/' . $name);
-				break;
-		}
-
-		return $result;
-	}
-
-	/**
-	 * *********************  All the database installation stuff  *******************************
-	 */
-	/**
-	 * Method to update the DB of the component
-	 *
-	 * @param   mixed $parent Object who started the upgrading process
-	 *
-	 * @return void
-	 *
-	 * @since 0.2b
-     * @throws Exception
-	 */
-	private function installDb($parent)
-	{
-		$installation_folder = $parent->getParent()->getPath('source');
-
-		$app = Factory::getApplication();
-
-		if (function_exists('simplexml_load_file') && file_exists($installation_folder . '/installer/structure.xml'))
-		{
-			$component_data = simplexml_load_file($installation_folder . '/installer/structure.xml');
-
-			// Check if there are tables to import.
-			foreach ($component_data->children() as $table)
-			{
-				$this->processTable($app, $table);
-			}
-		}
-		else
-		{
-			if (!function_exists('simplexml_load_file'))
-			{
-				$app->enqueueMessage(Text::_('This script needs \'simplexml_load_file\' to update the component'));
-			}
-			else
-			{
-				$app->enqueueMessage(Text::_('Structure file was not found.'));
-			}
-		}
-	}
-
-	/**
-	 * Process a table
-	 *
-	 * @param   JApplicationCms  $app   Application object
-	 * @param   SimpleXMLElement $table Table to process
-	 *
-	 * @return void
-	 *
-	 * @since 0.2b
-	 */
-	private function processTable($app, $table)
+	public function checkDBFields($table, $field, $ftype)
 	{
 		$db = Factory::getContainer()->get('DatabaseDriver');
-
-		$table_added = false;
-
-		if (isset($table['action']))
-		{
-			switch ($table['action'])
-			{
-				case 'add':
-
-					// Check if the table exists before create the statement
-					if (!$this->existsTable($table['table_name']))
-					{
-						$create_statement = $this->generateCreateTableStatement($table);
-						$db->setQuery($create_statement);
-
-						try
-						{
-							$db->execute();
-							$app->enqueueMessage(
-								Text::sprintf(
-									'Table %s has been successfully created',
-									(string) $table['table_name']
-								)
-							);
-							$table_added = true;
-						} catch (Exception $ex)
-						{
-							$app->enqueueMessage(
-								Text::sprintf(
-									'There was an error creating the table %s. Error: %s',
-									(string) $table['table_name'],
-									$ex->getMessage()
-								), 'error'
-							);
-						}
-					}
-					break;
-				case 'change':
-
-					// Check if the table exists first to avoid errors.
-					if ($this->existsTable($table['old_name']) && !$this->existsTable($table['new_name']))
-					{
-						try
-						{
-							$db->renameTable($table['old_name'], $table['new_name']);
-							$app->enqueueMessage(
-								Text::sprintf(
-									'Table %s was successfully renamed to %s',
-									$table['old_name'],
-									$table['new_name']
-								)
-							);
-						} catch (Exception $ex)
-						{
-							$app->enqueueMessage(
-								Text::sprintf(
-									'There was an error renaming the table %s. Error: %s',
-									$table['old_name'],
-									$ex->getMessage()
-								), 'error'
-							);
-						}
-					}
-					else
-					{
-						if (!$this->existsTable($table['table_name']))
-						{
-							// If the table does not exists, let's create it.
-							$create_statement = $this->generateCreateTableStatement($table);
-							$db->setQuery($create_statement);
-
-							try
-							{
-								$db->execute();
-								$app->enqueueMessage(
-									Text::sprintf('Table %s has been successfully created', $table['table_name'])
-								);
-								$table_added = true;
-							} catch (Exception $ex)
-							{
-								$app->enqueueMessage(
-									Text::sprintf(
-										'There was an error creating the table %s. Error: %s',
-										$table['table_name'],
-										$ex->getMessage()
-									), 'error'
-								);
-							}
-						}
-					}
-					break;
-				case 'remove':
-
-					try
-					{
-						// We make sure that the table will be removed only if it exists specifying ifExists argument as true.
-						$db->dropTable((string) $table['table_name'], true);
-						$app->enqueueMessage(
-							Text::sprintf('Table %s was successfully deleted', $table['table_name'])
-						);
-					} catch (Exception $ex)
-					{
-						$app->enqueueMessage(
-							Text::sprintf(
-								'There was an error deleting Table %s. Error: %s',
-								$table['table_name'], $ex->getMessage()
-							), 'error'
-						);
-					}
-
-					break;
-			}
+	    $db->setQuery(' SELECT count(*) FROM information_schema.columns WHERE table_schema = '.$db->Quote($this->dbName).' AND table_name ='.$db->Quote($table).' AND column_name = '.$db->Quote($field) );
+		try {
+		    $return = $db->loadResult();
+		} catch (RuntimeException $e) {
+		    $return = false;
+            Factory::getApplication()->enqueueMessage($e->getMessage(), 'danger');
 		}
+		return $return;
+	}
 
-		// If the table wasn't added before, let's process the fields of the table
-		if (!$table_added)
-		{
-			if ($this->existsTable($table['table_name']))
-			{
-				$this->executeFieldsUpdating($app, $table);
-			}
+	/**
+	 * Check for a column in table
+	 * @param   table name
+	 * @param   column name
+	 * @return  boolean
+	 */
+	private function checkColumnExists($table, $column)
+	{
+		$db    = Factory::getContainer()->get('DatabaseDriver');
+		$db->setQuery('SHOW COLUMNS FROM '.$db->quotename($table) . ' LIKE '.$db->quote($column));
+		try {
+		    return $db->loadObject();
+		} catch (RuntimeException $e) {
+		    Factory::getApplication()->enqueueMessage($e->getMessage(), 'danger');
+		    return false;
 		}
 	}
 
 	/**
-	 * Checks if a certain exists on the current database
-	 *
-	 * @param   string $table_name Name of the table
-	 *
-	 * @return boolean True if it exists, false if it does not.
+	 * Check for a column in table
+	 * @param   table name
+	 * @param   column name
+	 * @return  boolean
 	 */
-	private function existsTable($table_name)
+	private function createColumn($table, $column, $after, $type)
 	{
-		$db = Factory::getContainer()->get('DatabaseDriver');
-
-		$table_name = str_replace('#__', $db->getPrefix(), (string) $table_name);
-
-		return in_array($table_name, $db->getTableList());
-	}
-
-	/**
-	 * Generates a 'CREATE TABLE' statement for the tables passed by argument.
-	 *
-	 * @param   SimpleXMLElement $table Table of the database
-	 *
-	 * @return string 'CREATE TABLE' statement
-	 */
-	private function generateCreateTableStatement($table)
-	{
-		$create_table_statement = '';
-
-		if (isset($table->field))
-		{
-			$fields = $table->children();
-
-			$fields_definitions = array();
-			$indexes            = array();
-
-			$db = Factory::getContainer()->get('DatabaseDriver');
-
-			foreach ($fields as $field)
-			{
-				$field_definition = $this->generateColumnDeclaration($field);
-
-				if ($field_definition !== false)
-				{
-					$fields_definitions[] = $field_definition;
-				}
-
-				if ($field['index'] == 'index')
-				{
-					$indexes[] = $field['field_name'];
-				}
-			}
-
-			foreach ($indexes as $index)
-			{
-				$fields_definitions[] = Text::sprintf(
-					'INDEX %s (%s ASC)',
-					$db->quoteName((string) $index), $index
-				);
-			}
-
-			// Avoid duplicate PK definition
-            if (strpos(implode(',', $fields_definitions), 'PRIMARY KEY') === false)
-            {
-                $fields_definitions[] = 'PRIMARY KEY (id)';
-            }
-
-			$create_table_statement = Text::sprintf(
-				'CREATE TABLE IF NOT EXISTS %s (%s)',
-				$table['table_name'],
-				implode(',', $fields_definitions)
-			);
-
-			if(isset($table['storage_engine']) && !empty($table['storage_engine']))
-			{
-				$create_table_statement .= " ENGINE=" . $table['storage_engine'];
-			}
-			if(isset($table['collation']))
-			{
-				$create_table_statement .= " DEFAULT COLLATE=" . $table['collation'];
-			}
-		}
-
-		return $create_table_statement;
-	}
-
-	/**
-	 * Generate a column declaration
-	 *
-	 * @param   SimpleXMLElement $field Field data
-	 *
-	 * @return string Column declaration
-	 */
-	private function generateColumnDeclaration($field)
-	{
-		$db = Factory::getContainer()->get('DatabaseDriver');
-		$col_name  = $db->quoteName((string) $field['field_name']);
-		$data_type = $this->getFieldType($field);
-
-		if ($data_type !== false)
-		{
-			$default_value = (isset($field['default'])) ? 'DEFAULT ' . $field['default'] : '';
-
-			$other_data = '';
-
-			if (isset($field['is_autoincrement']) && $field['is_autoincrement'] == 1)
-			{
-				$other_data .= ' AUTO_INCREMENT PRIMARY KEY';
-			}
-
-			$comment_value = (isset($field['description'])) ? 'COMMENT ' . $db->quote((string) $field['description']) : '';
-
-			return Text::sprintf(
-				'%s %s NOT NULL %s %s %s', $col_name, $data_type,
-				$default_value, $other_data, $comment_value
-			);
-		}
-
-		return false;
-	}
-
-	/**
-	 * Generates SQL field type of a field.
-	 *
-	 * @param   SimpleXMLElement $field Field information
-	 *
-	 * @return  mixed SQL string data type, false on failure.
-	 */
-	private function getFieldType($field)
-	{
-		$data_type = (string) $field['field_type'];
-
-		if (isset($field['field_length']) && ($this->allowsLengthField($data_type) || $data_type == 'ENUM'))
-		{
-			$data_type .= '(' . (string) $field['field_length'] . ')';
-		}
-
-		return (!empty($data_type)) ? $data_type : false;
-	}
-
-	/**
-	 * Check if a SQL type allows length values.
-	 *
-	 * @param   string $field_type SQL type
-	 *
-	 * @return boolean True if it allows length values, false if it does not.
-	 */
-	private function allowsLengthField($field_type)
-	{
-		$allow_length = array(
-			'INT',
-			'VARCHAR',
-			'CHAR',
-			'TINYINT',
-			'SMALLINT',
-			'MEDIUMINT',
-			'INTEGER',
-			'BIGINT',
-			'FLOAT',
-			'DOUBLE',
-			'DECIMAL',
-			'NUMERIC'
-		);
-
-		return (in_array((string) $field_type, $allow_length));
-	}
-
-	/**
-	 * Updates all the fields related to a table.
-	 *
-	 * @param   JApplicationCms  $app   Application Object
-	 * @param   SimpleXMLElement $table Table information.
-	 *
-	 * @return void
-	 */
-	private function executeFieldsUpdating($app, $table)
-	{
-		if (isset($table->field))
-		{
-			foreach ($table->children() as $field)
-			{
-				$table_name = (string) $table['table_name'];
-
-				$this->processField($app, $table_name, $field);
-			}
+		$db    = Factory::getContainer()->get('DatabaseDriver');
+		$db->setQuery('ALTER TABLE '.$db->quotename($table) . ' ADD '.$db->quotename($column).' '.$type.' NULL AFTER '.$db->quotename($after));
+		try {
+		    $db->execute();
+		    Factory::getApplication()->enqueueMessage('Column '. $column . ' created', 'warning');
+		} catch (RuntimeException $e) {
+		    Factory::getApplication()->enqueueMessage($e->getMessage(), 'danger');
 		}
 	}
-
-	/**
-	 * Process a certain field.
-	 *
-	 * @param   JApplicationCms  $app        Application object
-	 * @param   string           $table_name The name of the table that contains the field.
-	 * @param   SimpleXMLElement $field      Field Information.
-	 *
-	 * @return void
-	 */
-	private function processField($app, $table_name, $field)
-	{
-		$db = Factory::getContainer()->get('DatabaseDriver');
-
-		if (isset($field['action']))
-		{
-			switch ($field['action'])
-			{
-				case 'add':
-					$result = $this->addField($table_name, $field);
-
-					if ($result === MODIFIED)
-					{
-						$app->enqueueMessage(
-							Text::sprintf('Field %s has been successfully added', $field['field_name'])
-						);
-					}
-					else
-					{
-						if ($result !== NOT_MODIFIED)
-						{
-							$app->enqueueMessage(
-								Text::sprintf(
-									'There was an error adding the field %s. Error: %s',
-									$field['field_name'], $result
-								), 'error'
-							);
-						}
-					}
-					break;
-				case 'change':
-
-					if (isset($field['old_name']) && isset($field['new_name']))
-					{
-						if ($this->existsField($table_name, $field['old_name']) && !$this->existsField($table_name, $field['new_name']))
-						{
-							$renaming_statement = Text::sprintf(
-								'ALTER TABLE %s CHANGE %s %s %s',
-								$table_name, $db->quoteName($field['old_name']->__toString()),
-								$db->quoteName($field['new_name']->__toString()),
-								$this->getFieldType($field)
-							);
-							$db->setQuery($renaming_statement);
-
-							try
-							{
-								$db->execute();
-								$app->enqueueMessage(
-									Text::sprintf('Field %s has been successfully modified', $field['old_name'])
-								);
-							} catch (Exception $ex)
-							{
-								$app->enqueueMessage(
-									Text::sprintf(
-										'There was an error modifying the field %s. Error: %s',
-										$field['field_name'],
-										$ex->getMessage()
-									), 'error'
-								);
-							}
-						}
-						else
-						{
-							$result = $this->addField($table_name, $field);
-
-							if ($result === MODIFIED)
-							{
-								$app->enqueueMessage(
-									Text::sprintf('Field %s has been successfully modified', $field['field_name'])
-								);
-							}
-							else
-							{
-								if ($result !== NOT_MODIFIED)
-								{
-									$app->enqueueMessage(
-										Text::sprintf(
-											'There was an error modifying the field %s. Error: %s',
-											$field['field_name'], $result
-										), 'error'
-									);
-								}
-							}
-						}
-					}
-					else
-					{
-						$result = $this->addField($table_name, $field);
-
-						if ($result === MODIFIED)
-						{
-							$app->enqueueMessage(
-								Text::sprintf('Field %s has been successfully added', $field['field_name'])
-							);
-						}
-						else
-						{
-							if ($result !== NOT_MODIFIED)
-							{
-								$app->enqueueMessage(
-									Text::sprintf(
-										'There was an error adding the field %s. Error: %s',
-										$field['field_name'], $result
-									), 'error'
-								);
-							}
-						}
-					}
-
-					break;
-				case 'remove':
-
-					// Check if the field exists first to prevent issue removing the field
-					if ($this->existsField($table_name, $field['field_name']))
-					{
-						$drop_statement = Text::sprintf(
-							'ALTER TABLE %s DROP COLUMN %s',
-							$table_name, $field['field_name']
-						);
-						$db->setQuery($drop_statement);
-
-						try
-						{
-							$db->execute();
-							$app->enqueueMessage(
-								Text::sprintf('Field %s has been successfully deleted', $field['field_name'])
-							);
-						} catch (Exception $ex)
-						{
-							$app->enqueueMessage(
-								Text::sprintf(
-									'There was an error deleting the field %s. Error: %s',
-									$field['field_name'],
-									$ex->getMessage()
-								), 'error'
-							);
-						}
-					}
-
-					break;
-			}
-		}
-		else
-		{
-			$result = $this->addField($table_name, $field);
-
-			if ($result === MODIFIED)
-			{
-				$app->enqueueMessage(
-					Text::sprintf('Field %s has been successfully added', $field['field_name'])
-				);
-			}
-			else
-			{
-				if ($result !== NOT_MODIFIED)
-				{
-					$app->enqueueMessage(
-						Text::sprintf(
-							'There was an error adding the field %s. Error: %s',
-							$field['field_name'], $result
-						), 'error'
-					);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Add a field if it does not exists or modify it if it does.
-	 *
-	 * @param   string           $table_name Table name
-	 * @param   SimpleXMLElement $field      Field Information
-	 *
-	 * @return mixed Constant on success(self::$MODIFIED | self::$NOT_MODIFIED), error message if an error occurred
-	 */
-	private function addField($table_name, $field)
-	{
-		$db = Factory::getContainer()->get('DatabaseDriver');
-
-		$query_generated = false;
-
-		// Check if the field exists first to prevent issues adding the field
-		if ($this->existsField($table_name, $field['field_name']))
-		{
-			if ($this->needsToUpdate($table_name, $field))
-			{
-				$change_statement = $this->generateChangeFieldStatement($table_name, $field);
-				$db->setQuery($change_statement);
-				$query_generated = true;
-			}
-		}
-		else
-		{
-			$add_statement = $this->generateAddFieldStatement($table_name, $field);
-			$db->setQuery($add_statement);
-			$query_generated = true;
-		}
-
-		if ($query_generated)
-		{
-			try
-			{
-				$db->execute();
-
-				return MODIFIED;
-			} catch (Exception $ex)
-			{
-				return $ex->getMessage();
-			}
-		}
-
-		return NOT_MODIFIED;
-	}
-
-	/**
-	 * Checks if a field exists on a table
-	 *
-	 * @param   string $table_name Table name
-	 * @param   string $field_name Field name
-	 *
-	 * @return boolean True if exists, false if it do
-	 */
-	private function existsField($table_name, $field_name)
-	{
-		$db = Factory::getContainer()->get('DatabaseDriver');
-
-		return in_array((string) $field_name, array_keys($db->getTableColumns($table_name)));
-	}
-
-	/**
-	 * Check if a field needs to be updated.
-	 *
-	 * @param   string           $table_name Table name
-	 * @param   SimpleXMLElement $field      Field information
-	 *
-	 * @return boolean True if the field has to be updated, false otherwise
-	 */
-	private function needsToUpdate($table_name, $field)
-	{
-		$db = Factory::getContainer()->get('DatabaseDriver');
-
-		$query = Text::sprintf(
-			'SHOW FULL COLUMNS FROM %s WHERE Field LIKE %s', $table_name, $db->quote((string) $field['field_name'])
-		);
-		$db->setQuery($query);
-
-		$field_info = $db->loadObject();
-
-		if (strripos($field_info->Type, $this->getFieldType($field)) === false)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	/**
-	 * Generates an change column statement
-	 *
-	 * @param   string           $table_name Table name
-	 * @param   SimpleXMLElement $field      Field Information
-	 *
-	 * @return string Change column statement
-	 */
-	private function generateChangeFieldStatement($table_name, $field)
-	{
-		$column_declaration = $this->generateColumnDeclaration($field);
-
-		return Text::sprintf('ALTER TABLE %s MODIFY %s', $table_name, $column_declaration);
-	}
-
-	/**
-	 * Generates an add column statement
-	 *
-	 * @param   string           $table_name Table name
-	 * @param   SimpleXMLElement $field      Field Information
-	 *
-	 * @return string Add column statement
-	 */
-	private function generateAddFieldStatement($table_name, $field)
-	{
-		$column_declaration = $this->generateColumnDeclaration($field);
-
-		return Text::sprintf('ALTER TABLE %s ADD %s', $table_name, $column_declaration);
-	}
-
 
 }

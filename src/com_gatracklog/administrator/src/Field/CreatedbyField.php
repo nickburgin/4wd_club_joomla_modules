@@ -1,7 +1,8 @@
 <?php
 /**
- * @version    4.1.0
- * @package    Com_Gatracklog
+ * @version     4.2.0
+ * @package     pkg_mypackage
+ * @subpackage  com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -11,8 +12,8 @@ namespace GlennArkell\Component\Gatracklog\Administrator\Field;
 
 defined('JPATH_BASE') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Form\FormField;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormField;
 use \GlennArkell\Component\Gatracklog\Administrator\Helper\GatracklogHelper;
 
 /**
@@ -47,12 +48,12 @@ class CreatedbyField extends FormField
 
 		if ($user_id)
 		{
-			$user = Factory::getUser($user_id);
+			$user = GatracklogHelper::getSpecificUser($user_id);
 		}
 		else
 		{
-			$user   = GatracklogHelper::getSpecificUser();
-			$html[] = '<input type="hidden" name="' . $this->name . '" value="' . $user->id . '" />';
+			$user   = Factory::getApplication()->getIdentity();
+			$html[] = '<input type="hidden" name="' . $user->name . '" value="' . $user->id . '" />';
 		}
 
 		if (!$this->hidden)

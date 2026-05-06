@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.0.2
+ * @version    4.2.2
  * @package    Com_Gaforsale
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  Copyright (C) 2013. All rights reserved.
@@ -18,12 +18,12 @@ use \Joomla\CMS\Access\Access;
 use \Joomla\CMS\Layout\LayoutHelper;
 use \GlennArkell\Component\Gaforsale\Administrator\Helper\GaforsaleHelper;
 
-HTMLHelper::_('bootstrap.tooltip');
-HTMLHelper::_('behavior.multiselect');
-HTMLHelper::_('formbehavior.chosen', 'select');
+// load any assets required
+$wa = $this->document->getWebAssetManager()
+    ->usePreset('com_gaforsale.gaforsalepreset');
 
 // Load admin language file
-$lang = Factory::getLanguage();
+$lang = Factory::getApplication()->getLanguage();
 $lang->load('com_gaforsale', JPATH_ADMINISTRATOR);
 
 $user = GaforsaleHelper::getSpecificUser();
@@ -37,6 +37,12 @@ $canDelete  = $user->authorise('core.delete', 'com_gaforsale');
 $this->show_offerdate = $this->params->get('show_offerdate', 0);
 $adminUser = $this->params->get('email_user', 0);
 
+$baseURL = 'index.php?';
+$newLink = GaforsaleHelper::getHTTPQuery(null, 'task', 'fsitemform.edit', 'id', 0);
+$newURL = $baseURL.\http_build_query($newLink, '', '&amp;');
+
+//GaforsaleHelper::gaPrint(Factory::getApplication()->getUserState('com_gaforsale.test.data'));
+
 ?>
 <form action="<?php echo Route::_('index.php?option=com_gaforsale&view=fsitems'); ?>" method="post"
       name="adminForm" id="adminForm">
@@ -45,7 +51,7 @@ $adminUser = $this->params->get('email_user', 0);
 	<p><?php echo Text::_($this->params->get('header_text')); ?></p>
 	<p>&nbsp;</p>
 
-	<?php echo LayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
+	<?php echo LayoutHelper::render('default_filter', array('view' => $this), dirname(__FILE__)); ?>
 
 	<?php if ($this->items): ?>
 		<table width="98%" class="table table-striped" id="fsitemList" style="border-top: 1px solid #000;">
@@ -59,20 +65,29 @@ $adminUser = $this->params->get('email_user', 0);
 			<tbody>
 			    <?php foreach ($this->items as $item): ?>
 					<?php /* Set up if item should be displayed */ ?>
-					<?php $this->dispAdmin = ($canCheckin || ($user->id > 0 && $user->id == $adminUser)) ? true : false; ?>
-					<?php $this->dispOwner = ($user->id == $item->user_id) ? true : false; ?>
-                    <?php $this->record = $item; ?>
+					<?php 
+                        $this->dispAdmin = ($canCheckin || ($user->id > 0 && $user->id == $adminUser)) ? true : false;
+                        $pubLink = GaforsaleHelper::getHTTPQuery(null, 'task', 'fsitem.publish', 'id', $item->id);
+                        $pubLink = GaforsaleHelper::getHTTPQuery($pubLink, null, null, 'state', 1);
+                        $pubURL = $baseURL.\http_build_query($pubLink, '', '&amp;');
+                        $delLink = GaforsaleHelper::getHTTPQuery(null, 'task', 'fsitem.remove', 'id', $item->id);
+                        $delURL = $baseURL.\http_build_query($delLink, '', '&amp;');
+
+                        $this->dispOwner = ($user->id == $item->user_id) ? true : false;
+                        $this->record = $item;
+
+                    ?>
 
 					<?php if ($item->state == 0 && $this->dispAdmin): ?>
-						<tr><td colspan="2" style="border: 3px solid #f00;">
+						<tr><td colspan="2" style="border: 3px solid #a51f18;">
 							    <h3><?php echo Text::_('COM_GAFORSALE_FSITEM_NEEDSTOBEPUBLISHED'); ?> &nbsp;
 								<a class="btn btn-success" title="<?php echo Text::_('COM_GAFORSALE_FSITEM_MAKEVISIBLE'); ?>"
-									href="index.php?option=com_gaforsale&task=fsitem.publish&id=<?php echo $item->id; ?>"
+									href="<?php echo Route::_($pubURL); ?>"
 									data-original-title="<?php echo Text::_('COM_GAFORSALE_FSITEM_MAKEVISIBLE'); ?>">
 							   	    <i class="icon-publish"></i>
 					 			</a> &nbsp;
 								<a class="btn btn-danger" title="<?php echo Text::_('COM_GAFORSALE_FSITEM_REMOVE'); ?>"
-									href="index.php?option=com_gaforsale&task=fsitem.remove&id=<?php echo $item->id; ?>"
+									href="<?php echo Route::_($delURL); ?>"
 									data-original-title="<?php echo Text::_('COM_GAFORSALE_FSITEM_REMOVE'); ?>">
 							   	    <i class="icon-trash"></i>
 					 			</a>
@@ -110,7 +125,7 @@ $adminUser = $this->params->get('email_user', 0);
 	<?php endif; ?>
 
 	<?php if ($canCreate) : ?>
-		<a href="<?php echo Route::_('index.php?option=com_gaforsale&task=fsitemform.edit&id=0', false, 2); ?>" class="btn btn-success btn-small">
+		<a href="<?php echo Route::_($newURL); ?>" class="btn btn-success btn-small">
 			<i class="icon-plus"></i> <?php echo Text::_('COM_GAFORSALE_ADD_ITEM'); ?>
 		</a>
 	<?php endif; ?>
@@ -119,5 +134,5 @@ $adminUser = $this->params->get('email_user', 0);
 	<input type="hidden" name="boxchecked" value="0"/>
 	<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>"/>
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>
-	<?php echo JHtml::_('form.token'); ?>
+	<?php echo HTMLHelper::_('form.token'); ?>
 </form>

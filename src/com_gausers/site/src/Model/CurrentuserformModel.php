@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,20 +12,22 @@ namespace GlennArkell\Component\Gausers\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\MVC\Model\FormModel;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\CMS\User\User;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\User\UserFactory;
-use \Joomla\CMS\Access\Access;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\Filesystem\Path;
-use \Joomla\CMS\Date\Date;
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\MVC\Model\FormModel;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\User\User;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\User\UserFactory;
+use Joomla\CMS\User\UserFactoryInterface;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Access\Access;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\Path;
+use Joomla\CMS\Date\Date;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GausersHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GaimgmgmntHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GauserverifyHelper;
@@ -37,6 +39,7 @@ use \GlennArkell\Component\Gausers\Administrator\Helper\GaaddresslistHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GanamesHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GaemailHelper;
 use \GlennArkell\Component\Gausers\Administrator\Helper\GamailchimplistHelper;
+use \GlennArkell\Component\Gausers\Administrator\Helper\GamemberprofileHelper;
 
 /**
  * Form model.
@@ -59,13 +62,20 @@ class CurrentuserformModel extends FormModel
 		// Load state from the request userState on edit or from the passed variable on default
         if ($app->input->get('layout') == 'edit') {
             $id = $app->getUserState('com_gausers.edit.currentuser.id');
+            $act_id = $app->input->get('act_id', 0);
+            $app->setUserState('com_gausers.edit.action.id', $act_id);
         } elseif ($app->input->get('layout') == 'training') {
             $id = $app->getUserState('com_gausers.edit.currentuser.id');
+            $act_id = $app->input->get('act_id', 0);
+            $app->setUserState('com_gausers.edit.action.id', $act_id);
         } else {
             $id = $app->input->get('id');
             $app->setUserState('com_gausers.edit.currentuser.id', $id);
+            $act_id = $app->input->get('act_id', 0);
+            $app->setUserState('com_gausers.edit.action.id', $act_id);
         }
 		$this->setState('currentuser.id', $id);
+		$this->setState('action.id', $act_id);
 
 		// Load the parameters.
         $params = $app->getParams();
@@ -91,6 +101,7 @@ class CurrentuserformModel extends FormModel
 
 			if (empty($id)) {
 				$id = $this->getState('currentuser.id');
+				$act_id = $this->getState('action.id', 0);
 			}
 
             $params = ComponentHelper::getParams('com_gausers');
@@ -117,7 +128,7 @@ class CurrentuserformModel extends FormModel
 				//foreach ($members as $member) {
     				if ($member)
     				{
-    	                $user = GausersHelper::getSpecificUser();
+    	                $user = Factory::getApplication()->getIdentity();
     	                //$member->id = $id;
     	                $mshipId = GainvoiceHelper::getLastInvoiceMship($id);
     	                if ($mshipId) {
@@ -138,22 +149,28 @@ class CurrentuserformModel extends FormModel
     	                    throw new \Exception(Text::_('JERROR_ALERTNOAUTHOR'));
     	                }
     
-    					$up = UserHelper::getProfile($id);
-
-                        $mainProf = isset($up->profile) && $up->profile > '' ? $up->profile : array();
-                        
-                        if ($profile_suffix > ' ') {
-                            $locProf = $up->$local_profile;
-                            unset($locProf['memtype']);
-                        } else {
-                            $locProf = array();
-                        }
-
-                        $profile = array_merge($mainProf, $locProf);
-                        ksort($profile);
-                        //
-                        foreach ($profile as $key => $val ) {
-                            $member->$key = $val;
+    					if (PluginHelper::isEnabled('user', 'profile')) {
+                            $up = UserHelper::getProfile($id);
+    
+                            $mainProf = isset($up->profile) && $up->profile > '' ? $up->profile : array();
+                            
+                            if ($profile_suffix > ' ') {
+                                if (PluginHelper::isEnabled('user', $local_profile)) {
+                                    $locProf = $up->$local_profile;
+                                    unset($locProf['memtype']);
+                                } else {
+                                    $locProf = array();
+                                }
+                            } else {
+                                $locProf = array();
+                            }
+    
+                            $profile = array_merge($mainProf, $locProf);
+                            ksort($profile);
+                            //
+                            foreach ($profile as $key => $val ) {
+                                $member->$key = $val;
+                            }
                         }
     
     					$this->item = $member;
@@ -208,6 +225,41 @@ class CurrentuserformModel extends FormModel
 					$this->item->medcond2 = '';
 				}
 			}
+
+			if ($act_id) {
+                // updating an existing action record
+                $this->item->action_record = GausersHelper::getRecord('#__gausers_actions', 'id', $act_id);
+                $this->item->act_id = $act_id;
+                $this->item->act_name = $this->item->action_record->act_name;
+                $this->item->comment = \strip_tags($this->item->action_record->comment);
+            }
+
+            if ($this->item->id && $profile_suffix == 'raf') {
+				$connect = GausersHelper::getCustomFieldValue(1, $member->id);
+				if (isset($connect->fieldValue)) {
+					$this->item->crew_connect = $connect->fieldValue;
+				} else {
+					$this->item->crew_connect = 0;
+				}
+				$relat = GausersHelper::getCustomFieldValue(2, $member->id);
+				if (isset($relat->fieldValue)) {
+					$this->item->crew_relation = $relat->fieldValue;
+				} else {
+					$this->item->crew_relation = 0;
+				}
+				$closest = GausersHelper::getCustomFieldValue(3, $member->id);
+				if (isset($closest->fieldValue)) {
+					$this->item->closest = $closest->fieldValue;
+				} else {
+					$this->item->closest = 0;
+				}
+				$updnotif = GausersHelper::getCustomFieldValue(4, $member->id);
+				if (isset($updnotif->fieldValue)) {
+					$this->item->upd_notif = $updnotif->fieldValue;
+				} else {
+					$this->item->upd_notif = 0;
+				}
+            }
 		}
 
 		return $this->item;
@@ -252,8 +304,7 @@ class CurrentuserformModel extends FormModel
             $data = $this->getItem();
 
         }
-        //Factory::getApplication()->setUserState('com_gausers.test.data',$data);
-        
+
         return $data;
 	}
 
@@ -268,12 +319,12 @@ class CurrentuserformModel extends FormModel
 	{
 		// prepare passed data - id = 0 if new user record being created here
 		$user_id = (!empty($data['id'])) ? $data['id'] : (int)$this->getState('currentuser.id');
-
+        $newMember = !$user_id ? true : false;
         $data['city'] = (!empty($data['city'])) ? strtoupper($data['city'] ?? '') : strtoupper($data['postal_city'] ?? '');
         $data['region'] = (isset($data['plain_region'])) ? strtoupper($data['plain_region'] ?? '') : strtoupper($data['region'] ?? '');
         $data['postal_region'] = (isset($data['postal_plain_region'])) ? strtoupper($data['postal_plain_region'] ?? '') : strtoupper($data['postal_region'] ?? '');
 
-        $user = GausersHelper::getSpecificUser();
+        $user = Factory::getApplication()->getIdentity();
 		$canMembers  = $user->authorise('core.members', 'com_gausers');
 		$canAdmin  = $user->authorise('core.admin', 'com_gausers');
 		$canAdmin = ($canMembers || $canAdmin) ? 1 : 0;
@@ -296,9 +347,7 @@ class CurrentuserformModel extends FormModel
         $log_actions  = $params->get('log_actions');
         $localprof  = 'profile'.$prof_suf.'.';
         $newApplic  = $params->get('newMember', 0);
-        //$temp_group = $params->get('temp_group',0);
-        //$temp_mship = $params->get('temp_mship',0);
-
+        $secGroup  = $params->get('mbrsec_group', 8);
 
         // get mship type id reference for use later if needed
         $mship_id = (!empty($data['mship_id'])) ? $data['mship_id'] : $default_mship;
@@ -323,7 +372,7 @@ class CurrentuserformModel extends FormModel
 			}
 		}
 
-        if (!$user_id) {
+        if ($newMember) {
 			// create new user
 			$user_id = GaregistrationHelper::setupNewUserData($data);
 			if (!$user_id) {
@@ -340,7 +389,7 @@ class CurrentuserformModel extends FormModel
 
     	// fields specifically for Covid19
         if ($hide_vax) {
-            // ignore these fields 
+            // ignore these fields
         } else {
             $vax_field1  = $params->get('vax_field1', 0);
             $exempt_field1  = $params->get('exempt_field1', 0);
@@ -372,7 +421,7 @@ class CurrentuserformModel extends FormModel
     				GausersHelper::createCustomFieldValue($med_cond1, $user_id, $data['medcond1']);
     			}
     		}
-    
+
             if ($vax_field2) {
     			$vaxSet2 = GausersHelper::getCustomFieldValue($vax_field2, $user_id);
     			if (isset($vaxSet2->fieldValue)) {
@@ -398,11 +447,38 @@ class CurrentuserformModel extends FormModel
     			}
     		}
 		}
+		
+		if ($prof_suf == 'raf') {
+			$connection = GausersHelper::getCustomFieldValue(1, $user_id);
+			if (isset($connection->fieldValue)) {
+				GausersHelper::updateCustomFieldValue(1, $user_id, $data['crew_connect']);
+			} else {
+				GausersHelper::createCustomFieldValue(1, $user_id, $data['crew_connect']);
+			}
+			$relationship = GausersHelper::getCustomFieldValue(2, $user_id);
+			if (isset($relationship->fieldValue)) {
+				GausersHelper::updateCustomFieldValue(2, $user_id, $data['crew_relation']);
+			} else {
+				GausersHelper::createCustomFieldValue(2, $user_id, $data['crew_relation']);
+			}
+			$closest = GausersHelper::getCustomFieldValue(3, $user_id);
+			if (isset($closest->fieldValue)) {
+				GausersHelper::updateCustomFieldValue(3, $user_id, $data['closest']);
+			} else {
+				GausersHelper::createCustomFieldValue(3, $user_id, $data['closest']);
+			}
+			$updnotif = GausersHelper::getCustomFieldValue(4, $user_id);
+			if (isset($updnotif->fieldValue)) {
+				GausersHelper::updateCustomFieldValue(4, $user_id, $data['upd_notif']);
+			} else {
+				GausersHelper::createCustomFieldValue(4, $user_id, $data['upd_notif']);
+			}
+		}
 
         // cycle through passed data array to load profile information
         foreach ($data as $key => $value) {
             $localprofkey = $localprof.$key;
-            
+
             // ignore display type fields profile data and just get real data
 			Switch ($key) {
 				case 'id': /* do nothing */; break;
@@ -444,7 +520,33 @@ class CurrentuserformModel extends FormModel
 			$actionlogged = GausersHelper::recordActionLog($user, $user->id, 'member', $user_id);
 		}
 
+        // check if membership secretary should be notified of a new member
+        if ($params->get('not_mbrsec') && $newMember) {
+            $data['sitename'] = Factory::getApplication()->get('fromname');
+            $data['secname'] = '' ;
+            $data['recips'] = '' ;
+            $secIds = Access::getUsersByGroup($secGroup);
+            foreach ($secIds as $secId) {
+                $sec = GausersHelper::getSpecificUser($secId);
+                $data['secname'] .= $sec->name.', ';
+                $data['recips'] .= array('email'=>$sec->email, 'name'=>$sec->name);
+            }
+            
+            $sent = GaemailHelper::sendEmailTemplate('com_gausers.mbrsec', $data);
+			if ($sent) {
+                Factory::getApplication()->enqueueMessage(Text::_('COM_GAUSERS_NEWMBRSEC_SUCCESSFULLY'), 'success');
+            } else {
+                Factory::getApplication()->enqueueMessage(Text::_('COM_GAUSERS_NEWMBRSEC_SUCCESSFULLY').' failed ', 'warning');
+            }
+		}
+
 		GaauditHelper::createAuditTrail($data, $user_id, $params);
+
+		if ($params->get('pwd_reset') && $newMember) {
+            $uObject = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($user_id);
+            $uObject->requireReset = 1;
+            $result = Factory::getContainer()->get('DatabaseDriver')->updateObject('#__users', $uObject, 'id');
+		}
 
         return $user_id;
 
@@ -452,7 +554,7 @@ class CurrentuserformModel extends FormModel
 
     public function genMembersDirectory()
 	{
-        $user = GausersHelper::getSpecificUser();
+        $user = Factory::getApplication()->getIdentity();
 
         if($user->authorise('core.dldir','com_gausers')) {
 			$extractOK = GausersHelper::createMembersDirectory();
@@ -466,12 +568,12 @@ class CurrentuserformModel extends FormModel
 
 	}
 
-    public function genMembersList()
+    public function genMembersList($finstatus = null, $mship = null)
 	{
-        $user = GausersHelper::getSpecificUser();
+        $user = Factory::getApplication()->getIdentity();
 
         if($user->authorise('core.dldir','com_gausers')) {
-			$extractOK = GalistmembersHelper::createPDF();
+			$extractOK = GalistmembersHelper::createPDF($finstatus, $mship);
 			if ($extractOK) {
 				Factory::getApplication()->enqueueMessage(Text::_('COM_GAUSERS_DIR_GEN_SUCCESSFULLY'));
 			}
@@ -495,7 +597,7 @@ class CurrentuserformModel extends FormModel
     public function delete($data)
     {
         $id = (!empty($data['id'])) ? $data['id'] : (int)$this->getState('currentuser.id');
-        if(GausersHelper::getSpecificUser()->authorise('core.delete', 'com_gausers') !== true){
+        if(Factory::getApplication()->getIdentity()->authorise('core.delete', 'com_gausers') !== true){
             throw new \Exception(403, Text::_('JERROR_ALERTNOAUTHOR'));
             return false;
         }
@@ -608,7 +710,7 @@ class CurrentuserformModel extends FormModel
 
 		// now that data collected and updated, process the audit trace
 		$data['comment'] = 'Member Passed Away'."\r\n".'Comment - '.$data['left_comment'];
-		$user = GausersHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
         $data['updated_by'] = $user->id;
 		$tran_id = GaauditHelper::createAuditTrail($data, $u->id, $params);
@@ -630,7 +732,7 @@ class CurrentuserformModel extends FormModel
         $leftclub_group  = $params->get('leftclub_group');
         $data['act_name'] = 'Left the Club';
 		$data['comment'] = $data['act_name']."\r\n".'Reason - '.$data['left_reason']."\r\n".'Comment - '.$data['left_comment'];
-		$user = GausersHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
         // get the user record for the member being updated
 		$u = GausersHelper::getSpecificUser($data['user_id']);
         
@@ -657,7 +759,7 @@ class CurrentuserformModel extends FormModel
 	{
         $params = ComponentHelper::getParams('com_gausers');
         $sendto_group  = $params->get('sendto_group');
-		$user = GausersHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
         // get the user record for the member being updated
 		$u = GausersHelper::getSpecificUser($id);
@@ -685,51 +787,100 @@ class CurrentuserformModel extends FormModel
         $sendto_group  = $params->get('sendto_group');
         $mship_id  = $params->get('temp_mship');
         $default_mship  = $params->get('default_mship');
-        $invoice_date  = $params->get('invoice_date');
-		$user = GausersHelper::getSpecificUser();
+        $inv_start_date  = $params->get('invoice_date');
+        $use_cutoff  = $params->get('use_cutoff', 0);
+        $cutoff_date  = $params->get('cutoff_date');
+        $mship_period  = $params->get('mship_period', 1);
+        $exEmailPref = $params->get('exclude_email_pref','noemail');
+		$user = Factory::getApplication()->getIdentity();
+
+        // get default mship details
+        $dMship = GausersHelper::getMshiptypeID($default_mship);
+
+        // calc end date based on the config start date
+        $mshipDate = new Date(strtotime($inv_start_date));
+        $eDate = $mshipDate->modify('+'.$dMship->mship_term.' '.$dMship->term_type);
+        $endDate = $eDate->modify('-1 DAY');
+        $expDate = date_format($endDate,'Y-m-d');
 
         // get the user record for the member being updated
 		$u = GausersHelper::getSpecificUser($id);
-        $data = array('left_reason'=>'', 'left_comment'=>'Converted from temporary membership', 'act_name'=>'Convert from Temporary' );
+		$u = GamemberprofileHelper::getMemberProfile($u, $params);
+		$today = date_format(Factory::getDate(),'Y-m-d');
 
-		// create the audit trial record
-		GaauditHelper::createAuditTrail($data, $id, $params);
-		GaauditHelper::saveMshipActions($data, $u, $params);
-
-		// update the user records usergroup
-		GausersHelper::resetMemberUserGroup($u, $sendto_group);
-
-        // catch an action log
-        GausersHelper::recordActionLog($u, $user->id, 'convertmember', $id);
-        
         // check mship type and generate invoice if necessary
         $inv = GainvoiceHelper::getLastInvoiceMship($u->id);
         if ($inv) {
-            // get default mship details
-            $dMship = GausersHelper::getMshiptypeID($default_mship);
-            $mshipDate = new Date(strtotime($invoice_date));
+            
+            $data = array('left_reason'=>'', 'left_comment'=>'Converted from temporary membership', 'act_name'=>'Convert from Temporary' );
 
-            // calc new end date
-            $eDate = $mshipDate->modify('+'.$dMship->mship_term.' '.$dMship->term_type);
-            $expDate = date_format($eDate,'Y-m-d H:i:s');
+    		// create the audit trail and action records
+    		GaauditHelper::createAuditTrail($data, $id, $params);
+    		GaauditHelper::saveMshipActions($data, $u, $params);
+    
+    		// update the user records usergroup
+    		GausersHelper::resetMemberUserGroup($u, $sendto_group);
+    
+            // catch an action log
+            GausersHelper::recordActionLog($u, $user->id, 'convertmember', $id);
+
+            if ($inv->end_date <= $today) {
+                // no discounts just a full membership is required so reset old inv value to zero
+                $inv->invoice_amt = 0;
+                Factory::getApplication()->enqueueMessage(Text::sprintf('COM_GAUSERS_TEMP_MSHIP_EXPIRED', $u->name), 'notice');
+            }
+
+            if ($mship_period == 3 ) {
+                // get the registration date
+                $regoDate = new Date(strtotime($u->registerDate));
+                $origRegoDate = date_format($regoDate,'Y-m-d');
+                $convEDate = $regoDate->modify('+'.$dMship->mship_term.' '.$dMship->term_type);
+                $expDate = date_format($convEDate,'Y-m-d');
+            }
+            
+            if ($use_cutoff && ($origRegoDate >= $cutoff_date) && ($mship_period != 3)) {
+                // extend expiry to the following year end
+                $extendedDate = new Date(strtotime($expDate));
+                $extEndDate = $extendedDate->modify('+'.$dMship->mship_term.' '.$dMship->term_type);
+                $expDate = date_format($extEndDate,'Y-m-d');
+            }
+
+            Factory::getApplication()->enqueueMessage($inv->end_date.' - '.$expDate, 'notice');
 
             // calc difference between mships (default & temp)
             $amt = ($dMship->subscrib_amt + $dMship->joining_fee) - $inv->invoice_amt;
 
             if ($amt == 0) { return true; }
-    
+
             $invRec = GainvoiceHelper::createNewInvoiceRec($u->id, $amt, $dMship, $expDate);
 
     	    $nextinv  = str_pad($invRec->id, 6, '0', STR_PAD_LEFT);
     		Factory::getApplication()->setUserState('com_gausers.nextinv.data', $nextinv);
-    
-            $data = array();
-    		$data['nextinv'] = $nextinv;
-    		$data['invRec'] = $invRec;
-    		$data['mship'] = $dMship;
-    		$data['conversion'] = 1;
+        	Factory::getApplication()->setUserState('com_gausers.user.data', $u);
 
-            return GainvoiceHelper::createAdHocPDF($data, $id, $params);
+            $newRec = array();
+    		$newRec['nextinv'] = $nextinv;
+    		$newRec['invRec'] = $invRec;
+    		$newRec['mship'] = $dMship;
+    		$newRec['conversion'] = 1;
+
+            $attachfile = GainvoiceHelper::createAdHocPDF($newRec, $u->id, $params);
+
+            if ($attachfile == false) {
+                Factory::getApplication()->enqueueMessage(Text::_('COM_GAUSERS_NO_INV_CREATED'), 'danger');
+                return true;
+            }
+
+    		if (substr($u->email,0,strlen($exEmailPref)) != $exEmailPref) {
+                $subject = Text::_('COM_GAUSERS_INVOICE_EMAIL_SUBJECT');
+                $body = Text::sprintf('COM_GAUSERS_INVOICE_EMAIL_SALUTATION',$u->name);
+                $body .= Text::_('COM_GAUSERS_INVOICE_EMAIL_BODY');
+        		$sentOK = GaemailHelper::sendEmail(array($u->email), $body, $subject, $attachfile);
+    		} else {
+                Factory::getApplication()->enqueueMessage(Text::sprintf('COM_GAUSERS_USER_HAS_NO_EMAIL', $u->name), 'notice');
+            }
+    
+            return $invRec;
         }
 	}
 
@@ -751,9 +902,20 @@ class CurrentuserformModel extends FormModel
         $profSuffix = $params->get('profile_suffix','b4wdc');
         $locProf = 'profile'.$profSuffix;
         $mship_id = Factory::getApplication()->getUserState('com_gausers.mship.type.id');
-		$u = GausersHelper::getSpecificUser($newId);
+		$user = GausersHelper::getSpecificUser($newId);
 
-        $u->user_id = $u->id;
+		// setup simple user data
+		$u = new \stdClass();
+		$u->id = $user->id;
+		$u->name = $user->name;
+		$u->email = $user->email;
+		$u->block = $user->block;
+		$u->sendEmail = $user->sendEmail;
+		$u->groups = $user->groups;
+		$u->guest = $user->guest;
+		$u->registerDate = $user->registerDate;
+		$u->lastvisitDate = $user->lastvisitDate;
+        $u->user_id = $user->id;
 
         $up = UserHelper::getProfile($u->id);
 		// cycle through profile elements and load into main user object
@@ -775,14 +937,16 @@ class CurrentuserformModel extends FormModel
                 $mship = GausersHelper::getMshiptypeID($defMship);
             }
         } else {
-            if (!empty($mship_id)) {$defMship = $mship_id; }
+            if (!empty($mship_id)) {
+                $defMship = $mship_id;
+            }
             $mship = GausersHelper::getMshiptypeID($defMship);
         }
 
         $u->mship = $mship;
 
         Factory::getApplication()->setUserState('com_gausers.user.data', $u);
-
+        
         $attachfile = GainvoiceHelper::mainInvoiceCreation($id, $u, $params);
 
         if ($attachfile == false) {
@@ -805,7 +969,7 @@ class CurrentuserformModel extends FormModel
 
     public function uplattachfile($data)
 	{
-        if(GausersHelper::getSpecificUser()->authorise('core.attupload', 'com_gausers') !== true){
+        if(Factory::getApplication()->getIdentity()->authorise('core.attupload', 'com_gausers') !== true){
             throw new \Exception(403, Text::_('JERROR_ALERTNOAUTHOR'));
             return false;
         }
@@ -864,26 +1028,28 @@ class CurrentuserformModel extends FormModel
 	}
 
     /**
-     * Collect information about member leaving
-     * @params $data = user_id, user_name, left_date, left_reason, left_comment
+     * Collect information about members action
+     * @params $data = user_id, act_name, comment
      * @return bool
      */
     public function createAction($data)
 	{
 		// get the current date-time based on timezone
-		$date = GausersHelper::getTodaysDate();
+		$date = Factory::getDate();
 		$today = date_format($date,'Y-m-d H:i:s');
-		$u = GausersHelper::getSpecificUser();
+		$u = Factory::getApplication()->getIdentity();
 
 		$newAct = new \stdClass();
 		$newAct->id=0;
 		$newAct->ordering=0;
 		$newAct->state=1;
-		$newAct->checked_out=0;
+		$newAct->checked_out=null;
 		$newAct->created_by=$u->id;
 		$newAct->created_date=$today;
+		$newAct->modified_by = $u->id;
+		$newAct->modified_date = $today;
 		$newAct->user_id = $data['user_id'];
-		$newAct->cat_id=0;
+		$newAct->category_id=0;
 		$newAct->act_name= $data['act_name'];
 		$newAct->comment = '<p>' . $data['comment'] . '</p>';
 
@@ -896,9 +1062,60 @@ class CurrentuserformModel extends FormModel
         return $newAct->id;
 	}
 
+    /**
+     * Update members action
+     * @params $data = act_id, act_name, comment
+     * @return bool
+     */
+    public function updAction($data)
+	{
+		// get the current date-time based on timezone
+		$today = Factory::getDate()->toSql();
+		$u = Factory::getApplication()->getIdentity();
+		$record = GausersHelper::getRecord('#__gausers_actions', 'id', $data['act_id']);
+
+		$record->modified_by = $u->id;
+		$record->modified_date = $today;
+		$record->act_name = $data['act_name'];
+		$record->comment = '<p>' . $data['comment'] . '</p>';
+
+	    try {
+	        $result = Factory::getContainer()->get('DatabaseDriver')->updateObject('#__gausers_actions', $record, 'id');
+	    } catch (RuntimeException $e) {
+	        Factory::getApplication()->enqueueMessage($e->getMessage());
+	    }
+
+        return $record->user_id;
+	}
+
+    /**
+     * Update members action
+     * @params $data = act_id, act_name, comment
+     * @return bool
+     */
+    public function delAction($id)
+	{
+		// get the current date-time based on timezone
+		$today = Factory::getDate()->toSql();
+		$u = Factory::getApplication()->getIdentity();
+		$record = GausersHelper::getRecord('#__gausers_actions', 'id', $id);
+
+		$record->modified_by = $u->id;
+		$record->modified_date = $today;
+		$record->state = -2;
+
+	    try {
+	        $result = Factory::getContainer()->get('DatabaseDriver')->updateObject('#__gausers_actions', $record, 'id');
+	    } catch (RuntimeException $e) {
+	        Factory::getApplication()->enqueueMessage($e->getMessage());
+	    }
+
+        return $record->user_id;
+	}
+
     public function genAddressList()
 	{
-        $user = GausersHelper::getSpecificUser();
+        $user = Factory::getApplication()->getIdentity();
 
         if($user->authorise('core.dldir','com_gausers')) {
 			$extractOK = GaaddresslistHelper::createNameList();
@@ -914,7 +1131,7 @@ class CurrentuserformModel extends FormModel
 
     public function genMailChimpList()
 	{
-        $user = GausersHelper::getSpecificUser();
+        $user = Factory::getApplication()->getIdentity();
 
         if($user->authorise('core.dldir','com_gausers')) {
 			$extractOK = GamailchimplistHelper::createList();
@@ -925,6 +1142,51 @@ class CurrentuserformModel extends FormModel
         }
 
         return true;
+
+	}
+
+    /**
+     * Payment in advance of the usual renewal process
+     * @params $data = user_id, mship_id, new_end_date
+     * @return bool
+     */
+    public function advPayment($data)
+	{
+        $user = GausersHelper::getSpecificUser($data['user_id']);
+        $params = ComponentHelper::getParams('com_gausers');
+        $user = GamemberprofileHelper::getMemberProfile($user, $params);
+        $exEmailPref = $params->get('exclude_email_pref','noemail');
+
+        $Mship = GausersHelper::getMshiptypeID($data['mship_id']);
+        $invRec = GainvoiceHelper::createNewInvoiceRec($data['user_id'], $Mship->subscrib_amt, $Mship, $data['new_end_date']);
+
+    	$nextinv  = str_pad($invRec->id, 6, '0', STR_PAD_LEFT);
+    	Factory::getApplication()->setUserState('com_gausers.nextinv.data', $nextinv);
+    	Factory::getApplication()->setUserState('com_gausers.user.data', $user);
+
+        $newRec = array();
+    	$newRec['nextinv'] = $nextinv;
+    	$newRec['invRec'] = $invRec;
+    	$newRec['mship'] = $Mship;
+    	$newRec['conversion'] = 0;
+
+        $attachfile = GainvoiceHelper::createAdHocPDF($newRec, $data['user_id'], $params);
+        
+        if ($attachfile == false) {
+            Factory::getApplication()->enqueueMessage(Text::_('COM_GAUSERS_NO_INV_CREATED'), 'danger');
+            return true;
+        }
+
+		if (substr($user->email,0,strlen($exEmailPref)) != $exEmailPref) {
+            $subject = Text::_('COM_GAUSERS_INVOICE_EMAIL_SUBJECT');
+            $body = Text::sprintf('COM_GAUSERS_INVOICE_EMAIL_SALUTATION',$user->name);
+            $body .= Text::_('COM_GAUSERS_INVOICE_EMAIL_BODY');
+    		$sentOK = GaemailHelper::sendEmail(array($user->email), $body, $subject, $attachfile);
+		} else {
+            Factory::getApplication()->enqueueMessage(Text::sprintf('COM_GAUSERS_USER_HAS_NO_EMAIL', $user->name));
+        }
+
+        return $invRec;
 
 	}
 

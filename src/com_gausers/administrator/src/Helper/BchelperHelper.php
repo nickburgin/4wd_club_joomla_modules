@@ -2,7 +2,7 @@
 
 /**
  * @package Module Barcode Cooker
- * @version 5.1.6
+ * @version 6.0.0
  * @author Glenn Arkell
  * @copyright (C) 2013- Glenn Arkell
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -13,8 +13,8 @@ namespace GlennArkell\Component\Gausers\Administrator\Helper;
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-use \Joomla\CMS\Factory;
-use \Joomla\Filesystem\Path;
+use Joomla\CMS\Factory;
+use Joomla\Filesystem\Path;
 
 class BchelperHelper
 {

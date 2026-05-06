@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    com_gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -12,23 +12,23 @@ namespace GlennArkell\Component\Gatripsys\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\User\UserFactoryInterface;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\Filesystem\Path;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\CMS\User\User;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\Mail\MailTemplate;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\Session\SessionInterface;
-use \Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\User\UserFactoryInterface;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\Filesystem\Path;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\CMS\User\User;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Mail\MailTemplate;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Installer\Installer;
+use Joomla\Session\SessionInterface;
+use Joomla\CMS\Application\SiteApplication;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GainvoiceHelper;
 
@@ -82,10 +82,11 @@ class GaemailHelper
         }
 
 	    try {
-	        if (!$params->get('test_switch', 0)) {
-                $mail->Send();
+	        $sentOK = true;
+            if (!$params->get('test_switch', 0)) {
+                $sentOK = $mail->Send();
             }
-	        return true;
+	        return $sentOK;
         } catch (\Exception $e) {
             $app->enqueueMessage(Text::_($e->getMessage()), 'warning');
 	        return false;
@@ -139,7 +140,7 @@ class GaemailHelper
         $data['booking_status'] = (isset($item->booking_status) && $item->booking_status > '') ? $item->booking_status : '';
 
         foreach ($item->members as $recip) {
-            if (isset($item->att_name) && $item->att_name > '') { 
+            if (isset($item->att_name) && $item->att_name > '') {
                 $data['member_name'] = $item->att_name; 
                 $name = isset($recip->full_name) ? $recip->full_name : $recip->name;
             } else {

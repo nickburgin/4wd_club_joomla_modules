@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -11,12 +11,12 @@
 defined('_JEXEC') or die;
 
 
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Layout\LayoutHelper;
-use \Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\Language\Text;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 
 /** @var \Joomla\CMS\WebAsset\WebAssetManager $wa */
@@ -26,7 +26,7 @@ $wa = $this->document->getWebAssetManager()
 $wa->useScript('table.columns')
     ->useScript('multiselect');
 
-$user      = GacaleventsHelper::getSpecificUser();
+$user      = Factory::getApplication()->getIdentity();
 $listOrder = $this->state->get('list.ordering', 'e.depart_date');
 $listDirn  = $this->state->get('list.direction', 'DESC');
 $canOrder  = $user->authorise('core.edit.state', 'com_gacalevents');

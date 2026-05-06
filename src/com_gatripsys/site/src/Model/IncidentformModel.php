@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    5.1.0
+ * @version    5.3.0
  * @package    Com_Gatripsys
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2016 Glenn Arkell
@@ -12,13 +12,14 @@ namespace GlennArkell\Component\Gatripsys\Site\Model;
 // No direct access.
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\MVC\Model\FormModel;
-use \Joomla\CMS\Table\Table;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Date\Date;
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\MVC\Model\FormModel;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Date\Date;
 use \GlennArkell\Component\Gatripsys\Administrator\Helper\GatripsysHelper;
+use \GlennArkell\Component\Gatripsys\Administrator\Helper\GauploadimgHelper;
 
 /**
  * Form model.
@@ -121,6 +122,9 @@ class IncidentformModel extends FormModel
 				$this->item = ArrayHelper::toObject($properties, 'stdClass');
 			}
 
+			if (isset($this->item->inc_img) && $this->item->inc_img > '') {
+				$this->item->inc_img_disp = $this->item->inc_img;
+			}
 		}
 
 		if (!isset($this->item->trip_id)) {
@@ -363,6 +367,24 @@ class IncidentformModel extends FormModel
 
 		return $table !== false;
 	}
-	
+
+    /**
+     * Method to upload an attachment using the helper
+     */
+    public function uploadAttachment($tran_file = null, $params = null, $file_type = 'trip')
+    {
+        $safeFileOptions  = $params->get( 'safe_files' );
+        $tripincdir  = $params->get( 'incimg_dir', 'images/trips/trip_incidents' );
+		$file_ext = substr($tran_file['name'],-3);
+
+		if (!in_array($file_ext, $safeFileOptions)) {
+			Factory::getApplication()->enqueueMessage(Text::_('File format ('.$file_ext.') not allowed'), 'danger');
+			return false;
+		}
+
+        return GauploadimgHelper::uploadAttachment($tripincdir, $tran_file);
+
+		//return $file;
+    }
 
 }

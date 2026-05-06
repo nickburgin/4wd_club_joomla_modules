@@ -1,7 +1,7 @@
 <?php
 /**
- * @version    4.2.1
- * @package    Com_Gabroadcast
+ * @version     4.3.3
+ * @package     com_gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -22,15 +22,12 @@ $this->document->getWebAssetManager()
     ->usePreset('com_gabroadcast.gabroadcastpreset');
 
 //Load admin language file
-$lang = Factory::getLanguage();
-$lang->load('com_gabroadcast', JPATH_ADMINISTRATOR);
+Factory::getApplication()->getLanguage()->load('com_gabroadcast', JPATH_ADMINISTRATOR);
 
-$today = GabroadcastHelper::getTodaysDate();
+$today = Factory::getDate()->toSql();
 $cycle_time = $this->params->get('cycle_time', 0);
 
-//$default_ldate = date_format(date_sub($date, date_interval_create_from_date_string($cycle_time.' minutes')),'Y-m-d H:i:s');
-
-$user       = GabroadcastHelper::getSpecificUser();
+$user       = Factory::getApplication()->getIdentity();
 $listOrder  = $this->state->get('list.ordering', 'a.created_date');
 $listDirn   = $this->state->get('list.direction', 'DESC');
 $canCreate  = $user->authorise('core.create', 'com_gabroadcast');
@@ -39,15 +36,24 @@ $canCheckin = $user->authorise('core.manage', 'com_gabroadcast');
 $canChange  = $user->authorise('core.edit.state', 'com_gabroadcast');
 $canDelete  = $user->authorise('core.delete', 'com_gabroadcast');
 $lastbcast = GabroadcastHelper::getLastBroadcast();
-//if (!$lastbcast) { $lastbcast = $default_ldate; }
-//$next_bcast = date_format(date_add(date_create($lastbcast), date_interval_create_from_date_string($cycle_time.' minutes')),'Y-m-d H:i:s');
 $canBeSent = $today >= $lastbcast ? true : false;
 
 $baseURL = 'index.php?';
 
+//GabroadcastHelper::print_r2(Factory::getApplication()->getUserState('com_gabroadcast.test.data'));
+
+// display heading for the list
+if ($this->params->get('view_type', 1) == 5) {
+    $heading = Text::_('COM_GABROADCAST_USERNEWS_PENDING');
+} else {
+    $heading = Text::_('COM_GABROADCAST_USERNEWS_LISTING');
+}
 ?>
 
-<h2><?php echo Text::_('COM_GABROADCAST_USERNEWS_PENDING'); ?></h2>
+<?php if (isset($this->items[0]->state)): ?>
+<h2><?php echo $heading; ?></h2>
+<?php endif; ?>
+
 <p><?php //echo Text::sprintf('COM_GABROADCAST_USERNEWS_LASTBCAST', $lastbcast, $next_bcast); ?></p>
 <form action="<?php echo htmlspecialchars(Uri::getInstance()->toString()); ?>" method="post"
       name="adminForm" id="adminForm">

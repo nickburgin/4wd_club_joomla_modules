@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @version    4.2.1
- * @package    Com_Gabroadcast
+ * @version     4.3.3
+ * @package     com_gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -13,25 +13,27 @@ namespace GlennArkell\Component\Gabroadcast\Administrator\Helper;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\User\UserHelper;
-use \Joomla\CMS\User\UserFactoryInterface;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Component\ComponentHelper;
-use \Joomla\Filesystem\Path;
-use \Joomla\Filesystem\File;
-use \Joomla\Filesystem\Folder;
-use \Joomla\CMS\User\User;
-use \Joomla\CMS\Date\Date;
-use \Joomla\CMS\Access\Access;
-use \Joomla\CMS\Helper\UserGroupsHelper;
-use \Joomla\CMS\Mail\Mail;
-use \Joomla\CMS\MVC\Model\ListModel;
-use \Joomla\CMS\MVC\Model\ItemModel;
-use \Joomla\CMS\Installer\Installer;
-use \Joomla\Session\SessionInterface;
-use \Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\User\UserFactoryInterface;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\Filesystem\Path;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+use Joomla\CMS\User\User;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Helper\UserGroupsHelper;
+use Joomla\CMS\Mail\Mail;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\CMS\Installer\Installer;
+use Joomla\Session\SessionInterface;
+use Joomla\CMS\Application\SiteApplication;
+use Joomla\Database\ParameterType;   //INTEGER, STRING, BOOLEAN, NULL, LARGE_OBJECT
+use GlennArkell\Component\Gabroadcast\Administrator\Helper\GaemailHelper;
 
 /**
  * Gabroadcast helper.
@@ -67,19 +69,6 @@ class GabroadcastHelper
 	}
 
     /**
-     * Gets todays date based on global timezone settings
-     */
-    public static function getTodaysDate()
-	{
-		//$tz = Factory::getConfig()->get('offset');
-		//$date = Factory::getDate('now', $tz);
-		//$today = date_format($date,'Y-m-d H:i:s');
-		$today = Factory::getDate()->toSql();
-
-		return $today;
-	}
-
-    /**
      * Gets the user record for the specific id reference
      */
     public static function getSpecificUser($id = 0)
@@ -94,6 +83,15 @@ class GabroadcastHelper
 
 		return $user;
 	}
+
+    /**
+     * Prints out a variable value in human readable format
+     */
+    public static function print_r2($val){
+        echo '<pre>Test<br />';
+        \print_r($val);
+        echo  '</pre>';
+    }
 
 	/**
 	 * Set up a web asset object for use
@@ -207,32 +205,47 @@ class GabroadcastHelper
 	}
 
 	/**
+	 * Gets the files attached to an item
+	 * @param   int     $pk     The item's id
+	 * @param   string  $table  The table's name
+	 * @param   string  $field  The field's name
+	 * @return  array  The files
+	 */
+	public static function getArticle($id = 0)
+	{
+		//$catId = ComponentHelper::getParams('com_gabroadcast')->get( 'article_cat', 0);
+		$db = Factory::getContainer()->get('DatabaseDriver');
+		$query = $db->getQuery(true);
+		$query->select('*');
+		$query->from('#__content');
+		$query->where('id = ' . (int) $id);
+		//$query->where('catid = ' . (int) $catId);
+		$db->setQuery($query);
+
+		return $db->loadObject();
+	}
+
+	/**
 	 * Method to get a record
 	 * @params  int     $id key to the record
 	 * @return  object
 	 */
-	public static function getRecord($id = 0)
+	public static function getRecord($table, $field, $id)
 	{
 		//get all records into spreadsheet and email to requestor
         $db    = Factory::getContainer()->get('DatabaseDriver');
         $query = $db->getQuery(true);
-        $query->select( 'a.*' );
-        $query->from('`#__gabroadcast_usernews` AS a');
-        $query->select('u.name AS created_by_name');
-        $query->join('LEFT', '#__users AS u ON u.id=a.created_by');
-		$query->select('cat_id.title AS cat_id_name');
-		$query->join('LEFT', '#__categories AS cat_id ON cat_id.id = a.cat_id');
-		$query->where(' a.id = '.(int) $id );
-		$db->setQuery((string)$query);
+        $query->select('*')
+            ->from($db->quotename($table))
+    		->where($db->quotename($field) . ' = :id')
+            ->bind(':id', $id, ParameterType::INTEGER);
+		$db->setQuery($query);
 	    try {
-	        // If it fails, it will throw a RuntimeException
-	        $data = $db->loadObject();
+	        return $db->loadObject();
 	    } catch (RuntimeException $e) {
 	        Factory::getApplication()->enqueueMessage($e->getMessage());
 	        return false;
 	    }
-
-	    return $data;
     }
 
 	/**
@@ -245,18 +258,22 @@ class GabroadcastHelper
 		//get all records into spreadsheet and email to requestor
         $db    = Factory::getContainer()->get('DatabaseDriver');
         $query = $db->getQuery(true);
-        $query->select( 'a.*' );
-        $query->from('`#__gabroadcast_usernews` AS a');
-        $query->select('u.name AS created_by_name');
-        $query->join('LEFT', '#__users AS u ON u.id=a.created_by');
-		$query->select('cat_id.title AS cat_id_name');
-		$query->join('LEFT', '#__categories AS cat_id ON cat_id.id = a.cat_id');
+        $query->select( 
+            [
+            'a.*',
+            $db->quotename('u.name', 'created_by_name'),
+            $db->quotename('cat_id.title', 'cat_id_name'),
+            ]
+            )
+            ->from($db->quotename('#__gabroadcast_usernews', 'a'))
+            ->join('LEFT', $db->quoteName('#__users', 'u'), $db->quoteName('u.id') . ' = ' . $db->quoteName('a.created_by'))
+            ->join('LEFT', $db->quoteName('#__categories', 'cat_id'), $db->quoteName('cat_id.id') . ' = ' . $db->quoteName('a.cat_id'));
 		if ($id) {
-			$query->where('a.id = '.(int) $id);
+			$query->where($db->quotename('a.id') . ' = :id')
+    			->bind(':id', $id, ParameterType::INTEGER);
 		}
-		$db->setQuery((string)$query);
+		$db->setQuery($query);
 	    try {
-	        // If it fails, it will throw a RuntimeException
 	        if ($id) {
 				$data = $db->loadObject();
 			} else {
@@ -266,7 +283,7 @@ class GabroadcastHelper
 	        Factory::getApplication()->enqueueMessage($e->getMessage());
 	        return false;
 	    }
-	    
+
 	    return $data;
     }
 
@@ -280,10 +297,10 @@ class GabroadcastHelper
 		//get all records into spreadsheet and email to requestor
         $db    = Factory::getContainer()->get('DatabaseDriver');
         $query = $db->getQuery(true);
-        $query->select( ' max(a.modified_date) ' );
-        $query->from('`#__gabroadcast_usernews` AS a');
-        $query->where(' a.state = 6 ' );
-		$db->setQuery((string)$query);
+        $query->select('max(a.modified_date)')
+            ->from($db->quotename('#__gabroadcast_usernews', 'a'))
+            ->where($db->quotename('a.state') . ' = 6');
+		$db->setQuery($query);
 	    try {
 	        return $db->loadResult();
 	    } catch (RuntimeException $e) {
@@ -300,10 +317,10 @@ class GabroadcastHelper
         $db		= Factory::getContainer()->get('DatabaseDriver');
 		$query	= $db->getQuery(true);
         $query->clear();
-		$query->select(' a.id, a.attach_lab ');
-		$query->from(' #__gabroadcast_bcasts AS a ');
-		$query->where(' a.state = 1 ' );
-		$db->setQuery((string)$query);
+		$query->select(' a.id, a.attach_lab ')
+            ->from($db->quotename('#__gabroadcast_bcasts', 'a'))
+            ->where($db->quotename('a.state') . ' = 1');
+		$db->setQuery($query);
 	    try {
 	        // If it fails, it will throw a RuntimeException
 	        $options = $db->loadObjectList();
@@ -328,10 +345,11 @@ class GabroadcastHelper
         $db		= Factory::getContainer()->get('DatabaseDriver');
 		$query	= $db->getQuery(true);
         $query->clear();
-		$query->select(' a.id, a.attach_lab, a.attach_dir ');
-		$query->from(' #__gabroadcast_bcasts AS a ');
-		$query->where(' a.id = '.(int) $id );
-		$db->setQuery((string)$query);
+		$query->select(' a.id, a.attach_lab, a.attach_dir ')
+            ->from($db->quotename('#__gabroadcast_bcasts', 'a'))
+            ->where($db->quotename('a.id') . ' = :id')
+            ->bind(':id', $id, ParameterType::INTEGER);
+		$db->setQuery($query);
 	    try {
 	        return $db->loadObject();
 	    } catch (RuntimeException $e) {
@@ -352,8 +370,9 @@ class GabroadcastHelper
 
 		$query
 			->select('title')
-			->from('#__categories')
-			->where('id = ' . intval($category_id));
+			->from($db->quotename('#__categories'))
+            ->where($db->quotename('id') . ' = :id')
+            ->bind(':id', $category_id, ParameterType::INTEGER);
 
 		$db->setQuery($query);
 		return $db->loadResult();
@@ -367,7 +386,7 @@ class GabroadcastHelper
     public static function canUserEdit($item)
     {
         $permission = false;
-        $user       = self::getSpecificUser();
+        $user       = Factory::getApplication()->getIdentity();
 
         if ($user->authorise('core.edit', 'com_gabroadcast')) {
             $permission = true;
@@ -384,8 +403,9 @@ class GabroadcastHelper
         return $permission;
     }
 
-	public static function getListOptions($table = '#__contents', $name = 'Article', $field = 'a.title')
+	public static function getListOptions($table = '#__content', $name = 'Article', $field = 'a.title')
 	{
+		$catId = ComponentHelper::getParams('com_gabroadcast')->get( 'article_cat', 0);
 		// get the user records for a listing to display
         $db		= Factory::getContainer()->get('DatabaseDriver');
 		$query	= $db->getQuery(true);
@@ -397,10 +417,15 @@ class GabroadcastHelper
 		} elseif ($table == '#__fields') {
 			$query->where(' a.context = '. $db->Quote('com_users.user') );
 			$query->where(' a.state = '. (int) 1 );
+		} elseif ($table == '#__content') {
+            if ($catId) {
+                $query->where('catid = ' . (int) $catId);
+            }
+			$query->where(' a.state = '. (int) 1 );
 		} else {
 			$query->where(' a.state = '. (int) 1 );
 		}
-		$query->order(' text ASC ' );
+        $query->order(' text ASC ' );
 		$db->setQuery((string)$query);
 
 	    try {
@@ -495,7 +520,7 @@ class GabroadcastHelper
 			}
 			$xclude = substr($csv,0,-1);
 		} else {
-			$xclude = 0;
+			$xclude = ',';
 		}
 
         $fltUsers = $params->get('filter_users', 0 );
@@ -504,50 +529,63 @@ class GabroadcastHelper
 		$db		= Factory::getContainer()->get('DatabaseDriver');
 		$query	= $db->getQuery(true);
         $query->clear();
-		$query->select(' a.id as user_id, a.name, a.email, b.profile_value as altemail, c.profile_value as inc_altemail ');
-		$query->select(' d.profile_value as address1, e.profile_value as address2, f.profile_value as suburb ');
-		$query->select(' g.profile_value as pcode, h.profile_value as memtype, a.registerDate ');
+		$query->select(
+            [
+            $db->quotename('a.id', 'user_id'), 
+            $db->quotename('a.name'), 
+            $db->quotename('a.email'),
+            $db->quotename('a.registerDate'),
+            $db->quotename('b.profile_value', 'altemail'),
+            $db->quotename('c.profile_value', 'inc_altemail'),
+            $db->quotename('d.profile_value', 'address1'),
+            $db->quotename('e.profile_value', 'address2'),
+            $db->quotename('f.profile_value', 'suburb'),
+            $db->quotename('g.profile_value', 'pcode'),
+            $db->quotename('h.profile_value', 'partner'),
+            ]
+        )
 
-		$query->from(' #__users as a');
-		$query->join('LEFT','#__user_profiles AS b ON b.user_id = a.id AND b.profile_key = '.$db->Quote($local_profile.'.altemail') );
-		$query->join('LEFT','#__user_profiles AS c ON c.user_id = a.id AND c.profile_key = '.$db->Quote($local_profile.'.inc_altemail') );
-		$query->join('LEFT','#__user_profiles AS d ON d.user_id = a.id AND d.profile_key = '.$db->Quote('profile.address1'));
-		$query->join('LEFT','#__user_profiles AS e ON e.user_id = a.id AND e.profile_key = '.$db->Quote('profile.address2'));
-		$query->join('LEFT','#__user_profiles AS f ON f.user_id = a.id AND f.profile_key = '.$db->Quote('profile.city'));
-		$query->join('LEFT','#__user_profiles AS g ON g.user_id = a.id AND g.profile_key = '.$db->Quote('profile.postal_code'));
-		$query->join('LEFT','#__user_profiles AS h ON h.user_id = a.id AND h.profile_key = '.$db->Quote($local_profile.'.memtype') );
+		->from($db->quotename('#__users', 'a'))
+        ->join('LEFT', $db->quoteName('#__user_profiles', 'b'), $db->quoteName('b.user_id') . ' = ' . $db->quoteName('a.id') . ' AND ' . $db->quoteName('b.profile_key') . ' = ' . $db->Quote($local_profile.'.altemail'))
+        ->join('LEFT', $db->quoteName('#__user_profiles', 'c'), $db->quoteName('c.user_id') . ' = ' . $db->quoteName('a.id') . ' AND ' . $db->quoteName('c.profile_key') . ' = ' . $db->Quote($local_profile.'.inc_altemail'))
+        ->join('LEFT', $db->quoteName('#__user_profiles', 'd'), $db->quoteName('d.user_id') . ' = ' . $db->quoteName('a.id') . ' AND ' . $db->quoteName('d.profile_key') . ' = ' . $db->Quote('profile.address1'))
+        ->join('LEFT', $db->quoteName('#__user_profiles', 'e'), $db->quoteName('e.user_id') . ' = ' . $db->quoteName('a.id') . ' AND ' . $db->quoteName('e.profile_key') . ' = ' . $db->Quote('profile.address2'))
+        ->join('LEFT', $db->quoteName('#__user_profiles', 'f'), $db->quoteName('f.user_id') . ' = ' . $db->quoteName('a.id') . ' AND ' . $db->quoteName('f.profile_key') . ' = ' . $db->Quote('profile.city'))
+        ->join('LEFT', $db->quoteName('#__user_profiles', 'g'), $db->quoteName('g.user_id') . ' = ' . $db->quoteName('a.id') . ' AND ' . $db->quoteName('g.profile_key') . ' = ' . $db->Quote('profile.postal_code'))
+        ->join('LEFT', $db->quoteName('#__user_profiles', 'h'), $db->quoteName('h.user_id') . ' = ' . $db->quoteName('a.id') . ' AND ' . $db->quoteName('h.profile_key') . ' = ' . $db->Quote($local_profile.'.partner'));
 
         if ($fltUsers) {
             if ($filter == 'c') {
-                $query->select(' cf.value as custFld_value ');
-                $query->join('LEFT','#__fields_values AS cf ON cf.item_id = a.id AND cf.field_id = '.$db->Quote($cust_field) );
-                $query->where(' cf.value IS NOT NULL ');
+                $query->select($db->quoteName('cf.value', 'custFld_value'))
+                    ->join('LEFT', $db->quoteName('#__fields_values', 'cf'), $db->quoteName('cf.item_id') . ' = ' . $db->quoteName('a.id') . ' AND ' . $db->quoteName('cf.field_id') . ' = ' . $db->Quote($cust_field))
+                    ->where($db->quoteName('cf.value') . ' IS NOT NULL');
     		} else {
-                $query->select(' 0 as custFld_value ');
+                $query->select('0 as custFld_value');
             }
     		if ($filter == 'p') {
-                $query->select(' pf.profile_value as profFld_value ');
-        		$query->join('LEFT','#__user_profiles AS pf ON pf.user_id = a.id AND pf.profile_key = '.$db->Quote($prof_field) );
-                $query->where(' pf.profile_value IS NOT NULL');
+                $query->select($db->quoteName('pf.profile_value', 'profFld_value'))
+                    ->join('LEFT', $db->quoteName('#__user_profiles', 'pf'), $db->quoteName('pf.user_id') . ' = ' . $db->quoteName('a.id') . ' AND ' . $db->quoteName('pf.profile_key') . ' = ' . $db->Quote($prof_field))
+                    ->where($db->quoteName('pf.profile_value') . ' IS NOT NULL');
     		} else {
-                $query->select(' 0 as profFld_value ');
+                $query->select('0 as profFld_value');
             }
 		} else {
-            $query->select(' 0 as custFld_value ');
-            $query->select(' 0 as profFld_value ');
+            $query->select('0 as custFld_value');
+            $query->select('0 as profFld_value');
         }
 
-    	$query->where(' a.block = 0 ');
+    	$query->where($db->quoteName('a.block') . ' = 0');
 
 		if ($settotest) {
-            $query->where(' a.id = '. (int) $testid);
+            $query->where($db->quotename('a.id') . ' = :testid')
+            ->bind(':testid', $testid, ParameterType::INTEGER);
         } else {
     		if ($xclude != ',') {
-				$query->where(' a.id NOT IN ('.$xclude.')' );
+				$query->where($db->quotename('a.id') . ' NOT IN ('.$xclude.')' );
    			}
         }
 
-		$db->setQuery((string)$query);
+		$db->setQuery($query);
 	    try {
 	        return $db->loadObjectList();
 	    } catch (RuntimeException $e) {
@@ -557,6 +595,7 @@ class GabroadcastHelper
 
 	}
 
+	/* --------------------------------   Create News Record  ------------------------------------------------- */
     /**
     *   Method to create a broadcast message ready to send
     *   Now that the usernew record is saved, build and send email
@@ -564,670 +603,127 @@ class GabroadcastHelper
     * @params $params component parameters to save getting them again
     * @params $usre object of the user submitting the form
     */
-    public static function addParamsForMail($mailParams, $params, $user, $data)
+    public static function createNewsEmail($data, $params, $user)
 	{
-        $mailParams->attach_link  = $params->get('attach_link', 0);  // 1 = attach and 0 = link
-        $mailParams->actually_send  = $params->get('actually_send', 1);
-        $mailParams->disp_sent  = $params->get('disp_sent', 0);
-        $mailParams->user_email	= $user->email;
-        // this is the user logged in and sending the broadcast
-        $sendingUser = $data['user_retaddr'];
-        //$mailParams->unsubscribe = '';
+		$app = Factory::getApplication();
+		$app->getLanguage()->load('com_gabroadcast', JPATH_ADMINISTRATOR);
+        $limit_set = $params->get('limit_set',0);  // this is the trigger to know if a counter is required
+		$mail_limit = $params->get('mail_limit',50);
+		$cycle_time = $params->get('cycle_time',5);
+		$replyTo = $params->get('ret_address',0);
+		$replyUser = $params->get('retaddr_user',0);
+		$replyGroup = $params->get('retaddr_group',0);
+		$dispSent = $params->get('disp_sent',0);
+		$individual = $params->get('indiv_bulk', 1);
+		$attach = $params->get('attach_link', 1);   // 1 = attach, 0 = link
+        $chunkCntr = 0;
+        $cntr = 0;
+        $pend = array();
 
-		// Set up the return address if necessary
-		if ($params->get('ret_address', 0) == 1) {
-			$mailParams->showRetAddr = in_array($params->get('retaddr_group',0), $user->groups) ? 1 : 0;
-		} elseif ($params->get('ret_address', 0) == 2 && $params->get('retaddr_user',0)) {
-			$mailParams->showRetAddr = 1;
-		} elseif ($params->get('ret_address', 0) == 2 && $sendingUser && !$params->get('retaddr_user',0)) {
-			$mailParams->showRetAddr = 1;
-		} else {
-			$mailParams->showRetAddr = 0;
+        $edata = GaemailHelper::setupBody($data, $user, $params);
+
+        $attachLabel = $attach ? 'Attached:' : 'Linked:';
+        $mailedto = '<h3>File '.$attachLabel.' '.$edata['filename'].'</h3>';
+		if ($replyTo == 2) {   // return address to be set to user
+			if ($replyUser) {    // this is when the person sending can set return address
+                $sender = self::getSpecificUser($data['user_retaddr']);
+                $mailedto .= '<p><strong>The return email address was set to:</strong></p>';
+    			$mailedto .= '<p>'.$sender->name.' ('.$sender->email.')</p>';
+    			$app->enqueueMessage('Return Address set to:'.$sender->email, 'notice');
+    			$edata['replyto'] = array($sender->email, $sender->name);
+    			//Factory::getApplication()->setUserState('com_gabroadcast.test.data', $edata['replyto']);
+			} else {   // else the user sending the message is set as return address
+                $mailedto .= '<p><strong>The return email address was set to:</strong></p>';
+    			$mailedto .= '<p>'.$user->name.' ('.$user->email.')</p>';
+    			$app->enqueueMessage('Return Address set to:'.$user->email, 'notice');
+    			$edata['replyto'] = array($user->email, $user->name);
+    			//Factory::getApplication()->setUserState('com_gabroadcast.test.data', $edata['replyto']);
+            }
+		} elseif ($replyTo == 1) {  // return address to be set to all in the group selected
+    		$gpUsers = Access::getUsersByGroup($replyGroup);
+    		if ($gpUsers && \is_array($gpUsers)) {
+        		// replyTo can only be to one email so the first one will do
+                $sender = self::getSpecificUser($gpUsers[0]);
+                $mailedto .= '<p><strong>The return email address was set to:</strong></p>';
+    			$mailedto .= '<p>'.$sender->name.' ('.$sender->email.')</p>';
+        		$app->enqueueMessage('Return Address set to:'.$sender->email, 'notice');
+        		$edata['replyto'] = array($sender->email, $sender->name);
+        		//Factory::getApplication()->setUserState('com_gabroadcast.test.data', $edata['replyto']);
+    		}
 		}
-
-        if (isset($sendingUser) && $mailParams->showRetAddr) {
-			$mailParams->user_email	= self::getSpecificUser($sendingUser)->email;
-		}
-
-        if ($params->get('link_site', 1)) {
-            $mailParams->sitename = '<a href="'.Uri::base().'">'.$mailParams->sitename.'</a>';
-        }
-
-        if ($params->get('incl_unsub', 1)) {
-            $link = '<a href="'.Uri::base().'/index.php/'.Text::_('COM_GABROADCAST_UNSUBSCRIBE').'">'.Text::_('COM_GABROADCAST_UNSUBSCRIBE').'</a>';
-            $unsubscribe = Text::sprintf('COM_GABROADCAST_UNSUB_MESSAGE', $link);
-            $mailParams->unsubscribe = $unsubscribe;
-        }
-
-        return $mailParams;
-	}
-
-    /**
-    *   Method to create a broadcast message ready to send
-    *   Now that the usernew record is saved, build and send email
-    * @params $data array data submitted in the form
-    * @params $params component parameters to save getting them again
-    * @params $usre object of the user submitting the form
-    */
-    public static function addNews($data, $params, $user)
-	{
-	    $app		= Factory::getApplication();
-
-		$mailParams = new \stdClass();
-        $mailParams->sitename	= $app->get('sitename');       // get site name
-        $mailParams->mailfrom	= $app->get('mailfrom');       // system email address
-        $mailParams->fromname	= $app->get('fromname');       // Site name or system name
-
-        $mailParams = self::addParamsForMail($mailParams, $params, $user, $data);
-
-		$limit_set = $params->get('limit_set',0);  // this is the trigger to know if a counter is required
-		$mail_limit = $params->get('mail_limit',100);
-		$cycle_time = $params->get('cycle_time',60);
-
-        $sendto_group  = $params->get( 'sendto_group', 2 );
-        $individual  = $params->get('indiv_bulk', 1);
-        $incl_std_text  = $params->get('incl_std_text');
-        //$link_site   = $params->get( 'link_site', 1 );
-        $exclemail  = $params->get( 'exclude_email_pref', 'noemail' );
-        $exclmbr  = $params->get( 'exclude_member' );
-
-		/* -------------------------   Filter on Usergroups ----------------------------- */
-        // setup and cycle through selected user groups if necessary
-		$UGHelp = UserGroupsHelper::getInstance();
-        if (isset($data['usergroup_only'])) {
-	        if (is_array($data['usergroup_only'])) {
-                $ugroups_display = '';
-	            foreach ($data['usergroup_only'] AS $ugroup) {
-					$ugroups_display .= $UGHelp->get($ugroup)->title;
-					$ugroups_display .= '<br />';
-				}
-				$usergroups = $data['usergroup_only'];
-	        } else {
-	            $ugroups_display = $UGHelp->get($data['usergroup_only'])->title;
-				$usergroups = 0;
-	        }
-        } else {
-			$ugroups_display = $UGHelp->get($sendto_group)->title;
-			$usergroups = 0;
-		}
-
-		/* -------------------------   Check attachments ----------------------------- */
-        if (!empty($data['attach_file'])) {
-			if ($mailParams->attach_link) {
-				$attachfile = '<a href="'.Uri::base().$data['attach_file'].'">'.Text::_('COM_GABROADCAST_LINK_TEXT').'</a>';
-			} else {
-				$attachfile = $data['attach_file'];
-	        }
-        } else {
-			$attachfile = null;
-		}
-
-        $news_id = $data['id'];
-        $app->enqueueMessage('Message record '.$data['id'].' Saved', 'notice');
-
-        // ----------------------------------------------------------------------
-
-    	$subject	= $data['news_subject'] . ' (sent from the website)';
-        $mailedto = '<h3>File Attached: '.$attachfile.'</h3>';
         if ($individual) {
 			$mailedto .= '<p><strong>Mailed out to the following individual recipients:</strong></p><p>';
 		} else {
 			$mailedto .= '<p><strong>Mailed out to the following recipients in a bulk BCC:</strong></p><p>';
 		}
 
-		// get all members
-		$members = self::getMembersDetails($params);
+        // get all members
+        $members = self::getMembersDetails($params);
 
-        $snailmail = array();
-        $bccopies = array();
-        $pending_bcast = array();
-        $cntr = 0;
-        $member_count = 0;
-        $email_count = 0;
+        // check members against params to filter out and return list of recipients
+        $recipients = GaemailHelper::getRecipients($members, $data, $params);
+        $numberRecips = \count($recipients);
 
-        foreach ($members as $u ) {
-			// test if groups set in broadcast and set only users in selected group/s to be displayed
-			$inGroup = false;
-			$recipients = array();
-			$u->altemail = str_replace('"','',$u->altemail ?? '');
-			$ug = UserHelper::getUserGroups($u->user_id);
-			
-			/* ------------   Test for usergroup & exclude settings  ---------------   */
-            if (is_array($usergroups)) {
-				foreach ($usergroups AS $g) {
-					$inGroup = ($inGroup || (in_array($g, $ug) && !$inGroup)) ? true : false;
-				}
-			} else {
-				$inGroup = ($inGroup || (in_array($sendto_group, $ug) && !$inGroup)) ? true : false;
-			}
+        if ($limit_set && $numberRecips >= (4 * $mail_limit)) {
+            \ini_set('max_execution_time', $params->get('max_time', 60));
+        }
 
-			if (is_array($exclmbr)) {
-				$inGroup = (!in_array($u->user_id, $exclmbr) && $inGroup) ? true : false;
-			}
+        //Factory::getApplication()->setUserState('com_gabroadcast.test.data', $recipients);
+        $chunks = \array_chunk($recipients, $mail_limit);
 
-			/* ------------   If in the group to be sent  ---------------   */
-            if ($inGroup) {
-				$pri_email = true;
-				$sec_email = true;
-
-				/* ------------   check if non - email type user and ignore if true ---------------   */
-                if ((strlen($exclemail) > 0) && (substr($u->email, 0, strlen($exclemail)) == $exclemail) ) {
-					$pri_email = false;
-				}
-
-				if ((isset($u->inc_altemail) && $u->inc_altemail) && isset($u->altemail) && ($u->altemail > ' ')) {
-					if ((strlen($exclemail) > 0) && (substr($u->altemail, 0, strlen($exclemail)) == $exclemail) ) {
-						$sec_email = false;
-					}
-				} else {
-					$sec_email = false;
-				}
-
-				/* ------------   Filter out based on user filter settings  ---------------   */
-                if ($params->get('filter_users',0)) {
-                    if ($params->get('filter_type','p') == 'p') {
-                        if ($data['user_proffld'] == "All" || str_contains($u->profFld_value, $data['user_proffld'])) {
-                            // proceed
-                        } else {
-                            // get next member record
-                            continue;
-                        }
-                    } else {
-                        if ($data['user_custfld'] == "All" || $data['user_custfld'] == $u->custFld_value) {
-                            // proceed
-                        } else {
-                            // get next member record
-                            continue;
-                        }
+        foreach ($chunks as $chunk) {
+            $chunkCntr++;
+            $sentDisp = '';
+            if ($individual) {    // 1 = individual, 0 = bulk
+                foreach ($chunk as $m) {
+                    $cntr++;
+                    $mailedto .= $m['name'].' - '.$m['email'].'<br />';
+                    $edata['recips'] = array($m);
+                    $edata['name'] = $m['name'];
+                    $sent = GaemailHelper::sendEmailTemplate('com_gabroadcast.message', $edata, $edata['filename'], $edata['site_link'], $edata['attach_file']);
+                    if ($sent && $dispSent) {
+                        $app->enqueueMessage(Text::_('COM_GABROADCAST_MAIL_SENT_SUCCESSFUL').' - '.$m['name'].' - '.$m['email'], 'message');
                     }
                 }
-
-				if (!$pri_email && !$sec_email) {
-					$snailmail[] = $u->name;
-                } else {
-
-					/* ------------------------------------------------------------------------------------------------------------------------- */
-                    if ($individual) {     // 1 = invdividual
-                        $member_count++;
-	                    // Prepare email body
-	                    $body = self::setupEmailBody($data, $u, $attachfile, $params, $mailParams, $individual, 0);
-
-                		if ($pri_email && !$sec_email) {
-                            // don't include alt email address
-                            if (!in_array($u->email, $recipients)) {
-                                $recipients[] = $u->email;
-                                $mailedto .= $u->email .'<br />';
-                                $email_count++;
-                            }
-                        } elseif (!$pri_email && $sec_email) {
-                            // don't include primary email address
-                            if (!in_array($u->altemail, $recipients)) {
-                                $recipients[] = $u->altemail;
-                                $mailedto .= $u->altemail .'<br />';
-                                $email_count++;
-                            }
-                        } else {
-                            if (!in_array($u->email, $recipients)) {
-                                $recipients[] = $u->email;
-                                $mailedto .= $u->email .'<br />';
-                                $email_count++;
-                            }
-                            if (!in_array($u->altemail, $recipients)) {
-                                $recipients[] = $u->altemail;
-                                $mailedto .= $u->altemail .'<br />';
-                                $email_count++;
-                            }
-                        }
-
-						// set bbc to be ignored
-						$mailParams->bccopy = 0;
-
-                        if ($limit_set) {   // when limit is set to yes, all sent in bulk format
-	                        if ($member_count >= $mail_limit) {
-                                $pending_bcast = array_merge($pending_bcast,$recipients);
-                                $prep_pending = self::preparePendingRecord($data['id'], $data['news_detail'], $pending_bcast);
-								$member_count = 0;    // reset counter
-								$pending_bcast = [];  // reset collected emails
-							} else {
-                                $pending_bcast = array_merge($pending_bcast,$recipients);
-							}
-						} else {
-                            $sentOK = self::sendEmailToRecipients($subject, $body, $recipients, $attachfile, $mailParams);
-							if ($sentOK !== true) {
-								$sendtoemails = implode(',', $recipients ?? '');
-								$app->enqueueMessage('Send Error - Mailer did not work for '.$u->name.' ('.$sendtoemails.')', 'message');
-							}
-						}
-
-	                    unset($recipients);
-						$cntr++;
-					/* ------------------------------------------------------------------------------------------------------------------------- */
-					} else {    // 0 = bulk
-
-                		if ($pri_email && !$sec_email) {
-                            // don't include alt email address
-                            if (!in_array($u->email, $bccopies)) {
-                                $bccopies[] = $u->email;
-                                $mailedto .= $u->email .'<br />';
-                                $email_count++;
-                            }
-                        } elseif (!$pri_email && $sec_email) {
-                            // don't include primary email address
-                            if (!in_array($u->altemail, $bccopies)) {
-                                $bccopies[] = $u->altemail;
-                                $mailedto .= $u->altemail .'<br />';
-                                $email_count++;
-                            }
-                        } else {
-                            if (!in_array($u->email, $bccopies)) {
-                                $bccopies[] = $u->email;
-                                $mailedto .= $u->email .'<br />';
-                                $email_count++;
-                            }
-                            if (!in_array($u->altemail, $bccopies)) {
-                                $bccopies[] = $u->altemail;
-                                $mailedto .= $u->altemail .'<br />';
-                                $email_count++;
-                            }
-                        }
-
-	                    $cntr++;
-	                } // end of individual or bulk test
-				} // end of sending email test
-            } // end of test for in group
-
-        } // end foreach cycle through member records
-
-		/* ------------------------------------------------------------------------------------------------------------------------- */
-		// now if set to bulk email, then send the one email with BCC for each member
-		if (!$individual) {   // 0 = bulk
-			$recipients[] = $mailParams->mailfrom;
-
-	        $body = self::setupEmailBody($data, $u, $attachfile, $params, $mailParams, $individual, 0);
-
-			// need to break up recipients (bcc's) if limit set
-			if ($limit_set) {
-				$member_count = count($bccopies);
-				$j = ($member_count / $mail_limit) + 1;
-				//ini_set('max_execution_time', $params->get('max_time', 120));
-				for ($i=0; $i<$j; $i++) {
-                    if ($i == 0) {
-						$startpoint = 0;
-					} else {
-						$startpoint = ($i * $mail_limit);
-					}
-					$pending_bcast = array_slice($bccopies, $startpoint, $mail_limit);
-					if (!empty($pending_bcast)) {
-						$mailParams->bccopy = $pending_bcast;
-						$prep_pending = self::preparePendingRecord($data['id'], $data['news_detail'], $pending_bcast);
-					}
-				}
-			} else {
-				$mailParams->bccopy = $bccopies;
-				$sentOK = self::sendEmailToRecipients($subject, $body, $recipients, $attachfile, $mailParams);
-				if (!$sentOK) {
-					$app->enqueueMessage('Bulk No Limit Send Not OK', 'danger');
-				}
+            } else {
+                $edata['bcc_recips'] = $chunk;
+                $edata['name'] = $params->get('bulk_label', 'Members');
+                foreach ($chunk as $m) {
+                    $mailedto .= $m['name'].' - '.$m['email'].'<br />';
+                    if ($params->get('disp_sent', 1)) {
+                        $sentDisp .= $m['name'].' - '.$m['email'].'<br />';
+                    }
+                }
+                $sent = GaemailHelper::sendEmailTemplate('com_gabroadcast.message', $edata, null, $edata['site_link'], $edata['attach_file']);
+                if ($sent && $dispSent) {
+                    $app->enqueueMessage(Text::sprintf('COM_GABROADCAST_SENT_MESSAGE', $chunkCntr, $sentDisp), 'message');
+                }
             }
-            //$max_time = ini_get('max_execution_time');
-			//Factory::getApplication()->enqueueMessage('Max Time ('.$max_time.')', 'warning');
-		} else {
-			// just make sure the last batch from cycle is loaded
-			if ($limit_set) {
-				$prep_pending = self::preparePendingRecord($data['id'], $data['news_detail'], $pending_bcast);
-			}
-		}
-        $mailedto .= '</p>';
+        }
 
-		/* ------------------------------------------------------------------------------------------------------------------------- */
-		// check if other groups should receive broadcasts and send
-        $menuitem = $app->getMenu()->getActive();
-        $menuparams = $menuitem->getParams();
-        $bc_type = $menuparams->get('broadcast_type');
-
-        // set up extra clubs to be sent to
-        $sendClubs   = $params->get( 'send_clubs', 0);
-        $bcTypeClubs   = $params->get( 'incl_bcast_type', 0);
-        $inclclubs   = $params->get( 'incl_clubs', '');
-
-        if ($sendClubs && $bc_type == $bcTypeClubs && $inclclubs > '') {
-            $recipients = array($mailParams->mailfrom);
-            // explode the string to an array
-			$mailParams->bccopy = explode(',',$inclclubs);
-			$incl_clubs = str_replace(',',', ',$inclclubs);
-
-            $body = self::setupEmailBody($data, $u, $attachfile, $params, $mailParams, $individual, $sendClubs);
-
-            $sentOK = self::sendEmailToRecipients($subject, $body, $recipients, $attachfile, $mailParams);
-
-            $mailedto .= '<p>Email also sent to Clubs = '.$incl_clubs.'.</p>';
-		}
-
-        $app->enqueueMessage('Message Sent to '.$cntr.' members', 'notice');
-        $app->enqueueMessage('Message Sent to '.$email_count.' emails', 'notice');
-
-		/* ------------------------------------------------------------------------------------------------------------------------- */
 		// update mailto listing to include snailmail, group and return address details
+        $snailmail = Factory::getApplication()->getUserState('com_gabroadcast.snailmail.list');
         if (!empty($snailmail)) {
             $snailmailto = '<p><strong>The following members need to be advised by mail:</strong></p><p>';
-            foreach ($snailmail as $sm) {
-                $snailmailto .= $sm.'<br />';
-            }
+            $snailmailto .= implode('<br />', $snailmail);
             $snailmailto .= '</p>';
             $mailedto .= $snailmailto;
             $app->enqueueMessage($snailmailto, 'notice');
         }
 
-		if (isset($data['usergroup_only']) && is_array($data['usergroup_only'])) {
-			$mailedto .= '<p><strong>The below groups were selected.</strong></p>';
-			$mailedto .= '<p>'.$ugroups_display.'</p>';
+		if (isset($data['usergroup_only']) && $data['usergroup_only']) {
+            $mailedto .= '<p><strong>The below groups were selected.</strong></p>';
+            $gpTitle = Access::getGroupTitle($data['usergroup_only']);
+			$mailedto .= '<p>'.$gpTitle.'</p>';
 		}
 
-		if (isset($data['user_retaddr']) && $mailParams->showRetAddr) {
-			$retaddr_user	= self::getSpecificUser($data['user_retaddr']);
-			$retaddr_name	= $retaddr_user->name;
-			$retaddr_email	= $retaddr_user->email;
-			$mailedto .= '<p><strong>The return email address was set to:</strong></p>';
-			$mailedto .= '<p>'.$retaddr_name.' ('.$retaddr_email.')</p>';
-			$app->enqueueMessage('Return Address set to:'.$retaddr_email, 'notice');
-		}
-
-        $addrecipients = self::updateDespatchedTo($mailedto, $data);
-        //Factory::getApplication()->setUserState('com_gabroadcast.test.data', $mailedto);
-
-        return true;
-
-	}
-
-    /**
-    *   Method to duplicate details fo broadcast message in a pending state ready to send out
-    */
-    public static function preparePendingRecord($id = 0, $news_detail = '', $pending_bcast = array())
-    {
-		if ($id) {
-			$db		= Factory::getContainer()->get('DatabaseDriver');
-			$query	= $db->getQuery(true);
-	        $query->clear();
-			$query->from(' #__gabroadcast_usernews ');
-			$query->select(' * ' );
-			$query->where(' id = '. (int) $id );
-			$db->setQuery((string)$query);
-
-		    try {
-		        $object = $db->loadObject();
-		    } catch (RuntimeException $e) {
-		        Factory::getApplication()->enqueueMessage('Failed to duplicate broadcast - '.$e->getMessage(), 'message');
-		        $object = false;
-		    }
-
-		    if ($object) {
-				$object->id = 0;
-				$object->state = 5;
-				$object->news_detail = $news_detail;
-				$object->pending_bcast = implode(',', $pending_bcast);
-				$result = Factory::getContainer()->get('DatabaseDriver')->insertObject('#__gabroadcast_usernews', $object);
-				if ($result) {
-					Factory::getApplication()->enqueueMessage('Successfully duplicated broadcast', 'message');
-					return true;
-				} else {
-					Factory::getApplication()->enqueueMessage('Failed duplicated broadcast', 'message');
-					return false;
-				}
-			}
-			return $object;
-	    }
-        return false;
-	}
-
-    /**
-    *   Method to build the email body
-    */
-    public static function setupEmailBody($data, $u, $attachfile, $params, $mailParams, $individual, $send_clubs = 0)
-    {
-        $html_headfoot  = $params->get('html_headfoot', 0);
-        $html_header  = $params->get('html_header');
-        $html_footer  = $params->get('html_footer');
-        $incl_std_text  = $params->get('incl_std_text');
-        $sig_block  = $params->get('sig_block');
-        $inclUnsub  = $params->get('incl_unsub', 0);
-
-        // Because saving an image in the header or footer removes the domain part of url
-        // add it back here if an image exists
-        $html_header = str_replace('src="images', 'src="'.Uri::root().'images', $data['html_header']);
-        $html_footer = str_replace('src="images', 'src="'.Uri::root().'images', $data['html_footer']);
-
-        // Prepare email body
-        $body = '<html><body><div style="max-width: 480px; margin:0 auto;">';
-		if ($html_headfoot) {
-            $body .= $html_header;
+        // Update who sent to
+        $object = self::getRecord('#__gabroadcast_usernews', 'id', $data['id']);
+    	if ($object) {
+    		$object->comment = $mailedto;
+    		//$object->pending_bcast = $pendemails;
+    		Factory::getContainer()->get('DatabaseDriver')->updateObject('#__gabroadcast_usernews', $object, 'id');
     	}
-		if ($individual && $u) {
-			if ($send_clubs) {
-				$body .= '<p>Dear Club, </p><p> </p>'.$data['news_detail'];
-			} else {
-				$body .= '<p>Dear '.$u->name . ', </p><p> </p>'.$data['news_detail'];
-			}
-		} else {
-			if ($send_clubs) {
-				$body .= '<p>Dear Club, </p><p> </p>'.$data['news_detail'];
-			} else {
-				$body .= '<p>Dear '.Text::_($params->get('bulk_label','Member')).', </p><p> </p>'.$data['news_detail'];
-			}
-		}
-        //Link to File
-        if ($mailParams->attach_link && !empty($attachfile)) {
-			$body .= '<p>'.$attachfile.'</p>';
-		}
-		$body .= '<p> </p><p>'.$mailParams->sitename.'</p>';
-
-		if ($sig_block) {
-            $body .= '<p>'.$params->get('sig_name').'<br />';
-			$body .= $params->get('sig_title').'</p>';
-    	}
-
-        if (!empty($incl_std_text)) {
-            $body .= '<p> </p><p>'.$incl_std_text.'</p>';
-        }
-
-		if ($inclUnsub) {
-            $body .= $data['unsubDet'];
-    	}
-
-		if ($html_headfoot) {
-            $body .= $html_footer;
-    	}
-
-    	//$body .= $mailParams->unsubscribe;
-
-        $body	.= '</div></body></html>';
-
-        return $body;
-
-	}
-
-    /**
-    *   Method to actually send out broadcast emails
-    */
-    public static function sendEmailToRecipients($subject, $body, $recipients, $attachfile, $mailParams)
-    {
-        // Build the email and send
-        $mail = Factory::getMailer();
-        $mail->isHtml(true);
-        $mail->addRecipient($recipients);
-
-        if ($mailParams->bccopy) {
-			$mail->addBcc($mailParams->bccopy);
-		}
-
-        if ($mailParams->showRetAddr) {
-			$mail->addReplyTo($mailParams->user_email);
-		} else {
-			$mail->addReplyTo($mailParams->mailfrom);
-		}
-
-        $mail->setSender(array($mailParams->mailfrom, $mailParams->fromname));
-        $mail->setFrom($mailParams->mailfrom, $mailParams->fromname);
-        $mail->setSubject($subject);
-        $mail->setBody($body);
-        if ($attachfile) {
-            if (is_file($attachfile) && !$mailParams->attach_link) {
-                $mail->addAttachment($attachfile);
-            }
-        }
-
-		if ($mailParams->actually_send)
-        {
-    		$sent = $mail->Send();
-    		if ($sent !== true) {
-    			return false;
-    		} else {
-                if ($mailParams->disp_sent) {
-                    Factory::getApplication()->enqueueMessage('Sent to '.$recipients['0'].' ', 'message');
-                }
-    			return true;
-    		}
-		} else {
-            if ($mailParams->disp_sent) {
-                Factory::getApplication()->enqueueMessage('Would be Sent to '.$recipients['0'].' ', 'message');
-            }
-			return true;
-		}
-	}
-
-    /**
-    *   Method to duplicate details fo broadcast message in a pending state ready to send out
-    */
-    public static function sendPending($id = 0)
-    {
-		if ($id) {
-			$db		= Factory::getContainer()->get('DatabaseDriver');
-			$query	= $db->getQuery(true);
-	        $query->clear();
-			$query->from(' #__gabroadcast_usernews ');
-			$query->select(' * ' );
-			$query->where(' id = '. (int) $id );
-			$db->setQuery((string)$query);
-
-		    try {
-		        $bcast = $db->loadObject();
-		    } catch (RuntimeException $e) {
-		        Factory::getApplication()->enqueueMessage('Failed to get broadcast - '.$e->getMessage(), 'message');
-		    }
-
-			if (isset($bcast->pending_bcast) && $bcast->pending_bcast > '') {
-                $app = Factory::getApplication();
-    			$params		= ComponentHelper::getParams('com_gabroadcast');
-                $mailParams = new \stdClass();
-                $mailParams->bccopy = explode(',', $bcast->pending_bcast);  // explodes a string into array using delimiter
-                $mailParams->attach_link = $params->get('attach_link', 0);
-                $mailParams->sitename = $app->get('sitename');
-                $mailParams->mailfrom = $app->get('mailfrom');
-                $mailParams->fromname = $app->get('fromname');
-                $mailParams->showRetAddr = 0;
-    			$recipients = array($mailParams->mailfrom);
-    			$u = 0;
-    			$individual = 0;
-    			$send_clubs = 0;
-    			
-    			if ($mailParams->attach_link && !empty($bcast->attach_file)) {
-    				$attachfile = '<a href="'.Uri::base().$bcast->attach_file.'">'.Text::_('COM_GABROADCAST_LINK_TEXT').'</a>';
-    			} else {
-    				$attachfile = $bcast->attach_file;
-    			}
-    
-    
-    			$body = self::setupResendEmailBody($bcast->news_detail, $u, $attachfile, $params, $mailParams, $individual, $send_clubs);
-    
-    			$send = self::sendEmailToRecipients($bcast->news_subject, $body, $recipients, $attachfile, $mailParams);
-    
-    			if ($send !== true) {
-    				return false;
-    			}
-			} else {
-                Factory::getApplication()->enqueueMessage('No Pending Recipients', 'message');
-			}
-	    }
-
-        return true;
-
-	}
-
-    /**
-    *   Method to build the email body
-    */
-    public static function setupResendEmailBody($data, $u, $attachfile, $params, $mailParams, $individual, $send_clubs = 0)
-    {
-        // Because saving an image in the content removes the domain part of url
-        // add it back here if an image exists
-        $data = str_replace('src="images', 'src="'.Uri::root().'images', $data);
-
-        // Prepare email body
-        $body = '<html><body><div style="max-width: 480px; margin:0 auto;">';
-
-		if ($individual && $u) {
-			if ($send_clubs) {
-				$body .= '<p>Dear Club, </p><p> </p>'.$data;
-			} else {
-				$body .= '<p>Dear '.$u->name . ', </p><p> </p>'.$data;
-			}
-		} else {
-			if ($send_clubs) {
-				$body .= '<p>Dear Club, </p><p> </p>'.$data;
-			} else {
-				$body .= '<p>Dear '.Text::_($params->get('bulk_label','Member')).', </p><p> </p>'.$data;
-			}
-		}
-        //Link to File
-        if ($mailParams->attach_link && !empty($attachfile)) {
-			$body .= '<p>'.$attachfile.'</p>';
-		}
-		$body .= '<p> </p><p>'.$mailParams->sitename.'</p>';
-
-		if ($sig_block) {
-            $body .= '<p>'.$params->get('sig_name').'<br />';
-			$body .= $params->get('sig_title').'</p>';
-    	}
-
-        if (!empty($incl_std_text)) {
-            $body .= '<p> </p><p>'.$incl_std_text.'</p>';
-        }
-
-		if ($inclUnsub) {
-            $body .= $data['unsubDet'];
-    	}
-
-		if ($html_headfoot) {
-            $body .= $html_footer;
-    	}
-
-        $body	.= '</div></body></html>';
-
-        return $body;
-
-	}
-
-    /**
-    *   Method to update the broadcast record with details of who sent to etc
-    */
-    public static function updateDespatchedTo($mailedto, $data = 0)
-	{
-        // update the news record to capture the list of recipients
-		$db		= Factory::getContainer()->get('DatabaseDriver');
-		$query	= $db->getQuery(true);
-        $query->clear();
-		$query->update(' #__gabroadcast_usernews ');
-		$query->set(' comment = '.$db->Quote($mailedto) );
-		$query->where(' id = '. (int) $data['id'] );
-		$db->setQuery((string)$query);
-
-	    try {
-	        $db->execute();
-	    } catch (RuntimeException $e) {
-	        Factory::getApplication()->enqueueMessage($e->getMessage());
-	        return false;
-	    }
-
-		return true;
 	}
 
 	/* --------------------------------   Action Log  ------------------------------------------------- */
@@ -1295,5 +791,6 @@ class GabroadcastHelper
 
 		return true;
 	}
+
 }
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -13,8 +13,8 @@ namespace GlennArkell\Component\Gacalevents\Administrator\Field;
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die('Restricted access');
 
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Form\FormField;
 
 /**
  * Class JFormFieldSubmit

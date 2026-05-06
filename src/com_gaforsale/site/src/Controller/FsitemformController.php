@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    4.0.2
+ * @version    4.2.2
  * @package    Com_Gaforsale
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  Copyright (C) 2013. All rights reserved.
@@ -93,7 +93,11 @@ class FsitemformController extends FormController
 				}
 			}
 		}
-		unset($data['item_image_txt']);
+		
+		// test for extra unwanted chars in value
+		$data['item_price'] = str_replace(',','',$data['item_price']);
+		$data['item_price'] = str_replace('$','',$data['item_price']);
+
 		// Validate the posted data.
 		$form = $model->getForm();
 

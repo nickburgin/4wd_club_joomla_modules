@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     5.1.6
+ * @version     6.0.0
  * @package     com_gausers
  * @copyright   Copyright (C) 2014. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,11 +12,11 @@ namespace GlennArkell\Component\Gausers\Administrator\Controller;
 // No direct access.
 \defined('_JEXEC') or die;
 
-use \Joomla\Utilities\ArrayHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\MVC\Controller\AdminController;
-use \Joomla\CMS\Session;
-use \Joomla\CMS\Language\Text;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\AdminController;
+use Joomla\CMS\Session;
+use Joomla\CMS\Language\Text;
 
 /**
  * Members list controller class.

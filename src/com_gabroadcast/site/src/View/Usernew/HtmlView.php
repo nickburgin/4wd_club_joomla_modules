@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version    4.2.1
+ * @version    4.3.3
  * @package    com_gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -43,7 +43,7 @@ class HtmlView extends BaseHtmlView
 	public function display($tpl = null)
 	{
 		$app  = Factory::getApplication();
-		$user = GabroadcastHelper::getSpecificUser();
+		$user = Factory::getApplication()->getIdentity();
 
 		$this->state  = $this->get('State');
 		$this->item   = $this->get('Item');

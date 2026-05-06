@@ -1,7 +1,8 @@
 <?php
 /**
- * @version    4.1.0
- * @package    com_gatracklog
+ * @version     4.2.0
+ * @package     pkg_mypackage
+ * @subpackage  com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -12,14 +13,14 @@ namespace GlennArkell\Component\Gatracklog\Administrator\View\Tracklog;
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use \Joomla\CMS\Toolbar\ToolbarHelper;
-use \Joomla\CMS\Factory;
+use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Factory;
 use \GlennArkell\Component\Gatracklog\Administrator\Helper\GatracklogHelper;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Helper\ContentHelper;
 
 /**
  * View class for a record.
@@ -54,10 +55,6 @@ class HtmlView extends BaseHtmlView
 
 		$this->addToolbar();
 
-        HTMLHelper::stylesheet(Uri::base().'media/com_gatracklog/css/gatracklog.css');
-        HTMLHelper::stylesheet(Uri::base().'media/com_gatracklog/css/form.css');
-        HTMLHelper::stylesheet(Uri::base().'media/com_gatracklog/css/item.css');
-
 		parent::display($tpl);
 	}
 
@@ -70,8 +67,9 @@ class HtmlView extends BaseHtmlView
 	{
 		Factory::getApplication()->input->set('hidemainmenu', true);
 
+		$compName = 'gatracklog';
 		$progNameL = 'tracklog';
-		$user  = GatracklogHelper::getSpecificUser();
+		$user  = Factory::getApplication()->getIdentity();
 		$isNew = ($this->item->id == 0);
 
 		if (isset($this->item->checked_out)) {
@@ -80,15 +78,15 @@ class HtmlView extends BaseHtmlView
 			$checkedOut = false;
 		}
 
-		$canDo = ContentHelper::getActions('com_gatracklog','component',0);
+		$canDo = ContentHelper::getActions('com_'.$compName,'component',0);
 
 		$customIcon = '';
 
-		if (file_exists(JPATH_SITE . '/media/com_gatracklog/images/f_'.$progNameL.'.png')) {
-			$customIcon = $progNameL;
+		if (file_exists(JPATH_SITE . '/media/com_'.$compName.'/images/l_'.$progNameL.'s.png')) {
+			$customIcon = $progNameL.'s';
 		}
 
-		ToolbarHelper::title(Text::_('COM_GATRACKLOG_TITLE_'.STRTOUPPER($progNameL)), $customIcon);
+		ToolbarHelper::title(Text::_('COM_'.STRTOUPPER($compName ?? '').'_TITLE_'.STRTOUPPER($progNameL ?? '')), $customIcon);
 
 		// If not checked out, can save the item.
 		if (!$checkedOut && ($canDo->get('core.edit') || ($canDo->get('core.create')))) {
@@ -107,7 +105,7 @@ class HtmlView extends BaseHtmlView
 
 		// Button for version control
 		if ($this->state->params->get('save_history', 1) && $user->authorise('core.edit')) {
-			ToolbarHelper::versions('com_gatracklog.'.$progNameL, $this->item->id);
+			ToolbarHelper::versions('com_'.$compName.'.'.$progNameL, $this->item->id);
 		}
 
 		if (empty($this->item->id)) {
@@ -115,5 +113,8 @@ class HtmlView extends BaseHtmlView
 		} else {
 			ToolbarHelper::cancel($progNameL.'.cancel', 'JTOOLBAR_CLOSE');
 		}
+
+		ToolbarHelper::divider();
+		ToolbarHelper::inlinehelp('hide-aware-inline-help');
 	}
 }

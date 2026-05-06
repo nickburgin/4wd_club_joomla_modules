@@ -1,7 +1,8 @@
 <?php
 /**
- * @version    4.1.0
- * @package    com_gatracklog
+ * @version    4.2.0
+ * @package    pkg_mypackage
+ * @subpackage com_gatracklog
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -11,14 +12,10 @@ namespace GlennArkell\Component\Gatracklog\Site\Controller;
 
 \defined('_JEXEC') or die;
 
-use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Router\Route;
-use Joomla\CMS\Uri\Uri;
-use Joomla\Utilities\ArrayHelper;
 
 /**
  * Form class.
@@ -73,10 +70,14 @@ class TracklogformController extends FormController
 
 		// Initialise variables.
 		$app   = Factory::getApplication();
+		// Set up Redirect URL.
+        $item = $app->getMenu()->getActive();
+        $url = (empty($item->link) ? 'index.php?option=com_gatracklog&view=tracklogs' : $item->link.'&Itemid='.$item->id);
+
 		$model = $this->getModel('Tracklogform', 'Site');
 
 		// Get the user data.
-		$data = Factory::getApplication()->input->get('jform', array(), 'array');
+		$data = $app->input->get('jform', array(), 'ARRAY');
 
 		// Validate the posted data.
 		$form = $model->getForm();
@@ -87,6 +88,13 @@ class TracklogformController extends FormController
 
 		// Validate the posted data.
 		$data = $model->validate($form, $data);
+		
+		// check date format entered
+        $goodDateFormat = $model->isValidDate($data['tran_date']);
+		if (!$goodDateFormat) { 
+            $data = false; 
+            $app->enqueueMessage('COM_GAGATRACKLOG_BAD_DATE_FORMAT', 'danger');
+        }
 
 		// Check for errors.
 		if ($data === false)
@@ -103,8 +111,7 @@ class TracklogformController extends FormController
 				}
 			}
 
-			$input = $app->input;
-			$jform = $input->get('jform', array(), 'ARRAY');
+			$jform = $app->input->get('jform', array(), 'ARRAY');
 
 			// Save the data in the session.
 			$app->setUserState('com_gatracklog.edit.tracklog.data', $jform);
@@ -127,7 +134,7 @@ class TracklogformController extends FormController
 
 			// Redirect back to the edit screen.
 			$id = (int) $app->getUserState('com_gatracklog.edit.tracklog.id');
-			$this->setMessage(Text::sprintf('Save failed', $model->getError()), 'warning');
+			$app->enqueueMessage(Text::sprintf(Text::_('COM_GAGATRACKLOG_SAVE_FAILED'), $model->getError()), 'warning');
 			$this->setRedirect(Route::_('index.php?option=com_gatracklog&view=tracklogform&layout=edit&id=' . $id, false));
 		}
 
@@ -140,10 +147,7 @@ class TracklogformController extends FormController
 		$app->setUserState('com_gatracklog.edit.tracklog.id', null);
 
 		// Redirect to the list screen.
-		$this->setMessage(Text::_('COM_GATRACKLOG_ITEM_SAVED_SUCCESSFULLY'));
-		$menu = Factory::getApplication()->getMenu();
-		$item = $menu->getActive();
-		$url  = (empty($item->link) ? 'index.php?option=com_gatracklog&view=tracklogs' : $item->link);
+		$app->enqueueMessage(Text::_('COM_GAGATRACKLOG_ITEM_SAVED_SUCCESSFULLY'), 'success');
 		$this->setRedirect(Route::_($url, false));
 
 		// Flush the data from the session.
@@ -158,6 +162,9 @@ class TracklogformController extends FormController
 	public function cancel($key = NULL)
 	{
 		$app = Factory::getApplication();
+		// Set up Redirect URL.
+        $item = $app->getMenu()->getActive();
+        $url = (empty($item->link) ? 'index.php?option=com_gatracklog&view=tracklogs' : $item->link.'&Itemid='.$item->id);
 
 		// Get the current edit id.
 		$editId = (int) $app->getUserState('com_gatracklog.edit.tracklog.id');
@@ -170,9 +177,6 @@ class TracklogformController extends FormController
 			$model->checkin($editId);
 		}
 
-		$menu = Factory::getApplication()->getMenu();
-		$item = $menu->getActive();
-		$url  = (empty($item->link) ? 'index.php?option=com_gatracklog&view=tracklogs' : $item->link);
 		$this->setRedirect(Route::_($url, false));
 	}
 
@@ -185,6 +189,10 @@ class TracklogformController extends FormController
 	public function remove()
     {
         $app   = Factory::getApplication();
+		// Set up Redirect URL.
+        $item = $app->getMenu()->getActive();
+        $url = (empty($item->link) ? 'index.php?option=com_gatracklog&view=tracklogs' : $item->link.'&Itemid='.$item->id);
+
         $model = $this->getModel('Tracklogform', 'Site');
         $pk    = $app->input->getInt('id');
 
@@ -199,13 +207,8 @@ class TracklogformController extends FormController
             // Clear the record id from the session.
             $app->setUserState('com_gatracklog.edit.tracklog.id', null);
 
-            $menu = $app->getMenu();
-            $item = $menu->getActive();
-            $url = (empty($item->link) ? 'index.php?option=com_gatracklog&view=tracklogs' : $item->link);
-
             // Redirect to the list screen
-            $this->setMessage(Text::_('COM_GATRACKLOG_ITEM_DELETED_SUCCESSFULLY'));
-            $this->setRedirect(Route::_($url, false));
+            $app->enqueueMessage(Text::_('COM_GAGATRACKLOG_ITEM_DELETED_SUCCESSFULLY'), 'success');
 
             // Flush the data from the session.
             $app->setUserState('com_gatracklog.edit.tracklog.data', null);
@@ -213,9 +216,10 @@ class TracklogformController extends FormController
         catch (\Exception $e)
         {
             $errorType = ($e->getCode() == '404') ? 'error' : 'warning';
-            $this->setMessage($e->getMessage(), $errorType);
-            $this->setRedirect('index.php?option=com_gatracklog&view=tracklogs');
+            $app->enqueueMessage($e->getMessage(), $errorType);
         }
+
+        $this->setRedirect(Route::_($url, false));
     }
 
 	/**

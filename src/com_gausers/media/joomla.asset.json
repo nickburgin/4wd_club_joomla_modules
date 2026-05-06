@@ -1,8 +1,8 @@
 {
   "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
   "name": "com_gausers",
-  "version": "0.0.2",
-  "description": "This file contains details of the assets used by the User Membership component by Glenn Arkell.",
+  "version": "6.0.0",
+  "description": "This file contains details of the assets used by the Membership Management component by Glenn Arkell.",
   "license": "GPL-2.0-or-later",
   "assets": [
     {
@@ -42,29 +42,13 @@
       ]
     },
     {
-      "name": "com_gausers.formjs",
-      "description": "JavaScript for the component form page.",
-      "type": "script",
-      "uri": "com_gausers/form.js",
-      "attributes" : {
-        "defer": true
-      },
-      "dependencies": [
-        "core",
-        "keepalive",
-        "form.validate",
-        "bootstrap.modal"
-      ]
-    },
-    {
       "name": "com_gausers.gauserspreset",
       "type": "preset",
       "dependencies": [
         "com_gausers.gausers#style",
         "com_gausers.form#style",
         "com_gausers.item#style",
-        "com_gausers.list#style",
-        "com_gausers.formjs#script"
+        "com_gausers.list#style"
       ]
     }
   ]

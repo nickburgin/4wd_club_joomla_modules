@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.0
+ * @version    3.3.1
  * @package    Com_Gacalevents
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2021 Glenn Arkell
@@ -9,11 +9,11 @@
 // No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
 use \GlennArkell\Component\Gacalevents\Administrator\Helper\GacaleventsHelper;
 
 // load any assets required
@@ -23,10 +23,9 @@ $wa->useScript('keepalive')
 	->useScript('form.validate');
 
 // Load admin language file
-$lang = Factory::getApplication()->getLanguage();
-$lang->load('com_gacalevents', JPATH_ADMINISTRATOR);
+Factory::getApplication()->getLanguage()->load('com_gacalevents', JPATH_ADMINISTRATOR);
 
-$user    = GacaleventsHelper::getSpecificUser();
+$user    = Factory::getApplication()->getIdentity();
 $canEdit = GacaleventsHelper::canUserEdit($this->item, $user);
 
 $canLink = GacaleventsHelper::getHTTPQuery(null, 'task', 'eventform.cancel', null, null);
@@ -51,12 +50,6 @@ if (!$charge_event) {
     $this->form->setFieldAttribute('paid_amt', 'type', 'hidden');
     $this->form->setFieldAttribute('att_cat', 'type', 'hidden');
 }
-
-/*
-echo '<pre>Test<br />';
-print_r($this->item);
-echo '</pre>';
-*/
 
 ?>
 

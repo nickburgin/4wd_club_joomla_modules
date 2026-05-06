@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    4.2.1
+ * @version    4.3.3
  * @package    Com_Gabroadcast
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  2019 Glenn Arkell
@@ -17,7 +17,7 @@ use \Joomla\CMS\Component\ComponentHelper;
 use \Joomla\CMS\HTML\HTMLHelper;
 
 // Load admin language file
-$lang = Factory::getLanguage();
+$lang = Factory::getApplication()->getLanguage();
 $lang->load('com_gabroadcast', JPATH_ADMINISTRATOR);
 
 $wa = $this->document->getWebAssetManager();

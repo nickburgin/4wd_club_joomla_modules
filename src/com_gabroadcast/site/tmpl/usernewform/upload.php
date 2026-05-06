@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     2.0.00
+ * @version     4.3.3
  * @package     com_gabroadcast
  * @copyright   Copyright (C) 2013. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -20,12 +20,11 @@ $this->document->getWebAssetManager()
     ->usePreset('com_gabroadcast.gabroadcastpreset');
 
 //Load admin language file
-$lang = Factory::getLanguage();
-$lang->load('com_gabroadcast', JPATH_ADMINISTRATOR);
+Factory::getApplication()->getLanguage()->load('com_gabroadcast', JPATH_ADMINISTRATOR);
 
-$user = GabroadcastHelper::getSpecificUser();
+$user = Factory::getApplication()->getIdentity();
 $canManage = $user->authorise('core.attupload', 'com_gabroadcast');
-
+Factory::getApplication()->setUserState('com_gabroadcast.use_filter.data', $this->params->get('use_filter', 1));
 ?>
 
 <div class="usernew-edit front-end-edit">

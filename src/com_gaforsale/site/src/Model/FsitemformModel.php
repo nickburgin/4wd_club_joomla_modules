@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    3.0.09
+ * @version    4.2.2
  * @package    Com_Gaforsale
  * @author     Glenn Arkell <glenn@glennarkell.com.au>
  * @copyright  Copyright (C) 2013. All rights reserved.
@@ -111,6 +111,7 @@ class FsitemformModel extends FormModel
 		
 		if (isset($this->item->item_image) && $this->item->item_image != '') {
 			$this->item->item_image_txt = $this->item->item_image;
+			//$this->item->item_image = '';
 		}
 		if (!isset($this->item->user_id) || $this->item->user_id == '') {
 			$this->item->user_id = $user->id;
@@ -266,11 +267,9 @@ class FsitemformModel extends FormModel
 	public function save($data)
 	{
 		$id    = (!empty($data['id'])) ? $data['id'] : (int) $this->getState('fsitem.id');
+		$data['state'] = (!empty($data['state'])) ? $data['state'] : (int) 0;
 		$user = GaforsaleHelper::getSpecificUser();
 
-
-
-        //Factory::getApplication()->setUserState('com_gaforsale.test.data2', $data);
 		if ($id) {
 			// Check the user can edit this item
 			$authorised = $user->authorise('core.edit', 'com_gaforsale') || $authorised = $user->authorise('core.edit.own', 'com_gaforsale');
@@ -293,18 +292,19 @@ class FsitemformModel extends FormModel
 				$data['item_image'] = '';
 			}
 		}
+		//Factory::getApplication()->setUserState('com_gaforsale.test.data', $data);
+
+        $tmpl = !$id ? 'fsitems' : '';
 
 		$table = $this->getTable();
 
 		if ($table->save($data) === true) {
             if (!$id) {
 				// notify of new item loaded
-				$data['id'] = $table->id;
-				GaforsaleHelper::sendNotification($data);
+				GaforsaleHelper::notifyForsale($table->id, $tmpl);
 			}
 			return $table->id;
 		} else {
-        //Factory::getApplication()->setUserState('com_gaforsale.test.data', $data);
 			return false;
 		}
 	}
@@ -353,9 +353,9 @@ class FsitemformModel extends FormModel
     {
 		$app = Factory::getApplication();
 		$params = ComponentHelper::getParams('com_gaforsale');
-        $safeFileOptions  = $params->get( 'safe_files' );
-        $max_size  = $params->get( 'max_size', 300000 );
-		$file_ext = substr($tran_file['name'],-3);
+        $safeFileOptions  = $params->get( 'safe_files', array('jpg') );
+        $max_size  = $params->get( 'max_size', 250 ) * 10000;
+		$file_ext = strtolower(substr($tran_file['name'],-3) ?? '');
 
 
 		if (!in_array($file_ext, $safeFileOptions)) {
@@ -370,7 +370,7 @@ class FsitemformModel extends FormModel
 				return null;
 			}
 			$fileName = File::makeSafe($tran_file['name']);
-			$fileName = str_replace(' ', '_', $fileName);
+			$fileName = str_replace(' ', '_', $fileName ?? '');
 			$src = $tran_file['tmp_name'];
 			$fileName = 'images/forsale/'.$fileName;
 
