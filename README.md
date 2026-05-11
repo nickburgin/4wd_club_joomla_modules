@@ -4,9 +4,7 @@ Maintained forks of Joomla extensions originally developed by Glenn Arkell. Thes
 
 ## Background
 
-Glenn Arkell published several Joomla extensions tailored to 4WD clubs (trip management, finance, member management, etc.) and hosted them at glennarkell.com.au. Development has ceased and the extensions are no longer receiving updates. The versions here were extracted directly from the live Joomla site and are the last known working state.
-
-Some extensions are behind the final published release (e.g. the live site was running `com_gafinance 5.1.0` when Glenn's last release was `5.1.0` — matched; but `mod_gafinance` was `5.0.2` vs Glenn's `5.1`). Where reference packages were available they have been used to verify the extraction is complete.
+Glenn Arkell published several Joomla extensions tailored to 4WD clubs (trip management, finance, member management, etc.) and hosted them at glennarkell.com.au. Development has ceased and the extensions are no longer receiving updates. The sources here have been brought up to the last known published versions (scraped from Glenn's update server in May 2026) and are ready for ongoing local maintenance.
 
 ## Repository layout
 
@@ -28,11 +26,13 @@ src/                        Source for all extensions — edit here
   mod_gausersexecs/
   mod_glennslideshow/
   mod_glennsnewsletters/
+  plg_task_gasubscriptions/
   plg_user_gausers/
   plg_user_profileb4wdc/
   rkic41site/               Site template
 
 packages/                   Package manifests (multi-extension installers)
+  pkg_gacalevents.xml
   pkg_gafinance.xml
   pkg_gatripsys.xml
   pkg_gatripsys_script.php
@@ -48,27 +48,26 @@ extract_extensions.sh       Used to extract extensions from a live Joomla site
 
 ### Packages (install these — they handle dependencies)
 
-| Package | Contents | Versions on live site |
+| Package | Contents | Package version |
 |---|---|---|
-| `pkg_gafinance` | `com_gafinance` + `mod_gafinance` | 5.1.0 / 5.0.2 |
-| `pkg_gatripsys` | `com_gatripsys` + `mod_gatripsys` | 5.1.0 / 5.0.4 |
-| `pkg_gausers` | `com_gausers` + `mod_gausers` + `mod_gausersexecs` + `plg_user_gausers` | 5.1.6 (all) |
+| `pkg_gacalevents` | `com_gacalevents` 3.3.1 + `mod_gacalevents` 5.3 | 4.1 |
+| `pkg_gafinance` | `com_gafinance` 5.2.3 + `mod_gafinance` 5.3 | 5.5 |
+| `pkg_gatripsys` | `com_gatripsys` 5.3.0 + `mod_gatripsys` 5.2 | 5.8 |
+| `pkg_gausers` | `com_gausers` 6.0.0 + `mod_gausers` 5.4 + `mod_gausersexecs` 5.3 + `plg_user_gausers` 5.3 + `plg_task_gasubscriptions` 5.3 | 6.0 |
 
 ### Standalone extensions
 
-| Extension | Type | Version |
-|---|---|---|
-| `com_gabroadcast` | Component | 4.2.1 |
-| `com_gacalevents` | Component | 3.0.0 |
-| `com_gaforsale` | Component | 4.0.2 |
-| `com_gamerchandise` | Component | 4.0.7 |
-| `com_gatracklog` | Component | 4.1.0 |
-| `mod_gacalevents` | Module | 2.1.2 |
-| `mod_gaforsale` | Module | 3.0.09 |
-| `mod_glennslideshow` | Module | 4.7 |
-| `mod_glennsnewsletters` | Module | 4.4 |
-| `plg_user_profileb4wdc` | Plugin (user) | 4.5.9 |
-| `rkic41site` | Template | 1.0 |
+| Extension | Type | Version | Notes |
+|---|---|---|---|
+| `com_gabroadcast` | Component | 4.3.3 | |
+| `com_gaforsale` | Component | 4.2.2 | |
+| `com_gamerchandise` | Component | 4.1.2 | |
+| `com_gatracklog` | Component | 4.2.0 | |
+| `mod_gaforsale` | Module | 3.0.09 | No upstream — live site extract only |
+| `mod_glennslideshow` | Module | 4.7 | No upstream — live site extract only |
+| `mod_glennsnewsletters` | Module | 4.4 | No upstream — live site extract only |
+| `plg_user_profileb4wdc` | Plugin (user) | 5.3 | |
+| `rkic41site` | Template | 1.0 | No upstream — live site extract only |
 
 ## Building
 
@@ -122,19 +121,15 @@ The build script auto-detects the version from the manifest XML and names the ou
 
 ### com_gatripsys — media/js/form.js
 
-This file exists on the live site but was not in any of Glenn's published release packages. It provides a `getScript()` utility function and is actively loaded by `Incidentform`, `Invoiceform`, and `Attendeeform` views. It must be preserved — removing it will cause silent 404s on those form pages.
+`src/com_gatripsys/media/js/form.js` is intentionally kept in this repo even though Glenn never included it in any published release package. It provides a `getScript()` utility function that is actively loaded by `Incidentform`, `Invoiceform`, and `Attendeeform` views. Removing it will cause silent 404s on those form pages.
+
+### mod_gaforsale, mod_glennslideshow, mod_glennsnewsletters, rkic41site — no upstream source
+
+These four have no update server and their direct download URLs are 404 on Glenn's server across all Joomla version paths (j4, j5, j6). The copies in `src/` extracted from the live site are the **only known surviving copies** — treat them as irreplaceable.
 
 ### plg_user_profileb4wdc
 
-This plugin is a 4WD-club-specific user profile extension. It is at version 4.5.9 while the rest of the gausers system is at 5.1.6 — it has its own independent release history and is kept as a standalone rather than bundled into `pkg_gausers`.
-
-### mod_gaforsale, mod_glennslideshow, rkic41site — no upstream source
-
-These three have no update server and their direct download URLs are 404 on Glenn's server across all Joomla version paths (j4, j5, j6). Glenn has stated he no longer supports J3/J4 extensions. The copies in `src/` extracted from the live site are the **only known surviving copies** — treat them as irreplaceable.
-
-### Older-style modules
-
-Several modules (`mod_gafinance`, `mod_gatripsys`, etc.) still use the pre-Joomla 4 entry point style (`mod_*.php` + `helper.php`) rather than the newer `services/provider.php` + `src/Dispatcher/` architecture. This is a known version gap — the live site was behind Glenn's final releases for these modules. They work fine on the current Joomla version but are worth modernising eventually.
+Kept as a standalone (not bundled into `pkg_gausers`) because it has its own independent release history and targets 4WD-club-specific user profile fields.
 
 ## Re-extracting from a live site
 
