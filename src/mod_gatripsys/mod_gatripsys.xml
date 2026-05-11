@@ -4,6 +4,7 @@
 	<author>Glenn Arkell</author>
 	<authorEmail>glenn@glennarkell.com.au</authorEmail>
 	<authorUrl>http://www.glennarkell.com.au</authorUrl>
+    <packager>Nick Burgin</packager>
 	<copyright>Open Source</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<creationDate>22 January 2016</creationDate>
@@ -29,7 +30,6 @@
 		<language tag="en-GB">language/en-GB/mod_gatripsys.sys.ini</language>
 	</languages>
 
-	<changelogurl>https://www.glennarkell.com.au/joomlaorg/packages/j6/changes/mod_gatripsys-changelog.xml</changelogurl>
 
 	<config>
 		<fields name="params">

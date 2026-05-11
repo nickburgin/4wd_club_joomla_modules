@@ -5,6 +5,7 @@
 	<creationDate>April 2022</creationDate>
 	<author>Glenn Arkell</author>
 	<authorEmail>glenn@glennarkell.com.au</authorEmail>
+    <packager>Nick Burgin</packager>
 	<copyright>(C) 2017 Open Source Matters, Inc.</copyright>
 	<description>TPL_RKIC41SITE_XML_DESCRIPTION</description>
 	<inheritable>1</inheritable>

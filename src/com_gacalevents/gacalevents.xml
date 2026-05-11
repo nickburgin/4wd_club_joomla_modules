@@ -7,6 +7,7 @@
     <author>Glenn Arkell</author>
     <authorEmail>glenn@glennarkell.com.au</authorEmail>
     <authorUrl>https://www.glennarkell.com.au</authorUrl>
+    <packager>Nick Burgin</packager>
     <version>3.3.1</version>
     <description>COM_GACALEVENTS_XML_DESCRIPTION</description>
 

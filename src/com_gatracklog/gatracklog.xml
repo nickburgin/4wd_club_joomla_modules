@@ -7,6 +7,7 @@
     <author>Glenn Arkell</author>
     <authorEmail>glenn@glennarkell.com.au</authorEmail>
     <authorUrl>https://www.glennarkell.com.au</authorUrl>
+    <packager>Nick Burgin</packager>
     <version>4.2.0</version>
     <description>COM_GATRACKLOG_XML_DESCRIPTION</description>
 
@@ -72,10 +73,9 @@
 		</dashboard>
 	</dashboards>
 
-	<changelogurl>https://www.glennarkell.com.au/joomlaorg/packages/j6/changes/com_gatracklog-changelog.xml</changelogurl>
 
 	<updateservers>
-		<server type="extension" priority="1" name="Tracklog System">https://www.glennarkell.com.au/joomlaorg/components/j6/updates/com_gatracklog-update.xml</server>
+		<server type="extension" priority="1" name="Tracklog System">https://github.com/nickburgin/4wd_club_joomla_modules/releases/latest/download/com_gatracklog-update.xml</server>
 	</updateservers>
 
 </extension>

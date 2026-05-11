@@ -4,6 +4,7 @@
 	<author>Glenn Arkell</author>
 	<authorEmail>glenn@glennarkell.com.au</authorEmail>
 	<authorUrl>https://www.glennarkell.com.au</authorUrl>
+    <packager>Nick Burgin</packager>
 	<copyright>Open Source</copyright>
 	<license>GNU General Public License version 2 or later</license>
 	<creationDate>21 August 2021</creationDate>
@@ -114,7 +115,7 @@
 	</config>
 
     <updateservers>
-            <server type="extension" name="GlennsNewsletters" priority="1">https://www.glennarkell.com.au/joomlaorg/modules/j4/glennsnewsletters_update.xml</server>
+            <server type="extension" name="GlennsNewsletters" priority="1">https://github.com/nickburgin/4wd_club_joomla_modules/releases/latest/download/mod_glennsnewsletters-update.xml</server>
     </updateservers>
 
 </extension>

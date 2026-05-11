@@ -7,6 +7,7 @@
     <author>Glenn Arkell</author>
     <authorEmail>glenn@glennarkell.com.au</authorEmail>
     <authorUrl>https://www.glennarkell.com.au</authorUrl>
+    <packager>Nick Burgin</packager>
     <version>5.3.0</version>
     <description>A simple trip management system to use for club planned trips.</description>
 

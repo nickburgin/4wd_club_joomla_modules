@@ -13,12 +13,61 @@ SRC="$ROOT/src"
 DIST="$ROOT/dist"
 PKGS="$ROOT/packages"
 
+GITHUB_REPO="${GITHUB_REPO:-https://github.com/nickburgin/4wd_club_joomla_modules}"
+
 mkdir -p "$DIST"
 
 # ── helpers ──────────────────────────────────────────────────────────────────
 
 get_version() {
     grep -m1 "<version>" "$1" | sed 's/.*<version>\(.*\)<\/version>.*/\1/' | tr -d '[:space:]'
+}
+
+get_display_name() {
+    grep -m1 "<name>" "$1" | sed 's/[[:space:]]*<name>\(.*\)<\/name>.*/\1/'
+}
+
+generate_update_xml() {
+    local name="$1" version="$2" zip_name="$3" manifest="$4"
+    local display_name type element extra_xml=""
+
+    display_name=$(get_display_name "$manifest")
+
+    case "$name" in
+        pkg_*)
+            type="package"; element="$name" ;;
+        com_*)
+            type="component"; element="$name" ;;
+        mod_*)
+            type="module"; element="$name"
+            extra_xml=$'\n        <client>site</client>' ;;
+        plg_*_*)
+            type="plugin"
+            local grp; grp=$(echo "$name" | cut -d'_' -f2)
+            element=$(echo "$name" | cut -d'_' -f3-)
+            extra_xml=$'\n        <folder>'"$grp"'</folder>' ;;
+        *)
+            type="extension"; element="$name" ;;
+    esac
+
+    cat > "$DIST/${name}-update.xml" <<EOF
+<?xml version="1.0" encoding="utf-8"?>
+<updates>
+    <update>
+        <name>${display_name}</name>
+        <element>${element}</element>
+        <type>${type}</type>
+        <version>${version}</version>
+        <infourl title="4WD Club Joomla Modules">${GITHUB_REPO}</infourl>
+        <downloads>
+            <downloadurl type="full" format="zip">${GITHUB_REPO}/releases/latest/download/${zip_name}</downloadurl>
+        </downloads>
+        <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
+        <maintainerurl>${GITHUB_REPO}</maintainerurl>
+        <targetplatform name="joomla" version="5.*"/>${extra_xml}
+    </update>
+</updates>
+EOF
 }
 
 find_manifest() {
@@ -55,6 +104,7 @@ build_ext() {
     echo "  building $name ($version)..."
     (cd "$src" && zip -rq "$DIST/${name}-${version}.zip" . \
         --exclude "*.DS_Store" --exclude "__MACOSX/*")
+    generate_update_xml "$name" "$version" "${name}-${version}.zip" "$manifest"
     echo "$out"
 }
 
@@ -106,6 +156,7 @@ build_pkg() {
 
     (cd "$tmp" && zip -rq "$DIST/${pkg}-${pkg_version}.zip" .)
     rm -rf "$tmp"
+    generate_update_xml "$pkg" "$pkg_version" "${pkg}-${pkg_version}.zip" "$manifest"
     echo "  -> $out"
 }
 

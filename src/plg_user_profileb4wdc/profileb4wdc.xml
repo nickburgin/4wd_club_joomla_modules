@@ -7,6 +7,7 @@
 	<license>GNU General Public License version 2 or later</license>
 	<authorEmail>glenn@glennarkell.com.au</authorEmail>
 	<authorUrl>https://www.glennarkell.com.au</authorUrl>
+    <packager>Nick Burgin</packager>
 	<version>5.3</version>
 	<description>Profile plug-in, to enhance the available options for the User record.</description>
 
@@ -22,10 +23,9 @@
 		<language tag="en-GB">language/en-GB/plg_user_profileb4wdc.sys.ini</language>
 	</languages>
 
-	<changelogurl>https://www.glennarkell.com.au/joomlaorg/plugins/j6/changes/plg_user_profileb4wdc-changelog.xml</changelogurl>
 
 	<updateservers>
-		<server type="extension" priority="1" name="User Profile B4WDC">https://www.glennarkell.com.au/joomlaorg/plugins/j6/updates/plg_user_profileb4wdc-update.xml</server>
+		<server type="extension" priority="1" name="User Profile B4WDC">https://github.com/nickburgin/4wd_club_joomla_modules/releases/latest/download/plg_user_profileb4wdc-update.xml</server>
 	</updateservers>
 
 	<config>

@@ -7,6 +7,7 @@
     <author>Glenn Arkell</author>
     <authorEmail>glenn@glennarkell.com.au</authorEmail>
     <authorUrl>https://www.glennarkell.com.au</authorUrl>
+    <packager>Nick Burgin</packager>
     <version>5.3</version>
     <description>MOD_GAFINANCE_XML_DESCRIPTION</description>
 
@@ -29,7 +30,6 @@
 			<language tag="en-GB">en-GB/mod_gafinance.sys.ini</language>
     </languages>
 
-	<changelogurl>https://www.glennarkell.com.au/joomlaorg/packages/j6/changes/mod_gafinance-changelog.xml</changelogurl>
 
     <config>
         <fields name="params">

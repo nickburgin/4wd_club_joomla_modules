@@ -7,6 +7,7 @@
     <author>Glenn Arkell</author>
     <authorEmail>glenn@glennarkell.com.au</authorEmail>
     <authorUrl>https://www.glennarkell.com.au</authorUrl>
+    <packager>Nick Burgin</packager>
     <version>4.2.2</version>
     <description>A simple component to manage club/group members forsale items.</description>
     
@@ -69,9 +70,8 @@
 
     </administration>
 
-	<changelogurl>https://www.glennarkell.com.au/joomlaorg/components/j6/changes/com_gaforsale-changelog.xml</changelogurl>
 
 	<updateservers>
-		<server type="extension" priority="1" name="ForSale Management">https://www.glennarkell.com.au/joomlaorg/components/j6/updates/com_gaforsale-update.xml</server>
+		<server type="extension" priority="1" name="ForSale Management">https://github.com/nickburgin/4wd_club_joomla_modules/releases/latest/download/com_gaforsale-update.xml</server>
 	</updateservers>
 </extension>

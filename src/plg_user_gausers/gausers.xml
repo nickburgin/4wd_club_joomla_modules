@@ -7,6 +7,7 @@
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail>glenn@glennarkell.com.au</authorEmail>
 	<authorUrl>https://www.glennarkell.com.au</authorUrl>
+    <packager>Nick Burgin</packager>
 	<version>5.3</version>
 	<description>User plug-in, to enable easy uploading of bulk new users from csv file.</description>
 
@@ -25,7 +26,6 @@
 		<language tag="it-IT">language/it-IT/plg_user_gausers.sys.ini</language>
 	</languages>
 
-	<changelogurl>https://www.glennarkell.com.au/joomlaorg/packages/j6/changes/plg_user_gausers-changelog.xml</changelogurl>
 
 	<config>
 		<fields name="params">

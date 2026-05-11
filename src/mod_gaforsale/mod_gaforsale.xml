@@ -4,6 +4,7 @@
 	<author>Glenn Arkell</author>
 	<authorEmail>glenn@glennarkell.com.au</authorEmail>
 	<authorUrl>http://www.glennarkell.com.au</authorUrl>
+    <packager>Nick Burgin</packager>
 	<copyright>Open Source</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<creationDate>04 March 2016</creationDate>

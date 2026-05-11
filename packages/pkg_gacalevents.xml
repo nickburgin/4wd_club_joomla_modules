@@ -17,4 +17,8 @@
     </files>
 
     <blockChildUninstall>true</blockChildUninstall>
+    <updateservers>
+        <server type="extension" priority="1" name="gacalevents">https://github.com/nickburgin/4wd_club_joomla_modules/releases/latest/download/pkg_gacalevents-update.xml</server>
+    </updateservers>
+
 </extension>

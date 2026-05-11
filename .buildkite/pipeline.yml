@@ -1,0 +1,10 @@
+steps:
+  - label: Build
+    command: ./auto/build
+
+  - wait
+
+  - label: Release
+    command: ./auto/release
+    branches:
+      - main
