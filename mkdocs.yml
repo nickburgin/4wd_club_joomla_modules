@@ -1,0 +1,44 @@
+site_name: 4WD Club Joomla Extensions
+site_description: Documentation for Glenn Arkell's Joomla extensions, maintained as an open-source fork
+repo_url: https://github.com/nickburgin/4wd_club_joomla_modules
+repo_name: nickburgin/4wd_club_joomla_modules
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - search.suggest
+    - search.highlight
+    - content.tooltips
+  palette:
+    - scheme: default
+      primary: green
+      accent: light green
+
+nav:
+  - Home: index.md
+  - Extensions:
+    - Finance Package: extensions/com_gafinance.md
+    - Trip Management Package: extensions/com_gatripsys.md
+    - User Membership Package: extensions/com_gausers.md
+    - Calendar Events Package: extensions/com_gacalevents.md
+    - Broadcast Management: extensions/com_gabroadcast.md
+    - For Sale: extensions/com_gaforsale.md
+    - Merchandise: extensions/com_gamerchandise.md
+    - Track Log: extensions/com_gatracklog.md
+    - Slideshow Module: extensions/mod_glennslideshow.md
+    - Newsletter Listing Module: extensions/mod_glennsnewsletters.md
+    - For Sale Module: extensions/mod_gaforsale.md
+    - 4WD Profile Plugin: extensions/plg_user_profileb4wdc.md
+    - Subscriptions Task Plugin: extensions/plg_task_gasubscriptions.md
+  - Manuals:
+    - User Membership System: manuals/com_gausers-manual.md
+  - Archived:
+    - Election Voting: archived/com_gavoting.md
+    - Attendance Register: archived/com_gavisitsignin.md
+    - Decisions Management: archived/com_gadecisions.md
+    - Newsletter Management: archived/com_ganewsletter.md
+    - Display Gallery: archived/com_gagallery.md

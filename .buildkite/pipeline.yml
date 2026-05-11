@@ -2,9 +2,17 @@ steps:
   - label: Build
     command: ./auto/build
 
+  - label: Docs Build
+    command: ./auto/docs-build
+
   - wait
 
   - label: Release
     command: ./auto/release
+    branches:
+      - main
+
+  - label: Deploy Docs
+    command: ./auto/docs-deploy
     branches:
       - main
