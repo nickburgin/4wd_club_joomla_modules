@@ -1,6 +1,7 @@
 steps:
   - label: Build
     command: ./auto/build
+    artifact_paths: "dist/*"
 
   - label: Docs Build
     command: ./auto/docs-build
