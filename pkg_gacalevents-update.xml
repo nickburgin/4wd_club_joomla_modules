@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<updates>
+    <update>
+        <name>Calendar Events Package</name>
+        <element>pkg_gacalevents</element>
+        <type>package</type>
+        <version>4.1</version>
+        <infourl title="4WD Club Joomla Modules">https://github.com/nickburgin/4wd_club_joomla_modules</infourl>
+        <downloads>
+            <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/pkg_gacalevents-4.1/pkg_gacalevents-4.1.zip</downloadurl>
+        </downloads>
+        <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
+        <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>
+        <targetplatform name="joomla" version="5.*"/>
+    </update>
+</updates>
