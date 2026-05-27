@@ -1,7 +1,4 @@
 #!/bin/bash
 set -euo pipefail
 
-cd "$(dirname "$0")/.."
-
-pip install -q -r docs/requirements.txt
-mkdocs gh-deploy --force
+SERVICE=docs "$(dirname "$0")"/dev scripts/docs-deploy "$@"

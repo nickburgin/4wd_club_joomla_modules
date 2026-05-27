@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+SERVICE="${SERVICE:-build}"
+
+docker-compose build "$SERVICE"
+
+docker-compose run --rm "$SERVICE" "${@-bash}"

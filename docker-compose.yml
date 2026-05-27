@@ -1,4 +1,27 @@
 services:
+  build: &build
+    build:
+      context: .
+      target: build-env
+      dockerfile: Dockerfile
+    environment:
+      GITHUB_REPO: '${GITHUB_REPO:-https://github.com/nickburgin/4wd_club_joomla_modules}'
+      GITHUB_TOKEN: '${GITHUB_TOKEN:-}'
+      BUILD_NUMBER: '${BUILD_NUMBER:-}'
+      BUILDKITE_COMMIT: '${BUILDKITE_COMMIT:-}'
+    working_dir: /work
+    volumes:
+      - .:/work:z
+
+  docs:
+    <<: *build
+    build:
+      context: .
+      target: docs-env
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+
   joomla:
     image: joomla:5
     ports:
