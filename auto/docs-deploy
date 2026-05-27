@@ -1,4 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
+mkdir -p ~/.ssh
+ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
+
 SERVICE=docs "$(dirname "$0")"/dev scripts/docs-deploy "$@"
