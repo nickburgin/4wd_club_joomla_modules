@@ -50,6 +50,9 @@ generate_update_xml() {
             type="extension"; element="$name" ;;
     esac
 
+    local sha256
+    sha256=$(sha256sum "$DIST/${zip_name}" | awk '{print $1}')
+
     cat > "$DIST/${name}-update.xml" <<EOF
 <?xml version="1.0" encoding="utf-8"?>
 <updates>
@@ -62,6 +65,9 @@ generate_update_xml() {
         <downloads>
             <downloadurl type="full" format="zip">${GITHUB_REPO}/releases/download/${name}-${version}/${zip_name}</downloadurl>
         </downloads>
+        <checksums>
+            <checksum type="sha256">${sha256}</checksum>
+        </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>${GITHUB_REPO}</maintainerurl>
         <targetplatform name="joomla" version="5.*"/>${extra_xml}
