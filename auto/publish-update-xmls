@@ -9,6 +9,7 @@ buildkite-agent artifact download "dist/*-update.xml" dist/
 COMMIT="${BUILDKITE_COMMIT:-$(git rev-parse HEAD)}"
 
 git fetch origin releases 2>/dev/null || true
+git worktree prune
 
 if git show-ref --verify --quiet refs/remotes/origin/releases; then
     git worktree add -b releases /tmp/releases-branch origin/releases
