@@ -9,6 +9,9 @@
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/pkg_gacalevents-4.1/pkg_gacalevents-4.1.zip</downloadurl>
         </downloads>
+        <checksums>
+            <checksum type="sha256">4d0dd84047810b63544db6302a00b663296baf40a9747336da0eaa736becef8f</checksum>
+        </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>
         <targetplatform name="joomla" version="5.*"/>

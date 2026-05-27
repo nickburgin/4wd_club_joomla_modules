@@ -9,6 +9,9 @@
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/plg_task_gasubscriptions-5.3/plg_task_gasubscriptions-5.3.zip</downloadurl>
         </downloads>
+        <checksums>
+            <checksum type="sha256">f98a7c6b939412accdf1af0c3a61cda1dce6fe18dd4526b58bb7e6bb34b28bcb</checksum>
+        </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>
         <targetplatform name="joomla" version="5.*"/>

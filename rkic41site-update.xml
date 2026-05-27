@@ -9,6 +9,9 @@
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/rkic41site-1.0/rkic41site-1.0.zip</downloadurl>
         </downloads>
+        <checksums>
+            <checksum type="sha256">ca5faed1f1dcc980eed485bef72aa020b1b04fd2112920f8bd64b6f9423395ed</checksum>
+        </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>
         <targetplatform name="joomla" version="5.*"/>

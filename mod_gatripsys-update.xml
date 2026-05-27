@@ -9,6 +9,9 @@
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/mod_gatripsys-5.2/mod_gatripsys-5.2.zip</downloadurl>
         </downloads>
+        <checksums>
+            <checksum type="sha256">7b6654646b73c9806f37e7189db2c3aba136bfe58f45353bdeba5dc98372a3b0</checksum>
+        </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>
         <targetplatform name="joomla" version="5.*"/>

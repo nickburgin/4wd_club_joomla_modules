@@ -9,6 +9,9 @@
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/com_gamerchandise-4.1.2/com_gamerchandise-4.1.2.zip</downloadurl>
         </downloads>
+        <checksums>
+            <checksum type="sha256">933047673238dd50e669bb5c9b6f99b24771cb3a39ba4a57a0d0822d9d095b4f</checksum>
+        </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>
         <targetplatform name="joomla" version="5.*"/>

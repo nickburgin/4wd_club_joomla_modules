@@ -9,6 +9,9 @@
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/com_gabroadcast-4.3.3/com_gabroadcast-4.3.3.zip</downloadurl>
         </downloads>
+        <checksums>
+            <checksum type="sha256">2a2ffede57cb6c199a835b494a6a6d2163245d9c485dde012f750a50e0b97482</checksum>
+        </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>
         <targetplatform name="joomla" version="5.*"/>

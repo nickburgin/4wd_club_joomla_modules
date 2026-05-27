@@ -9,6 +9,9 @@
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/plg_user_gausers-5.3/plg_user_gausers-5.3.zip</downloadurl>
         </downloads>
+        <checksums>
+            <checksum type="sha256">7d012f98d0483a8d982f15ea874c3c83f368f586c1eafd9cb8a791694cd24cbf</checksum>
+        </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>
         <targetplatform name="joomla" version="5.*"/>

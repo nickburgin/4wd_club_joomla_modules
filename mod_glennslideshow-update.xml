@@ -9,6 +9,9 @@
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/mod_glennslideshow-4.7/mod_glennslideshow-4.7.zip</downloadurl>
         </downloads>
+        <checksums>
+            <checksum type="sha256">0dcf83262681d2e3733563fc90d7aaaead14acde8700205d2b588e08ee9d0ebb</checksum>
+        </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>
         <targetplatform name="joomla" version="5.*"/>

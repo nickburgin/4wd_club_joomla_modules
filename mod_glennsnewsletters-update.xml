@@ -9,6 +9,9 @@
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/mod_glennsnewsletters-4.4/mod_glennsnewsletters-4.4.zip</downloadurl>
         </downloads>
+        <checksums>
+            <checksum type="sha256">f19d0f7870e6f26a66bed4162c248ded2894fec4d3aebbf99854121c886d6ef3</checksum>
+        </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>
         <targetplatform name="joomla" version="5.*"/>

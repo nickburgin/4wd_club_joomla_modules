@@ -9,6 +9,9 @@
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/mod_gacalevents-5.3/mod_gacalevents-5.3.zip</downloadurl>
         </downloads>
+        <checksums>
+            <checksum type="sha256">1771d4b92b6544dd32635f6568b9a5af9a44dcb0453771d35740bb0cfb34e96b</checksum>
+        </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>
         <targetplatform name="joomla" version="5.*"/>

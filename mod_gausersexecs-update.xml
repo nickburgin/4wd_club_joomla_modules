@@ -9,6 +9,9 @@
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/mod_gausersexecs-5.3/mod_gausersexecs-5.3.zip</downloadurl>
         </downloads>
+        <checksums>
+            <checksum type="sha256">ea7ca4a333a4057ca7e897f01a65a2b08d0b99c591b789cb295d7ab98150b5b0</checksum>
+        </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>
         <targetplatform name="joomla" version="5.*"/>

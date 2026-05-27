@@ -9,6 +9,9 @@
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/plg_user_profileb4wdc-5.3/plg_user_profileb4wdc-5.3.zip</downloadurl>
         </downloads>
+        <checksums>
+            <checksum type="sha256">4928718910443dc19f20d97194d2cee3875321cf6d4e472bb166299c0d2f918e</checksum>
+        </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>
         <targetplatform name="joomla" version="5.*"/>
