@@ -21,7 +21,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/work:z
-      - ~/.ssh:/root/.ssh:ro
+      - '${SSH_KEY_PATH:-/dev/null}:/root/.ssh/id_ed25519:ro'
     ports:
       - "8000:8000"
 
