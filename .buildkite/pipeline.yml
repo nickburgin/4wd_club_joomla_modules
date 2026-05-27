@@ -8,8 +8,8 @@ steps:
 
   - wait
 
-  - label: Release
-    command: ./auto/release
+  - label: "Upload Release Pipeline"
+    command: ./auto/upload-release-pipeline
     branches:
       - main
 

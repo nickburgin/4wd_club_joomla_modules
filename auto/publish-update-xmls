@@ -1,0 +1,26 @@
+#!/bin/bash
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+mkdir -p dist/
+buildkite-agent artifact download "dist/*-update.xml" dist/
+
+COMMIT="${BUILDKITE_COMMIT:-$(git rev-parse HEAD)}"
+
+git fetch origin releases 2>/dev/null || true
+
+if git show-ref --verify --quiet refs/remotes/origin/releases; then
+    git worktree add /tmp/releases-branch origin/releases
+else
+    git worktree add --orphan /tmp/releases-branch releases
+fi
+
+cp dist/*-update.xml /tmp/releases-branch/
+
+cd /tmp/releases-branch
+git add -A
+git diff --cached --quiet || git commit -m "Update XMLs from ${COMMIT}"
+git push origin releases
+cd -
+git worktree remove --force /tmp/releases-branch

@@ -60,7 +60,7 @@ generate_update_xml() {
         <version>${version}</version>
         <infourl title="4WD Club Joomla Modules">${GITHUB_REPO}</infourl>
         <downloads>
-            <downloadurl type="full" format="zip">${GITHUB_REPO}/releases/latest/download/${zip_name}</downloadurl>
+            <downloadurl type="full" format="zip">${GITHUB_REPO}/releases/download/${name}-${version}/${zip_name}</downloadurl>
         </downloads>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>${GITHUB_REPO}</maintainerurl>

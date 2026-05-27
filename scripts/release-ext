@@ -1,0 +1,20 @@
+#!/bin/bash
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+NAME="$1"
+
+zip=$(ls dist/${NAME}-*.zip | head -1)
+filename=$(basename "$zip")
+version="${filename##*-}"; version="${version%.zip}"
+versioned_tag="${NAME}-${version}"
+
+if gh release view "$versioned_tag" &>/dev/null; then
+    echo "${NAME} ${version} already released, skipping."
+    exit 0
+fi
+
+gh release create "$versioned_tag" \
+    --title "${NAME} ${version}" \
+    --notes "Release of ${NAME} version ${version}" \
+    "$zip"

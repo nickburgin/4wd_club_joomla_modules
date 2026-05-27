@@ -1,9 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-cd "$(dirname "$0")/.."
-
-mkdir -p dist/
-buildkite-agent artifact download "dist/*" dist/
-
-"$(dirname "$0")"/dev scripts/release "$@"

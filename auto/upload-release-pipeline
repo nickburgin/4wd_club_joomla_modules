@@ -1,0 +1,30 @@
+#!/bin/bash
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+mkdir -p dist/
+buildkite-agent artifact download "dist/*.zip" dist/
+
+echo "steps:" > /tmp/release-pipeline.yml
+
+for zip in dist/*.zip; do
+    filename=$(basename "$zip")
+    name="${filename%-*}"
+    cat >> /tmp/release-pipeline.yml <<EOF
+  - label: "Release ${name}"
+    command: ./auto/release-ext ${name}
+    branches: main
+EOF
+done
+
+cat >> /tmp/release-pipeline.yml <<'EOF'
+
+  - wait
+
+  - label: "Publish Update XMLs"
+    command: ./auto/publish-update-xmls
+    branches: main
+EOF
+
+buildkite-agent pipeline upload /tmp/release-pipeline.yml
