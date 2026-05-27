@@ -10,7 +10,7 @@ RUN curl -fsSL https://github.com/cli/cli/releases/download/v2.50.0/gh_2.50.0_li
 FROM build-env AS docs-env
 
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends python3 python3-pip python3-venv \
+  && apt-get install -y --no-install-recommends openssh-client python3 python3-pip python3-venv \
   && rm -rf /var/lib/apt/lists/*
 
 ENV VIRTUAL_ENV=/opt/venv

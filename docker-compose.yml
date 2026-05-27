@@ -19,6 +19,9 @@ services:
       context: .
       target: docs-env
       dockerfile: Dockerfile
+    volumes:
+      - .:/work:z
+      - ~/.ssh:/root/.ssh:ro
     ports:
       - "8000:8000"
 
