@@ -15,7 +15,7 @@ for zip in dist/*.zip; do
     version="${filename##*-}"; version="${version%.zip}"
     versioned_tag="${name}-${version}"
 
-    if gh release view "$versioned_tag" &>/dev/null; then
+    if GH_TOKEN="${GH_TOKEN:-${GITHUB_ACCESS_TOKEN:-}}" gh release view "$versioned_tag" &>/dev/null; then
         echo "  ${name} ${version} already released, skipping."
     else
         needs_release=1
