@@ -57,17 +57,30 @@ Where a package exists (`pkg_gacalevents`, `pkg_gafinance`, `pkg_gatripsys`, `pk
 
 ## CI/CD
 
-Buildkite pipeline at `.buildkite/pipeline.yml`. Steps:
-1. `auto/build` — runs `./build.sh all`, producing zips and update XMLs in `dist/`
-2. `auto/release` — creates a GitHub release and uploads everything in `dist/`; runs on `main` only
+Buildkite pipeline at `.buildkite/pipeline.yml`. The build runs in Docker via `docker-compose.yml` and `Dockerfile`.
 
-The `auto/release` script requires the `gh` CLI and `GITHUB_REPO` env var (defaults to `https://github.com/nickburgin/4wd_club_joomla_modules`). Tag format is `build-{BUILD_NUMBER}`.
+Steps on every push:
+1. `auto/build` — runs `./build.sh all` inside the `build` container, producing zips and update XMLs in `dist/`; artifacts uploaded to Buildkite
+2. `auto/docs-build` — builds the MkDocs documentation site
+
+On `main` only (after the above complete):
+3. `auto/upload-release-pipeline` — downloads zips, checks which GitHub release tags already exist, and uploads a dynamic pipeline with one `auto/release-ext {name}` step per extension that needs a new release, followed by `auto/publish-update-xmls`
+4. Per-extension release steps — each creates a versioned GitHub release tag `{name}-{version}` containing just that extension's zip
+5. `auto/publish-update-xmls` — downloads all `*-update.xml` artifacts and commits them to the `releases` branch
+6. `auto/docs-deploy` — deploys the docs site to GitHub Pages
+
+To force update XMLs to be republished without a version bump, include `[publish-xmls]` in the commit message.
 
 ## Update servers
 
-`build.sh` generates a `{name}-update.xml` in `dist/` for every extension it builds. Package manifests (`packages/pkg_*.xml`) and standalone extension manifests point to `{GITHUB_REPO}/releases/latest/download/{name}-update.xml` — the fixed-name update XML that is overwritten on every release.
+`build.sh` generates a `{name}-update.xml` in `dist/` for every extension it builds. Each update XML contains the version, download URL, and SHA256 checksum of the zip.
 
-When releasing a new version of an extension: bump the `<version>` in its manifest, then run the build. The update XML is regenerated with the new version and correct download URL automatically.
+- **Update XML URL** (stable): `https://raw.githubusercontent.com/nickburgin/4wd_club_joomla_modules/releases/{name}-update.xml`
+- **Zip download URL** (versioned): `https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/{name}-{version}/{name}-{version}.zip`
+
+Each standalone extension manifest (`src/<name>/<manifest>.xml`) must contain an `<updateservers>` block pointing at its update XML URL on the `releases` branch. Package members do not need this — Joomla tracks updates through the package.
+
+When releasing a new version: bump the `<version>` in the manifest, push to `main`, and CI handles the rest.
 
 ## Local testing
 

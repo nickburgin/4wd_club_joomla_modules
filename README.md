@@ -1,5 +1,7 @@
 # 4WD Club Joomla Modules
 
+[![Build status](https://badge.buildkite.com/78b5555ee270cbe6e9aba4c813d10d16e1dbeb552e936136f1.svg?branch=main)](https://buildkite.com/nick-burgin/4wd-club-joomla-modules)
+
 Maintained forks of Joomla extensions originally developed by Glenn Arkell. These extensions were extracted from the live club site after the original author abandoned them. This repo is the ongoing source of truth for all customisation and maintenance work.
 
 ## Background
@@ -111,11 +113,28 @@ Modules and plugins have a flat structure with the manifest at the root of their
 
 1. Make your changes in `src/<extension>/`
 2. Bump the `<version>` tag in the extension's XML manifest
-3. If the extension is part of a package, update the filename in `packages/pkg_<name>.xml` to match the new version number
-4. Run `make pkg_<name>` (or `./build.sh <ext_name>` for standalones)
-5. Install the resulting zip from `dist/` on the target Joomla site
+3. If the extension is part of a package, update the filename in `packages/pkg_<name>.xml` to match the new version number (the build script patches it anyway, but keeping it in sync avoids confusion)
+4. Push to `main` — CI builds the zip, creates a versioned GitHub release, and publishes the updated XML to the `releases` branch
 
-The build script auto-detects the version from the manifest XML and names the output zip accordingly. If the version in `packages/pkg_*.xml` doesn't match what was built, the build script patches the manifest filename inside the assembled package zip automatically.
+Joomla will pick up the new version automatically on the next update check.
+
+To test locally before pushing:
+
+```bash
+make pkg_<name>        # or ./build.sh <ext_name> for standalones
+```
+
+Then install the zip from `dist/` via Joomla Admin > Extensions > Install.
+
+## CI/CD
+
+Buildkite runs on every push. On `main`, after a successful build:
+
+- Each extension with a new version gets its own GitHub release: `{name}-{version}`
+- All `*-update.xml` files are committed to the `releases` branch, where Joomla polls them
+- Docs are deployed to GitHub Pages
+
+To force update XMLs to republish without a version bump, include `[publish-xmls]` in the commit message.
 
 ## Notes
 
