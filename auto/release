@@ -10,4 +10,4 @@ COMMIT="${BUILDKITE_COMMIT:-$(git rev-parse HEAD)}"
 gh release create "$TAG" \
     --title "Build ${BUILD_NUMBER}" \
     --notes "Automated build ${BUILD_NUMBER} (${COMMIT})" \
-    dist/*.zip
+    dist/*.zip dist/*-update.xml
