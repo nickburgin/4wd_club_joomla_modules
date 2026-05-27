@@ -4,4 +4,4 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 pip install -q -r docs/requirements.txt
-mkdocs gh-deploy --force
+GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" mkdocs gh-deploy --force
