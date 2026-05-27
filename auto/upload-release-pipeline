@@ -29,7 +29,14 @@ existing_tags=$(docker-compose run --rm --no-deps \
     ' -- "${tags[@]}")
 
 echo "steps:" > /tmp/release-pipeline.yml
-needs_release=0
+
+# Also need to publish if the releases branch doesn't exist yet
+if git ls-remote --exit-code origin releases &>/dev/null; then
+    needs_release=0
+else
+    echo "  releases branch does not exist, will publish update XMLs."
+    needs_release=1
+fi
 
 for i in "${!tags[@]}"; do
     tag="${tags[$i]}"
