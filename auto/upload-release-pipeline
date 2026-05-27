@@ -6,16 +6,37 @@ cd "$(dirname "$0")/.."
 mkdir -p dist/
 buildkite-agent artifact download "dist/*.zip" dist/
 
-echo "steps:" > /tmp/release-pipeline.yml
-needs_release=0
-
+# Build list of tags to check
+tags=()
+names=()
+versions=()
 for zip in dist/*.zip; do
     filename=$(basename "$zip")
     name="${filename%-*}"
     version="${filename##*-}"; version="${version%.zip}"
-    versioned_tag="${name}-${version}"
+    tags+=("${name}-${version}")
+    names+=("$name")
+    versions+=("$version")
+done
 
-    if GH_TOKEN="${GH_TOKEN:-${GITHUB_ACCESS_TOKEN:-}}" gh release view "$versioned_tag" &>/dev/null; then
+# Check which tags already exist in a single container invocation
+existing_tags=$(docker-compose run --rm --no-deps \
+    -e GH_TOKEN="${GH_TOKEN:-${GITHUB_ACCESS_TOKEN:-}}" \
+    build bash -c '
+        for tag in "$@"; do
+            gh release view "$tag" &>/dev/null && echo "$tag"
+        done
+    ' -- "${tags[@]}")
+
+echo "steps:" > /tmp/release-pipeline.yml
+needs_release=0
+
+for i in "${!tags[@]}"; do
+    tag="${tags[$i]}"
+    name="${names[$i]}"
+    version="${versions[$i]}"
+
+    if echo "$existing_tags" | grep -qx "$tag"; then
         echo "  ${name} ${version} already released, skipping."
     else
         needs_release=1
