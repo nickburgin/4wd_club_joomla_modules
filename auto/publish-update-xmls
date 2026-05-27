@@ -22,6 +22,6 @@ cp dist/*-update.xml /tmp/releases-branch/
 cd /tmp/releases-branch
 git add -A
 git diff --cached --quiet || git commit -m "Update XMLs from ${COMMIT}"
-git push origin releases
+git push origin HEAD:releases
 cd -
 git worktree remove --force /tmp/releases-branch
