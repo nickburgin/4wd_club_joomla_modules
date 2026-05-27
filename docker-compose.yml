@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     environment:
       GITHUB_REPO: '${GITHUB_REPO:-https://github.com/nickburgin/4wd_club_joomla_modules}'
-      GITHUB_TOKEN: '${GITHUB_TOKEN:-}'
+      GH_TOKEN: '${GITHUB_ACCESS_TOKEN:-}'
       BUILD_NUMBER: '${BUILD_NUMBER:-}'
       BUILDKITE_COMMIT: '${BUILDKITE_COMMIT:-}'
     working_dir: /work
