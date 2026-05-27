@@ -42,6 +42,10 @@
 		<language tag="en-GB">language/en-GB/en-GB.mod_gaforsale.sys.ini</language>
 	</languages>
 
+	<updateservers>
+		<server type="extension" priority="1" name="ForSale Management">https://raw.githubusercontent.com/nickburgin/4wd_club_joomla_modules/releases/mod_gaforsale-update.xml</server>
+	</updateservers>
+
 	<config>
 		<fields name="params">
 			<fieldset name="basic">				
