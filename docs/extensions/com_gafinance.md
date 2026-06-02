@@ -16,45 +16,135 @@ Install `pkg_gafinance` via **Joomla Admin → Extensions → Install → Upload
 ## Key features
 
 - Transaction management (income and expenses)
-- Multi-bank account consolidation
-- Basic budgeting
+- Multi-bank account management and consolidated reporting
+- Basic budgeting (monthly, quarterly, or annual)
 - PDF invoicing with optional logo and payment instructions
 - Audit logging of all transactions and changes
 - PayPal and accounts payable tracking
 - GST support (typically disabled for non-profit groups)
-- Receipt file uploads (PDF/JPG)
+- Receipt file uploads (PDF/JPG/PNG)
 - Email audit file export
-- Profit & Loss, Cash Summary, and Balance Sheet reports
+- Profit & Loss, Cash Summary, Balance Sheet, Bank Reconciliation, GST Summary, and Depreciation Schedule reports
 - Guided tours for initial setup
+
+## Initial setup
+
+Before using the component, you must create at least one **bank account** (Admin → Finance → Accounts) and the relevant **categories** (Admin → Finance → Categories, or Joomla's standard category manager filtered to `com_gafinance`).
+
+Each bank account has:
+- Account name
+- BSB / Sort code
+- Account number
+
+An **opening balance transaction** (type `Z`) should be created for each account before adding regular transactions. All balance calculations are made relative to the most recent `Z` record.
+
+Default categories created on installation include: General Operations, Bank Charges or Interest, Membership, Merchandise, Donations, IT Related, Advertising or Sponsorship, Training, Venue Costs, Miscellaneous.
+
+## Transactions
+
+Transactions are the core record type. Each transaction has:
+
+| Field | Description |
+|-------|-------------|
+| Type | `I` = Income, `E` = Expense, `D` = Journal entry, `Z` = Opening balance |
+| Date | Transaction date |
+| Amount | Positive = income/credit, negative = expense/debit |
+| Category | Links to a `com_gafinance` Joomla category |
+| Account | Which bank account this belongs to |
+| Reference | Cheque number, invoice reference, etc. |
+| Receipt | Optional attached file (PDF/JPG/PNG/GIF, default max 300 KB) |
+| GST amount | Manually entered GST component (only when GST is enabled) |
+
+> GST amounts are **not** calculated automatically — they must be entered manually per transaction.
+
+> Deleting an account or category does **not** cascade-delete its transactions. Manual cleanup is required.
+
+## Reports
+
+| Report | Description |
+|--------|-------------|
+| Cash Book Summary | Opening balance, all transactions, and closing balance for a selected period and account(s) |
+| Profit & Loss | Income and expenses by category for a date range |
+| Balance Sheet | Point-in-time financial position — assets, liabilities, equity |
+| Bank Reconciliation | Matches transactions against bank statement items |
+| Depreciation Schedule | Asset values and depreciation over a period |
+| GST Summary | GST collected and claimable GST for a date range |
+
+All reports support date range filtering and account selection. When `Combine Accounts` is enabled in configuration, reports can aggregate across multiple accounts.
+
+## Finance module (mod_gafinance)
+
+Displays a running transaction list for a selected account in a front-end module position. Shows date, category, description, debit/credit columns, and running balance. For membership-category transactions, the member's name is shown instead of the description. Only visible to logged-in users.
 
 ## Configuration options
 
-### Business & membership settings
-- Business details included on invoices
-- Single or multiple membership record support
-- Custom profile plugin configuration
-- Partner field support for merged invoice listings
+### Business details
 
-### Transaction management
-- Automatic negative values for expense records
-- Single extra currency exchange rate support
-- Owner drawdown identification
-- Receipt file uploads
+| Parameter | Description |
+|-----------|-------------|
+| ABN | Business registration number — printed on invoices |
+| Address / Suburb / Phone / Fax | Club contact details for invoices |
+
+### Transactions
+
+| Parameter | Description |
+|-----------|-------------|
+| Auto Negative | Automatically set expense transactions to negative amounts |
+| Activity Logging | Log all changes to transactions (can grow large) |
+| Exchange Rate | Multiplier for a secondary currency (e.g. PayPal USD → AUD) |
+| Use PayPal | Track PayPal AUD and USD balances separately |
+| GST | Enable GST tracking; set rate (default 10%) |
+| Safe Files | Permitted file types for receipt uploads |
+| Max File Size | Upload size limit in bytes (default 300,000) |
+| Email Audit | Send audit file by email |
+| Owner Category | Category used to identify owner drawdown transactions |
 
 ### Reporting & accounts
-- Multi-bank account consolidation and combined reports
+
+| Parameter | Description |
+|-----------|-------------|
+| Combine Accounts | Merge multiple accounts into consolidated reports |
+| Select Accounts | Which accounts to combine (when enabled) |
+| Combine Reports | Show combined and individual account reports together |
+| Budget | Enable budgeting feature |
+| Budget Regularity | Monthly, quarterly, or annual budget periods |
 
 ### Invoicing
-- Invoice number offsetting and prefixes
-- Optional header image and payment instructions
 
-### Permissions
-- Standard Joomla core permissions
-- Special treasurer-level actions
+| Parameter | Description |
+|-----------|-------------|
+| Include Invoices | Source for invoice numbering: None, Timesheets, or Finance |
+| Invoice Number Offset | Starting offset for invoice numbers (default 900,000) |
+| Invoice Prefix | Prefix for invoice numbers (default `BECS`) |
+| Dummy Email | Placeholder email for invoices with no recipient |
+| Bank / BSB / Account | Fallback bank details printed on invoices |
+| Header Image | Logo printed at the top of invoice PDFs |
+| Invoice Category | Joomla category used for finance invoices |
+| Age to Hide | Hide invoices older than this many days (default 90) |
+| Email Text | Template text for invoice emails |
+| Payment Instructions | Text printed below bank details on invoices |
 
-## Integration
+### Membership settings
 
-Integrates with [com_gausers](com_gausers.md) — when a membership invoice is marked as paid, a finance record can be created automatically. Configure this under **Finance → Incorporate Finance** in the Users component configuration.
+| Parameter | Description |
+|-----------|-------------|
+| Single Membership | Enable single-record membership mode |
+| Profile Suffix | Profile plugin suffix for partner name lookup (when single membership is on) |
+
+## Integration with com_gausers
+
+When a membership invoice is marked as paid in com_gausers, a finance transaction is automatically created if **Incorporate Finance** is enabled in the Users component configuration.
+
+The transaction created is:
+- **Type:** Income (`I`)
+- **Date:** Invoice paid date
+- **Amount:** Invoice amount
+- **Category:** Set by `Finance Category ID` in com_gausers config
+- **Account:** Set by `Account Name` in com_gausers config (falls back to account ID 1)
+- **Reference:** `Invoice {invoice_id}`
+- **Comment:** `Auto Loaded from Members Invoicing`
+
+To configure: in com_gausers → Configuration → Finance, set `Incorporate Finance = Yes`, `Finance Category ID` to the membership income category, and `Account Name` to the correct bank account.
 
 ## Version history
 

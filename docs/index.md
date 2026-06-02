@@ -41,11 +41,10 @@ Glenn published several other extensions not currently in this repository. Their
 | [Newsletter Management](archived/com_ganewsletter.md) | Aggregate articles into newsletters |
 | [Display Gallery](archived/com_gagallery.md) | Simple image gallery |
 
-## Detailed manual
+## Detailed manuals
 
-The User Membership System has a comprehensive manual converted from Glenn's original PDF:
-
-- [User Membership System Manual](manuals/com_gausers-manual.md)
+- [User Membership System Manual](manuals/com_gausers-manual.md) — full administrator reference converted from Glenn's original PDF
+- [New Member Onboarding Guide](manuals/new-member-onboarding.md) — step-by-step walkthrough for Membership Officers
 
 ## Licence
 

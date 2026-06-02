@@ -1,4 +1,4 @@
 #!/bin/bash
 set -euo pipefail
 
-SERVICE=docs "$(dirname "$0")"/dev scripts/docs-serve "$@"
+SERVICE=docs SERVICE_PORTS=true "$(dirname "$0")"/dev scripts/docs-serve "$@"

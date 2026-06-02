@@ -7,4 +7,5 @@ SERVICE="${SERVICE:-build}"
 
 docker-compose build "$SERVICE"
 
-docker-compose run --rm "$SERVICE" "${@-bash}"
+SERVICE_PORTS_FLAG=${SERVICE_PORTS:+--service-ports}
+docker-compose run --rm ${SERVICE_PORTS_FLAG} "$SERVICE" "${@-bash}"

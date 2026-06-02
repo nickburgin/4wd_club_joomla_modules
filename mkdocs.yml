@@ -36,6 +36,7 @@ nav:
     - Subscriptions Task Plugin: extensions/plg_task_gasubscriptions.md
   - Manuals:
     - User Membership System: manuals/com_gausers-manual.md
+    - New Member Onboarding: manuals/new-member-onboarding.md
   - Archived:
     - Election Voting: archived/com_gavoting.md
     - Attendance Register: archived/com_gavisitsignin.md

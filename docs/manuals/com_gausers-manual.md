@@ -94,7 +94,7 @@ Click the **+ New Member** button at the bottom of the listing. When the form is
 
 When viewing the Membership Invoices listing you can click **Generate Invoices** (green button) to create invoices for all current members.
 
-> The Generate Invoices button only appears at a date 10 months after the last annual invoices were created. This is controlled by the **Last Invoice Start Date** configuration parameter.
+> The Generate Invoices button only appears **9 months after the Last Invoice Start Date**. For an annual membership, this means the button becomes available 9 months into the current financial year. If the button is missing, check that **Last Invoice Start Date** (Configuration → Invoicing) is set correctly — a future-dated value will prevent the button from appearing until 9 months after that date.
 
 The invoice listing shows columns: Member Name (links to PDF), Amount, End Date, Date Paid, and action buttons:
 
