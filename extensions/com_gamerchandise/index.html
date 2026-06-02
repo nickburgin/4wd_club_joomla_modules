@@ -703,6 +703,100 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#key-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration options
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#products-orders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Products &amp; orders
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sales-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sales settings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discounts-site-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discounts &amp; site details
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#finance-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finance integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#version-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version history
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -898,6 +992,8 @@
       
         
       
+        
+      
     
     
     
@@ -958,6 +1054,34 @@
     
   
     User Membership System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../manuals/new-member-onboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    New Member Onboarding
   
 
     
@@ -1237,6 +1361,100 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#key-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration options
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#products-orders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Products &amp; orders
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sales-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sales settings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discounts-site-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discounts &amp; site details
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#finance-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finance integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#version-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version history
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1260,12 +1478,163 @@
 <h1 id="merchandise-management-com_gamerchandise">Merchandise Management (com_gamerchandise)</h1>
 <p><strong>Current version:</strong> 4.1.2</p>
 <h2 id="description">Description</h2>
-<p>A component for managing club merchandise catalogue and sales.</p>
-<blockquote>
-<p>No dedicated documentation page was published by the original author for this extension. This page reflects what is known from the source code and installed version.</p>
-</blockquote>
+<p>A component for managing a club merchandise catalogue and member orders, including stock tracking, order status management, PDF order documents, and optional finance integration.</p>
 <h2 id="installation">Installation</h2>
 <p>Install <code>com_gamerchandise</code> via <strong>Joomla Admin → Extensions → Install → Upload Package File</strong>.</p>
+<h2 id="key-features">Key features</h2>
+<ul>
+<li>Product catalogue with categories, pricing, and images</li>
+<li>Member order (cart) creation and management</li>
+<li>Order status workflow: Created → Unpaid → Paid → Ordered → Delivered</li>
+<li>PDF order document generation with custom header</li>
+<li>Member discount support</li>
+<li>Optional public (non-member) sales</li>
+<li>Stock on hand tracking</li>
+<li>Email notifications to merchandise officer on new orders</li>
+<li>Finance integration for income/expense recording</li>
+<li>Joomla workflow, custom fields, and content history support</li>
+</ul>
+<h2 id="configuration-options">Configuration options</h2>
+<h3 id="products-orders">Products &amp; orders</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Products Header Text</td>
+<td>Introductory text shown on the products page</td>
+</tr>
+<tr>
+<td>Purchase Order Emails</td>
+<td>Send email notifications on new orders</td>
+</tr>
+<tr>
+<td>PO Email Text</td>
+<td>Custom template for purchase order emails</td>
+</tr>
+<tr>
+<td>Notify Merchandise Officer</td>
+<td>Notify designated officer on each new order</td>
+</tr>
+<tr>
+<td>Merchandise Email</td>
+<td>Contact email address for orders</td>
+</tr>
+<tr>
+<td>PO Contact Name / Phone</td>
+<td>Contact person details printed on order documents</td>
+</tr>
+<tr>
+<td>Report Header Image</td>
+<td>Logo image printed on order PDFs</td>
+</tr>
+<tr>
+<td>Image Format</td>
+<td>Header image format (JPG, PNG, GIF)</td>
+</tr>
+<tr>
+<td>Order Instructions</td>
+<td>Instruction text printed on order documents</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sales-settings">Sales settings</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stock on Hand</td>
+<td>Enable stock tracking and display</td>
+</tr>
+<tr>
+<td>Public Sales</td>
+<td>Allow non-members to purchase</td>
+</tr>
+<tr>
+<td>Welcome Note</td>
+<td>Joomla article shown to public buyers</td>
+</tr>
+<tr>
+<td>Ignore Categories</td>
+<td>Product categories hidden from public</td>
+</tr>
+</tbody>
+</table>
+<h3 id="discounts-site-details">Discounts &amp; site details</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Member Discount</td>
+<td>Enable a percentage discount for members</td>
+</tr>
+<tr>
+<td>Discount Amount</td>
+<td>Discount percentage to apply</td>
+</tr>
+<tr>
+<td>ABN / Address / Phone</td>
+<td>Club details printed on order documents</td>
+</tr>
+<tr>
+<td>Profile Prefix</td>
+<td>User profile prefix for member detection (default <code>b4wdc</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="finance-integration">Finance integration</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Incorporate Finance</td>
+<td>Create finance transactions when orders are paid</td>
+</tr>
+<tr>
+<td>Finance Category</td>
+<td>com_gafinance category for merchandise income</td>
+</tr>
+</tbody>
+</table>
+<h2 id="integration">Integration</h2>
+<ul>
+<li><strong><a href="../com_gafinance/">com_gafinance</a>:</strong> Optionally creates income transactions when orders are marked paid.</li>
+<li><strong><a href="../plg_user_profileb4wdc/">plg_user_profileb4wdc</a>:</strong> Member detection uses the configured profile prefix to identify members and apply discounts.</li>
+</ul>
+<h2 id="version-history">Version history</h2>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4.1.2</td>
+<td>Current release</td>
+</tr>
+</tbody>
+</table>
 
 
 

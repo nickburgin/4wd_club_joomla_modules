@@ -871,6 +871,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#what-it-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it does
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies-on-com_gausers-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies on com_gausers configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#version-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version history
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -895,6 +928,8 @@
   
     
     
+      
+        
       
         
       
@@ -958,6 +993,34 @@
     
   
     User Membership System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../manuals/new-member-onboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    New Member Onboarding
   
 
     
@@ -1237,6 +1300,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#what-it-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it does
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies-on-com_gausers-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies on com_gausers configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#version-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version history
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1261,9 +1357,69 @@
 <p><strong>Part of:</strong> <code>pkg_gausers</code><br />
 <strong>Current version:</strong> 5.3</p>
 <h2 id="description">Description</h2>
-<p>A Joomla scheduled task plugin that automates membership subscription renewal notifications. Installed as part of the <a href="../com_gausers/">User Membership Package</a>.</p>
+<p>A Joomla scheduled task plugin that automates membership subscription renewals. When a member's current invoice reaches its expiry date, the plugin blocks their account and generates a renewal invoice.</p>
 <h2 id="setup">Setup</h2>
-<p>After installing <code>pkg_gausers</code>, configure the scheduled task via <strong>Joomla Admin → System → Scheduled Tasks</strong>.</p>
+<p>After installing <code>pkg_gausers</code>, configure the scheduled task via <strong>Joomla Admin → System → Scheduled Tasks</strong>. The default schedule runs daily at 06:14 AM.</p>
+<h2 id="what-it-does">What it does</h2>
+<p>Each time the task runs, it:</p>
+<ol>
+<li>Finds all paid invoices with <code>end_date = today</code></li>
+<li>For each matching member, applies the following checks in order:</li>
+<li><strong>Already invoiced</strong> — if a newer unpaid invoice exists, skip</li>
+<li><strong>Excluded member</strong> — if the user ID is in <code>exclude_member</code> (com_gausers config), skip</li>
+<li><strong>Exempt membership type</strong> — if the membership type is in <code>mship_exempt</code> (e.g. Life), skip</li>
+<li><strong>Extendable membership type</strong> — if in <code>mship_extend</code>, extend the invoice <code>end_date</code> by one term instead of generating a new invoice</li>
+<li>For remaining members: block the user account and generate a renewal invoice via the same path as the manual Generate Invoices button</li>
+</ol>
+<p>Emails are sent as part of the invoice generation process, using the same templates as a manual invoice run.</p>
+<h2 id="dependencies-on-com_gausers-configuration">Dependencies on com_gausers configuration</h2>
+<p>The plugin reads four parameters directly from the com_gausers component config:</p>
+<table>
+<thead>
+<tr>
+<th>Config key</th>
+<th>Where set</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>exclude_member</code></td>
+<td>com_gausers → Configuration → Invoicing</td>
+<td>User IDs to skip entirely</td>
+</tr>
+<tr>
+<td><code>mship_exempt</code></td>
+<td>com_gausers → Configuration → Membership</td>
+<td>Membership types exempt from renewal (e.g. Life)</td>
+</tr>
+<tr>
+<td><code>mship_extend</code></td>
+<td>com_gausers → Configuration → Membership</td>
+<td>Membership types that auto-extend without a new invoice</td>
+</tr>
+<tr>
+<td><code>profile_suffix</code></td>
+<td>com_gausers → Configuration → Base Parameters</td>
+<td>Profile plugin suffix</td>
+</tr>
+</tbody>
+</table>
+<h2 id="version-history">Version history</h2>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5.3</td>
+<td>Current release; added as part of pkg_gausers 6.0</td>
+</tr>
+</tbody>
+</table>
 
 
 
