@@ -141,7 +141,7 @@ $del0Link = GatripsysHelper::getHTTPQuery($delRptLink, null, null, 'rpt', '0');
 			<?php if (!empty($this->item->status_name)) { echo ' &nbsp; <span class="small">(Status: '.$this->item->status_name.')</span>'; } ?>
         </h2>
 
-		<table class="table">
+		<table class="table trip-detail">
 
 			<tr>
 				<th><?php echo Text::_('COM_GATRIPSYS_FORM_LBL_TRIP_RATING'); ?></th>
@@ -220,7 +220,7 @@ $del0Link = GatripsysHelper::getHTTPQuery($delRptLink, null, null, 'rpt', '0');
 			</tr>
 			<tr>
 				<th><?php echo Text::_('COM_GATRIPSYS_FORM_LBL_TRIP_TRIP_IMG'); ?></th>
-				<td><?php echo '<img src="'.$this->item->trip_img.'" style="width:110px;" alt="No Image" />'; ?></td>
+				<td><?php echo '<img src="'.$this->item->trip_img.'" class="trip-img" alt="No Image" />'; ?></td>
 			</tr>
 			<tr>
 				<th><?php echo Text::_('COM_GATRIPSYS_FORM_LBL_TRIP_TRIP_PLAN'); ?></th>
@@ -304,6 +304,7 @@ $del0Link = GatripsysHelper::getHTTPQuery($delRptLink, null, null, 'rpt', '0');
 	</div>
 
 	<?php /* -----------------------------  Always show the return button  ---------------------------------- */ ?>
+	<div class="trip-actions">
 	<?php $returnLink = GatripsysHelper::getHTTPQuery(null, 'view', 'trips', null, null); ?>
 	<a href="<?php echo Route::_('index.php?'.http_build_query($returnLink, '', '&amp;')); ?>" class="btn btn-warning" type="button" title="Trips List" >
 		<i class="icon-undo-2"></i> <?php echo Text::_('Return'); ?>
@@ -386,29 +387,31 @@ $del0Link = GatripsysHelper::getHTTPQuery($delRptLink, null, null, 'rpt', '0');
 
 		<?php /* -----------------------------  Leader or Co-ord ONLY - Delete Buttons ---------------------------------- */ ?>
 		<?php if($this->item->canLead):?>
+			<div class="trip-actions-end">
 			<?php if (!$this->item->finalExists) : ?>
-				<a class="btn btn-danger pull-right"
-					href="<?php echo Route::_('index.php?'.http_build_query($canLink, '', '&amp;')); ?>"
-					title="<?php echo Text::_('COM_GATRIPSYS_CANCEL_TRIP'); ?>">
-					<i class="icon-trash"></i> <?php echo Text::_("COM_GATRIPSYS_CANCEL_TRIP"); ?>
-				</a>
 				<?php if ($this->item->agendaExists) : ?>
-					<a class="btn btn-info pull-right" style="margin-right: 5px;"
+					<a class="btn btn-info"
 						href="<?php echo Route::_('index.php?'.http_build_query($del0Link, '', '&amp;')); ?>"
 						title="<?php echo Text::_('COM_GATRIPSYS_DELETE_FINALPDF_DESC'); ?>">
 						<i class="icon-trash"></i> <?php echo Text::_("COM_GATRIPSYS_DELETE_PDF"); ?>
 					</a>
 				<?php endif; ?>
+				<a class="btn btn-danger"
+					href="<?php echo Route::_('index.php?'.http_build_query($canLink, '', '&amp;')); ?>"
+					title="<?php echo Text::_('COM_GATRIPSYS_CANCEL_TRIP'); ?>">
+					<i class="icon-trash"></i> <?php echo Text::_("COM_GATRIPSYS_CANCEL_TRIP"); ?>
+				</a>
 			<?php else : ?>
-				<a class="btn btn-secondary pull-right" style="margin-right: 5px;"
+				<a class="btn btn-secondary"
 					href="<?php echo Route::_('index.php?'.http_build_query($del1Link, '', '&amp;')); ?>"
 					title="<?php echo Text::_('COM_GATRIPSYS_DELETE_FINALPDF_DESC'); ?>">
 					<i class="icon-trash"></i> <?php echo Text::_("COM_GATRIPSYS_DELETE_FINALPDF"); ?>
 				</a>
 			<?php endif; ?>
+			</div>
 		<?php endif; ?>
 	<?php endif; ?>
-	<div class="clearfix"></div>
+	</div>
 	<p> </p>
 <?php else : ?>
 	<?php Factory::getApplication()->enqueueMessage(Text::_('COM_GATRIPSYS_NOT_AUTHORISED'), 'warning'); ?>

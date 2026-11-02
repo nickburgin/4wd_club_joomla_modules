@@ -35,9 +35,9 @@ fieldset.radio label {
     display: inline-block;
 }
 
-/* Modals: full-width on small screens */
+/* Modals: nearly full width on small screens, whatever modalWidth they use */
 @media (max-width: 767px) {
-    .modal-dialog.jviewport-width60 {
+    .modal-dialog[class*="jviewport-width"] {
         width: 95vw !important;
         max-height: 90dvh;
         overflow-y: auto;
