@@ -28,7 +28,8 @@
         width: 100%;
     }
 
-    .trip-detail th {
+    .table.trip-detail th {
+        font-weight: bold;
         border-bottom: 0;
         padding-bottom: 0;
     }
