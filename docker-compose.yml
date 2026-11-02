@@ -40,6 +40,23 @@ services:
     depends_on:
       - db
 
+  cli:
+    image: joomla:5
+    working_dir: /var/www/html
+    entrypoint: ["php", "cli/joomla.php"]
+    environment:
+      JOOMLA_DB_HOST: db
+      JOOMLA_DB_USER: joomla
+      JOOMLA_DB_PASSWORD: joomla
+      JOOMLA_DB_NAME: joomla
+    volumes:
+      - joomla_html:/var/www/html
+      - ./dist:/tmp/packages
+    depends_on:
+      - db
+    profiles:
+      - cli
+
   db:
     image: mysql:8
     environment:
