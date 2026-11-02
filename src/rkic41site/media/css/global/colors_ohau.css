@@ -1,0 +1,28 @@
+:root {
+  --rkic41site-color-primary: #609198;
+  --rkic41site-color-link: #1f6470;
+  --rkic41site-color-hover: #a6d7e0;
+  --rkic41site-color-primary-border: #dcf1f5;
+}
+.container-header .mod-menu > li > a,
+.container-header .mod-menu > li > span {
+  font-size: 1.4em;
+}
+.container-header .mod-list li.active > a {
+  font-size: 1.4em;
+}
+.card-header {
+	background-color: #fff !important;
+}
+._menu {
+	border: 0px !important;
+}
+@media (min-width: 380px) and (max-width: 800px) {
+	.container-toplogin::before,
+	.container-toplogin::after {
+		clear: both;
+	}
+}
+.container-toplogin a {
+	color: #fff !important;
+}

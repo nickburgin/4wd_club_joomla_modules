@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="template" client="site" method="upgrade">
 	<name>rkic41site</name>
-	<version>1.0</version>
+	<version>1.0.1</version>
 	<creationDate>April 2022</creationDate>
 	<author>Glenn Arkell</author>
 	<authorEmail>glenn@glennarkell.com.au</authorEmail>

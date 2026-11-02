@@ -1,0 +1,31 @@
+:root {
+  --rkic41site-color-primary: #dfd8c8;
+  --rkic41site-color-link: #a69771;
+  --rkic41site-color-hover: #ebcf7b;
+  --rkic41site-color-primary-border: #d5ac4e;
+}
+.container-header .mod-menu > li > a,
+.container-header .mod-menu > li > span {
+  font-size: 1.4em;
+  color: var(--rkic41site-color-link);
+}
+.container-header .mod-list li.active > a,
+.container-header .mod-list li > a:hover {
+  font-size: 1.4em;
+  color: var(--rkic41site-color-primary-border);
+}
+.card-header {
+	background-color: #fff !important;
+}
+._menu {
+	border: 0px !important;
+}
+@media (min-width: 380px) and (max-width: 800px) {
+	.container-toplogin::before,
+	.container-toplogin::after {
+		clear: both;
+	}
+}
+.container-toplogin a {
+	color: #fff !important;
+}

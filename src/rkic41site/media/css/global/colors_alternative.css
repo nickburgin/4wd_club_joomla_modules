@@ -1,0 +1,11 @@
+:root {
+  --rkic41site-color-primary: #912b3b;
+  --rkic41site-color-link: #30638d;
+  --rkic41site-color-hover: #954b56;
+}
+
+.container-toplogin {
+    clear:both;
+    min-width:200px;
+    padding-left:10px;
+}
