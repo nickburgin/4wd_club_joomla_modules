@@ -24,7 +24,7 @@ existing_tags=$(docker-compose run --rm --no-deps \
     -e GH_TOKEN="${GH_TOKEN:-${GITHUB_ACCESS_TOKEN:-}}" \
     build bash -c '
         for tag in "$@"; do
-            gh release view "$tag" &>/dev/null && echo "$tag"
+            if gh release view "$tag" &>/dev/null; then echo "$tag"; fi
         done
     ' -- "${tags[@]}")
 
