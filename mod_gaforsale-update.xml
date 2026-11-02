@@ -10,7 +10,7 @@
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/mod_gaforsale-3.0.09/mod_gaforsale-3.0.09.zip</downloadurl>
         </downloads>
         <checksums>
-            <checksum type="sha256">63943f489e291571c4f213a5c449b98369661f05c2bee34595ac765ec25b765f</checksum>
+            <checksum type="sha256">1a1da9958a17d3d4441693cd33dda406ae073b75f74f75140afed5ab96292429</checksum>
         </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>

@@ -10,7 +10,7 @@
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/plg_task_gasubscriptions-5.3/plg_task_gasubscriptions-5.3.zip</downloadurl>
         </downloads>
         <checksums>
-            <checksum type="sha256">f98a7c6b939412accdf1af0c3a61cda1dce6fe18dd4526b58bb7e6bb34b28bcb</checksum>
+            <checksum type="sha256">6c575889e1eb950f877cd9e629af003a4d0c4f4a9d89eca190e760a226f1c347</checksum>
         </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>

@@ -10,7 +10,7 @@
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/pkg_gausers-6.0/pkg_gausers-6.0.zip</downloadurl>
         </downloads>
         <checksums>
-            <checksum type="sha256">a5a32a23cffd72fb64763f825f57ccdc6bf12b582be3ae011bebd9784dea02e6</checksum>
+            <checksum type="sha256">4a9b13a345504065f3a795a9c1193a9048b21861f850a4ac9774e33b646dd7dc</checksum>
         </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>

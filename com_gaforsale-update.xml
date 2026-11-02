@@ -10,7 +10,7 @@
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/com_gaforsale-4.2.2/com_gaforsale-4.2.2.zip</downloadurl>
         </downloads>
         <checksums>
-            <checksum type="sha256">12de82e2c22a8c38f886efaf4ff0a57d1594f27759f0549fc2cea2555366b108</checksum>
+            <checksum type="sha256">7f3de868a2b606f1e44e0a93a700e6c5bc965f704b68ca31af86e14bd1110d2e</checksum>
         </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>

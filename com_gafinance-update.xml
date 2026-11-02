@@ -10,7 +10,7 @@
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/com_gafinance-5.2.3/com_gafinance-5.2.3.zip</downloadurl>
         </downloads>
         <checksums>
-            <checksum type="sha256">8f33a09b3a51cd4f46d2defa4285e04db6dc89a81fb80605f36d5cc716ab7808</checksum>
+            <checksum type="sha256">1fd87e0e4842f5dc1676299113b414d6f9d81a9fd50b205f963b241ee5e0810b</checksum>
         </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>

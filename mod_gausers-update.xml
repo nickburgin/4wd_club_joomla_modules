@@ -10,7 +10,7 @@
             <downloadurl type="full" format="zip">https://github.com/nickburgin/4wd_club_joomla_modules/releases/download/mod_gausers-5.4/mod_gausers-5.4.zip</downloadurl>
         </downloads>
         <checksums>
-            <checksum type="sha256">49c06c113aef7f96c8126dfce88a546fcb633944b74be1e455eacbb3761a3317</checksum>
+            <checksum type="sha256">87452629a2e58e117bc58906e679279937910f511afb8dd8c5a6084d3ec68455</checksum>
         </checksums>
         <maintainer>Nick Burgin (fork of Glenn Arkell)</maintainer>
         <maintainerurl>https://github.com/nickburgin/4wd_club_joomla_modules</maintainerurl>
