@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="template" client="site" method="upgrade">
 	<name>rkic41site</name>
-	<version>1.0</version>
+	<version>1.0.1</version>
 	<creationDate>April 2022</creationDate>
 	<author>Glenn Arkell</author>
 	<authorEmail>glenn@glennarkell.com.au</authorEmail>
@@ -51,6 +51,11 @@
 		<language tag="en-GB">en-GB/tpl_rkic41site.ini</language>
 		<language tag="en-GB">en-GB/tpl_rkic41site.sys.ini</language>
 	</languages>
+
+	<updateservers>
+		<server type="extension" priority="1" name="rkic41site Template">https://raw.githubusercontent.com/nickburgin/4wd_club_joomla_modules/releases/rkic41site-update.xml</server>
+	</updateservers>
+
 	<config>
 		<fields name="params">
 			<fieldset name="advanced">

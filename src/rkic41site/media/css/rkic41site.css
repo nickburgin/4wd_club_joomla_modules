@@ -1,0 +1,175 @@
+/**
+ * @version     1.0.0
+ * @package     tmp_rkic41site
+ * @copyright   2021 Glenn Arkell
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Glenn Arkell <glenn@glennarkell.com.au>
+ * @comment     Enhancement to standard Cassiopeia template
+ */
+
+.center {
+	text-align: center;
+	margin: 0 auto;
+}
+
+.imgleft {
+	float: left;
+	margin: 0px 30px 10px 0px;
+	border-radius: 3px
+	padding: 0;
+}
+
+.imgright {
+	float: right;
+	margin: 0px 0px 10px 30px;
+	border-radius: 3px
+	padding: 0;
+}
+
+figure.center {
+	display: block;
+	margin: auto;
+}
+figure.center > figcaption {
+	display: block;
+	padding-bottom: 25px;
+}
+
+.container-header .mod.menu .nav-pills .nav-link > li > a {
+    color: var(--rkic41site-color-link) !important;
+}
+
+/* -------- trip system extras --------------------- */
+.btn-incident.active {
+	color: rgba(255,255,255,0.75);
+}
+
+.btn-incident {
+	color: #fff;
+	text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+	background-color: #af4ace;
+	background-image: -moz-linear-gradient(top,#cb5ced,#a729ce);
+	background-image: -webkit-gradient(linear,0 0,0 100%,from(#cb5ced),to(#a729ce));
+	background-image: -webkit-linear-gradient(top,#cb5ced,#a729ce);
+	background-image: -o-linear-gradient(top,#cb5ced,#a729ce);
+	background-image: linear-gradient(to bottom,#cb5ced,#a729ce);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffcb5ced', endColorstr='#ffa729ce', GradientType=0);
+	border-color: #a729ce #a729ce #66197f;
+	*background-color: #a729ce;
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+}
+
+.btn-incident:hover,
+.btn-incident:focus,
+.btn-incident:active,
+.btn-incident.active,
+.btn-incident.disabled,
+.btn-incident[disabled] {
+	color: #fff;
+	background-color: #a729ce;
+	*background-color: #8e21b2;
+}
+.btn-incident:active,
+.btn-incident.active {
+	background-color: #8e21b2 \9;
+}
+
+/* format login fields to a line at the top - set module class=login-line  */
+div.login-line #login-form.form-inline div.userdata #form-login-username.control-group,
+div.login-line #login-form.form-inline div.userdata #form-login-password.control-group,
+div.login-line #login-form.form-inline div.userdata #form-login-submit.control-group {
+	display: inline-block;
+}
+
+blockquote {
+	border: none;
+}
+blockquote.quoteimage {
+    font-family: Georgia, serif;
+    position: relative;
+    margin: 0.5em;
+    padding: 0.5em 2em 0.5em 3em;
+}
+blockquote.quoteimage:before {
+    font-family: Georgia, serif;
+    position: relative;
+    font-size: 6em;
+    line-height: 1;
+    top: 0;
+    content: "\201C";
+    float: left;
+}
+blockquote.quoteimage:after {
+    font-family: Georgia, serif;
+    position: absolute;
+    float:right;
+    font-size:6em;
+    line-height: 1;
+    right:0;
+    bottom:-0.4em;
+    content: "\201D";
+}
+blockquote.quoteimage > p {
+	padding-left: 50px;
+	padding-right: 20px;
+}
+
+@media (max-width: 429px) {
+	.container-header .navbar-brand img {
+		max-width: 85%;
+		min-width:85%;
+	}
+}
+.position-stickyf .sticky-bottom {
+    position:fixed;
+    bottom: 0;
+}
+
+.gasite-grid {
+    grid-template-areas: ". main-comp main-comp main-comp main-comp .";
+    grid-template-columns: [main-start] repeat(4, minmax(0, 15.875rem)) [main-end] minmax(0, 1fr);
+}
+.gacontainer-main-comp {
+    /* width: 100%; */
+}
+
+img.menuButton {
+  width: 48px;
+  margin-right: 5px;
+  padding-right: 5px;
+}
+hr.dashed {
+  border-style: none; 
+  border-top-style: dashed;
+  border-top-width: 2px;
+}
+hr.black {
+  border-color: #000;
+}
+hr.gray {
+  border-color: #ccc;
+}
+hr.red {
+  border-color: #c26161;
+}
+hr.blue {
+  border-color: #4794c2;
+}
+
+.container-toplogin {
+    margin-left:auto;
+    min-width:200px;
+    padding-left:10px;
+}
+
+.shadow-r {
+    border: 1px solid #cccccc;
+    padding: 5px;
+    box-shadow: 0.15rem 0.3rem 0.7rem rgba(0, 0, 0, 0.15);
+}
+.shadow-l {
+    border: 1px solid #cccccc;
+    padding: 5px;
+    box-shadow: -0.3rem 0.4rem 0.4rem rgba(0, 0, 0, 0.15);
+}

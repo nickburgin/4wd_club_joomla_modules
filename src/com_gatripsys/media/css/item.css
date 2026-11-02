@@ -1,8 +1,42 @@
 /**
- * @version     5.3.0
+ * @version     5.4.0
  * @package     com_gatripsys
  * @copyright   2016 Glenn Arkell
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Glenn Arkell <glenn@glennarkell.com.au>
  */
 
+.trip-img {
+    width: 110px;
+    max-width: 100%;
+    height: auto;
+}
+
+.trip-actions,
+.trip-actions-end {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/* Trip detail: each label sits above its value on small screens */
+@media (max-width: 767px) {
+    .trip-detail tr,
+    .trip-detail th,
+    .trip-detail td {
+        display: block;
+        width: 100%;
+    }
+
+    .table.trip-detail th {
+        font-weight: bold;
+        border-bottom: 0;
+        padding-bottom: 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .trip-actions-end {
+        margin-left: auto;
+    }
+}

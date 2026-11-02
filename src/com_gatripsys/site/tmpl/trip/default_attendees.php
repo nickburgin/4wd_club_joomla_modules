@@ -60,6 +60,7 @@ foreach ($tripRec->bookings as $b) {$totPeople = $totPeople + $b->in_party;}
                         	</div>
 */
 ?>
+<div class="table-responsive">
 <table class="table table-striped" id="attendList">
 	<thead>
 		<tr>
@@ -194,6 +195,7 @@ foreach ($tripRec->bookings as $b) {$totPeople = $totPeople + $b->in_party;}
 		<?php endforeach; ?>
 	</tbody>
 </table>
+</div>
 
 <?php if($tripRec->canLead && $tripRec->state == 2) : ?>
 	<h2>

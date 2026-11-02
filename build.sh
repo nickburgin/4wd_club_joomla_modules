@@ -27,6 +27,11 @@ get_display_name() {
     grep -m1 "<name>" "$1" | sed 's/[[:space:]]*<name>\(.*\)<\/name>.*/\1/'
 }
 
+# Read an attribute of the root <extension> element, e.g. type or client
+get_extension_attr() {
+    grep -m1 -o "<extension[^>]*>" "$1" | sed -n "s/.* $2=\"\([^\"]*\)\".*/\1/p"
+}
+
 generate_update_xml() {
     local name="$1" version="$2" zip_name="$3" manifest="$4"
     local display_name type element extra_xml=""
@@ -47,7 +52,9 @@ generate_update_xml() {
             element=$(echo "$name" | cut -d'_' -f3-)
             extra_xml=$'\n        <folder>'"$grp"'</folder>' ;;
         *)
-            type="extension"; element="$name" ;;
+            type=$(get_extension_attr "$manifest" type); element="$name"
+            local client; client=$(get_extension_attr "$manifest" client)
+            [ -n "$client" ] && extra_xml=$'\n        <client>'"$client"'</client>' ;;
     esac
 
     local sha256

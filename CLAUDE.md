@@ -93,6 +93,14 @@ docker-compose up           # start Joomla 5 + MySQL at http://localhost:8080
 
 First run: complete the Joomla installer wizard at http://localhost:8080, then log in to admin.
 
+To install from the command line, use the `cli` service. It runs `cli/joomla.php` against the same Joomla volume:
+
+```bash
+docker-compose run --rm cli extension:install --path=/tmp/packages/pkg_gatripsys-5.3.0.zip
+```
+
+The `cli` service mounts `dist/` read-write because the installer unpacks each zip into a directory next to it.
+
 ## Licence
 
 All extensions are GPL v2+, original copyright Glenn Arkell. The `<packager>Nick Burgin</packager>` field in each manifest records the fork maintainer. Do not remove Glenn's copyright headers from individual PHP files — they must be preserved under GPL. Add your own copyright to any new files you create.

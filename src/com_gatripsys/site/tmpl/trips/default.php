@@ -105,7 +105,7 @@ GatripsysHelper::gaPrint(Factory::getApplication()->getUserState('com_gatripsys.
     			<th class='small hidden-phone'>
     				<?php echo Text::_('COM_GATRIPSYS_TRIPS_RATING'); ?>
     			</th>
-    			<th class='small hidden-phone'>
+    			<th class='small'>
     				<?php echo Text::_('COM_GATRIPSYS_STATE'); ?>
     			</th>
     			<th class='small hidden-phone'>
@@ -123,7 +123,7 @@ GatripsysHelper::gaPrint(Factory::getApplication()->getUserState('com_gatripsys.
     			<th class='center small hidden-phone'>
     				<?php echo Text::_('COM_GATRIPSYS_TRIPS_RET_DATE'); ?>
     			</th>
-    			<th class="center small hidden-phone">
+    			<th class="center small">
     				<?php echo Text::_('COM_GATRIPSYS_TRIPS_ACTIONS'); ?>
     			</th>
     
@@ -244,7 +244,7 @@ GatripsysHelper::gaPrint(Factory::getApplication()->getUserState('com_gatripsys.
     				<td class="trips small hidden-phone<?php echo $tripClass; ?>">
     					<?php if ($item->rating) : ?>
     						<?php if ($cat_params->image != '') : ?>
-    							<img src="<?php echo $cat_params->image; ?>" style="width:14px;" 
+    							<img src="<?php echo $cat_params->image; ?>" style="width:14px;"
                                     alt="<?php echo $cat_params->image_alt; ?>"
                                     title="<?php echo$cat_params->image_alt; ?>"/>
     						<?php else : ?>
@@ -254,7 +254,7 @@ GatripsysHelper::gaPrint(Factory::getApplication()->getUserState('com_gatripsys.
     						Not<br />Rated
     					<?php endif; ?>
     				</td>
-    				<td class="trips small hidden-phone<?php echo $tripClass; ?>">
+    				<td class="trips small<?php echo $tripClass; ?>">
     					<?php echo $state; ?>
     				</td>
     				<td class="trips small hidden-phone<?php echo $tripClass; ?>">
@@ -289,7 +289,7 @@ GatripsysHelper::gaPrint(Factory::getApplication()->getUserState('com_gatripsys.
                     		// 0=Unpublished - not used?
             		 ?>
     				<?php /* setup relevant actions available */ ?>
-                    <td class="center trips small hidden-phone">
+                    <td class="center trips small">
         				<?php /* -----------  Approved Trip - can book  ---------------   */ ?>
                         <?php if ($item->state == 2):  /* Bookings are allowed */ ?>
         					<?php if ($item->ret_date >= substr($todaysDate,0,10) && !$blockBook && $booking && !$pastRego ):  /* Bookings are allowed */ ?>

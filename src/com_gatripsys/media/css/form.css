@@ -1,50 +1,74 @@
 /**
- * @version     5.3.0
+ * @version     5.4.0
  * @package     com_gatripsys
  * @copyright   2021 Glenn Arkell
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Glenn Arkell <glenn@glennarkell.com.au>
  */
 
-.form-control.inclButton {
-    max-width:80%;
-    margin-right: 10px;
-    float: left;
-}
-
-.fields-inline > div {
-	float: left;
-}
-
+/* Mobile-first: stacked label above input */
 .front-end-edit label {
-    margin-right: 10px;
     display: block;
-    float: left;
-    text-align: right;
-    width: 180px !important;
+    float: none;
+    width: auto !important;
+    text-align: left;
+    margin-bottom: 0.25rem;
 }
 
 .front-end-edit .controls {
-    margin-left: 195px;
+    margin-left: 0;
 }
 
-fieldset.radio label{
-    width: 50px !important;
+fieldset.radio label {
+    width: auto !important;
+    display: inline;
 }
 
-@media (max-width: 480px) {
-    .modal-dialog.jviewport-width60 {
+.fields-inline > div {
+    display: inline-block;
+}
+
+/* Image field: inline button sits beside the displayed filename */
+.form-control.inclButton {
+    max-width: 80%;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+/* Modals: nearly full width on small screens, whatever modalWidth they use */
+@media (max-width: 767px) {
+    .modal-dialog[class*="jviewport-width"] {
         width: 95vw !important;
+        max-height: 90dvh;
+        overflow-y: auto;
     }
+}
+
+/* Desktop: restore horizontal label + input layout */
+@media (min-width: 768px) {
     .front-end-edit label {
-        margin-right: 5px;
-        display: block;
         float: left;
-        text-align: left;
-        width: 130px !important;
+        width: 180px !important;
+        text-align: right;
+        margin-right: 10px;
+        margin-bottom: 0;
     }
-    
+
     .front-end-edit .controls {
-        margin-left: 15px !important;
+        margin-left: 195px;
+    }
+
+    fieldset.radio label {
+        width: 50px !important;
+        display: inline;
+    }
+
+    .fields-inline > div {
+        float: left;
+    }
+
+    .form-control.inclButton {
+        max-width: 80%;
+        float: left;
     }
 }

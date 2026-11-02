@@ -54,7 +54,7 @@ extract_extensions.sh       Used to extract extensions from a live Joomla site
 |---|---|---|
 | `pkg_gacalevents` | `com_gacalevents` 3.3.1 + `mod_gacalevents` 5.3 | 4.1 |
 | `pkg_gafinance` | `com_gafinance` 5.2.3 + `mod_gafinance` 5.3 | 5.5 |
-| `pkg_gatripsys` | `com_gatripsys` 5.3.0 + `mod_gatripsys` 5.2 | 5.8 |
+| `pkg_gatripsys` | `com_gatripsys` 5.4.0 + `mod_gatripsys` 5.2 | 5.9 |
 | `pkg_gausers` | `com_gausers` 6.0.0 + `mod_gausers` 5.4 + `mod_gausersexecs` 5.3 + `plg_user_gausers` 5.3 + `plg_task_gasubscriptions` 5.3 | 6.0 |
 
 ### Standalone extensions
@@ -69,7 +69,7 @@ extract_extensions.sh       Used to extract extensions from a live Joomla site
 | `mod_glennslideshow` | Module | 4.7 | No upstream — live site extract only |
 | `mod_glennsnewsletters` | Module | 4.4 | No upstream — live site extract only |
 | `plg_user_profileb4wdc` | Plugin (user) | 5.3 | |
-| `rkic41site` | Template | 1.0 | No upstream — live site extract only |
+| `rkic41site` | Template | 1.0.1 | No upstream — live site extract only |
 
 ## Building
 
