@@ -1,7 +1,7 @@
 # Trip Management System (com_gatripsys)
 
 **Package:** `pkg_gatripsys` (includes `mod_gatripsys`)  
-**Current version:** 5.3.0 (package 5.8)
+**Current version:** 5.4.0 (package 5.9)
 
 ## Description
 
@@ -46,7 +46,8 @@ Integrates with [com_gafinance](com_gafinance.md) for payment tracking when per-
 
 | Version | Notes |
 |---------|-------|
-| 5.3.0 (pkg 5.8) | Current release |
+| 5.4.0 (pkg 5.9) | Mobile usability: stacked forms and trip details on phones, Book button in the trips list (#3) |
+| 5.3.0 (pkg 5.8) | Last upstream release |
 | 4.4.6 | Review and optimisation for Joomla 5 with namespace updates |
 | 4.0.0–4.2.1 | Converted to Joomla 4 compatibility |
 | 3.3.00–3.3.07 | Bug fixes, image management, bulk approval, sort order enhancements |
