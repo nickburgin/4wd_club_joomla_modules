@@ -2,7 +2,7 @@
 <extension type="package" method="upgrade">
     <name>Trip Management Package</name>
     <packagename>gatripsys</packagename>
-    <version>5.8</version>
+    <version>5.9</version>
     <creationDate>2024</creationDate>
     <copyright>Glenn Arkell</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
@@ -14,7 +14,7 @@
     <scriptfile>script.php</scriptfile>
 
     <files folder="packages">
-        <file type="component" id="com_gatripsys">com_gatripsys-5.3.0.zip</file>
+        <file type="component" id="com_gatripsys">com_gatripsys-5.4.0.zip</file>
         <file type="module" id="gatripsys" client="site">mod_gatripsys-5.2.zip</file>
     </files>
 
