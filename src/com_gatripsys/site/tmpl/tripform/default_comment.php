@@ -45,8 +45,8 @@ $submitLink = GatripsysHelper::getHTTPQuery(null, 'task', 'tripform.saveComment'
 		<form id="form-attendee" action="<?php echo Route::_('index.php?'.http_build_query($submitLink, '', '&amp;')); ?>"
 			method="post" class="form-validate form-horizontal" enctype="multipart/form-data" target="_parent">
 
-			<div class="row-fluid">
-				<div class="span10 form-horizontal">
+			<div class="row">
+				<div class="col-12 col-lg-10 form-horizontal">
 					<fieldset name="extrainfo" class="adminform" style="padding: 0 10px !important;">
 						<?php echo $this->form->renderFieldset('extrainfo'); ?>
 						<input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>"/>

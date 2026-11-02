@@ -64,8 +64,8 @@ if (!$canTrip) {
 			<?php echo HTMLHelper::_('uitab.startTabSet', 'myTab', array('active' => 'general')); ?>
 			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'general', Text::_('COM_GATRIPSYS_TITLE_TRIP_BASICS', true)); ?>
 		
-				<div class="row-fluid">
-					<div class="span10 form-horizontal">
+				<div class="row">
+					<div class="col-12 col-lg-10 form-horizontal">
 						<fieldset name="general" class="adminform">
 							<?php echo $this->form->renderFieldset('general'); ?>
 						</fieldset>
@@ -78,8 +78,8 @@ if (!$canTrip) {
 			<?php echo HTMLHelper::_('uitab.endTab'); ?>
 
 			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'depart', Text::_('COM_GATRIPSYS_TITLE_TRIP_DEPARTURE', true)); ?>
-				<div class="row-fluid">
-					<div class="span10 form-horizontal">
+				<div class="row">
+					<div class="col-12 col-lg-10 form-horizontal">
 						<fieldset name="depart" class="adminform">
 							<?php echo $this->form->renderFieldset('depart'); ?>
 						</fieldset>
@@ -88,8 +88,8 @@ if (!$canTrip) {
 			<?php echo HTMLHelper::_('uitab.endTab'); ?>
 		
 			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'where', Text::_('COM_GATRIPSYS_TITLE_WHERE', true)); ?>
-				<div class="row-fluid">
-					<div class="span10 form-horizontal">
+				<div class="row">
+					<div class="col-12 col-lg-10 form-horizontal">
 						<fieldset name="where" class="adminform">
 							<?php echo $this->form->renderFieldset('where'); ?>
 						</fieldset>
@@ -98,8 +98,8 @@ if (!$canTrip) {
 			<?php echo HTMLHelper::_('uitab.endTab'); ?>
 		
 			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'what', Text::_('COM_GATRIPSYS_TITLE_WHAT', true)); ?>
-				<div class="row-fluid">
-					<div class="span10 form-horizontal">
+				<div class="row">
+					<div class="col-12 col-lg-10 form-horizontal">
 						<fieldset name="what" class="adminform">
 							<?php echo $this->form->renderFieldset('what'); ?>
 						</fieldset>
@@ -108,8 +108,8 @@ if (!$canTrip) {
 			<?php echo HTMLHelper::_('uitab.endTab'); ?>
 		
 			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'equip', Text::_('COM_GATRIPSYS_TITLE_EQUIP', true)); ?>
-				<div class="row-fluid">
-					<div class="span10 form-horizontal">
+				<div class="row">
+					<div class="col-12 col-lg-10 form-horizontal">
 						<fieldset name="equip" class="adminform">
 							<?php echo $this->form->renderFieldset('equip'); ?>
 						</fieldset>
@@ -118,8 +118,8 @@ if (!$canTrip) {
 			<?php echo HTMLHelper::_('uitab.endTab'); ?>
 		
 			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'details', Text::_('COM_GATRIPSYS_TITLE_DETAILS', true)); ?>
-				<div class="row-fluid">
-					<div class="span10 form-horizontal">
+				<div class="row">
+					<div class="col-12 col-lg-10 form-horizontal">
 						<fieldset name="details" class="adminform">
 							<?php echo $this->form->renderFieldset('details'); ?>
 						</fieldset>
@@ -128,8 +128,8 @@ if (!$canTrip) {
 			<?php echo HTMLHelper::_('uitab.endTab'); ?>
 		
 			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'plans', Text::_('COM_GATRIPSYS_TITLE_TRIPPLANS', true)); ?>
-				<div class="row-fluid">
-					<div class="span10 form-horizontal">
+				<div class="row">
+					<div class="col-12 col-lg-10 form-horizontal">
 						<fieldset name="plans" class="adminform">
 
                             <?php if (!isset($this->item->trip_img_disp)) : ?>
@@ -153,8 +153,8 @@ if (!$canTrip) {
 			<?php echo HTMLHelper::_('uitab.endTab'); ?>
 		
 			<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'extrainfo', Text::_('COM_GATRIPSYS_TITLE_EXTRAINFO', true)); ?>
-				<div class="row-fluid">
-					<div class="span10 form-horizontal">
+				<div class="row">
+					<div class="col-12 col-lg-10 form-horizontal">
 						<fieldset name="extrainfo" class="adminform">
 							<?php echo $this->form->renderFieldset('extrainfo'); ?>
 						</fieldset>
@@ -163,8 +163,8 @@ if (!$canTrip) {
 			<?php echo HTMLHelper::_('uitab.endTab'); ?>
 		
             <?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'sysinfo', Text::_('COM_GATRIPSYS_TITLE_SYSINFO', true)); ?>
-				<div class="row-fluid">
-					<div class="span10 form-horizontal">
+				<div class="row">
+					<div class="col-12 col-lg-10 form-horizontal">
 						<fieldset name="sysinfo" class="adminform">
 							<?php echo $this->form->renderFieldset('sysinfo'); ?>
 						</fieldset>
