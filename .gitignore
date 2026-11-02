@@ -1,5 +1,5 @@
 dist/
-site/
+/site/
 *.DS_Store
 __MACOSX/
 # Raw zips from server — source of truth is src/
